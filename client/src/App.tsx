@@ -1,20 +1,8 @@
 import React from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Navbar } from "./components/Navbar";
-import { Home } from "./pages/Home";
-import { Routes, Route } from "react-router-dom";
-import { UserInfo } from "./pages/UserInfo";
+import Routes from "./Routes";
 
 function App() {
-  return (
-    <>
-      <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/userInfo" element={<UserInfo />} />
-        </Routes>
-    </>
-  );
+  return <Routes />;
 }
 
 export default App;
