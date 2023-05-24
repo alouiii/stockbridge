@@ -5,16 +5,19 @@ import HomepageBottombar from "components/HomepageBottombar";
 import HomepageHelp from "components/HomepageHelp";
 import HomepageIntrobar from "components/HomepageIntrobar";
 import HomepageStackpostYourAdvert from "components/HomepageStackpostYourAdvert";
-import HomepageTopbar from "components/HomepageTopbar";
+import Topbar from "components/Topbar";
 
-const HomepagePage: React.FC = () => {
+const Homepage: React.FC = () => {
   return (
     <>
-      <div className="bg-gray_50 flex flex-col font-roboto items-center justify-end mx-auto pt-[9px] w-full">
-        <HomepageTopbar className="flex flex-row items-center justify-between px-2.5 w-full" />
+      <div className="bg-gray_50_02 flex flex-col font-roboto items-center justify-end mx-auto pt-[9px] w-full">
+        <Topbar
+          className="flex flex-row items-center justify-between px-2.5 w-full"
+          user={false}
+        />
         <HomepageStackpostYourAdvert
           className="font-poppins h-[789px] mt-3 md:px-5 relative w-full"
-          postYourAdvert="Post your advert"
+          buttonText="Post your advert"
           or="OR"
           language={
             <>
@@ -27,7 +30,7 @@ const HomepagePage: React.FC = () => {
           }
         />
         <HomepageIntrobar
-          className="bg-red_300_4c flex flex-col font-roboto gap-[60px] h-[443px] md:h-auto items-center justify-center md:px-10 sm:px-5 px-[60px] py-[25px] w-full"
+          className="bg-red_300_4c flex flex-col font-roboto gap-[60px] h-[443px] md:h-auto items-center justify-center px-0 md:px-10 sm:px-5 py-[25px] w-full"
           howitworks="How it works"
           one="1."
           searchforwhat="Search for what you are looking for."
@@ -54,18 +57,20 @@ const HomepagePage: React.FC = () => {
           gotanyquestionsOne="Got any questions? Need help?"
           weareheretohelpOne="We are here to help. Get in touch!"
         />
-        <HomepageBottombar
-          className="bg-red_300_4c flex flex-col font-worksans items-center justify-center mt-[99px] w-full"
-          yourwebsite2023One="© Your Website 2023"
-          legal="Legal"
-          terms="Terms"
-          privacy="Privacy"
-          languageOne="Language"
-          iconsmadebyfreeOne="Icons made by Freepik from www.flaticon.com is licensed by CC 3.0 BY"
-        />
+        <div className="flex flex-col font-worksans items-center justify-center max-w-[1512px] mt-[99px] w-full">
+          <HomepageBottombar
+            className="bg-red_300_4c flex flex-col h-[209px] md:h-auto items-center justify-center min-w-[100%] w-full"
+            yourwebsite2023One="© Your Website 2023"
+            legal="Legal"
+            terms="Terms"
+            privacy="Privacy"
+            languageOne="Language"
+            iconsmadebyfreeOne="Icons made by Freepik from www.flaticon.com is licensed by CC 3.0 BY"
+          />
+        </div>
       </div>
     </>
   );
 };
 
-export default HomepagePage;
+export default Homepage;

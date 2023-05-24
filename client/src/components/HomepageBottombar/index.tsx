@@ -25,10 +25,10 @@ const HomepageBottombar: React.FC<HomepageBottombarProps> = (props) => {
   return (
     <>
       <div className={props.className}>
-        <div className="flex flex-col items-center justify-start pb-[18px] pl-[18px] w-[55%]">
-          <div className="flex flex-col gap-[25px] justify-start w-full">
+        <div className="flex flex-col items-center justify-start pb-[18px] pl-[18px] w-[46%]">
+          <div className="flex flex-col gap-[25px] items-center justify-start w-full">
             <div className="flex md:flex-col flex-row md:gap-5 items-end justify-evenly w-full">
-              <div className="flex md:flex-1 flex-col items-center justify-end mb-0.5 md:mt-0 mt-6 pt-[17px] w-[34%] md:w-full">
+              <div className="flex md:flex-1 flex-col items-center justify-end mb-0.5 md:mt-0 mt-6 pt-[17px] w-[42%] md:w-full">
                 <div className="flex flex-row gap-2 items-start justify-start pl-4 md:pr-10 sm:pr-5 pr-[154px] pt-4 w-auto">
                   <Button
                     className="flex h-12 items-center justify-center w-12"
@@ -83,7 +83,7 @@ const HomepageBottombar: React.FC<HomepageBottombarProps> = (props) => {
                   </Text>
                 </div>
               </div>
-              <div className="flex flex-col gap-[14.3px] items-start justify-start pl-10 sm:pl-5 pt-10 w-[333px]">
+              <div className="flex flex-col gap-[14.3px] items-start justify-start pl-10 sm:pl-5 pt-10 w-[190px]">
                 <div className="flex flex-col gap-2 items-start justify-start pr-0.5 pt-0.5 w-full">
                   <Text
                     className="font-bold font-roboto text-black_900_dd uppercase"
@@ -92,7 +92,7 @@ const HomepageBottombar: React.FC<HomepageBottombarProps> = (props) => {
                   >
                     {props?.languageOne}
                   </Text>
-                  <div className="bg-black_900_dd h-0.5 w-[10%]"></div>
+                  <div className="bg-black_900_dd h-0.5 w-[19%]"></div>
                 </div>
                 <div className="flex flex-col items-start justify-start w-auto sm:w-full">
                   <SelectBox
@@ -111,15 +111,15 @@ const HomepageBottombar: React.FC<HomepageBottombarProps> = (props) => {
                     options={languageTwoOptionsList}
                     isSearchable={false}
                     placeholder="English"
-                    size="sm"
+                    size="md"
                   />
                 </div>
               </div>
             </div>
-            <div className="flex flex-col items-start justify-start md:ml-[0] ml-[119px] w-auto sm:w-full">
+            <div className="flex flex-col items-start justify-start w-auto sm:w-full">
               <Text
                 className="font-worksans text-black_900_dd w-auto"
-                variant="body2"
+                variant="body4"
               >
                 {props?.iconsmadebyfreeOne}
               </Text>

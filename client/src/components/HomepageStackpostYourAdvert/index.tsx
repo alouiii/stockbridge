@@ -1,13 +1,14 @@
 import React from "react";
 
 import { Button, Img, Line, Text } from "components";
+import { useNavigate } from "react-router-dom";
 
 type HomepageStackpostYourAdvertProps = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLDivElement>,
   HTMLDivElement
 > &
   Partial<{
-    postYourAdvert: string;
+    buttonText: string;
     or: string;
     language: JSX.Element | string;
     locationOne: string;
@@ -19,6 +20,7 @@ type HomepageStackpostYourAdvertProps = React.DetailedHTMLProps<
 const HomepageStackpostYourAdvert: React.FC<
   HomepageStackpostYourAdvertProps
 > = (props) => {
+  const navigate = useNavigate();
   return (
     <>
       <div className={props.className}>
@@ -36,8 +38,9 @@ const HomepageStackpostYourAdvert: React.FC<
                   shape="CircleBorder26"
                   size="md"
                   variant="FillRed300"
+                  onClick={() => navigate("/signinview")}
                 >
-                  {props?.postYourAdvert}
+                  {props?.buttonText}
                 </Button>
                 <div className="h-12 md:ml-[0] ml-[22px] relative w-[68%]">
                   <Img
@@ -46,7 +49,7 @@ const HomepageStackpostYourAdvert: React.FC<
                     alt="hrmyThree"
                   />
                   <Text
-                    className="absolute font-poppins h-full inset-[0] justify-center m-auto text-center text-white_A700 tracking-[3.20px] w-max"
+                    className="absolute font-normal font-poppins h-full inset-[0] justify-center m-auto text-center text-white_A700 tracking-[3.20px] w-max"
                     as="h3"
                     variant="h3"
                   >
@@ -103,7 +106,7 @@ const HomepageStackpostYourAdvert: React.FC<
                     </div>
                     <div className="flex flex-col h-6 md:h-auto items-center justify-center w-6">
                       <Img
-                        src="images/img_dropdownicon.svg"
+                        src="images/img_vector_gray_600.svg"
                         className="h-6 w-6"
                         alt="dropdownicon"
                       />
@@ -141,7 +144,7 @@ const HomepageStackpostYourAdvert: React.FC<
 };
 
 HomepageStackpostYourAdvert.defaultProps = {
-  postYourAdvert: "Post your advert",
+  buttonText: "Post your advert",
   or: "OR",
   language: (
     <>

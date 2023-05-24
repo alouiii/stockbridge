@@ -5,10 +5,12 @@ import { ErrorMessage } from "../ErrorMessage";
 type selectOptionType = { value: string; label: string };
 
 const variants = {
+  OutlineBluegray100:
+    "bg-gray_50_01 outline outline-[1px] outline-blue_gray_100",
   OutlineGray30001: "bg-white_A700 border border-gray_300_01 border-solid",
 } as const;
-
-const sizes = { sm: "p-4" } as const;
+const shapes = { RoundedBorder6: "rounded-md" } as const;
+const sizes = { sm: "px-1.5 py-[7px]", md: "p-4" } as const;
 
 export type SelectProps = Omit<Props, "getOptionLabel"> &
   Partial<{
@@ -23,7 +25,7 @@ export type SelectProps = Omit<Props, "getOptionLabel"> &
     errors: string[];
     indicator: React.ReactElement;
     getOptionLabel: (e: any) => string;
-
+    shape: keyof typeof shapes;
     variant: keyof typeof variants;
     size: keyof typeof sizes;
   }>;
@@ -31,6 +33,7 @@ export type SelectProps = Omit<Props, "getOptionLabel"> &
 const SelectBox = React.forwardRef<any, SelectProps>(
   (
     {
+      children,
       placeholder = "Select",
       className = "",
       options = [],
@@ -41,6 +44,7 @@ const SelectBox = React.forwardRef<any, SelectProps>(
       value = "",
       errors = [],
       indicator,
+      shape = "",
       variant = "",
       size = "",
       ...restProps
@@ -63,9 +67,9 @@ const SelectBox = React.forwardRef<any, SelectProps>(
         <Select
           ref={ref}
           options={options}
-          className={`${className} ${(size && sizes[size]) || ""} ${
-            (variant && variants[variant]) || ""
-          }`}
+          className={`${className} ${(shape && shapes[shape]) || ""} ${
+            (size && sizes[size]) || ""
+          } ${(variant && variants[variant]) || ""}`}
           placeholder={
             <div className={placeholderClassName}>{placeholder}</div>
           }
@@ -135,6 +139,7 @@ const SelectBox = React.forwardRef<any, SelectProps>(
           {...restProps}
         />
         <ErrorMessage errors={errors} />
+        {children}
       </>
     );
   }

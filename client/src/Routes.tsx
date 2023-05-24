@@ -2,7 +2,10 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "pages/Home";
 import NotFound from "pages/NotFound";
-const Homepage = React.lazy(() => import("pages/Homepage"));
+const SigninView = React.lazy(() => import("pages/SigninView"));
+const SignupViewOne = React.lazy(() => import("pages/SignupViewOne"));
+const Homepage = React.lazy(() => import("pages/Landingpage"));
+const SignupViewTwo = React.lazy(() => import("pages/SignupViewTwo"));
 const ProjectRoutes = () => {
   return (
     <React.Suspense fallback={<>Loading...</>}>
@@ -10,6 +13,10 @@ const ProjectRoutes = () => {
         <Routes>
           <Route path="/" element={<Homepage />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/signupviewtwo" element={<SignupViewTwo />} />
+          <Route path="/signupviewone" element={<SignupViewOne />} />
+          <Route path="/signinview" element={<SigninView />} />
+          <Route path="/dhiwise-dashboard" element={<Home />} />
         </Routes>
       </Router>
     </React.Suspense>

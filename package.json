@@ -17,6 +17,11 @@
     "client"
   ],
   "devDependencies": {
-    "concurrently": "^8.0.1"
+    "concurrently": "^8.0.1",
+    "nx": "16.2.2",
+    "nx-cloud": "latest"
+  },
+  "dependencies": {
+    "prettier": "^2.8.8"
   }
 }
