@@ -14,4 +14,5 @@ To run server, for example, go to root directory and run: `yarn workspace server
 To add dependencies, go to root directory and run: `yarn workspace <workspace-name> add <package-name>`
 For example, to add `express` to server, run: `yarn workspace server add express`
 
+To format the code run `yarn nx format`
 Questions? Contact Bilel
