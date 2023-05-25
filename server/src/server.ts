@@ -7,13 +7,14 @@ import hpp from 'hpp';
 import helmet from 'helmet';
 // TODO: Add types to import below
 // import xss from 'xss-clean';
-
 import { connectDB } from './config/db';
 import environment from "./utils/environment";
 import logger from "./utils/logger";
+import {errorHandler, listenToErrorEvents} from "./utils/errorHandler";
 
 //Routes
 import { userRouter } from './routes/users';
+import http from "http";
 
 
 connectDB();
@@ -45,12 +46,30 @@ app.use(cors());
 // Mount routers
 app.use('/api/v1/users', userRouter);
 
+
+app.use(errorHandler)
+
 const PORT = environment.PORT || 3001;
 
-app.listen(PORT, () => {
-    logger.info(`Server running in ${environment.NODE_ENV} mode on port ${PORT}`
-    );
-});
+// app.listen(PORT, () => {
+//     logger.info(`Server running in ${environment.NODE_ENV} mode on port ${PORT}`
+//     );
+// });
+
+
+const onListening = (server: http.Server) => (): void => {
+    const addr = server.address();
+    const bind =
+        typeof addr === "string" ? `pipe ${addr}` : `port ${addr?.port ?? ""}`;
+    logger.info(`Server running in ${environment.NODE_ENV} listening on ${bind}`);
+};
+
+// let's first create a server based on our Express application
+const server = http.createServer(app);
+// then add an error handler for anything uncaught by the app
+listenToErrorEvents(server);
+server.on("listening", onListening(server));
+server.listen(PORT);
 
 //TODO: Server crashes when trying to connect to MongoDB Atlas
 //TODO: Server crashes when validation fails
