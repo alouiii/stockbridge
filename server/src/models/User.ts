@@ -1,5 +1,8 @@
 import mongoose from "mongoose";
 import type {User, Address, PaymentMethod, Subscription} from "../entities/userEntity";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+import environment from "../utils/environment";
 
 const Types = mongoose.Schema.Types;
 
@@ -96,6 +99,36 @@ const userSchema = new mongoose.Schema<User>({
     paymentMethod: paymentMethodSchema,
 
 });
+
+userSchema.pre('save', async function (next) {
+    if (!this.isModified('password')) {
+        next();
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+});
+
+// Encrypt password using bcrypt while updating (admin)
+// userSchema.pre("findOneAndUpdate", async function ( next) {
+//     if (this._update.password) {
+//         this._update.password = await bcrypt.hash(this._update.password, 10);
+//     }
+//     next();
+// });
+
+// Sign JWT and return
+userSchema.methods.getSignedJwtToken = function () {
+    return jwt.sign({ id: this._id }, environment.JWT_SECRET, {
+        expiresIn: environment.JWT_EXPIRE,
+    });
+};
+
+// Match user entered password to hashed password in database
+userSchema.methods.matchPassword = async function (enteredPassword: string) {
+    return await bcrypt.compare(enteredPassword, this.password);
+};
+
 
 const userModel = mongoose.model('User', userSchema, 'users');
 export default userModel;

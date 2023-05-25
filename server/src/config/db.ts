@@ -6,7 +6,7 @@ const serviceName = 'db';
 export const connectDB = async () => {
     logger.debug(`${serviceName}: Connecting to MongoDB at: ${environment.MONGO_URI}`)
 
-    const conn = await mongoose.connect(environment.MONGO_URI || '');
+    const conn = await mongoose.connect(environment.MONGO_URI);
 
     logger.debug(`${serviceName}: MongoDB Connected: ${conn.connection.host}`)
 };

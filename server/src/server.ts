@@ -1,10 +1,12 @@
 import './preStart'; // always have this at the top of this file in order to execute these scripts first
 import express, { Express } from 'express';
 import mongoSanitize from 'express-mongo-sanitize';
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import morgan from 'morgan';
 import hpp from 'hpp';
 import helmet from 'helmet';
+import http from "http";
 // TODO: Add types to import below
 // import xss from 'xss-clean';
 import { connectDB } from './config/db';
@@ -14,7 +16,7 @@ import {errorHandler, listenToErrorEvents} from "./utils/errorHandler";
 
 //Routes
 import { userRouter } from './routes/users';
-import http from "http";
+import {authRouter} from "./routes/auth";
 
 
 connectDB();
@@ -24,6 +26,9 @@ const app: Express = express();
 
 // Body parser
 app.use(express.json());
+
+// Cookie parser
+app.use(cookieParser());
 
 // Dev logging middleware
 if (environment.NODE_ENV === 'development') {
@@ -45,6 +50,7 @@ app.use(cors());
 
 // Mount routers
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/auth', authRouter);
 
 
 app.use(errorHandler)
@@ -64,13 +70,10 @@ const onListening = (server: http.Server) => (): void => {
     logger.info(`Server running in ${environment.NODE_ENV} listening on ${bind}`);
 };
 
-// let's first create a server based on our Express application
+// create a server based on our Express application
 const server = http.createServer(app);
-// then add an error handler for anything uncaught by the app
+// add an error handler for anything uncaught by the app
 listenToErrorEvents(server);
 server.on("listening", onListening(server));
 server.listen(PORT);
-
-//TODO: Server crashes when trying to connect to MongoDB Atlas
-//TODO: Server crashes when validation fails
 

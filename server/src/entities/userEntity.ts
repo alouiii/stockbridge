@@ -20,14 +20,20 @@ export interface PaymentMethod {
 }
 
 export interface User {
-    id: string,
-    name: string,
-    email: string,
-    password: string,
-    prioritisationTickets: number,
-    phoneNumber: string,
-    createdAt: Date,
-    address: Address
-    subscription: Subscription
-    paymentMethod: PaymentMethod
+    id: string;
+    name: string;
+    email: string;
+    password: string;
+    prioritisationTickets: number;
+    phoneNumber: string;
+    createdAt: Date;
+    address: Address;
+    subscription: Subscription;
+    paymentMethod: PaymentMethod;
+
+    getSignedJwtToken(): string;
+
+    matchPassword(enteredPassword: string): boolean;
+
+
 }
