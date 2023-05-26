@@ -1,6 +1,7 @@
 import userModel from "../models/User";
 import type {User} from "../entities/userEntity";
 import logger from "../utils/logger";
+import {AppError} from "../utils/errorHandler";
 
 const serviceName = 'userServices';
 
@@ -10,7 +11,7 @@ export const findUserById = async (id: string) => {
 
     if (!user) {
         logger.error(`${serviceName}: User not found with id of ${id}`);
-        throw new Error(`User not found with id of ${id}`);
+        throw new AppError('User not found', 'User not found', 404);
     }
 
     logger.debug(`${serviceName}: Returning user ${user}`);

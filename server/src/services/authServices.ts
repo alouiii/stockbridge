@@ -2,6 +2,7 @@ import userModel from "../models/User";
 import type {User} from "../entities/userEntity";
 import logger from "../utils/logger";
 import environment from "../utils/environment";
+import {AppError} from "../utils/errorHandler";
 
 
 const serviceName = 'authServices';
@@ -17,14 +18,14 @@ export const loginUser = async (email: string, password: string) => {
     const user = await userModel.findOne({ email }).select('+password');
 
     if (!user) {
-        throw new Error('Invalid credentials');
+        throw new AppError('Invalid credentials', 'Invalid credentials', 401);
     }
 
     // Check if password matches
     const isMatch = await user.matchPassword(password);
 
     if (!isMatch) {
-        throw new Error('Invalid credentials');
+        throw new AppError('Invalid credentials', 'Invalid credentials', 401);
     }
 
     return sendTokenResponse(user);
