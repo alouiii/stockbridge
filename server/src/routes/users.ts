@@ -50,7 +50,6 @@ const deleteUser = asyncHandler(async (req: AuthenticatedRequest, res: Response)
 });
 
 const getAuthenticatedUser = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
-    console.log('###################')
     res.json(req.user);
 });
 
