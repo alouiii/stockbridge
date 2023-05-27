@@ -5,6 +5,11 @@ import {AppError} from "../utils/errorHandler";
 
 const serviceName = 'userServices';
 
+/**
+ * Find a user by id
+ * @param id
+ * @returns Promise containing the user
+ */
 export const findUserById = async (id: string) => {
     logger.debug(`${serviceName}: Finding user with id: ${id}`);
     const user = await userModel.findById(id);
@@ -18,11 +23,22 @@ export const findUserById = async (id: string) => {
     return user;
 }
 
+/**
+ * create a user
+ * @param user
+ * @returns Promise containing the user
+ */
 export const createUser = async (user: User) => {
     logger.debug(`${serviceName}: Creating user ${user}`)
     return await userModel.create(user);
 }
 
+/**
+ * Update a user
+ * @param id
+ * @param user
+ * @returns Promise containing the updated user
+ */
 export const updateUser = async (id: string, user: User) => {
     logger.debug(`${serviceName}: Updating user with id: ${id} with ${user}`)
     return userModel.findByIdAndUpdate(id, user, {
@@ -31,12 +47,20 @@ export const updateUser = async (id: string, user: User) => {
     });
 }
 
+/**
+ * Delete a user
+ * @param id
+ * @returns Promise containing the deleted user
+ */
 export const delUser = async (id: string) => {
     logger.debug(`${serviceName}: Deleting user with id: ${id}`)
     return userModel.findByIdAndDelete(id);
 }
 
-// TODO: This is a test function, remove it later
+/**
+ * Find all users // TODO: This is a test function, remove it later
+ * @returns Promise containing all users
+ */
 export const findAllUsers = async () => {
     logger.debug(`${serviceName}: Finding all users`)
     return userModel.find();

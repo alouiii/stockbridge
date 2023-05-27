@@ -1,5 +1,10 @@
 import { cleanEnv, port, str, url, num } from "envalid";
 
+// Read more about envalid here: https://www.npmjs.com/package/envalid
+
+/**
+ * This file is used to validate the environment variables.
+ */
 const env = cleanEnv(process.env, {
     PORT: port(),
     LOG_LEVEL: str({ default: "info" }),

@@ -10,6 +10,9 @@ export interface AuthenticatedRequest extends Request {
     user?: User | null; // Replace 'any' with the appropriate type for the user object
 }
 
+/**
+ * Middleware to protect routes by checking if the user has a valid JWT in the request cookie.
+ */
 export const protect = asyncHandler(async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     let jwtToken;
 

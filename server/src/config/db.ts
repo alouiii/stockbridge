@@ -3,6 +3,10 @@ import environment from "../utils/environment";
 import logger from "../utils/logger";
 
 const serviceName = 'db';
+
+/**
+ * This file is used to configure the database connection.
+ */
 export const connectDB = async () => {
     logger.debug(`${serviceName}: Connecting to MongoDB at: ${environment.MONGO_URI}`)
 

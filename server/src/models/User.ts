@@ -100,6 +100,10 @@ const userSchema = new mongoose.Schema<User>({
 
 });
 
+/**
+ * If password is modified, encrypt it using bcrypt. This runs before every save operation.
+ * @returns {Promise<void>}
+ */
 userSchema.pre('save', async function (next) {
     if (!this.isModified('password')) {
         next();
@@ -117,14 +121,21 @@ userSchema.pre('save', async function (next) {
 //     next();
 // });
 
-// Sign JWT and return
+/**
+ * Sign JWT and return it with the user id as payload.
+ * @returns {string}
+ */
 userSchema.methods.getSignedJwtToken = function () {
     return jwt.sign({ id: this._id }, environment.JWT_SECRET, {
         expiresIn: environment.JWT_EXPIRE,
     });
 };
 
-// Match user entered password to hashed password in database
+/**
+ * Match user entered password to hashed password in database.
+ * @param enteredPassword
+ * @returns {Promise<boolean>}
+ */
 userSchema.methods.matchPassword = async function (enteredPassword: string) {
     return await bcrypt.compare(enteredPassword, this.password);
 };

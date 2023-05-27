@@ -7,12 +7,23 @@ import {AppError} from "../utils/errorHandler";
 
 const serviceName = 'authServices';
 
+/**
+ * Register a new user
+ * @param user
+ * @returns Promise containing the created user
+ */
 export const registerUser = async (user: User) => {
     logger.debug(`${serviceName}: Creating user ${user}`)
     const createdUser = await userModel.create(user);
     return sendTokenResponse(createdUser);
 }
 
+/**
+ * Login a user
+ * @param email
+ * @param password
+ * @returns Promise containing the user and the token
+ */
 export const loginUser = async (email: string, password: string) => {
     // Check for user
     const user = await userModel.findOne({ email }).select('+password');
@@ -31,7 +42,12 @@ export const loginUser = async (email: string, password: string) => {
     return sendTokenResponse(user);
 }
 
-const sendTokenResponse = (user: any) => {
+/**
+ * Get token from model, create cookie and send response
+ * @param user
+ * @returns Promise containing the user and the token (with options)
+ */
+const sendTokenResponse = (user: User) => {
     // Create token
     const token = user.getSignedJwtToken();
 
