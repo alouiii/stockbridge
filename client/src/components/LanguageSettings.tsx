@@ -1,6 +1,6 @@
-import { Img } from "components/Img";
+
 import { SelectBox } from "components/SelectBox";
-import { Text } from "components";
+import { Text, Img } from "components";
 import React from "react";
 
 type selectOptionType = { value: string; label: string };
@@ -49,4 +49,4 @@ const LanguageSettings: React.FC<LanguageSettingsProps> = (props) => {
   );
 };
 
-export default LanguageSettings;
+export {LanguageSettings};

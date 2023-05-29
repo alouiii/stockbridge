@@ -2,7 +2,7 @@ import { Store } from "index";
 import React from "react";
 import { Text } from "components";
 import { Ratings } from "./Ratings";
-import { ProductAttribute } from "./ProductOverviewSection/ProductAttribute";
+import { ProductAttribute } from "./ProductAttribute";
 
 type OfferBarProps = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLDivElement>,

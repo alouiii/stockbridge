@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 
 import { Bottombar, Topbar, StoreDetailsBar, List, Text } from "components";
-import { ProductOverviewSection } from "components/ProductOverviewSection";
 import { Reviewbar } from "components/Reviewbar";
 import { OfferStatus } from "index";
 import { OfferSection } from "components/OfferSection";
 import { useParams } from "react-router-dom";
+import { ProductOverviewSection } from "components";
 
 type ProductOverviewProps = Partial<{
   userid: number;

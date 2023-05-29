@@ -1,4 +1,4 @@
-import { Img } from "components/Img";
+import { Img } from "components";
 import React from "react";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -21,4 +21,4 @@ const CloseButton = React.forwardRef<HTMLInputElement>(() => {
   );
 });
 
-export { CloseButton as CloseButton };
+export { CloseButton };

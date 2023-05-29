@@ -1,9 +1,6 @@
 import React from "react";
 
-import { Img, Input, Line, SelectBox, Text } from "components";
-import Addpayment from "components/AddPayment";
-import Fieldname from "components/Fieldname";
-import SignupViewTwoInputfieldname from "components/SignupViewTwoInputfieldname";
+import { Img, Input, Line, SelectBox, Text, Fieldname, Addpayment } from "components";
 import SignupViewTwoLogo from "components/SignupViewTwoLogo";
 import SignupViewTwoSignupsection from "components/SignupViewTwoSignupsection";
 

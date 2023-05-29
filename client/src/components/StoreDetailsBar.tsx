@@ -1,10 +1,9 @@
 import React from "react";
-
 import { Text } from "components";
 import { Ratings } from "components/Ratings";
 import { Store } from "index";
 
-type StoreDetailsBar = React.DetailedHTMLProps<
+type StoreDetailsBarProps = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLDivElement>,
   HTMLDivElement
 > &
@@ -12,7 +11,7 @@ type StoreDetailsBar = React.DetailedHTMLProps<
     store: Store;
   }>;
 
-const StoreDetailsBar: React.FC<StoreDetailsBar> = (props) => {
+const StoreDetailsBar: React.FC<StoreDetailsBarProps> = (props) => {
   return (
     <>
       <div className={props.className}>

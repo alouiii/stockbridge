@@ -1,8 +1,8 @@
 import React from "react";
 
 import { Text, Bottombar, Topbar, Button } from "components";
-import HomepageHelp from "components/HomepageHelp";
-import HomepageIntrobar from "components/HomepageIntrobar";
+import HomepageHelp from "components/Help";
+import HomepageIntrobar from "components/Introbar";
 import HomepageStackpostYourAdvert from "components/HomepageStackpostYourAdvert";
 import { useNavigate } from "react-router-dom";
 
@@ -53,7 +53,7 @@ const Homepage: React.FC = () => {
           inventory management
         </Text>
         <div className="flex flex-col gap-5">
-          <Button onClick={() => navigate("/productoverview/")}>
+          <Button onClick={() => navigate("/productoverview/12")}>
             Article to buy
           </Button>
           <Button>Article Prioritized</Button>

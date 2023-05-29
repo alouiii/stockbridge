@@ -1,7 +1,6 @@
 import React from "react";
 
-import { Img, Input, Line, Text } from "components";
-import Fieldname from "components/Fieldname";
+import { Img, Input, Line, Text, Fieldname } from "components";
 import SignupViewTwoLogo from "components/SignupViewTwoLogo";
 import SignupViewTwoSignupsection from "components/SignupViewTwoSignupsection";
 

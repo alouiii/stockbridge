@@ -1,5 +1,5 @@
 import React from "react";
-import { Text } from "..";
+import { Text } from "components";
 
 const LegalSection: React.FC = () => {
   return (
@@ -32,4 +32,4 @@ const LegalSection: React.FC = () => {
   );
 };
 
-export default LegalSection;
+export {LegalSection};

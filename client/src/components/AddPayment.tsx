@@ -29,4 +29,4 @@ Addpayment.defaultProps = {
   addapaymentmethOne: "Add a payment method",
 };
 
-export default Addpayment;
+export {Addpayment};

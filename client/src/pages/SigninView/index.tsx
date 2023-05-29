@@ -1,12 +1,8 @@
 import React from "react";
-import { CloseButton } from "components/CloseButton";
-import { useNavigate } from "react-router-dom";
-import { Img, Input, Line, Text } from "components";
-import Fieldname from "components/Fieldname";
+import { Fieldname, Img, Input, Line, Text, CloseButton } from "components";
 import SignupViewTwoSignupsection from "components/SignupViewTwoSignupsection";
 
 const SigninViewPage: React.FC = () => {
-  const navigate = useNavigate();
   return (
     <>
       <div className="bg-white_A700 flex flex-col font-poppins items-center justify-start mx-auto w-full">

@@ -1,6 +1,6 @@
 import React from "react";
 import Select, { Props } from "react-select";
-import { ErrorMessage } from "../ErrorMessage";
+import { ErrorMessage } from "./ErrorMessage";
 
 type selectOptionType = { value: string; label: string };
 

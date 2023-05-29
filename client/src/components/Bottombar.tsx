@@ -1,8 +1,8 @@
 import React from "react";
 
 import { Button, Img, Text } from "components";
-import LegalSection from "./LegalSection";
-import LanguageSettings from "./LanguageSettings";
+import { LanguageSettings } from "./LanguageSettings";
+import { LegalSection } from "./LegalSection";
 
 type selectOptionType = { value: string; label: string };
 
