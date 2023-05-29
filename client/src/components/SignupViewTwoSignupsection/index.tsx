@@ -48,7 +48,7 @@ const SignupViewTwoSignupsection: React.FC<SignupViewTwoSignupsectionProps> = (
           .
         </Text>
         <Button
-          className="cursor-pointer font-bold font-worksans min-w-[556px] sm:min-w-full mt-[25px] text-4xl sm:text-[32px] md:text-[34px] text-center text-white_A700"
+          className="cursor-pointer font-bold font-poppins min-w-[556px] sm:min-w-full mt-[25px] text-4xl sm:text-[32px] md:text-[34px] text-center text-white_A700"
           shape="RoundedBorder6"
           size="sm"
           variant="OutlineRed300"

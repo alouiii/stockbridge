@@ -42,4 +42,4 @@ const Topbar: React.FC<HomepageTopbarProps> = (props) => {
 
 Topbar.defaultProps = {};
 
-export default Topbar;
+export { Topbar };

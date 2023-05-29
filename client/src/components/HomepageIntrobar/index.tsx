@@ -22,7 +22,7 @@ const HomepageIntrobar: React.FC<HomepageIntrobarProps> = (props) => {
       <div className={props.className}>
         <div className="flex flex-col gap-1 items-center justify-center w-auto">
           <Text
-            className="font-roboto text-black_900_dd uppercase w-auto"
+            className="font-poppins text-black_900_dd uppercase w-auto"
             as="h2"
             variant="h2"
           >
@@ -39,7 +39,7 @@ const HomepageIntrobar: React.FC<HomepageIntrobarProps> = (props) => {
                 alt="vector"
               />
               <Text
-                className="font-worksans text-red_300 w-auto"
+                className="font-poppins text-red_300 w-auto"
                 as="h4"
                 variant="h4"
               >
@@ -47,7 +47,7 @@ const HomepageIntrobar: React.FC<HomepageIntrobarProps> = (props) => {
               </Text>
             </div>
             <Text
-              className="font-worksans leading-[26.00px] max-w-[178px] md:max-w-full text-black_900_dd text-center"
+              className="font-poppins leading-[26.00px] max-w-[178px] md:max-w-full text-black_900_dd text-center"
               as="h5"
               variant="h5"
             >
@@ -66,7 +66,7 @@ const HomepageIntrobar: React.FC<HomepageIntrobarProps> = (props) => {
                   alt="offer"
                 />
                 <Text
-                  className="font-worksans text-red_300 w-auto"
+                  className="font-poppins text-red_300 w-auto"
                   as="h4"
                   variant="h4"
                 >
@@ -74,7 +74,7 @@ const HomepageIntrobar: React.FC<HomepageIntrobarProps> = (props) => {
                 </Text>
               </div>
               <Text
-                className="font-worksans leading-[26.00px] text-black_900_dd text-center"
+                className="font-poppins leading-[26.00px] text-black_900_dd text-center"
                 as="h5"
                 variant="h5"
               >
@@ -89,7 +89,7 @@ const HomepageIntrobar: React.FC<HomepageIntrobarProps> = (props) => {
                   alt="megaphone"
                 />
                 <Text
-                  className="font-worksans text-red_300 w-auto"
+                  className="font-poppins text-red_300 w-auto"
                   as="h4"
                   variant="h4"
                 >
@@ -97,7 +97,7 @@ const HomepageIntrobar: React.FC<HomepageIntrobarProps> = (props) => {
                 </Text>
               </div>
               <Text
-                className="font-worksans text-black_900_dd text-center w-auto"
+                className="font-poppins text-black_900_dd text-center w-auto"
                 as="h5"
                 variant="h5"
               >

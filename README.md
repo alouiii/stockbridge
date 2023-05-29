@@ -1,6 +1,5 @@
 # stockbridge
 
-
 ## Getting started
 
 To install packages, go to root directory and run: `yarn install`

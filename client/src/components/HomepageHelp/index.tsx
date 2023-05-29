@@ -14,7 +14,7 @@ const HomepageHelp: React.FC<HomepageHelpProps> = (props) => {
       <div className={props.className}>
         <div className="border-4 border-gray_900 border-solid flex flex-col items-center justify-end p-[13px]">
           <Text
-            className="font-roboto text-black_900_dd text-center uppercase"
+            className="font-poppins text-black_900_dd text-center uppercase"
             as="h4"
             variant="h4"
           >
@@ -22,7 +22,7 @@ const HomepageHelp: React.FC<HomepageHelpProps> = (props) => {
           </Text>
         </div>
         <Text
-          className="font-normal font-worksans text-black_900_dd text-center w-[299px]"
+          className="font-normal font-poppins text-black_900_dd text-center w-[299px]"
           as="h6"
           variant="h6"
         >

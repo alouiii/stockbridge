@@ -1,16 +1,16 @@
 import React from "react";
 
-import { Text } from "components";
-import HomepageBottombar from "components/HomepageBottombar";
+import { Text, Bottombar, Topbar, Button } from "components";
 import HomepageHelp from "components/HomepageHelp";
 import HomepageIntrobar from "components/HomepageIntrobar";
 import HomepageStackpostYourAdvert from "components/HomepageStackpostYourAdvert";
-import Topbar from "components/Topbar";
+import { useNavigate } from "react-router-dom";
 
 const Homepage: React.FC = () => {
+  const navigate = useNavigate();
   return (
     <>
-      <div className="bg-gray_50_02 flex flex-col font-roboto items-center justify-end mx-auto pt-[9px] w-full">
+      <div className="bg-gray_50_02 flex flex-col font-poppins items-center justify-end mx-auto pt-[9px] w-full">
         <Topbar
           className="flex flex-row items-center justify-between px-2.5 w-full"
           user={false}
@@ -30,7 +30,7 @@ const Homepage: React.FC = () => {
           }
         />
         <HomepageIntrobar
-          className="bg-red_300_4c flex flex-col font-roboto gap-[60px] h-[443px] md:h-auto items-center justify-center px-0 md:px-10 sm:px-5 py-[25px] w-full"
+          className="bg-red_300_4c flex flex-col font-poppins gap-[60px] h-[443px] md:h-auto items-center justify-center px-0 md:px-10 sm:px-5 py-[25px] w-full"
           howitworks="How it works"
           one="1."
           searchforwhat="Search for what you are looking for."
@@ -52,19 +52,28 @@ const Homepage: React.FC = () => {
         >
           inventory management
         </Text>
+        <div className="flex flex-col gap-5">
+          <Button onClick={() => navigate("/productoverview/")}>
+            Article to buy
+          </Button>
+          <Button>Article Prioritized</Button>
+          <Button>Article To prioritize</Button>
+        </div>
         <HomepageHelp
           className="flex flex-col gap-5 items-center justify-center max-w-[1032px] mt-[3046px] mx-auto md:px-5 w-full"
           gotanyquestionsOne="Got any questions? Need help?"
           weareheretohelpOne="We are here to help. Get in touch!"
         />
-        <div className="flex flex-col font-worksans items-center justify-center max-w-[1512px] mt-[99px] w-full">
-          <HomepageBottombar
+        <div className="flex flex-col font-poppins items-center justify-center max-w-[1512px] mt-[99px] w-full">
+          <Bottombar
             className="bg-red_300_4c flex flex-col h-[209px] md:h-auto items-center justify-center min-w-[100%] w-full"
             yourwebsite2023One="© Your Website 2023"
-            legal="Legal"
             terms="Terms"
             privacy="Privacy"
-            languageOne="Language"
+            languageOptions={[
+              { label: "EN", value: "English" },
+              { label: "DE", value: "German" },
+            ]}
             iconsmadebyfreeOne="Icons made by Freepik from www.flaticon.com is licensed by CC 3.0 BY"
           />
         </div>

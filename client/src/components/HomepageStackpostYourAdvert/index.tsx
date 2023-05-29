@@ -65,7 +65,7 @@ const HomepageStackpostYourAdvert: React.FC<
                 />
                 <div className="flex flex-col items-center justify-start pt-[35px] w-full">
                   <Text
-                    className="font-roboto leading-[57.00px] text-center text-white_A700 uppercase"
+                    className="font-poppins leading-[57.00px] text-center text-white_A700 uppercase"
                     as="h2"
                     variant="h2"
                   >
