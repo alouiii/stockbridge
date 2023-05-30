@@ -3,7 +3,7 @@ info:
   title: Team 27 - StockBridge
   description: |-
     StockBridge was developed for the Software Engineering Business Application course at TUM.
-  version: '0.1'
+  version: "0.1"
 servers:
   - url: http://localhost:3001/api/v1
 tags:
@@ -29,15 +29,15 @@ paths:
       description: This is public
       operationId: createUser
       requestBody:
-        $ref: '#/components/requestBodies/UserRegistration'
+        $ref: "#/components/requestBodies/UserRegistration"
       responses:
-        '201':
+        "201":
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
-        '400':
+                $ref: "#/components/schemas/User"
+        "400":
           description: Invalid Input
   /user/login:
     post:
@@ -59,7 +59,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: successful operation
           headers:
             X-Expires-After:
@@ -71,43 +71,77 @@ paths:
             application/json:
               schema:
                 type: string
-        '400':
+        "400":
           description: Invalid username/password supplied
   /user/logout:
     get:
       tags:
         - Authentication
       summary: Logs out current logged in user session
-      description: ''
+      description: ""
       operationId: logoutUser
       parameters: []
       responses:
         default:
           description: successful operation
-  /user/{id}:
+  /users:
     get:
       tags:
         - User
-      summary: Get user by user name
-      description: ''
-      operationId: getUserById
-      parameters:
-        - name: id
-          in: path
-          description: 'The name that needs to be fetched. Use user1 for testing. '
-          required: true
-          schema:
-            type: string
+      summary: Get all Users
+      description: Get all Users
+      operationId: getUsers
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
-        '400':
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+    post:
+      tags:
+        - User
+      summary: Create user
+      description: This a test endpoint. Should be removed
+      operationId: postUser
+      requestBody:
+        $ref: "#/components/requestBodies/UserRegistration"
+      responses:
+        "201":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          description: Invalid Input
+
+  /user/{id}:
+    get:
+      tags:
+        - User
+      summary: Get user by user Id
+      description: ""
+      operationId: getUserById
+      parameters:
+        - name: id
+          in: path
+          description: "The name that needs to be fetched. Use user1 for testing. "
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
           description: Invalid username supplied
-        '404':
+        "404":
           description: User not found
       security:
         - bearerAuth: []
@@ -125,11 +159,11 @@ paths:
           schema:
             type: string
       requestBody:
-        $ref: '#/components/requestBodies/User'
+        $ref: "#/components/requestBodies/User"
       responses:
-        '200':
+        "200":
           description: successful operation
-        '301':
+        "301":
           description: Unauthorized
       security:
         - bearerAuth: []
@@ -147,9 +181,9 @@ paths:
           schema:
             type: string
       responses:
-        '400':
+        "400":
           description: Invalid username supplied
-        '404':
+        "404":
           description: User not found
       security:
         - bearerAuth: []
@@ -161,40 +195,40 @@ paths:
       description: Post a new review
       operationId: postReview
       requestBody:
-        $ref: '#/components/requestBodies/Review'
+        $ref: "#/components/requestBodies/Review"
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Review'
-        '405':
+                $ref: "#/components/schemas/Review"
+        "405":
           description: Invalid input
   /reviews/{id}:
     get:
       tags:
         - Review
       summary: get review by id
-      description: ''
+      description: ""
       operationId: getReviewById
       parameters:
         - name: id
           in: path
-          description: 'the id of the review that needs to be fetched'
+          description: "the id of the review that needs to be fetched"
           required: true
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Review'
-        '400':
+                $ref: "#/components/schemas/Review"
+        "400":
           description: Invalid username supplied
-        '404':
+        "404":
           description: review found
       security:
         - bearerAuth: []
@@ -211,11 +245,11 @@ paths:
           schema:
             type: string
       requestBody:
-        $ref: '#/components/requestBodies/Review'
+        $ref: "#/components/requestBodies/Review"
       responses:
-        '200':
+        "200":
           description: successful operation
-        '301':
+        "301":
           description: Unauthorized
       security:
         - bearerAuth: []
@@ -232,9 +266,9 @@ paths:
           schema:
             type: string
       responses:
-        '400':
+        "400":
           description: Invalid username supplied
-        '404':
+        "404":
           description: review not found
       security:
         - bearerAuth: []
@@ -243,27 +277,27 @@ paths:
       tags:
         - Review
       summary: get review by reviwer id
-      description: ''
+      description: ""
       operationId: getReviewsByReviwer
       parameters:
         - name: id
           in: path
-          description: 'the id of the author of the review'
+          description: "the id of the author of the review"
           required: true
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Review'
-        '400':
+                  $ref: "#/components/schemas/Review"
+        "400":
           description: Invalid username supplied
-        '404':
+        "404":
           description: review found
       security:
         - bearerAuth: []
@@ -272,45 +306,61 @@ paths:
       tags:
         - Review
       summary: get review by reviwee id
-      description: ''
+      description: ""
       operationId: getReviewsByReviwee
       parameters:
         - name: id
           in: path
-          description: 'the id of the author of the review'
+          description: "the id of the author of the review"
           required: true
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Review'
-        '400':
+                  $ref: "#/components/schemas/Review"
+        "400":
           description: Invalid username supplied
-        '404':
+        "404":
           description: review found
       security:
         - bearerAuth: []
 
   /adverts:
     summary: Operations for adverts
+    get:
+      tags:
+        - Adverts
+      summary: Get all adverts
+      operationId: getAllAdverts
+      responses:
+        200:
+          description: Return all adverts
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Advert"
+        405:
+          description: Invalid input
     post:
       tags:
         - Adverts
       summary: Post new advert
       operationId: postAdvert
+      requestBody:
+        $ref: "#/components/requestBodies/Advert"
       responses:
         200:
           description: Advert posted successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Advert'
+                $ref: "#/components/schemas/Advert"
         405:
           description: Invalid input
   /adverts/{id}:
@@ -322,7 +372,7 @@ paths:
       parameters:
         - name: id
           in: path
-          description: 'the id of the advert that needs to be fetched'
+          description: "the id of the advert that needs to be fetched"
           required: true
           schema:
             type: string
@@ -332,7 +382,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Advert'
+                $ref: "#/components/schemas/Advert"
         404:
           description: Advert Not found
         405:
@@ -352,11 +402,11 @@ paths:
           schema:
             type: string
       requestBody:
-        $ref: '#/components/requestBodies/Advert'
+        $ref: "#/components/requestBodies/Advert"
       responses:
-        '200':
+        "200":
           description: successful operation
-        '301':
+        "301":
           description: Unauthorized
       security:
         - bearerAuth: []
@@ -373,14 +423,14 @@ paths:
           schema:
             type: string
       responses:
-        '400':
+        "400":
           description: Invalid id supplied
-        '404':
+        "404":
           description: Advert not found
       security:
         - bearerAuth: []
   /getAdvertsByCategory/{cat}:
-    summary: ''
+    summary: ""
     get:
       tags:
         - Adverts
@@ -394,9 +444,9 @@ paths:
           schema:
             type: string
       responses:
-        '400':
+        "400":
           description: Invalid id supplied
-        '404':
+        "404":
           description: Advert not found
       security:
         - bearerAuth: []
@@ -406,18 +456,18 @@ paths:
       tags:
         - Offers
       summary: post a new offer
-      description: ''
+      description: ""
       operationId: postOffer
       requestBody:
-        $ref: '#/components/requestBodies/Offer'
+        $ref: "#/components/requestBodies/Offer"
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Offer'
-        '405':
+                $ref: "#/components/schemas/Offer"
+        "405":
           description: Invalid input
       security:
         - bearerAuth: []
@@ -426,25 +476,25 @@ paths:
       tags:
         - Offers
       summary: get offer by id
-      description: ''
+      description: ""
       operationId: getOfferById
       parameters:
         - name: id
           in: path
-          description: 'the id of the offer that needs to be fetched'
+          description: "the id of the offer that needs to be fetched"
           required: true
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Offer'
-        '400':
+                $ref: "#/components/schemas/Offer"
+        "400":
           description: Invalid id supplied
-        '404':
+        "404":
           description: offer not found
       security:
         - bearerAuth: []
@@ -461,11 +511,11 @@ paths:
           schema:
             type: string
       requestBody:
-        $ref: '#/components/requestBodies/Offer'
+        $ref: "#/components/requestBodies/Offer"
       responses:
-        '200':
+        "200":
           description: successful operation
-        '301':
+        "301":
           description: Unauthorized
       security:
         - bearerAuth: []
@@ -482,9 +532,9 @@ paths:
           schema:
             type: string
       responses:
-        '400':
+        "400":
           description: Invalid id supplied
-        '404':
+        "404":
           description: offer not found
       security:
         - bearerAuth: []
@@ -493,27 +543,27 @@ paths:
       tags:
         - Offers
       summary: get offer by advert id
-      description: ''
+      description: ""
       operationId: getOffersByAdvert
       parameters:
         - name: id
           in: path
-          description: 'the id of the advert'
+          description: "the id of the advert"
           required: true
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Offer'
-        '400':
+                  $ref: "#/components/schemas/Offer"
+        "400":
           description: Invalid id supplied
-        '404':
+        "404":
           description: offer not found
       security:
         - bearerAuth: []
@@ -522,27 +572,27 @@ paths:
       tags:
         - Offers
       summary: get offer by offeror id
-      description: ''
+      description: ""
       operationId: getOffersByOfferor
       parameters:
         - name: id
           in: path
-          description: 'the id of the author of the offer'
+          description: "the id of the author of the offer"
           required: true
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Offer'
-        '400':
+                  $ref: "#/components/schemas/Offer"
+        "400":
           description: Invalid id supplied
-        '404':
+        "404":
           description: offer not found
       security:
         - bearerAuth: []
@@ -551,49 +601,48 @@ paths:
       tags:
         - Offers
       summary: get offer by offeree id
-      description: ''
+      description: ""
       operationId: getOffersByOfferee
       parameters:
         - name: id
           in: path
-          description: 'the id of the offeree'
+          description: "the id of the offeree"
           required: true
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Offer'
-        '400':
+                  $ref: "#/components/schemas/Offer"
+        "400":
           description: Invalid id supplied
-        '404':
+        "404":
           description: offer not found
       security:
         - bearerAuth: []
-
 
   /orders:
     post:
       tags:
         - Orders
       summary: post a new order
-      description: ''
+      description: ""
       operationId: postOrder
       requestBody:
-        $ref: '#/components/requestBodies/Order'
+        $ref: "#/components/requestBodies/Order"
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Order'
-        '405':
+                $ref: "#/components/schemas/Order"
+        "405":
           description: Invalid input
       security:
         - bearerAuth: []
@@ -602,25 +651,25 @@ paths:
       tags:
         - Orders
       summary: get order by id
-      description: ''
+      description: ""
       operationId: getOrderById
       parameters:
         - name: id
           in: path
-          description: 'the id of the order that needs to be fetched'
+          description: "the id of the order that needs to be fetched"
           required: true
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Order'
-        '400':
+                $ref: "#/components/schemas/Order"
+        "400":
           description: Invalid id supplied
-        '404':
+        "404":
           description: offer not found
       security:
         - bearerAuth: []
@@ -637,11 +686,11 @@ paths:
           schema:
             type: string
       requestBody:
-        $ref: '#/components/requestBodies/Order'
+        $ref: "#/components/requestBodies/Order"
       responses:
-        '200':
+        "200":
           description: successful operation
-        '301':
+        "301":
           description: Unauthorized
       security:
         - bearerAuth: []
@@ -658,9 +707,9 @@ paths:
           schema:
             type: string
       responses:
-        '400':
+        "400":
           description: Invalid id supplied
-        '404':
+        "404":
           description: offer not found
       security:
         - bearerAuth: []
@@ -669,34 +718,30 @@ paths:
       tags:
         - Orders
       summary: gets an order by id.
-      description: ''
+      description: ""
       operationId: getOrdersByOffer
       parameters:
         - name: id
           in: path
-          description: 'the id of the offer of the order'
+          description: "the id of the offer of the order"
           required: true
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Order'
-        '400':
+                  $ref: "#/components/schemas/Order"
+        "400":
           description: Invalid username supplied
-        '404':
+        "404":
           description: review found
       security:
         - bearerAuth: []
-
-
-
-
 
 components:
   schemas:
@@ -726,11 +771,11 @@ components:
           type: string
           format: Date
         address:
-          $ref: '#/components/schemas/Address'
+          $ref: "#/components/schemas/Address"
         subscription:
-          $ref: '#/components/schemas/Subscription'
+          $ref: "#/components/schemas/Subscription"
         paymentMethod:
-          $ref: '#/components/schemas/PaymentMethod'
+          $ref: "#/components/schemas/PaymentMethod"
     PaymentMethod:
       type: object
       properties:
@@ -779,15 +824,13 @@ components:
           format: int32
           minimum: 0
           maximum: 5
-        description:
+        reviewMessage:
           type: string
-        createdAt:
+        date:
           type: string
           format: date
-        reviewer:
-          $ref: '#/components/schemas/User'
-        reviewee:
-          $ref: '#/components/schemas/User'
+        issuer:
+          $ref: "#/components/schemas/User"
     AdvertType:
       type: string
       enum:
@@ -825,53 +868,73 @@ components:
     Advert:
       type: object
       properties:
-        name:
+        id:
+          type: string
+          format: uuid
+        productname:
+          type: string
+        description:
+          type: string
+        imageurl:
           type: string
         prioritized:
           type: boolean
-        quantity:
-          type: integer
-        description:
+        color:
           type: string
-        price:
-          type: integer
         expirationDate:
           type: string
           format: date
+        quantity:
+          type: integer
+        price:
+          type: integer
+        date:
+          type: string
+          format: date
         status:
-          $ref: '#/components/schemas/AdvertStatus'
-        advertType:
-          $ref: '#/components/schemas/AdvertType'
+          $ref: "#/components/schemas/AdvertStatus"
+        type:
+          $ref: "#/components/schemas/AdvertType"
         category:
-          $ref: '#/components/schemas/ProductCategory'
+          $ref: "#/components/schemas/ProductCategory"
         offers:
           type: array
           items:
-            $ref: '#/components/schemas/Offer'
+            $ref: "#/components/schemas/Offer"
+        reviews:
+          type: array
+          items:
+            $ref: "#/components/schemas/Review"
+        store:
+          $ref: "#/components/schemas/User"
+    OfferStatus:
+      type: string
+      enum:
+        - "Open"
+        - "Rejected"
+        - "Accepted"
+        - "Canceled"
     Offer:
       type: object
       properties:
         id:
           type: string
           format: uuid
+        status:
+          $ref: "#/components/schemas/OfferStatus"
+        quantity:
+          type: integer
         price:
           type: number
           format: double
-        quantity:
-          type: integer
-        status:
-          type: string
         message:
           type: string
-        createdAt:
+        date:
           type: string
           format: date
-        offeror:
-          $ref: '#/components/schemas/User'
-        offeree:
-          $ref: '#/components/schemas/User'
-        advert:
-          $ref: '#/components/schemas/Advert'
+        issuer:
+          $ref: "#/components/schemas/User"
+
     Order:
       type: object
       properties:
@@ -890,7 +953,7 @@ components:
             - SHIPMENT_PENDING
             - RECEIVED
         offer:
-          $ref: '#/components/schemas/Offer'
+          $ref: "#/components/schemas/Offer"
       # Might change this in offer
       #   buyer:
       #     $ref: '#/components/schemas/User'
@@ -935,11 +998,11 @@ components:
                 type: string
                 format: byte
               address:
-                $ref: '#/components/schemas/Address'
+                $ref: "#/components/schemas/Address"
               subscription:
-                $ref: '#/components/schemas/Subscription'
+                $ref: "#/components/schemas/Subscription"
               paymentMethod:
-                $ref: '#/components/schemas/PaymentMethod'
+                $ref: "#/components/schemas/PaymentMethod"
     Review:
       content:
         application/json:
@@ -950,43 +1013,48 @@ components:
                 format: int32
                 minimum: 0
                 maximum: 5
-              description:
+              reviewMessage:
                 type: string
-              createdAt:
+              date:
                 type: string
                 format: date
-              reviewer:
-                $ref: '#/components/schemas/User'
-              reviewee:
-                $ref: '#/components/schemas/User'
+              issuer:
+                $ref: "#/components/schemas/User"
     Advert:
       content:
         application/json:
           schema:
             properties:
-              name:
+              productname:
                 type: string
-              prioritized:
-                type: boolean
+              description:
+                type: string
+              imageurl:
+                type: string
               quantity:
                 type: integer
                 format: int32
                 minimum: 0
-              description:
-                type: string
               price:
                 type: integer
+              color:
+                type: string
               expirationDate:
                 type: string
                 format: date
-              advertType:
-                $ref: '#/components/schemas/AdvertType'
+              date:
+                type: string
+                format: date
+              prioritized:
+                type: boolean
+              status:
+                $ref: "#/components/schemas/OfferStatus"
               category:
-                $ref: '#/components/schemas/ProductCategory'
-              offers:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Offer'
+                $ref: "#/components/schemas/ProductCategory"
+              type:
+                $ref: "#/components/schemas/AdvertType"
+              store:
+                $ref: "#/components/schemas/User"
     Offer:
       content:
         application/json:
@@ -1001,11 +1069,11 @@ components:
                 type: string
               message:
                 type: string
-              createdAt:
+              date:
                 type: string
                 format: date
-              offerer:
-                $ref: '#/components/schemas/User'
+              issuer:
+                $ref: "#/components/schemas/User"
 
     Order:
       content:
@@ -1020,7 +1088,7 @@ components:
               status:
                 type: string
               offer:
-                $ref: '#/components/schemas/Offer'
+                $ref: "#/components/schemas/Offer"
 
     UserArray:
       description: List of user object
@@ -1029,9 +1097,9 @@ components:
           schema:
             type: array
             items:
-              $ref: '#/components/schemas/User'
+              $ref: "#/components/schemas/User"
   securitySchemes:
-    bearerAuth:            # arbitrary name for the security scheme
+    bearerAuth: # arbitrary name for the security scheme
       type: http
       scheme: bearer
       bearerFormat: JWT

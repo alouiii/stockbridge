@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Button, Img, Line, Text } from "components";
 import { useNavigate } from "react-router-dom";
@@ -15,12 +15,22 @@ type HomepageStackpostYourAdvertProps = React.DetailedHTMLProps<
     category: string;
     whatareyousearcOne: string;
     search: string;
+    user: User;
   }>;
 
 const HomepageStackpostYourAdvert: React.FC<
   HomepageStackpostYourAdvertProps
 > = (props) => {
   const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
+  const openModal = () => {
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
   return (
     <>
       <div className={props.className}>

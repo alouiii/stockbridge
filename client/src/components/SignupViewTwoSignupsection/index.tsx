@@ -25,7 +25,7 @@ const SignupViewTwoSignupsection: React.FC<SignupViewTwoSignupsectionProps> = (
           className="font-poppins md:ml-[0] ml-[5px] mt-[15px] text-gray_600"
           variant="body2"
         >
-          By signing {props.signUp == "Sign Up" ? "up" : "in"} you agree to{" "}
+          By signing {props.signUp === "Sign Up" ? "up" : "in"} you agree to{" "}
           <a
             href=""
             style={{
@@ -53,7 +53,7 @@ const SignupViewTwoSignupsection: React.FC<SignupViewTwoSignupsectionProps> = (
           size="sm"
           variant="OutlineRed300"
           onClick={() => {
-            if (props.signUp == "Sign Up") {
+            if (props.signUp === "Sign Up") {
               if (!props.secondStep) {
                 navigate("/signupviewtwo");
               } else {
@@ -68,7 +68,7 @@ const SignupViewTwoSignupsection: React.FC<SignupViewTwoSignupsectionProps> = (
           className="font-poppins md:ml-[0] ml-[5px] mt-[15px] text-gray_600"
           variant="body2"
         >
-          {props?.confirmation == "Sign up" ? (
+          {props?.confirmation === "Sign up" ? (
             <Text
               className="font-poppins md:ml-[0] ml-[3px] text-gray_600"
               variant="body2"

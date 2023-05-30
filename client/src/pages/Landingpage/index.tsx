@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Text, Bottombar, Topbar, Button } from "components";
 import HomepageHelp from "components/Help";
@@ -53,7 +53,11 @@ const Homepage: React.FC = () => {
           inventory management
         </Text>
         <div className="flex flex-col gap-5">
-          <Button onClick={() => navigate("/productoverview/12")}>
+          <Button
+            onClick={() =>
+              navigate("/productoverview/6474bfe8b8e3f17ae36a2b11")
+            }
+          >
             Article to buy
           </Button>
           <Button>Article Prioritized</Button>

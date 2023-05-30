@@ -32,4 +32,4 @@ const LegalSection: React.FC = () => {
   );
 };
 
-export {LegalSection};
+export { LegalSection };

@@ -3,11 +3,6 @@ import React from "react";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-const variants = {
-  OutlineBluegray100:
-    "bg-gray_50_01 outline outline-[1px] outline-blue_gray_100",
-} as const;
-
 const CloseButton = React.forwardRef<HTMLInputElement>(() => {
   const navigate = useNavigate();
   return (

@@ -29,4 +29,4 @@ Fieldname.defaultProps = {
   one: "*",
 };
 
-export {Fieldname};
+export { Fieldname };

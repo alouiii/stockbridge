@@ -8,35 +8,43 @@ import { useParams } from "react-router-dom";
 import { ProductOverviewSection } from "components";
 
 type ProductOverviewProps = Partial<{
-  userid: number;
+  userid: string;
 }>;
 
 const ProductOverview: React.FC<ProductOverviewProps> = (props) => {
-  const [advert, setElement] = useState(null);
+  const [advert, setAdvert] = useState(null);
   const advertID = useParams();
+  console.log("ADVERT ID: ", advertID);
+  console.log("User ID: ", props.userid);
   useEffect(() => {
     const fetchElement = async () => {
       try {
-        const response = await fetch(`/api/adverts/${advertID}`);
+        const response = await fetch(
+          `http://localhost:3001/api/v1/adverts/${advertID.id}`
+        );
+        console.log("Response: ", response);
         const data = await response.json();
-        setElement(data);
+        setAdvert(data);
       } catch (error) {
         console.error("Error fetching element:", error);
       }
     };
     fetchElement();
   }, []);
-  const owner = props?.userid === advert.store.id && advert.offers?.length > 0;
-  const openOffers = advert.offers?.filter(
+
+  console.log("Fetched advert: ", advert);
+  const owner =
+    props?.userid === advert?.store?.id && advert?.offers?.length > 0;
+  const openOffers = advert?.offers?.filter(
     (o) => o.status === OfferStatus.OPEN
   );
-  const acceptedOffers = advert.offers?.filter(
+  const acceptedOffers = advert?.offers?.filter(
     (o) => o.status === OfferStatus.ACCEPTED
   );
-  const rejectedOffers = advert.offers?.filter(
+  const rejectedOffers = advert?.offers?.filter(
     (o) => o.status === OfferStatus.REJECTED
   );
-  const canceledOffers = advert.offers?.filter(
+  const canceledOffers = advert?.offers?.filter(
     (o) => o.status === OfferStatus.CANCELED
   );
 
@@ -52,68 +60,83 @@ const ProductOverview: React.FC<ProductOverviewProps> = (props) => {
         className="flex flex-row items-center justify-between px-2.5 w-full"
         user={false}
       />
-      <div className="flex flex-col gap-40 items-start justify-start w-full">
-        <StoreDetailsBar
-          className="bg-red_300 opacity-[55%] flex flex-col gap-7 items-start justify-start p-30 pb-5 pt-5 pl-10 sm:px-5 w-full"
-          store={advert.store}
-        />
+      {advert != null ? (
+        <>
+          <div className="flex flex-col gap-40 items-start justify-start w-full">
+            <StoreDetailsBar
+              className="bg-red_300 opacity-[55%] flex flex-col gap-7 items-start justify-start p-30 pb-5 pt-5 pl-10 sm:px-5 w-full"
+              store={advert?.store}
+            />
 
-        <ProductOverviewSection
-          className="flex items-start justify-start pl-10"
-          advert={advert}
-          userid={props?.userid}
-        />
-      </div>
-
-      <div className="flex flex-col gap-20 items-start justify-start w-full">
-        {owner && (
-          <div className="items-center justify-center p-10 w-full">
-            <Text className="text-black_900_dd uppercase" as="h1" variant="h1">
-              Offers
-            </Text>
-            {openOffers.length > 0 && (
-              <OfferSection status={OfferStatus.OPEN} offers={openOffers} />
-            )}
-            {acceptedOffers.length > 0 && (
-              <OfferSection
-                status={OfferStatus.ACCEPTED}
-                offers={acceptedOffers}
-              />
-            )}
-            {rejectedOffers.length > 0 && (
-              <OfferSection
-                status={OfferStatus.REJECTED}
-                offers={rejectedOffers}
-              />
-            )}
-            {canceledOffers.length > 0 && (
-              <OfferSection
-                status={OfferStatus.CANCELED}
-                offers={canceledOffers}
-              />
-            )}
+            <ProductOverviewSection
+              className="flex items-start justify-start pl-10"
+              advert={advert}
+              userid={props?.userid}
+            />
           </div>
-        )}
-        <div className="items-center justify-center p-10 w-full">
-          <Text className="text-black_900_dd uppercase" as="h1" variant="h1">
-            Reviews
-          </Text>
-          <List
-            className="font-poppins gap-[20%] grid items-center mt-[37px] w-[100%]"
-            orientation="vertical"
-          >
-            {advert.reviews.map((props, index) => (
-              <React.Fragment key={`ProductOverviewViewerReviewbar${index}`}>
-                <Reviewbar
-                  className="border border-gray_500 border-solid rounded-[15px] flex flex-col justify-start w-[100%]"
-                  {...props}
-                />
-              </React.Fragment>
-            ))}
-          </List>
-        </div>
-      </div>
 
+          <div className="flex flex-col gap-20 items-start justify-start w-full">
+            {owner && (
+              <div className="items-center justify-center p-10 w-full">
+                <Text
+                  className="text-black_900_dd uppercase"
+                  as="h1"
+                  variant="h1"
+                >
+                  Offers
+                </Text>
+                {openOffers.length > 0 && (
+                  <OfferSection status={OfferStatus.OPEN} offers={openOffers} />
+                )}
+                {acceptedOffers.length > 0 && (
+                  <OfferSection
+                    status={OfferStatus.ACCEPTED}
+                    offers={acceptedOffers}
+                  />
+                )}
+                {rejectedOffers.length > 0 && (
+                  <OfferSection
+                    status={OfferStatus.REJECTED}
+                    offers={rejectedOffers}
+                  />
+                )}
+                {canceledOffers.length > 0 && (
+                  <OfferSection
+                    status={OfferStatus.CANCELED}
+                    offers={canceledOffers}
+                  />
+                )}
+              </div>
+            )}
+            <div className="items-center justify-center p-10 w-full">
+              <Text
+                className="text-black_900_dd uppercase"
+                as="h1"
+                variant="h1"
+              >
+                Reviews
+              </Text>
+              <List
+                className="font-poppins gap-[20%] grid items-center mt-[37px] w-[100%]"
+                orientation="vertical"
+              >
+                {advert?.reviews?.map((props, index) => (
+                  <React.Fragment
+                    key={`ProductOverviewViewerReviewbar${index}`}
+                  >
+                    <Reviewbar
+                      className="border border-gray_500 border-solid rounded-[15px] flex flex-col justify-start w-[100%]"
+                      {...props}
+                    />
+                  </React.Fragment>
+                ))}
+              </List>
+            </div>
+          </div>
+        </>
+      ) : (
+        <p>Loading ...</p>
+      )}
       <Bottombar />
     </div>
   );

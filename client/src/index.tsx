@@ -17,7 +17,7 @@ export type Review = {
 };
 
 export type Store = {
-  id: number;
+  id: string;
   storename: string;
   rating: number;
   category: StoreCategory;
@@ -84,7 +84,7 @@ export const adverts: Advert[] = [
       {
         status: OfferStatus.REJECTED,
         store: {
-          id: 3,
+          id: "6474c7d7222db607692cb307",
           category: StoreCategory.FLOWERS,
           storename: "Offer Store",
           rating: 3,
@@ -96,7 +96,7 @@ export const adverts: Advert[] = [
       {
         status: OfferStatus.OPEN,
         store: {
-          id: 3,
+          id: "6474c7d7222db607692cb307",
           category: StoreCategory.FLOWERS,
           storename: "Offer Store",
           rating: 3,
@@ -108,7 +108,7 @@ export const adverts: Advert[] = [
       {
         status: OfferStatus.ACCEPTED,
         store: {
-          id: 3,
+          id: "6474c7d7222db607692cb307",
           category: StoreCategory.FLOWERS,
           storename: "Offer Store",
           rating: 3,
@@ -120,7 +120,7 @@ export const adverts: Advert[] = [
       {
         status: OfferStatus.CANCELED,
         store: {
-          id: 3,
+          id: "6474c7d7222db607692cb307",
           category: StoreCategory.FLOWERS,
           storename: "Offer Store",
           rating: 3,
@@ -131,7 +131,7 @@ export const adverts: Advert[] = [
       },
     ],
     store: {
-      id: 1,
+      id: "6474c7d7222db607692cb307",
       category: StoreCategory.FLOWERS,
       storename: "Store-Name",
       rating: 3,

@@ -1,4 +1,3 @@
-
 import { SelectBox } from "components/SelectBox";
 import { Text, Img } from "components";
 import React from "react";
@@ -49,4 +48,4 @@ const LanguageSettings: React.FC<LanguageSettingsProps> = (props) => {
   );
 };
 
-export {LanguageSettings};
+export { LanguageSettings };

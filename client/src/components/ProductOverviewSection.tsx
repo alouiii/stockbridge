@@ -13,7 +13,7 @@ type ProductOverviewSectionProps = React.DetailedHTMLProps<
 > &
   Partial<{
     advert: Advert;
-    userid: number;
+    userid: string;
   }>;
 
 const ProductOverviewSection: React.FC<ProductOverviewSectionProps> = (
