@@ -1,4 +1,4 @@
-import { useMediaQuery } from "@mui/material";
+import useMediaQuery from "./../../hooks/useMediaQuery";
 import { FC } from "react";
 import { LeftTab } from "./LeftTab";
 import questionIcon from "./../../assets/question-circle.svg";

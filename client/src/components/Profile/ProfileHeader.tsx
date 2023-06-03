@@ -3,7 +3,7 @@ import profilePageImage from ".//../../assets/profilePageImage.png";
 import { Button } from "react-bootstrap";
 import { BodyText } from "../Text/BodyText";
 import { Title } from "../Text/Title";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import useMediaQuery from "./../../hooks/useMediaQuery";
 import { right } from "@popperjs/core";
 import { relative } from "path";
 
