@@ -1,24 +1,3 @@
-import { User } from "./userEntity";
-
-export interface Advert {
-  id: string;
-  productname: string;
-  description: string;
-  imageurl: string;
-  prioritized?: boolean;
-  color: string;
-  expirationDate: Date;
-  quantity: number;
-  price: number;
-  date: Date;
-  status: string;
-  type: string;
-  category: string;
-  offers: string[];
-  reviews: string[];
-  store: User;
-}
-
 export enum ADVERT_TYPE {
     SELL,
     ASK
@@ -51,4 +30,19 @@ export enum PRODUCT_CATEGORY {
     Musical_Instruments,
     Travel_And_Luggage,
     Flowers_And_Bouquets
+}
+
+
+export interface Advert {
+    id: string;
+    title: string;
+    prioritized: boolean;
+    quantity: number;
+    description: string;
+    price: number;
+    expirationDate: Date;
+    status: ADVERT_STATUS;
+    advertType: ADVERT_TYPE,
+    category: PRODUCT_CATEGORY;
+    offers: string[];
 }

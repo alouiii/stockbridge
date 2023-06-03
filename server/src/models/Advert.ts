@@ -1,53 +1,8 @@
 import mongoose from "mongoose";
-import type { Advert, Review, Offer } from "../entities/advertEntity";
-import { userSchema } from "./User";
+import { ADVERT_STATUS, ADVERT_TYPE, Advert, PRODUCT_CATEGORY } from "../entities/advertEntity";
 
 const Types = mongoose.Schema.Types;
 
-export enum ProductCategory {
-  FLOWERS = "Flowers",
-  BOOKS = "Books",
-  FOOD = "Food and Beverages",
-}
-export const reviewSchema = new mongoose.Schema<Review>({
-  issuer: userSchema,
-  date: {
-    type: Types.Date,
-    required: [true, "The review date is necessary"],
-  },
-  reviewMessage: {
-    type: Types.String,
-    required: [true, "The review date is necessary"],
-  },
-  rating: {
-    type: Types.Number,
-    required: [true, "Please rate numerically"],
-    min: 0,
-    max: 5,
-  },
-});
-
-export const offerSchema = new mongoose.Schema<Offer>({
-  status: {
-    type: Types.String,
-    enum: ["Open", "Accepted", "Rejected", "Canceled"],
-    default: "Open",
-  },
-  issuer: userSchema,
-  quantity: {
-    type: Types.Number,
-    required: true,
-    min: 1,
-  },
-  price: {
-    type: Types.Number,
-    required: true,
-  },
-  date: {
-    type: Types.Date,
-    required: true,
-  },
-});
 export const advertSchema = new mongoose.Schema<Advert>({
   productname: {
     type: Types.String,
@@ -87,23 +42,33 @@ export const advertSchema = new mongoose.Schema<Advert>({
     default: false,
   },
   status: {
-    type: Types.String,
-    enum: ["Ongoing", "Deleted", "Closed"],
-    required: true,
+    default: ADVERT_STATUS.ONGOING,
+    enum: Object.values(ADVERT_STATUS),
+    required: [true, "Please add a status"] 
   },
   type: {
-    type: Types.String,
-    enum: ["Ask", "Sell"],
-    required: true,
+    enum: Object.values(ADVERT_TYPE),
+    required: [true, "Please add an advert type"] 
   },
   category: {
-    type: Types.String,
-    enum: ProductCategory,
-    required: true,
+    enum: Object.values(PRODUCT_CATEGORY),
+    required: [true, "Please add a product category"] 
   },
-  reviews: { type: [reviewSchema], required: false },
-  offers: { type: [offerSchema], required: false },
-  store: userSchema,
+  reviews: [{
+    type: Types.ObjectId,
+    ref: 'Review',
+    required: true,
+  }],
+  offers: [{ 
+    type: Types.ObjectId,
+    ref: 'Review',
+    required: true,
+  }],
+  store: {
+    type: Types.ObjectId,
+    ref: 'User',
+    required: true,
+  }
 });
 
 const advertModel = mongoose.model("Advert", advertSchema, "adverts");
