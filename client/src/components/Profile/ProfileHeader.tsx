@@ -1,12 +1,9 @@
-import { palette } from "../../utils/colors";
+import {palette} from "../../utils/colors";
 import profilePageImage from ".//../../assets/profilePageImage.png";
-import { Button } from "react-bootstrap";
-import { BodyText } from "../Text/BodyText";
-import { Title } from "../Text/Title";
+import {Button, Image} from "react-bootstrap";
+import {BodyText} from "../Text/BodyText";
+import {Title} from "../Text/Title";
 import useMediaQuery from "./../../hooks/useMediaQuery";
-import { right } from "@popperjs/core";
-import { relative } from "path";
-
 
 
 export function ProfileHeader() {
@@ -21,7 +18,7 @@ export function ProfileHeader() {
                 zIndex: 1,
             }}
         >
-            <img
+            <Image
                 style={{
                     maxWidth: "100%",
                     height: 236,
@@ -31,18 +28,18 @@ export function ProfileHeader() {
                 }}
                 src={profilePageImage}
                 alt="homepage"
-            />
+                fluid/>
 
             <div className="textContainer"
-                style={{
-                    display: "inline-block",
-                    position: "relative",
-                    //marginTop: "5em",
-                    //width: "30%",
-                    alignContent: "left",
-                    left: "35%",
-                    top: "20%"
-                }}
+                 style={{
+                     display: "inline-block",
+                     position: "relative",
+                     //marginTop: "5em",
+                     //width: "30%",
+                     alignContent: "left",
+                     left: "35%",
+                     top: "20%"
+                 }}
             >
                 <Title
                     style={{
@@ -52,14 +49,8 @@ export function ProfileHeader() {
                         textAlign: "center",
                         fontWeight: 500,
                     }}
-                    message=
-                    <h1>
-                        Out of stock? or got
-                        <br />
-                        too much stock?
-                        <br />
-                        No worries!
-                    </h1>
+                    message={'Out of stock? or got \n too much stock? \n No worries!'}
+
                 />
             </div>
 
@@ -91,8 +82,6 @@ export function ProfileHeader() {
             </Button>
 
 
-
-
             {/* <div className="gapHeader"
                 style={{
                     display: "flex",
@@ -103,7 +92,9 @@ export function ProfileHeader() {
                 }}
             >
                
-            </div> */}
+            </div> */
+            }
         </div>
-    );
+    )
+        ;
 }

@@ -1,8 +1,7 @@
 import { BodyText } from "../Text/BodyText";
-import { Title } from "../Text/Title";
-import { palette } from "../../utils/colors";
 
 type LeftTabProps = {
+    key: string;
   message: string;
   icon: string;
   isSelected: boolean;
