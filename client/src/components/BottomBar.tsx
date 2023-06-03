@@ -15,7 +15,7 @@ export const BottomBar: FC = () => {
         alignItems: "stretch",
         justifyContent: "center",
         gap: 100,
-        paddingTop: 100,
+        paddingTop: 100
       }}
     >
       <div>
