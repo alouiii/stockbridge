@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Text } from "components";
 import { Ratings } from "components/Ratings";
 import { Store } from "index";
@@ -8,10 +8,43 @@ type StoreDetailsBarProps = React.DetailedHTMLProps<
   HTMLDivElement
 > &
   Partial<{
-    store: Store;
+    userID: string;
   }>;
 
 const StoreDetailsBar: React.FC<StoreDetailsBarProps> = (props) => {
+
+  let [user, setUser] = useState(null);
+
+  const fetchUser = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3001/api/v1/users/${props.userID}`
+      );
+      console.log("Response: ", response);
+      const data = await response.json();
+      setUser(data);
+    } catch (error) {
+      console.error("Error fetching element:", error);
+    }
+  };
+  /* useEffect(() => {
+      fetchUser();
+      if (user == null || user == undefined) {
+        setUser({
+          category: "FLOWERS",
+          rating: 5,
+          storename: "Petals & Blooms"
+        })
+      }
+    }
+  
+, []); */
+user = {
+  category: "FLOWERS",
+  rating: 5,
+  storename: "Petals & Blooms"
+}
+console.log('user: ', user)
   return (
     <>
       <div className={props.className}>
@@ -37,7 +70,7 @@ const StoreDetailsBar: React.FC<StoreDetailsBarProps> = (props) => {
               as="h2"
               variant="h2"
             >
-              {props?.store.category}
+              {user.category}
             </Text>
           </div>
 
@@ -55,11 +88,11 @@ const StoreDetailsBar: React.FC<StoreDetailsBarProps> = (props) => {
                 as="h2"
                 variant="h2"
               >
-                {props?.store.storename}
+                {user.storename}
               </Text>
               <Ratings
                 className="flex font-light font-poppins text-white_A700 w-auto"
-                rating={props?.store.rating}
+                rating={user.rating}
               ></Ratings>
             </div>
           </div>

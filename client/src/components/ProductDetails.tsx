@@ -11,7 +11,7 @@ type ProductDetailsProps = React.DetailedHTMLProps<
     imageurl: string;
     description: string;
     color: string;
-    purchaseDate: string;
+    purchaseDate: Date;
     quantity: number;
     price: number;
   }>;

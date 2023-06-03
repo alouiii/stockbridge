@@ -30,6 +30,7 @@ module.exports = {
         gray_900_63: "#21252963",
         white_A700: "#ffffff",
         indigo_600: "#233fc8",
+        green_300: "#4ecba9",
       },
       fontFamily: {
         poppins: "Poppins",

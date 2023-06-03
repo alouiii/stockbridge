@@ -6,7 +6,7 @@ type ProductAttributeProps = React.DetailedHTMLProps<
 > &
   Partial<{
     name: string;
-    value: string | number;
+    value: string | number | Date;
     unit: string;
     border: boolean;
   }>;

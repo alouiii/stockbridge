@@ -1,21 +1,14 @@
 import React, { useState } from "react";
-
-import { Button, Img, Line, Text } from "components";
+import { Button, EditAdvertContent, Img, Line, Modal, Text } from "components";
 import { useNavigate } from "react-router-dom";
+import { Advert } from "index";
 
 type HomepageStackpostYourAdvertProps = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLDivElement>,
   HTMLDivElement
 > &
   Partial<{
-    buttonText: string;
-    or: string;
-    language: JSX.Element | string;
-    locationOne: string;
-    category: string;
-    whatareyousearcOne: string;
-    search: string;
-    user: User;
+    loggedin: boolean;
   }>;
 
 const HomepageStackpostYourAdvert: React.FC<
@@ -48,10 +41,13 @@ const HomepageStackpostYourAdvert: React.FC<
                   shape="CircleBorder26"
                   size="md"
                   variant="FillRed300"
-                  onClick={() => navigate("/signinview")}
+                  onClick={() =>
+                    props?.loggedin ? openModal() : navigate("/signinview")
+                  }
                 >
-                  {props?.buttonText}
+                  Post your Advert
                 </Button>
+                {showModal && <Modal isOpen={showModal} onClose={closeModal} />}
                 <div className="h-12 md:ml-[0] ml-[22px] relative w-[68%]">
                   <Img
                     src="images/img_hrmy3.svg"
@@ -63,7 +59,7 @@ const HomepageStackpostYourAdvert: React.FC<
                     as="h3"
                     variant="h3"
                   >
-                    {props?.or}
+                    OR
                   </Text>
                 </div>
               </div>
@@ -79,7 +75,13 @@ const HomepageStackpostYourAdvert: React.FC<
                     as="h2"
                     variant="h2"
                   >
-                    {props?.language}
+                    <>
+                      Out of stock? or got
+                      <br />
+                      too much stock?
+                      <br />
+                      No worries!{" "}
+                    </>
                   </Text>
                 </div>
               </div>
@@ -93,7 +95,7 @@ const HomepageStackpostYourAdvert: React.FC<
                         className="font-poppins text-gray_600 w-auto"
                         variant="body1"
                       >
-                        {props?.locationOne}
+                        Location
                       </Text>
                     </div>
                     <Img
@@ -111,7 +113,7 @@ const HomepageStackpostYourAdvert: React.FC<
                         className="font-poppins text-gray_600 w-auto"
                         variant="body1"
                       >
-                        {props?.category}
+                        Category
                       </Text>
                     </div>
                     <div className="flex flex-col h-6 md:h-auto items-center justify-center w-6">
@@ -131,7 +133,7 @@ const HomepageStackpostYourAdvert: React.FC<
                         className="font-poppins text-gray_600 w-auto"
                         variant="body1"
                       >
-                        {props?.whatareyousearcOne}
+                        What are you searching for?
                       </Text>
                     </div>
                   </div>
@@ -141,8 +143,11 @@ const HomepageStackpostYourAdvert: React.FC<
                   shape="CircleBorder21"
                   size="sm"
                   variant="FillRed300"
+                  onClick={() =>
+                    props?.loggedin ? openModal : navigate("/signinview")
+                  }
                 >
-                  {props?.search}
+                  Search
                 </Button>
               </div>
             </div>
@@ -154,21 +159,7 @@ const HomepageStackpostYourAdvert: React.FC<
 };
 
 HomepageStackpostYourAdvert.defaultProps = {
-  buttonText: "Post your advert",
-  or: "OR",
-  language: (
-    <>
-      Out of stock? or got
-      <br />
-      too much stock?
-      <br />
-      No worries!{" "}
-    </>
-  ),
-  locationOne: "Location",
-  category: "Category",
-  whatareyousearcOne: "What are you searching for?",
-  search: "Search",
+  loggedin: true,
 };
 
 export default HomepageStackpostYourAdvert;

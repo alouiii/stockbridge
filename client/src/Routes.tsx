@@ -1,12 +1,12 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NotFound from "pages/NotFound";
-import ProductOverview from "pages/ProductOverview";
+
 const SigninView = React.lazy(() => import("pages/SigninView"));
 const SignupViewOne = React.lazy(() => import("pages/SignupViewOne"));
 const Homepage = React.lazy(() => import("pages/Landingpage"));
 const SignupViewTwo = React.lazy(() => import("pages/SignupViewTwo"));
-
+const  ProductOverview = React.lazy(() => import("pages/ProductOverview"));
 const ProjectRoutes = () => {
   return (
     <React.Suspense fallback={<>Loading...</>}>
@@ -18,8 +18,12 @@ const ProjectRoutes = () => {
           <Route path="/signupviewone" element={<SignupViewOne />} />
           <Route path="/signinview" element={<SigninView />} />
           <Route
+            path="/productoverview/"
+            element={<ProductOverview />}
+          />
+          <Route
             path="/productoverview/:id"
-            element={<ProductOverview userid={"6474c7d7222db607692cb307"} />}
+            element={<ProductOverview  />}
           />
         </Routes>
       </Router>

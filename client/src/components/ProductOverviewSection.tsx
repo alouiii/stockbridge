@@ -19,7 +19,7 @@ type ProductOverviewSectionProps = React.DetailedHTMLProps<
 const ProductOverviewSection: React.FC<ProductOverviewSectionProps> = (
   props
 ) => {
-  const owner = props.userid === props.advert.store.id;
+  const owner = props.userid === props.advert.issuer;
   const button_text = owner
     ? "Buy"
     : props.advert.prioritized
@@ -43,7 +43,7 @@ const ProductOverviewSection: React.FC<ProductOverviewSectionProps> = (
             productname={props?.advert.productname}
             color={props?.advert.color}
             description={props?.advert.description}
-            purchaseDate={props?.advert.purchaseDate?.toLocaleDateString()}
+            purchaseDate={props?.advert.purchaseDate}
             quantity={props?.advert.quantity}
             imageurl={props?.advert.imageurl}
           ></ProductDetails>

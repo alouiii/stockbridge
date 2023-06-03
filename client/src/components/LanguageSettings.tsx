@@ -1,5 +1,4 @@
-import { SelectBox } from "components/SelectBox";
-import { Text, Img } from "components";
+import { Text, SelectBox, Img } from "components";
 import React from "react";
 
 type selectOptionType = { value: string; label: string };

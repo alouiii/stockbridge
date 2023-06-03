@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "main": "server.js",
   "license": "MIT",
+  "module": "true",
   "scripts": {
     "build": "tsc",
     "start": "tsc && node dist/server.js",

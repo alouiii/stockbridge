@@ -4,6 +4,11 @@ import { userSchema } from "./User";
 
 const Types = mongoose.Schema.Types;
 
+export enum ProductCategory {
+  FLOWERS = "Flowers",
+  BOOKS = "Books",
+  FOOD = "Food and Beverages",
+}
 export const reviewSchema = new mongoose.Schema<Review>({
   issuer: userSchema,
   date: {
@@ -93,7 +98,7 @@ export const advertSchema = new mongoose.Schema<Advert>({
   },
   category: {
     type: Types.String,
-    enum: ["Flowers"],
+    enum: ProductCategory,
     required: true,
   },
   reviews: { type: [reviewSchema], required: false },

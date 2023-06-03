@@ -1,9 +1,11 @@
 import React from "react";
+import { propTypes } from "react-bootstrap/esm/Image";
 import { ErrorMessage } from "./ErrorMessage";
 
 const variants = {
   OutlineBluegray100:
     "bg-gray_50_01 outline outline-[1px] outline-blue_gray_100",
+  OutlineTransparent: "outline outline-[1px] outline-blue_gray_100",
 } as const;
 const shapes = { RoundedBorder6: "rounded-md" } as const;
 const sizes = { sm: "px-1.5 py-[7px]" } as const;
@@ -29,6 +31,7 @@ export type InputProps = Omit<
     shape: keyof typeof shapes;
     variant: keyof typeof variants;
     size: keyof typeof sizes;
+    value: string | number | boolean;
   }>;
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -45,7 +48,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       prefix,
       suffix,
       onChange,
-
       shape = "",
       variant = "",
       size = "",
@@ -53,9 +55,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     },
     ref
   ) => {
-    const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    /* const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
       if (onChange) onChange(e?.target?.value);
-    };
+    }; */
 
     return (
       <>
@@ -73,7 +75,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             type={type}
             name={name}
             placeholder={placeholder}
-            onChange={handleChange}
             {...restProps}
           />
           {!!suffix && suffix}

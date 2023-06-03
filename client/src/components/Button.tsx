@@ -7,9 +7,12 @@ const shapes = {
 } as const;
 const variants = {
   OutlineRed300: "bg-red_300 border-[5px] border-red_300 border-solid",
+  FillGreen: "bg-green_300",
   FillRed300: "bg-red_300",
   icbFillOrange200: "bg-orange_200",
   fillBlack: "bg-black",
+  transparentRedBorder: "border-[1px] border-red_300 border-solid",
+  transparentGrayBorder: "border-[1px] border-gray_600 border-solid w-full",
 } as const;
 const sizes = { sm: "p-[7px]", md: "p-3.5", smIcn: "p-[13px]" } as const;
 

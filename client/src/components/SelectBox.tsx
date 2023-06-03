@@ -7,7 +7,8 @@ type selectOptionType = { value: string; label: string };
 const variants = {
   OutlineBluegray100:
     "bg-gray_50_01 outline outline-[1px] outline-blue_gray_100",
-  OutlineGray30001: "bg-white_A700 border border-gray_300_01 border-solid",
+  OutlineGray30001: "bg-gray_50_01 outline outline-[1px] outline-blue_gray_100",
+  OutlineTransparent: "outline outline-[1px] outline-blue_gray_100",
 } as const;
 const shapes = { RoundedBorder6: "rounded-md" } as const;
 const sizes = { sm: "px-1.5 py-[7px]", md: "p-4" } as const;

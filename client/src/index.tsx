@@ -42,14 +42,16 @@ export type Advert = {
   productname: string;
   description: string;
   imageurl: string;
+  category: string;
   reference: string;
   price: number;
   quantity: number;
+  type: string;
   color: string;
   purchaseDate: Date;
   reviews: Review[];
   offers: Offer[];
-  store: Store;
+  issuer: string;
   prioritized?: boolean;
 };
 ReactDOM.render(
@@ -63,8 +65,10 @@ export const adverts: Advert[] = [
   {
     id: 12,
     price: 12,
+    category: "Flowers",
     quantity: 10,
     productname: "Orchids",
+    type: "Sell",
     description:
       "lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s,",
     color: "Blue",
@@ -130,11 +134,7 @@ export const adverts: Advert[] = [
         date: new Date(2023, 5, 26),
       },
     ],
-    store: {
-      id: "6474c7d7222db607692cb307",
-      category: StoreCategory.FLOWERS,
-      storename: "Store-Name",
-      rating: 3,
-    },
+    issuer: "6474c7d7222db607692cb307",
+ 
   },
 ];

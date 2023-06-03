@@ -17,17 +17,7 @@ const Homepage: React.FC = () => {
         />
         <HomepageStackpostYourAdvert
           className="font-poppins h-[789px] mt-3 md:px-5 relative w-full"
-          buttonText="Post your advert"
-          or="OR"
-          language={
-            <>
-              Out of stock? or got
-              <br />
-              too much stock?
-              <br />
-              No worries!{" "}
-            </>
-          }
+          loggedin={true}
         />
         <HomepageIntrobar
           className="bg-red_300_4c flex flex-col font-poppins gap-[60px] h-[443px] md:h-auto items-center justify-center px-0 md:px-10 sm:px-5 py-[25px] w-full"
@@ -55,7 +45,7 @@ const Homepage: React.FC = () => {
         <div className="flex flex-col gap-5">
           <Button
             onClick={() =>
-              navigate("/productoverview/6474bfe8b8e3f17ae36a2b11")
+              navigate("/productoverview/")
             }
           >
             Article to buy
@@ -75,8 +65,8 @@ const Homepage: React.FC = () => {
             terms="Terms"
             privacy="Privacy"
             languageOptions={[
-              { label: "EN", value: "English" },
-              { label: "DE", value: "German" },
+              { label: "English", value: "English" },
+              { label: "German", value: "German" },
             ]}
             iconsmadebyfreeOne="Icons made by Freepik from www.flaticon.com is licensed by CC 3.0 BY"
           />
