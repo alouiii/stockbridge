@@ -1,8 +1,6 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
-/**
- * Create Axios instance with a base url and the main headers
- */
+
 const axiosClient = axios.create({
   baseURL: `http://localhost:3001/api/v1`,
   headers: {
@@ -11,20 +9,38 @@ const axiosClient = axios.create({
   },
 });
 
-// using interceptors to clean redirects
-/*
-axiosClient.interceptors.response.use(
-  function (response) {
-    return response;
-  },
-  function (error) {
-    let res = error.response;
-    if (res.status === 401) {
-      window.location.href = "https://localhost:3000";
+export class ApiClient {
+  private baseURL: string = 'http://localhost:3001/api/v1'; //TODO: Make this env variable
+
+
+  private async request<T>(config: AxiosRequestConfig): Promise<T> {
+    try {
+      const response: AxiosResponse<T> = await axios.request<T>({
+        baseURL: this.baseURL,
+        ...config,
+      });
+
+      return response.data;
+    } catch (error) {
+      throw new Error(`Request failed: ${error}`);
     }
-    console.error("Looks like there was a problem. Status Code: " + res.status);
-    return Promise.reject(error);
   }
-);
-*/
+
+  public async get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
+    return await this.request<T>({ url, method: 'GET', ...config });
+  }
+
+  public async post<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
+    return await this.request<T>({ url, method: 'POST', data, ...config });
+  }
+
+  public async put<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
+    return await this.request<T>({ url, method: 'PUT', data, ...config });
+  }
+
+  public async delete<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
+    return await this.request<T>({ url, method: 'DELETE', ...config });
+  }
+}
+
 export default axiosClient;

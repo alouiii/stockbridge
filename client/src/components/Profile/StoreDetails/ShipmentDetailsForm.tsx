@@ -37,7 +37,9 @@ const ShipmentDetailsForm = (props: ShipmentDetailsFormProps) => {
 
     return (
         <>
-            <Title style={{}} message={'Shipment Details'} />
+            <Title style={{}}>
+                <h2>Shipment Details</h2>
+            </Title>
             {/*<Form onSubmit={handleSubmit} className={"m-2"}>*/}
                 <Row className={'mb-2'}>
                     <Col>

@@ -52,8 +52,9 @@ export const SignUp: FC = () => {
                   fontWeight: 600,
                   fontSize: 36,
                 }}
-                message="Sign up "
-              />
+              >
+                Sign Up
+                </Title>
               <Form
                 className="container-fluid"
                 style={{ paddingLeft: 40, paddingRight: 40, marginTop: 30 }}
@@ -111,8 +112,9 @@ export const SignUp: FC = () => {
                   fontWeight: 600,
                   fontSize: 36,
                 }}
-                message="One more step..."
-              />
+              >
+                  One more step...
+                </Title>
               <Form
                 className="container-fluid"
                 style={{ paddingLeft: 40, paddingRight: 40, marginTop: 30 }}

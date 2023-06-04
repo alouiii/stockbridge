@@ -49,9 +49,10 @@ export function ProfileHeader() {
                         textAlign: "center",
                         fontWeight: 500,
                     }}
-                    message={'Out of stock? or got \n too much stock? \n No worries!'}
+                >
+                    <h1>Out of stock? or got <br/>too much stock? <br/>No worries!</h1>
+                </Title>
 
-                />
             </div>
 
             <Button

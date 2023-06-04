@@ -2,7 +2,6 @@ import React from 'react';
 import { Form, FloatingLabel} from 'react-bootstrap';
 import {Title} from "../../Text/Title";
 import {AccountInformationFormProps} from "./StoreDetailsForm";
-const categories = ['Category 1', 'Category 2', 'Category 3'];
 
 const AccountInformationForm = (props: AccountInformationFormProps) => {
     // const [category, setCategory] = useState('');
@@ -33,17 +32,19 @@ const AccountInformationForm = (props: AccountInformationFormProps) => {
 
     return (
         <>
-            <Title style={{}} message={'Account Information'} />
+            <Title style={{}}>
+                <h2>Account Information</h2>
+            </Title>
             {/*<Form onSubmit={handleSubmit} className={'p-2'}>*/}
-                <FloatingLabel className="mb-3" controlId="category" label='Category'>
-                    <Form.Control as="select" value={props.category.value} onChange={props.category.onChange}>
-                        {categories.map((category) => (
-                            <option key={category} value={category}>
-                                {category}
-                            </option>
-                        ))}
-                    </Form.Control>
-                </FloatingLabel>
+            {/*    <FloatingLabel className="mb-3" controlId="category" label='Category'>*/}
+            {/*        <Form.Control as="select" value={props.category.value} onChange={props.category.onChange}>*/}
+            {/*            {categories.map((category) => (*/}
+            {/*                <option key={category} value={category}>*/}
+            {/*                    {category}*/}
+            {/*                </option>*/}
+            {/*            ))}*/}
+            {/*        </Form.Control>*/}
+            {/*    </FloatingLabel>*/}
 
                 <FloatingLabel className="mb-3" controlId="email" label='Email Address'>
                     <Form.Control type="email" value={props.email.value} onChange={props.email.onChange} autoComplete='username'/>

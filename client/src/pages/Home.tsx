@@ -53,8 +53,9 @@ export function Home() {
             paddingTop: 50,
             marginBottom: -60,
           }}
-          message="HOW IT WORKS"
-        />
+        >
+            How it Works
+        </Title>
         <ColoredLine
           color={palette.subSectionsBgAccent}
           height={5}
@@ -81,8 +82,7 @@ export function Home() {
       <div style={{ height: 2000 }}>
         <Title
           style={{ fontSize: 36, textAlign: "center", paddingTop: 20 }}
-          message="Active Adverts"
-        ></Title>
+        >Active Adverts</Title>
         <div style={{ marginTop: 100 }}>
           <img
             src={sortIcon}

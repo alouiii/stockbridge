@@ -30,8 +30,9 @@ export const SignIn: FC = () => {
               fontWeight: 600,
               fontSize: 36,
             }}
-            message="Sign in "
-          />
+          >
+            Sign In
+          </Title>
           <Button
             style={{
               position: "absolute",

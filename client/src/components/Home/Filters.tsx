@@ -28,8 +28,7 @@ export const Filters: FC = () => {
     >
       <Title
         style={{ textAlign: "center", fontSize: 30, marginTop: 30 }}
-        message="Filters"
-      ></Title>
+      >Filters</Title>
       <ColoredLine height={2} width={100} color="black" />
       <Dropdown style={{ marginTop: 30 }}>
         <Dropdown.Toggle

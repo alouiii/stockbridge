@@ -5,8 +5,6 @@ import {ProfileHeader} from "../components/Profile/ProfileHeader";
 import {ProfileSections} from "../components/Profile/ProfileSections";
 import "../styles/userInfo.css"
 import {palette} from "../utils/colors";
-import StoreDetailsHeader from "../components/Profile/StoreDetails/StoreDetailsHeader";
-import flowerShop from '../assets/flower-shop-temp.jpg';
 import {Col, Container, Row} from "react-bootstrap";
 import StoreDetailsForm from "../components/Profile/StoreDetails/StoreDetailsForm";
 
@@ -43,7 +41,7 @@ export function UserInfo() {
                         {/*  <Tab title="Incoming Offers">Hola guys, this is the container for the incoming offers</Tab>*/}
                         {/*  <Tab title="Outgoing Offers">Servus amigos, this is the container for the outgoing offers</Tab>*/}
                         {/*</Tabs>*/}
-                        <StoreDetailsHeader name={'Petals & Blooms'} image={flowerShop} joined={new Date()}/>
+                        {/*<StoreDetailsHeader name={'Petals & Blooms'} image={flowerShop} joined={new Date()}/>*/}
 
                         <StoreDetailsForm />
 

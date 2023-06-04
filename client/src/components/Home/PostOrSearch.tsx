@@ -70,8 +70,9 @@ export function PostOrSearch() {
               color: "white",
               fontWeight: 400,
             }}
-            message="OR"
-          />
+          >
+            OR
+            </Title>
         </ColoredLine>
         <SearchBar />
         <div
@@ -90,8 +91,9 @@ export function PostOrSearch() {
               textAlign: "center",
               fontWeight: 500,
             }}
-            message="Out of stock?or got too much stock?No worries!"
-          />
+          >
+              Out of stock?or got too much stock?No worries!
+            </Title>
         </div>
       </div>
     </div>

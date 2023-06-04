@@ -1,9 +1,11 @@
 import React, {useState} from 'react';
-import { Form, Button, Row, Col } from 'react-bootstrap';
+import {Form, Button, Row, Col} from 'react-bootstrap';
 import {palette} from "../../../utils/colors";
 import AccountInformationForm from "./AccountInformationForm";
 import ShipmentDetailsForm from "./ShipmentDetailsForm";
 import PaymentDetailsForm from "./PaymentDetailsForm";
+import StoreDetailsHeader from "./StoreDetailsHeader";
+import {updateUser, User} from "../../../api/collections/user";
 
 
 export interface InputProps {
@@ -12,7 +14,7 @@ export interface InputProps {
 }
 
 export interface AccountInformationFormProps {
-    category: InputProps;
+    // category: InputProps;
     email: InputProps;
     password: InputProps;
     phone: InputProps;
@@ -33,30 +35,44 @@ export interface PaymentDetailsFormProps {
     expiration: InputProps;
 }
 
+export interface StoreDetailsProps {
+    name: InputProps;
+    image: { value: string; setValue: React.Dispatch<React.SetStateAction<string>> };
+    joined: Date;
+}
+
 const StoreDetailsForm: React.FC = () => {
-    const [category, setCategory] = useState('');
+    const [name, setName] = useState<string>('Petals & Blooms');
+    const [image, setImage] = useState<string>('');
+
+    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        // console.log(e.target.value);
+        setName(e.target.value);
+    };
+
+    // const [category, setCategory] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [phone, setPhone] = useState('');
 
 
-    const handleCategoryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.value);
-        setCategory(e.target.value);
-    };
+    // const handleCategoryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     // console.log(e.target.value);
+    //     setCategory(e.target.value);
+    // };
 
     const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.value);
+        // console.log(e.target.value);
         setEmail(e.target.value);
     };
 
     const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.value);
+        // console.log(e.target.value);
         setPassword(e.target.value);
     };
 
     const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.value);
+        // console.log(e.target.value);
         setPhone(e.target.value);
     };
 
@@ -67,67 +83,90 @@ const StoreDetailsForm: React.FC = () => {
     const [country, setCountry] = useState('');
 
     const handleStreetNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.value);
+        // console.log(e.target.value);
         setStreetName(e.target.value);
     };
 
     const handleHouseNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.value);
+        // console.log(e.target.value);
         setHouseNumber(e.target.value);
     };
 
     const handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.value);
+        // console.log(e.target.value);
         setCity(e.target.value);
     };
 
     const handlePostalCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.value);
+        // console.log(e.target.value);
         setPostalCode(e.target.value);
     };
 
     const handleCountryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.value);
+        // console.log(e.target.value);
         setCountry(e.target.value);
     };
 
     const [cardHolder, setCardHolder] = useState('');
     const [cardNumber, setCardNumber] = useState('');
-    const [ccv, setCcv] = useState('');
+    const [cvv, setCvv] = useState('');
     const [expiration, setExpiration] = useState('');
 
     const handleCardHolderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.value);
+        // console.log(e.target.value);
         setCardHolder(e.target.value);
     };
 
     const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.value);
+        // console.log(e.target.value);
         setCardNumber(e.target.value);
     };
 
     const handleCcvChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.value);
-        setCcv(e.target.value);
+        // console.log(e.target.value);
+        setCvv(e.target.value);
     };
 
     const handleExpirationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.value);
+        // console.log(e.target.value);
         setExpiration(e.target.value);
     };
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // Handle form submission here
+        const user: User = {
+            name: name,
+            email: email,
+            password: password,
+            phoneNumber: phone,
+            address: {
+                street: streetName,
+                houseNumber: houseNumber,
+                city: city,
+                postalCode: postalCode,
+                country: country
+            },
+            paymentMethod: {
+                name: cardHolder,
+                cardNumber: cardNumber,
+                cvv: cvv,
+                expirationDate: new Date(expiration)
+            }
+        };
+        updateUser('6470eb87fc895db57a6599c7', user);
     };
 
     return (
         <>
             <Form onSubmit={handleSubmit} className={"m-2"}>
-                <AccountInformationForm category={{
-                    value: category,
-                    onChange: handleCategoryChange,
-                }} email={{
+                <StoreDetailsHeader name={{value: name, onChange: handleNameChange}}
+                                    image={{value: image, setValue: setImage}} joined={new Date()}/>
+                <AccountInformationForm
+                //     category={{
+                //     value: category,
+                //     onChange: handleCategoryChange,
+                // }}
+                email={{
                     value: email,
                     onChange: handleEmailChange,
                 }} password={{
@@ -160,7 +199,7 @@ const StoreDetailsForm: React.FC = () => {
                     value: cardNumber,
                     onChange: handleCardNumberChange,
                 }} ccv={{
-                    value: ccv,
+                    value: cvv,
                     onChange: handleCcvChange,
                 }} expiration={{
                     value: expiration,

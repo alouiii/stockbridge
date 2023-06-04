@@ -33,7 +33,9 @@ const PaymentDetailsForm = (props: PaymentDetailsFormProps ) => {
     return (
         <>
             {/*<Form onSubmit={handleSubmit}>*/}
-            <Title style={{}} message={'Payment Details'}/>
+            <Title style={{}}>
+                <h2>Payment Details</h2>
+            </Title>
             <Form.Floating className="mb-3">
                 <Form.Control
                     type="text"
