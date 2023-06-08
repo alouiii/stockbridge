@@ -1,42 +1,26 @@
-import { BodyText } from "../Text/BodyText";
-import { Title } from "../Text/Title";
-import { palette } from "../../utils/colors";
+//import styles from "./profile.scss"
+require('./profile.scss');
 
 type LeftTabProps = {
-  message: string;
   icon: string;
-  isSelected: boolean;
+  title: string;
+  index: number;
+  selectedTab: number;
+  setSelectedTab: (index: number) => void
 };
 
 /**
- * Component that displays the step number, the icon and the relative message.
+ * Component that displays the tabs on the left sidebar.
  */
 export function LeftTab(props: LeftTabProps) {
-  
-  return (
-    <div
-      style={{
-        //width: 200,
-        height: 70,
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        gap: 15,
-      }}
-    >
-      <img style={{ alignSelf: "center", marginTop: "-6px" }} src={props.icon} alt="icon" />
 
-      <BodyText
-        style={{
-          color: props.isSelected ? "#6464c5" : "white",
-          textAlign: "center",
-          fontSize: 21,
-          //color: "black",
-          marginRight: 10,
-          fontWeight: 350
-        }}
-        message={props.message}
-      />
-    </div>
+  return (
+      <li className="left-tab" style={{ display: "inline", width: "100%", alignSelf: "left" }}>
+        <button className="btn-lg left-tab-button"
+          style={{color: props.selectedTab ===  props.index ? "#233FC8" : "white"}}
+          onClick={() => props.setSelectedTab(props.index)}>
+          <img className="left-tab-icon" src={props.icon} alt="icon" />
+          {props.title}</button>
+      </li>
   );
 }

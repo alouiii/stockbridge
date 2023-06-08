@@ -1,0 +1,27 @@
+.left-tab-button{
+    background: transparent;
+    border: none;
+    color: white; 
+    font-size: 25px;
+    padding: 15px;
+    width: 100%; 
+}
+
+
+.left-tab{
+
+  color: white; 
+  font-size: 25px;
+  float: left;
+
+}
+
+.left-tab-button:hover{
+  background-color: rgb(255, 190, 199) !important;
+}
+
+.left-tab-icon{
+  align-self: center;
+  margin-top: -6px; 
+  margin-right: 15px;
+}

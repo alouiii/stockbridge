@@ -1,5 +1,4 @@
 import React from "react"
-import { palette } from "../../utils/colors"
 
 type Props = {
     title: string

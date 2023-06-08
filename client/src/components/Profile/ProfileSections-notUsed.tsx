@@ -1,4 +1,4 @@
-import useMediaQuery from "./../../hooks/useMediaQuery";
+import useMediaQuery from "../../hooks/useMediaQuery";
 import { FC } from "react";
 import { LeftTab } from "./LeftTab";
 import questionIcon from "./../../assets/question-circle.svg";
@@ -7,6 +7,8 @@ import storeIcon from "./../../assets/shop.svg";
 import buyingIcon from "./../../assets/box-seam.svg";
 import advertIcon from "./../../assets/cash-stack.svg";
 import sellingIcon from "./../../assets/cash-coin.svg";
+import Tab from "../ContentTabs/Tab";
+import Tabs from "../ContentTabs/Tabs";
 
 
 export type ProfileSectionsProps = {
@@ -68,7 +70,6 @@ export const ProfileSections: FC = () => {
             }}
         >
 
-
             <div className="sections-container"
                 style={{
                     marginTop: "40%",
@@ -77,7 +78,7 @@ export const ProfileSections: FC = () => {
                     gap: 0,
                 }}
             >
-                {leftTabs.map((section, _) => {
+                {/* {leftTabs.map((section, _) => {
                     return (
                         <LeftTab
                             message={section.text}
@@ -85,9 +86,9 @@ export const ProfileSections: FC = () => {
                             isSelected={section.isSelected}
                         />
                     );
-                })}
+                })} */}
             </div>
 
-     </div>
+        </div>
     );
 }
