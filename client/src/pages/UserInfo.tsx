@@ -6,12 +6,6 @@ import { palette } from "../utils/colors";
 import useMediaQuery from "./../hooks/useMediaQuery";
 import { useState, ReactElement } from "react";
 
-import questionIcon from "./../assets/question-circle.svg";
-import premiumIcon from "./../assets/bookmark-star.svg";
-import storeIcon from "./../assets/shop.svg";
-import buyingIcon from "./../assets/box-seam.svg";
-import advertIcon from "./../assets/cash-stack.svg";
-import sellingIcon from "./../assets/cash-coin.svg";
 import { ProfileSectionTab } from "../components/ContentTabs/ProfileSectionTab";
 import MyAdvertsContent from "../components/Profile/ProfileSectionsContent/MyAdvertsContent";
 import SellingContent from "../components/Profile/ProfileSectionsContent/SellingContent";
