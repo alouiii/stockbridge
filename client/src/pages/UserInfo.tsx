@@ -68,11 +68,9 @@ export function UserInfo() {
   
   const matches = useMediaQuery("(min-width: 768px)");
   const [selectedProfileSection, setSelectedProfileSection] = useState(0);
-  const { loggedIn, user } = useContext(LoginContext);
 
   return (
     <Page>
-      {loggedIn ? <h3>Welcome back {user?.name}</h3> : undefined}
       <ProfileHeader />
 
       <div className="row">
