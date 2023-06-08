@@ -4,7 +4,10 @@ import { Dropdown } from "react-bootstrap";
 import { BodyText } from "./Text/BodyText";
 import { ColoredLine } from "./ColoredLine";
 
-export const BottomBar: FC = () => {
+/**
+ * This component represents the footer/bottom bar of our website.
+ */
+export const Footer: FC = () => {
   return (
     <div
       style={{
@@ -15,9 +18,11 @@ export const BottomBar: FC = () => {
         alignItems: "stretch",
         justifyContent: "center",
         gap: 100,
-        paddingTop: 100
+        paddingTop: 100,
+        marginTop: "auto",
       }}
     >
+      <div>© StockBridge 2023</div>
       <div>
         <BodyText
           style={{ fontSize: 15, fontWeight: 600 }}
@@ -34,6 +39,25 @@ export const BottomBar: FC = () => {
           <BodyText
             style={{ fontSize: 15, fontWeight: 400 }}
             message="Privacy"
+          ></BodyText>
+        </a>
+      </div>
+      <div>
+        <BodyText
+          style={{ fontSize: 15, fontWeight: 600 }}
+          message="Social"
+        ></BodyText>
+        <ColoredLine color="black" width={20} height={2} marginTop={-10} />
+        <a href="#ciao">
+          <BodyText
+            style={{ fontSize: 15, fontWeight: 400, marginTop: 20 }}
+            message="Instagram"
+          ></BodyText>
+        </a>
+        <a href="#ciao">
+          <BodyText
+            style={{ fontSize: 15, fontWeight: 400 }}
+            message="Facebook"
           ></BodyText>
         </a>
       </div>

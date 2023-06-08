@@ -8,6 +8,9 @@ import Slider from "@mui/material/Slider";
 import { BodyText } from "../Text/BodyText";
 import useMediaQuery from "./../../hooks/useMediaQuery";
 
+/**
+ * This components represents the filters section in the home page.
+ */
 export const Filters: FC = () => {
   const [rangePrice, setRangePrice] = useState<number[]>([0, 1000]);
   const [rangeQuantity, setRangeQuantity] = useState<number[]>([0, 100]);
@@ -17,7 +20,7 @@ export const Filters: FC = () => {
       style={{
         position: "absolute",
         left: 0,
-        height: "100%",
+        paddingBottom: 150,
         width: 350,
         borderRadius: 15,
         backgroundColor: palette.subSectionsBgLighter,

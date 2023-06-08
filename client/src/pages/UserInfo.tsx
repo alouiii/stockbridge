@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import { Page } from "../components/Page";
 import { ProfileHeader } from "../components/Profile/ProfileHeader";
 import "../styles/userInfo.css"
@@ -5,6 +6,7 @@ import { palette } from "../utils/colors";
 
 import useMediaQuery from "./../hooks/useMediaQuery";
 import { useState, ReactElement } from "react";
+import { LoginContext } from "../contexts/LoginContext";
 
 import { ProfileSectionTab } from "../components/ContentTabs/ProfileSectionTab";
 import MyAdvertsContent from "../components/Profile/ProfileSectionsContent/MyAdvertsContent";
@@ -63,12 +65,14 @@ const leftTabs: { text: string; icon: string, content: ReactElement, isSelected:
  * The page containing the user information (profile): Ads, Offers, Subsriptions...
  */
 export function UserInfo() {
+  
   const matches = useMediaQuery("(min-width: 768px)");
   const [selectedProfileSection, setSelectedProfileSection] = useState(0);
-
+  const { loggedIn, user } = useContext(LoginContext);
 
   return (
     <Page>
+      {loggedIn ? <h3>Welcome back {user?.name}</h3> : undefined}
       <ProfileHeader />
 
       <div className="row">
