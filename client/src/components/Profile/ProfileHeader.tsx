@@ -4,6 +4,7 @@ import { Button } from "react-bootstrap";
 import { BodyText } from "../Text/BodyText";
 import { Title } from "../Text/Title";
 import useMediaQuery from "./../../hooks/useMediaQuery";
+import { Image } from "react-bootstrap";
 
 
 
@@ -15,13 +16,12 @@ export function ProfileHeader() {
             style={{
                 width: "100%",
                 height: 236,
-                backgroundColor: palette.imageBg,
-                zIndex: 1,
+                backgroundColor: palette.imageBg
             }}
         >
-            <img
+            <Image
                 style={{
-                    maxWidth: "100%",
+                    width: "100%",
                     height: 236,
                     zIndex: -1,
                     position: "absolute",
