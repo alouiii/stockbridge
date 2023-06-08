@@ -1,6 +1,6 @@
 import React, { ReactElement } from "react"
-import Tabs from "../ContentTabs/Tabs"
-import Tab from "../ContentTabs/Tab"
+import Tabs from "../../ContentTabs/Tabs"
+import ContentTab from "../../ContentTabs/ContentTab"
 
 
 type Props = {
@@ -15,8 +15,8 @@ const MyAdvertsContent: React.FC<Props> = ({ children }) => {
     return (
         <div>
             <Tabs>
-                <Tab title="Buying Ads">Ciao bella, this is the container for the buying Ads</Tab>
-                <Tab title="Selling Ads">Hola guys, this is the container for the selling Ads</Tab>
+                <ContentTab title="Buying Ads">Ciao bella, this is the container for the buying Ads</ContentTab>
+                <ContentTab title="Selling Ads">Hola guys, this is the container for the selling Ads</ContentTab>
             </Tabs>
         </div>
     )

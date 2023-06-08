@@ -12,61 +12,62 @@ import storeIcon from "./../assets/shop.svg";
 import buyingIcon from "./../assets/box-seam.svg";
 import advertIcon from "./../assets/cash-stack.svg";
 import sellingIcon from "./../assets/cash-coin.svg";
-import { LeftTab } from "../components/Profile/LeftTab";
-import MyAdvertsContent from "../components/Profile/MyAdvertsContent";
-import SellingContent from "../components/Profile/SellingContent";
-import BuyingContent from "../components/Profile/BuyingContent";
-import StoreDetailsContent from "../components/Profile/StoreDetailsContent";
-import PremiumContent from "../components/Profile/PremiumContent";
-import HelpQaContent from "../components/Profile/HelpQaContent";
+import { ProfileSectionTab } from "../components/ContentTabs/ProfileSectionTab";
+import MyAdvertsContent from "../components/Profile/ProfileSectionsContent/MyAdvertsContent";
+import SellingContent from "../components/Profile/ProfileSectionsContent/SellingContent";
+import BuyingContent from "../components/Profile/ProfileSectionsContent/BuyingContent";
+import StoreDetailsContent from "../components/Profile/ProfileSectionsContent/StoreDetailsContent";
+import PremiumContent from "../components/Profile/ProfileSectionsContent/PremiumContent";
+import HelpQaContent from "../components/Profile/ProfileSectionsContent/HelpQaContent";
 
 
 
-
-
-
-// Contains the tabs displayed on the sidebar of the profile page and their corresponding content
-const leftTabs: { text: string; icon: any, content: ReactElement, isSelected: boolean }[] = [
+/**
+ * Contains the tabs displayed on the sidebar of the profile page and their corresponding content
+ */
+const leftTabs: { text: string; icon: string, content: ReactElement, isSelected: boolean }[] = [
   {
     text: "My Adverts",
-    icon: advertIcon,
+    icon: "bi-cash-stack",
     content: <MyAdvertsContent children={[]} />,
     isSelected: false
   },
   {
     text: "Selling",
-    icon: sellingIcon,
+    icon: "bi-cash-coin",
     content: <SellingContent children={[]} />,
     isSelected: true
   },
   {
     text: "Buying",
-    icon: buyingIcon,
+    icon: "bi-box-seam",
     content: <BuyingContent children={[]} />,
     isSelected: false
   },
   {
     text: "Store Details",
-    icon: storeIcon,
+    icon: "bi-shop",
     content: <StoreDetailsContent children={[]} />,
     isSelected: false
   },
   {
     text: "Premium",
-    icon: premiumIcon,
+    icon: "bi-bookmark-star",
     content: <PremiumContent children={[]} />,
     isSelected: false
   },
   {
     text: "Help and FAQ",
-    icon: questionIcon,
+    icon: "bi-question-circle",
     content: <HelpQaContent children={[]} />,
     isSelected: false
   },
 ];
 
 
-
+/**
+ * The page containing the user information (profile): Ads, Offers, Subsriptions...
+ */
 export function UserInfo() {
   const matches = useMediaQuery("(min-width: 768px)");
   const [selectedProfileSection, setSelectedProfileSection] = useState(0);
@@ -92,14 +93,13 @@ export function UserInfo() {
           <div className="sections-container"
             style={{
               marginTop: "40%",
-              //display: "flex",
               flexDirection: "column",
               gap: 0,
             }}
           >
             {leftTabs.map((section, sectionIndex) => {
               return (
-                <LeftTab
+                <ProfileSectionTab
                   title={section.text}
                   icon={section.icon}
                   index={sectionIndex}
@@ -113,7 +113,6 @@ export function UserInfo() {
 
         <div className="col-10" style={{ paddingTop: "5em" }}>
           {leftTabs[selectedProfileSection].content}
-
         </div>
 
       </div>

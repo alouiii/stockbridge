@@ -7,9 +7,9 @@ type Props = {
 }
 
 
-const Tab: React.FC<Props> = ({ children } ) => {
+const ContentTab: React.FC<Props> = ({ children } ) => {
   return <div>{children}</div>
 }
 
-export default Tab
+export default ContentTab
   

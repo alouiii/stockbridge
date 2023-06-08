@@ -4,8 +4,6 @@ import { Button } from "react-bootstrap";
 import { BodyText } from "../Text/BodyText";
 import { Title } from "../Text/Title";
 import useMediaQuery from "./../../hooks/useMediaQuery";
-import { right } from "@popperjs/core";
-import { relative } from "path";
 
 
 
@@ -89,21 +87,6 @@ export function ProfileHeader() {
                     message="POST YOUR ADVERT"
                 />
             </Button>
-
-
-
-
-            {/* <div className="gapHeader"
-                style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 20,
-                    alignItems: "flex-end",
-                    marginRight: "10%",
-                }}
-            >
-               
-            </div> */}
         </div>
     );
 }
