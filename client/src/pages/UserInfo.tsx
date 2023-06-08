@@ -1,55 +1,117 @@
-import React from "react";
-
-import {Page} from "../components/Page";
-import {ProfileHeader} from "../components/Profile/ProfileHeader";
-import {ProfileSections} from "../components/Profile/ProfileSections";
+import { useContext } from "react";
+import { Page } from "../components/Page";
+import { ProfileHeader } from "../components/Profile/ProfileHeader";
 import "../styles/userInfo.css"
-import {palette} from "../utils/colors";
-import {Col, Container, Row} from "react-bootstrap";
-import StoreDetailsForm from "../components/Profile/StoreDetails/StoreDetailsForm";
+import { palette } from "../utils/colors";
+
+import useMediaQuery from "./../hooks/useMediaQuery";
+import { useState, ReactElement } from "react";
+import { LoginContext } from "../contexts/LoginContext";
+
+import { ProfileSectionTab } from "../components/ContentTabs/ProfileSectionTab";
+import MyAdvertsContent from "../components/Profile/ProfileSectionsContent/MyAdvertsContent";
+import SellingContent from "../components/Profile/ProfileSectionsContent/SellingContent";
+import BuyingContent from "../components/Profile/ProfileSectionsContent/BuyingContent";
+import StoreDetailsContent from "../components/Profile/ProfileSectionsContent/StoreDetailsContent";
+import PremiumContent from "../components/Profile/ProfileSectionsContent/PremiumContent";
+import HelpQaContent from "../components/Profile/ProfileSectionsContent/HelpQaContent";
 
 
+
+/**
+ * Contains the tabs displayed on the sidebar of the profile page and their corresponding content
+ */
+const leftTabs: { text: string; icon: string, content: ReactElement, isSelected: boolean }[] = [
+  {
+    text: "My Adverts",
+    icon: "bi-cash-stack",
+    content: <MyAdvertsContent children={[]} />,
+    isSelected: false
+  },
+  {
+    text: "Selling",
+    icon: "bi-cash-coin",
+    content: <SellingContent children={[]} />,
+    isSelected: true
+  },
+  {
+    text: "Buying",
+    icon: "bi-box-seam",
+    content: <BuyingContent children={[]} />,
+    isSelected: false
+  },
+  {
+    text: "Store Details",
+    icon: "bi-shop",
+    content: <StoreDetailsContent children={[]} />,
+    isSelected: false
+  },
+  {
+    text: "Premium",
+    icon: "bi-bookmark-star",
+    content: <PremiumContent children={[]} />,
+    isSelected: false
+  },
+  {
+    text: "Help and FAQ",
+    icon: "bi-question-circle",
+    content: <HelpQaContent children={[]} />,
+    isSelected: false
+  },
+];
+
+
+/**
+ * The page containing the user information (profile): Ads, Offers, Subsriptions...
+ */
 export function UserInfo() {
-    return (
-        <Page>
-            <ProfileHeader/>
 
-            <Container className={'m-0'} fluid >
+  const matches = useMediaQuery("(min-width: 768px)");
+  const [selectedProfileSection, setSelectedProfileSection] = useState(0);
 
-                <Row>
+  return (
+    <Page>
+      <ProfileHeader />
 
-                    <Col xs={2}
-                         style={{
-                             //position: "absolute",
-                             left: 0,
-                             height: "100%",
-                             backgroundColor: palette.subSectionsBgLighter,
-                             alignItems: "center",
-                             //display: matches ? "flex" : "none",
-                             //flexDirection: "column",
-                         }}
-                    >
-
-                        {/* <ProfileSections leftTabs= {leftTabs as ProfileSectionsProps}/> */}
-                        <ProfileSections/>
-
-                    </Col>
-
-                    <Col xs={10} className={'p-4'}>
-                        {/*<Tabs>*/}
-                        {/*  <Tab title="Orders">Ciao bella, this is the container for the Orders</Tab>*/}
-                        {/*  <Tab title="Incoming Offers">Hola guys, this is the container for the incoming offers</Tab>*/}
-                        {/*  <Tab title="Outgoing Offers">Servus amigos, this is the container for the outgoing offers</Tab>*/}
-                        {/*</Tabs>*/}
-                        {/*<StoreDetailsHeader name={'Petals & Blooms'} image={flowerShop} joined={new Date()}/>*/}
-
-                        <StoreDetailsForm />
+      <div className="row">
+        <div className="col-2 profile-section-container"
+          style={{
+            left: 0,
+            minHeight: "100em",
+            height: "100%",
+            backgroundColor: palette.subSectionsBgLighter,
+            alignItems: "center",
+            display: matches ? "flex" : "none",
+            flexDirection: "column",
+          }}>
 
 
-                    </Col>
+          <div className="sections-container"
+            style={{
+              marginTop: "40%",
+              flexDirection: "column",
+              gap: 0,
+            }}
+          >
+            {leftTabs.map((section, sectionIndex) => {
+              return (
+                <ProfileSectionTab
+                  title={section.text}
+                  icon={section.icon}
+                  index={sectionIndex}
+                  selectedTab={selectedProfileSection}
+                  setSelectedTab={setSelectedProfileSection}
+                />
+              );
+            })}
+          </div>
+        </div>
 
-                </Row>
-            </Container>
-        </Page>
-    );
+        <div className="col-10" style={{ paddingTop: "5em" }}>
+          {leftTabs[selectedProfileSection].content}
+        </div>
+
+      </div>
+    </Page>
+  );
 }

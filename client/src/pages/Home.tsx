@@ -1,4 +1,3 @@
-import { ColoredLine } from "../components/ColoredLine";
 import { StepDescription } from "../components/Home/StepDescription";
 import { Title } from "../components/Text/Title";
 import { palette } from "../utils/colors";
@@ -11,6 +10,12 @@ import { Page } from "../components/Page";
 import { Filters } from "../components/Home/Filters";
 import { BodyText } from "../components/Text/BodyText";
 import sortIcon from "../assets/sort-icon.svg";
+import { FC } from "react";
+import { ColoredLine } from "../components/ColoredLine";
+import { useContext, useEffect } from "react";
+import { LoginContext } from "../contexts/LoginContext";
+import { ApiClient } from "../api/apiClient";
+import { Image } from "react-bootstrap";
 
 const stepDescriptions: { message: string; icon: string }[] = [
   {
@@ -29,9 +34,38 @@ const stepDescriptions: { message: string; icon: string }[] = [
 
 export function Home() {
   const matches = useMediaQuery("(min-width: 768px)");
+
+  const { setLoggedIn, setUser } = useContext(LoginContext);
+
+  useEffect(() => {
+    new ApiClient()
+      .get("auth/verify", { withCredentials: true })
+      .then(() => {
+        const currentLoginStatus = localStorage.getItem("loginStatus");
+        const currentUser = localStorage.getItem("currentUser");
+        if (currentLoginStatus && currentUser) {
+          setLoggedIn(true);
+          setUser(JSON.parse(currentUser));
+        }
+      })
+      .catch((error) => {
+        setLoggedIn(false);
+        setUser(undefined);
+      });
+
+    /*
+    const currentLoginStatus = localStorage.getItem("loginStatus");
+    const currentUser = localStorage.getItem("currentUser");
+    if (currentLoginStatus && currentUser) {
+      setLoggedIn(true);
+      setUser(JSON.parse(currentUser));
+    }*/
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Page>
-      <PostOrSearch />
+      <PostOrSearch/>
       <div
         style={{
           position: "relative",
@@ -53,9 +87,7 @@ export function Home() {
             paddingTop: 50,
             marginBottom: -60,
           }}
-        >
-            How it Works
-        </Title>
+        >HOW IT WORKS</Title>
         <ColoredLine
           color={palette.subSectionsBgAccent}
           height={5}
@@ -71,6 +103,7 @@ export function Home() {
           {stepDescriptions.map((step, index) => {
             return (
               <StepDescription
+                key={index}
                 number={index + 1}
                 message={step.message}
                 icon={step.icon}
@@ -84,11 +117,7 @@ export function Home() {
           style={{ fontSize: 36, textAlign: "center", paddingTop: 20 }}
         >Active Adverts</Title>
         <div style={{ marginTop: 100 }}>
-          <img
-            src={sortIcon}
-            alt="sortIcon"
-            style={{ position: "absolute", right: 0 }}
-          />
+          <Image src={sortIcon} style={{ position: "absolute", right: 0 }} />
           <div
             style={{
               display: "flex",
@@ -103,12 +132,10 @@ export function Home() {
                 fontSize: 30,
                 fontWeight: 600,
               }}
-              message="Selling"
-            />
+            >Selling</BodyText>
             <BodyText
               style={{ color: palette.subSectionsBgLighter, fontSize: 30 }}
-              message="Buying"
-            />
+            >Buying</BodyText>
           </div>
           <Filters />
         </div>

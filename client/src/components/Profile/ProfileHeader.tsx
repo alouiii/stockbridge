@@ -1,10 +1,9 @@
-import {palette} from "../../utils/colors";
+import { palette } from "../../utils/colors";
 import profilePageImage from ".//../../assets/profilePageImage.png";
-import {Button, Image} from "react-bootstrap";
-import {BodyText} from "../Text/BodyText";
-import {Title} from "../Text/Title";
+import { Button, Image } from "react-bootstrap";
+import { BodyText } from "../Text/BodyText";
+import { Title } from "../Text/Title";
 import useMediaQuery from "./../../hooks/useMediaQuery";
-
 
 export function ProfileHeader() {
     const matches = useMediaQuery("(min-width: 1200px)");
@@ -14,13 +13,12 @@ export function ProfileHeader() {
             style={{
                 width: "100%",
                 height: 236,
-                backgroundColor: palette.imageBg,
-                zIndex: 1,
+                backgroundColor: palette.imageBg
             }}
         >
             <Image
                 style={{
-                    maxWidth: "100%",
+                    width: "100%",
                     height: 236,
                     zIndex: -1,
                     position: "absolute",
@@ -28,18 +26,18 @@ export function ProfileHeader() {
                 }}
                 src={profilePageImage}
                 alt="homepage"
-                fluid/>
+            />
 
             <div className="textContainer"
-                 style={{
-                     display: "inline-block",
-                     position: "relative",
-                     //marginTop: "5em",
-                     //width: "30%",
-                     alignContent: "left",
-                     left: "35%",
-                     top: "20%"
-                 }}
+                style={{
+                    display: "inline-block",
+                    position: "relative",
+                    //marginTop: "5em",
+                    //width: "30%",
+                    alignContent: "left",
+                    left: "35%",
+                    top: "20%"
+                }}
             >
                 <Title
                     style={{
@@ -50,9 +48,14 @@ export function ProfileHeader() {
                         fontWeight: 500,
                     }}
                 >
-                    <h1>Out of stock? or got <br/>too much stock? <br/>No worries!</h1>
+                    <h1>
+                        Out of stock? or got
+                        <br />
+                        too much stock?
+                        <br />
+                        No worries!
+                    </h1>
                 </Title>
-
             </div>
 
             <Button
@@ -67,9 +70,7 @@ export function ProfileHeader() {
                     float: "right",
                     right: "5%",
                     top: "70%"
-
                 }}
-
             >
                 <BodyText
                     style={{
@@ -78,24 +79,8 @@ export function ProfileHeader() {
                         color: "white",
                         fontWeight: 600,
                     }}
-                    message="POST YOUR ADVERT"
-                />
+                >POST YOUR ADVERT</BodyText>
             </Button>
-
-
-            {/* <div className="gapHeader"
-                style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 20,
-                    alignItems: "flex-end",
-                    marginRight: "10%",
-                }}
-            >
-               
-            </div> */
-            }
         </div>
-    )
-        ;
+    );
 }

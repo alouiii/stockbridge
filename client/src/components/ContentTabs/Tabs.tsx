@@ -1,5 +1,5 @@
 import React, { ReactElement, useState } from "react"
-import TabTitle from "./TabTitle"
+import ContentTabTitle from "./ContentTabTitle"
 //import styles from "./styles.css";
 
 type Props = {
@@ -10,13 +10,19 @@ const Tabs: React.FC<Props> = ({ children }) => {
     const [selectedTab, setSelectedTab] = useState(0);
     return (
         <div>
-            <ul style={{ listStyleType: 'none',
-  margin: 0,
-  padding: 0,
-  overflow: 'hidden',
-}}>
+            <ul style={{
+                listStyleType: 'none',
+                margin: 0,
+                padding: 0,
+                overflow: 'hidden',
+            }}>
                 {children.map((item, index) => (
-                    <TabTitle key={index} title={item.props.title} index={index} setSelectedTab= {setSelectedTab} />
+                    <ContentTabTitle
+                    key={index}
+                    title={item.props.title}
+                    index={index}
+                    selectedTab={selectedTab}
+                    setSelectedTab={setSelectedTab} />
                 ))}
             </ul>
             {children[selectedTab]}
