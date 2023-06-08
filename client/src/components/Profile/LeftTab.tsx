@@ -1,7 +1,7 @@
 import { BodyText } from "../Text/BodyText";
 
 type LeftTabProps = {
-    key: string;
+  key: string;
   message: string;
   icon: string;
   isSelected: boolean;
@@ -11,7 +11,6 @@ type LeftTabProps = {
  * Component that displays the step number, the icon and the relative message.
  */
 export function LeftTab(props: LeftTabProps) {
-  
   return (
     <div
       style={{
@@ -23,7 +22,11 @@ export function LeftTab(props: LeftTabProps) {
         gap: 15,
       }}
     >
-      <img style={{ alignSelf: "center", marginTop: "-6px" }} src={props.icon} alt="icon" />
+      <img
+        style={{ alignSelf: "center", marginTop: "-6px" }}
+        src={props.icon}
+        alt="icon"
+      />
 
       <BodyText
         style={{
@@ -32,10 +35,11 @@ export function LeftTab(props: LeftTabProps) {
           fontSize: 21,
           //color: "black",
           marginRight: 10,
-          fontWeight: 350
+          fontWeight: 350,
         }}
-        message={props.message}
-      />
+      >
+        {props.message}
+      </BodyText>
     </div>
   );
 }
