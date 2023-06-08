@@ -5,7 +5,7 @@ import AccountInformationForm from "./AccountInformationForm";
 import ShipmentDetailsForm from "./ShipmentDetailsForm";
 import PaymentDetailsForm from "./PaymentDetailsForm";
 import StoreDetailsHeader from "./StoreDetailsHeader";
-import {updateUser, User} from "../../../api/collections/user";
+import {Address, PaymentMethod, updateUser, User} from "../../../api/collections/user";
 
 
 export interface InputProps {
@@ -134,26 +134,28 @@ const StoreDetailsForm: React.FC = () => {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        const address: Address = {
+            street: streetName || undefined,
+                houseNumber: houseNumber || undefined,
+                city: city || undefined,
+                postalCode: postalCode || undefined,
+                country: country || undefined
+        }
+        const paymentMethod: PaymentMethod = {
+            name: cardHolder || undefined,
+            cardNumber: cardNumber || undefined,
+            cvv: cvv || undefined,
+            expirationDate: expiration ? new Date(expiration) : undefined
+        }
         const user: User = {
-            name: name,
-            email: email,
-            password: password,
-            phoneNumber: phone,
-            address: {
-                street: streetName,
-                houseNumber: houseNumber,
-                city: city,
-                postalCode: postalCode,
-                country: country
-            },
-            paymentMethod: {
-                name: cardHolder,
-                cardNumber: cardNumber,
-                cvv: cvv,
-                expirationDate: new Date(expiration)
-            }
+            name: name || undefined,
+            email: email || undefined,
+            password: password || undefined,
+            phoneNumber: phone || undefined,
+            ...(Object.values(address).some(value => value !== undefined) && { address }),
+            ...(Object.values(paymentMethod).some(value => value !== undefined) && { paymentMethod }),
         };
-        updateUser('6470eb87fc895db57a6599c7', user);
+        updateUser('6470eb87fc895db57a6599c7', user); // TODO: get user id from auth
     };
 
     return (

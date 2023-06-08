@@ -1,24 +1,24 @@
 import {ApiClient} from "../apiClient";
 
 export interface Address {
-    street: string;
-    houseNumber: string;
-    city: string;
-    postalCode: string;
-    country: string;
+    street?: string;
+    houseNumber?: string;
+    city?: string;
+    postalCode?: string;
+    country?: string;
 }
 
 export interface Subscription {
-    from: Date;
-    to: Date;
-    renew: boolean;
+    from?: Date;
+    to?: Date;
+    renew?: boolean;
 }
 
 export interface PaymentMethod {
-    name: string;
-    cardNumber: string;
-    expirationDate: Date;
-    cvv: string;
+    name?: string;
+    cardNumber?: string;
+    expirationDate?: Date;
+    cvv?: string;
 }
 
 export interface User {
