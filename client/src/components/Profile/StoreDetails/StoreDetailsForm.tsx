@@ -164,7 +164,7 @@ const StoreDetailsForm: React.FC = () => {
       cvv: cvv || undefined,
       expirationDate: expiration ? new Date(expiration) : undefined,
     };
-    const user: User = {
+    const updatedUser: User = {
       name: name || undefined,
       email: email || undefined,
       password: password || undefined,
@@ -177,8 +177,7 @@ const StoreDetailsForm: React.FC = () => {
       }),
     };
 
-    console.log(user);
-    await updateUser(user._id!, user); // TODO: get user id from auth
+    await updateUser(user._id!, updatedUser);
   };
 
   return (
@@ -190,10 +189,6 @@ const StoreDetailsForm: React.FC = () => {
           joined={new Date()}
         />
         <AccountInformationForm
-          //     category={{
-          //     value: category,
-          //     onChange: handleCategoryChange,
-          // }}
           email={{
             value: email,
             onChange: handleEmailChange,
