@@ -1,10 +1,10 @@
 import { Button, Nav, Navbar as NavbarBS } from "react-bootstrap";
 import userLogo from "../assets/user-logo.svg";
 import { useNavigate, NavLink } from "react-router-dom";
-import { palette } from "../utils/colors";
 import logo from "../assets/logo.svg";
 import { useContext } from "react";
 import { LoginContext } from "../contexts/LoginContext";
+import { palette } from "../utils/colors";
 import { ApiClient } from "../api/apiClient";
 
 /**
@@ -49,7 +49,7 @@ export function Navbar() {
             color: palette.subSectionsBgAccent,
             fontSize: 20,
           }}
-          onClick={() => navigate("/signIn")}
+          onClick={() => navigate("/SignIn")}
         >
           Sign In
         </Button>

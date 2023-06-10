@@ -4,15 +4,27 @@ import { Button, Image } from "react-bootstrap";
 import { BodyText } from "../Text/BodyText";
 import { Title } from "../Text/Title";
 import { SearchBar } from "./SearchBar";
-import { useNavigate } from "react-router-dom";
 import useMediaQuery from "../../hooks/useMediaQuery";
+import { useState } from "react";
+import { EditAdvertModal } from "../ProductOverview/EditAdvertModal";
 import { ColoredLine } from "../ColoredLine";
+
 /**
  * Component to manage the section of the homepage where the user can click on "post advert" or decide to search for something
  */
+
+
 export function PostOrSearch() {
-  const navigate = useNavigate();
   const matches = useMediaQuery("(min-width: 1200px)");
+  const [showModal, setShowModal] = useState(false);
+  const openModal = () => {
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    window.location.reload();
+  }
   return (
     <div
       style={{
@@ -23,14 +35,13 @@ export function PostOrSearch() {
     >
       <Image
         style={{
-          maxWidth: "100%",
+          width: "100%",
           height: 700,
           zIndex: -1,
           position: "absolute",
           objectFit: "cover",
         }}
         src={homepageImage}
-        fluid
       />
       <div
         style={{
@@ -50,18 +61,20 @@ export function PostOrSearch() {
             maxWidth: 260,
             marginTop: "15%",
           }}
-          onClick={() => navigate("/signUp")}
+          onClick={() =>
+            openModal()
+          }
         >
           <BodyText
-            style={{
+            style={{  
               margin: "auto",
               fontSize: 15,
               color: "white",
               fontWeight: 600,
             }}
-            message="POST YOUR ADVERT"
-          />
+          >POST YOUR ADVERT</BodyText>
         </Button>
+        {showModal && <EditAdvertModal isShowing={showModal} onClose={closeModal}/>}
         <ColoredLine width={60} height={2} color="white" gap={5}>
           <Title
             style={{
@@ -70,8 +83,7 @@ export function PostOrSearch() {
               color: "white",
               fontWeight: 400,
             }}
-            message="OR"
-          />
+          >OR</Title>
         </ColoredLine>
         <SearchBar />
         <div
@@ -90,8 +102,7 @@ export function PostOrSearch() {
               textAlign: "center",
               fontWeight: 500,
             }}
-            message="Out of stock?or got too much stock?No worries!"
-          />
+          >Out of stock?or got too much stock?No worries!</Title>
         </div>
       </div>
     </div>
