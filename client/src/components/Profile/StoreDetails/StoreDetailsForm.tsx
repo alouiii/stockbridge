@@ -19,7 +19,6 @@ export interface InputProps {
 }
 
 export interface AccountInformationFormProps {
-  // category: InputProps;
   email: InputProps;
   password: InputProps;
   phone: InputProps;
@@ -52,11 +51,7 @@ export interface StoreDetailsProps {
 const StoreDetailsForm: React.FC = () => {
   const { user } = useContext(LoginContext);
 
-  if (!user) {
-    throw new Error("User is not logged in");
-  }
-
-  const [name, setName] = useState<string>(user.name as string);
+  const [name, setName] = useState<string>(user?.name as string);
   const [image, setImage] = useState<string>("");
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,15 +59,9 @@ const StoreDetailsForm: React.FC = () => {
     setName(e.target.value);
   };
 
-  // const [category, setCategory] = useState('');
-  const [email, setEmail] = useState(user.email as string);
+  const [email, setEmail] = useState(user?.email as string);
   const [password, setPassword] = useState("");
-  const [phone, setPhone] = useState(user.phoneNumber as string);
-
-  // const handleCategoryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //     // console.log(e.target.value);
-  //     setCategory(e.target.value);
-  // };
+  const [phone, setPhone] = useState(user?.phoneNumber as string);
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // console.log(e.target.value);
@@ -89,13 +78,13 @@ const StoreDetailsForm: React.FC = () => {
     setPhone(e.target.value);
   };
 
-  const [streetName, setStreetName] = useState(user.address!.street || "");
+  const [streetName, setStreetName] = useState(user?.address!.street || "");
   const [houseNumber, setHouseNumber] = useState(
-    user.address!.houseNumber || ""
+    user?.address!.houseNumber || ""
   );
-  const [city, setCity] = useState(user.address!.city || "");
-  const [postalCode, setPostalCode] = useState(user.address!.postalCode || "");
-  const [country, setCountry] = useState(user.address!.country || "");
+  const [city, setCity] = useState(user?.address!.city || "");
+  const [postalCode, setPostalCode] = useState(user?.address!.postalCode || "");
+  const [country, setCountry] = useState(user?.address!.country || "");
 
   const handleStreetNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // console.log(e.target.value);
@@ -122,11 +111,11 @@ const StoreDetailsForm: React.FC = () => {
     setCountry(e.target.value);
   };
 
-  const [cardHolder, setCardHolder] = useState(user.paymentMethod!.name || "");
+  const [cardHolder, setCardHolder] = useState(user?.paymentMethod!.name || "");
   const [cardNumber, setCardNumber] = useState(
-    user.paymentMethod!.cardNumber || ""
+    user?.paymentMethod!.cardNumber || ""
   );
-  const [cvv, setCvv] = useState(user.paymentMethod!.cvv || "");
+  const [cvv, setCvv] = useState(user?.paymentMethod!.cvv || "");
   const [expiration, setExpiration] = useState("");
 
   const handleCardHolderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -177,7 +166,7 @@ const StoreDetailsForm: React.FC = () => {
       }),
     };
 
-    await updateUser(user._id!, updatedUser);
+    await updateUser(user?._id!, updatedUser);
   };
 
   return (
