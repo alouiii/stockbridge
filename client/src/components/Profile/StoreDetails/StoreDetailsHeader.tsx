@@ -11,6 +11,7 @@ import {
 import { Title } from "../../Text/Title";
 import { BodyText } from "../../Text/BodyText";
 import { StoreDetailsProps } from "./StoreDetailsForm";
+import defaultUserImage from "../../../assets/defaultUser.png";
 
 const StoreDetailsHeader: React.FC<StoreDetailsProps> = (props) => {
   const [showModal, setShowModal] = useState(false);
@@ -59,7 +60,10 @@ const StoreDetailsHeader: React.FC<StoreDetailsProps> = (props) => {
         <Col xs={4}>
           <Image
             src={props.image.value}
-            alt={"Store Image"}
+            alt="Store Image"
+            onError={(e: React.SyntheticEvent<HTMLImageElement>) =>
+              (e.currentTarget.src = defaultUserImage)
+            }
             roundedCircle
             className={"p-2"}
             style={{

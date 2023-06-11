@@ -55,7 +55,6 @@ const StoreDetailsForm: React.FC = () => {
   const [image, setImage] = useState<string>("");
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log(e.target.value);
     setName(e.target.value);
   };
 
@@ -64,17 +63,14 @@ const StoreDetailsForm: React.FC = () => {
   const [phone, setPhone] = useState(user?.phoneNumber as string);
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log(e.target.value);
     setEmail(e.target.value);
   };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log(e.target.value);
     setPassword(e.target.value);
   };
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log(e.target.value);
     setPhone(e.target.value);
   };
 
@@ -87,27 +83,22 @@ const StoreDetailsForm: React.FC = () => {
   const [country, setCountry] = useState(user?.address!.country || "");
 
   const handleStreetNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log(e.target.value);
     setStreetName(e.target.value);
   };
 
   const handleHouseNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log(e.target.value);
     setHouseNumber(e.target.value);
   };
 
   const handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log(e.target.value);
     setCity(e.target.value);
   };
 
   const handlePostalCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log(e.target.value);
     setPostalCode(e.target.value);
   };
 
   const handleCountryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log(e.target.value);
     setCountry(e.target.value);
   };
 
@@ -119,22 +110,18 @@ const StoreDetailsForm: React.FC = () => {
   const [expiration, setExpiration] = useState("");
 
   const handleCardHolderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log(e.target.value);
     setCardHolder(e.target.value);
   };
 
   const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log(e.target.value);
     setCardNumber(e.target.value);
   };
 
   const handleCcvChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log(e.target.value);
     setCvv(e.target.value);
   };
 
   const handleExpirationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log(e.target.value);
     setExpiration(e.target.value);
   };
 
