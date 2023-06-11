@@ -12,6 +12,11 @@ import {
   User,
 } from "../../../api/collections/user";
 import { LoginContext } from "../../../contexts/LoginContext";
+import {
+  autocompleteCardNumber,
+  autocompleteExpirationDate,
+  expDatePaymentToDate,
+} from "../../../utils/functions";
 
 export interface InputProps {
   value: string;
@@ -22,6 +27,7 @@ export interface AccountInformationFormProps {
   email: InputProps;
   password: InputProps;
   phone: InputProps;
+  onChangeError: (error: boolean) => void;
 }
 
 export interface ShipmentDetailsFormProps {
@@ -30,6 +36,7 @@ export interface ShipmentDetailsFormProps {
   city: InputProps;
   postalCode: InputProps;
   country: InputProps;
+  onChangeError: (error: boolean) => void;
 }
 
 export interface PaymentDetailsFormProps {
@@ -37,6 +44,7 @@ export interface PaymentDetailsFormProps {
   cardNumber: InputProps;
   ccv: InputProps;
   expiration: InputProps;
+  onChangeError: (error: boolean) => void;
 }
 
 export interface StoreDetailsProps {
@@ -46,10 +54,13 @@ export interface StoreDetailsProps {
     setValue: React.Dispatch<React.SetStateAction<string>>;
   };
   joined: Date;
+  onChangeError: (error: boolean) => void;
 }
 
 const StoreDetailsForm: React.FC = () => {
   const { user } = useContext(LoginContext);
+
+  const [error, setError] = useState<boolean>(false);
 
   const [name, setName] = useState<string>(user?.name as string);
   const [image, setImage] = useState<string>("");
@@ -114,7 +125,7 @@ const StoreDetailsForm: React.FC = () => {
   };
 
   const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCardNumber(e.target.value);
+    setCardNumber(autocompleteCardNumber(e) ?? "");
   };
 
   const handleCcvChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -122,38 +133,47 @@ const StoreDetailsForm: React.FC = () => {
   };
 
   const handleExpirationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setExpiration(e.target.value);
+    setExpiration(autocompleteExpirationDate(e) ?? "");
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const address: Address = {
-      street: streetName || undefined,
-      houseNumber: houseNumber || undefined,
-      city: city || undefined,
-      postalCode: postalCode || undefined,
-      country: country || undefined,
-    };
-    const paymentMethod: PaymentMethod = {
-      name: cardHolder || undefined,
-      cardNumber: cardNumber || undefined,
-      cvv: cvv || undefined,
-      expirationDate: expiration ? new Date(expiration) : undefined,
-    };
-    const updatedUser: User = {
-      name: name || undefined,
-      email: email || undefined,
-      password: password || undefined,
-      phoneNumber: phone || undefined,
-      ...(Object.values(address).some((value) => value !== undefined) && {
-        address,
-      }),
-      ...(Object.values(paymentMethod).some((value) => value !== undefined) && {
-        paymentMethod,
-      }),
-    };
+    if (error) {
+      console.log(error);
+      return;
+    } else {
+      const address: Address = {
+        street: streetName || undefined,
+        houseNumber: houseNumber || undefined,
+        city: city || undefined,
+        postalCode: postalCode || undefined,
+        country: country || undefined,
+      };
+      const paymentMethod: PaymentMethod = {
+        name: cardHolder || undefined,
+        cardNumber: cardNumber || undefined,
+        cvv: cvv || undefined,
+        expirationDate: expiration
+          ? expDatePaymentToDate(expiration)
+          : undefined,
+      };
+      const updatedUser: User = {
+        name: name || undefined,
+        email: email || undefined,
+        password: password || undefined,
+        phoneNumber: phone || undefined,
+        ...(Object.values(address).some((value) => value !== undefined) && {
+          address,
+        }),
+        ...(Object.values(paymentMethod).some(
+          (value) => value !== undefined
+        ) && {
+          paymentMethod,
+        }),
+      };
 
-    await updateUser(user?._id!, updatedUser);
+      await updateUser(user?._id!, updatedUser);
+    }
   };
 
   return (
@@ -163,6 +183,7 @@ const StoreDetailsForm: React.FC = () => {
           name={{ value: name, onChange: handleNameChange }}
           image={{ value: image, setValue: setImage }}
           joined={new Date()}
+          onChangeError={(error) => setError(error)}
         />
         <AccountInformationForm
           email={{
@@ -177,6 +198,7 @@ const StoreDetailsForm: React.FC = () => {
             value: phone,
             onChange: handlePhoneChange,
           }}
+          onChangeError={(error) => setError(error)}
         />
         <ShipmentDetailsForm
           streetName={{
@@ -199,6 +221,7 @@ const StoreDetailsForm: React.FC = () => {
             value: country,
             onChange: handleCountryChange,
           }}
+          onChangeError={(error) => setError(error)}
         />
         <PaymentDetailsForm
           cardHolder={{
@@ -217,6 +240,7 @@ const StoreDetailsForm: React.FC = () => {
             value: expiration,
             onChange: handleExpirationChange,
           }}
+          onChangeError={(error) => setError(error)}
         />
         <Row className={"mb-2 justify-content-end "}>
           <Col xs={1}>

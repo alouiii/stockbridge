@@ -1,9 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Form, FloatingLabel } from "react-bootstrap";
 import { Title } from "../../Text/Title";
 import { AccountInformationFormProps } from "./StoreDetailsForm";
+import { checkEmail, checkPhoneNumber } from "../../../utils/functions";
 
 const AccountInformationForm = (props: AccountInformationFormProps) => {
+  useEffect(() => {
+    if (props.email.value && props.password.value && props.phone.value) {
+      if (
+        checkPhoneNumber(props.phone.value) &&
+        checkEmail(props.email.value) &&
+        props.password.value.length >= 6
+      ) {
+        props.onChangeError(false);
+      } else {
+        props.onChangeError(true);
+      }
+    } else {
+      props.onChangeError(true);
+    }
+  }, [props]);
+
   return (
     <>
       <Title style={{}}>
@@ -15,6 +32,7 @@ const AccountInformationForm = (props: AccountInformationFormProps) => {
           value={props.email.value}
           onChange={props.email.onChange}
           autoComplete="username"
+          isInvalid={!checkEmail(props.email.value)}
         />
       </FloatingLabel>
 
@@ -32,6 +50,7 @@ const AccountInformationForm = (props: AccountInformationFormProps) => {
           type="tel"
           value={props.phone.value}
           onChange={props.phone.onChange}
+          isInvalid={!checkPhoneNumber(props.phone.value)}
         />
       </FloatingLabel>
     </>
