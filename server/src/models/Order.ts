@@ -14,7 +14,7 @@ export const orderSchema = new mongoose.Schema<Order>({
     },
     status: {
         enum: Object.values(ORDER_STATUS),
-        required: [true, "Please add an order status"] 
+        required: [false, "Please add an order status"] 
      },
     offer: {
         type: Types.ObjectId,
