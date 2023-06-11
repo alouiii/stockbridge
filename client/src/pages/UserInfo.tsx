@@ -1,72 +1,72 @@
-import { useContext } from "react";
-import { Page } from "../components/Page";
-import { ProfileHeader } from "../components/Profile/ProfileHeader";
-import "../styles/userInfo.css"
-import { palette } from "../utils/colors";
+import React from 'react';
+import { Page } from '../components/Page';
+import { ProfileHeader } from '../components/Profile/ProfileHeader';
+import '../styles/userInfo.css';
+import { palette } from '../utils/colors';
 
-import useMediaQuery from "./../hooks/useMediaQuery";
-import { useState, ReactElement } from "react";
-import { LoginContext } from "../contexts/LoginContext";
+import useMediaQuery from './../hooks/useMediaQuery';
+import { useState, ReactElement } from 'react';
 
-import { ProfileSectionTab } from "../components/ContentTabs/ProfileSectionTab";
-import MyAdvertsContent from "../components/Profile/ProfileSectionsContent/MyAdvertsContent";
-import SellingContent from "../components/Profile/ProfileSectionsContent/SellingContent";
-import BuyingContent from "../components/Profile/ProfileSectionsContent/BuyingContent";
-import StoreDetailsContent from "../components/Profile/ProfileSectionsContent/StoreDetailsContent";
-import PremiumContent from "../components/Profile/ProfileSectionsContent/PremiumContent";
-import HelpQaContent from "../components/Profile/ProfileSectionsContent/HelpQaContent";
-
-
+import { ProfileSectionTab } from '../components/ContentTabs/ProfileSectionTab';
+import MyAdvertsContent from '../components/Profile/ProfileSectionsContent/MyAdvertsContent';
+import SellingContent from '../components/Profile/ProfileSectionsContent/SellingContent';
+import BuyingContent from '../components/Profile/ProfileSectionsContent/BuyingContent';
+import PremiumContent from '../components/Profile/ProfileSectionsContent/PremiumContent';
+import HelpQaContent from '../components/Profile/ProfileSectionsContent/HelpQaContent';
+import StoreDetailsForm from '../components/Profile/StoreDetails/StoreDetailsForm';
 
 /**
  * Contains the tabs displayed on the sidebar of the profile page and their corresponding content
  */
-const leftTabs: { text: string; icon: string, content: ReactElement, isSelected: boolean }[] = [
+const leftTabs: {
+  text: string;
+  icon: string;
+  content: ReactElement;
+  isSelected: boolean;
+}[] = [
   {
-    text: "My Adverts",
-    icon: "bi-cash-stack",
+    text: 'My Adverts',
+    icon: 'bi-cash-stack',
     content: <MyAdvertsContent children={[]} />,
-    isSelected: false
+    isSelected: false,
   },
   {
-    text: "Selling",
-    icon: "bi-cash-coin",
+    text: 'Selling',
+    icon: 'bi-cash-coin',
     content: <SellingContent children={[]} />,
-    isSelected: true
+    isSelected: true,
   },
   {
-    text: "Buying",
-    icon: "bi-box-seam",
+    text: 'Buying',
+    icon: 'bi-box-seam',
     content: <BuyingContent children={[]} />,
-    isSelected: false
+    isSelected: false,
   },
   {
-    text: "Store Details",
-    icon: "bi-shop",
-    content: <StoreDetailsContent children={[]} />,
-    isSelected: false
+    text: 'Store Details',
+    icon: 'bi-shop',
+    content: <StoreDetailsForm />,
+    isSelected: false,
   },
   {
-    text: "Premium",
-    icon: "bi-bookmark-star",
+    text: 'Premium',
+    icon: 'bi-bookmark-star',
     content: <PremiumContent children={[]} />,
-    isSelected: false
+    isSelected: false,
   },
   {
-    text: "Help and FAQ",
-    icon: "bi-question-circle",
+    text: 'Help and FAQ',
+    icon: 'bi-question-circle',
     content: <HelpQaContent children={[]} />,
-    isSelected: false
+    isSelected: false,
   },
 ];
-
 
 /**
  * The page containing the user information (profile): Ads, Offers, Subsriptions...
  */
 export function UserInfo() {
-  
-  const matches = useMediaQuery("(min-width: 768px)");
+  const matches = useMediaQuery('(min-width: 768px)');
   const [selectedProfileSection, setSelectedProfileSection] = useState(0);
 
   return (
@@ -74,22 +74,23 @@ export function UserInfo() {
       <ProfileHeader />
 
       <div className="row">
-        <div className="col-2 profile-section-container"
+        <div
+          className="col-2 profile-section-container"
           style={{
             left: 0,
-            minHeight: "100em",
-            height: "100%",
+            minHeight: '100em',
+            height: '100%',
             backgroundColor: palette.subSectionsBgLighter,
-            alignItems: "center",
-            display: matches ? "flex" : "none",
-            flexDirection: "column",
-          }}>
-
-
-          <div className="sections-container"
+            alignItems: 'center',
+            display: matches ? 'flex' : 'none',
+            flexDirection: 'column',
+          }}
+        >
+          <div
+            className="sections-container"
             style={{
-              marginTop: "40%",
-              flexDirection: "column",
+              marginTop: '40%',
+              flexDirection: 'column',
               gap: 0,
             }}
           >
@@ -107,10 +108,9 @@ export function UserInfo() {
           </div>
         </div>
 
-        <div className="col-10" style={{ paddingTop: "5em" }}>
+        <div className="col-10" style={{ paddingTop: '5em' }}>
           {leftTabs[selectedProfileSection].content}
         </div>
-
       </div>
     </Page>
   );

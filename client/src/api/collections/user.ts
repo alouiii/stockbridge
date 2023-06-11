@@ -1,4 +1,4 @@
-import { ApiClient } from "../apiClient";
+import { ApiClient } from '../apiClient';
 
 export interface Address {
   street?: string;
@@ -22,7 +22,7 @@ export interface PaymentMethod {
 }
 
 export interface User {
-  id?: string;
+  _id?: string;
   name?: string;
   email?: string;
   password?: string;
@@ -32,7 +32,7 @@ export interface User {
   createdAt?: Date;
   address?: Address;
   subscription?: Subscription;
-  paymentMethod?: PaymentMethod; 
+  paymentMethod?: PaymentMethod;
 }
 
 export interface UserResponse {
@@ -59,12 +59,12 @@ export async function deleteUser(id: string): Promise<void> {
 
 export async function login(
   email: string,
-  password: string
+  password: string,
 ): Promise<UserResponse> {
   return await apiClient.post<UserResponse>(
     `/auth/login`,
     { email, password },
-    { withCredentials: true }
+    { withCredentials: true },
   );
 }
 

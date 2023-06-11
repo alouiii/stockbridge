@@ -1,9 +1,9 @@
-import offerModel from "../models/Offer";
-import type {Offer} from "../entities/offerEntity";
-import logger from "../config/logger";
-import {AppError} from "../utils/errorHandler";
-import { User } from "../entities/userEntity";
-import { Advert } from "../entities/advertEntity";
+import offerModel from '../models/Offer';
+import type { Offer } from '../entities/offerEntity';
+import logger from '../config/logger';
+import { AppError } from '../utils/errorHandler';
+import { User } from '../entities/userEntity';
+import { Advert } from '../entities/advertEntity';
 
 const serviceName = 'offerServices';
 
@@ -13,17 +13,17 @@ const serviceName = 'offerServices';
  * @returns Promise containing the offer
  */
 export const findOfferById = async (id: string) => {
-    logger.debug(`${serviceName}: Finding offer with id: ${id}`);
-    const offer = await offerModel.findById(id);
+  logger.debug(`${serviceName}: Finding offer with id: ${id}`);
+  const offer = await offerModel.findById(id);
 
-    if (!offer) {
-        logger.error(`${serviceName}: Offer not found with id of ${id}`);
-        throw new AppError('Offer not found', 'Offer not found', 404);
-    }
+  if (!offer) {
+    logger.error(`${serviceName}: Offer not found with id of ${id}`);
+    throw new AppError('Offer not found', 'Offer not found', 404);
+  }
 
-    logger.debug(`${serviceName}: Returning offer ${offer}`);
-    return offer;
-}
+  logger.debug(`${serviceName}: Returning offer ${offer}`);
+  return offer;
+};
 
 /**
  * Creates an offer.
@@ -31,9 +31,9 @@ export const findOfferById = async (id: string) => {
  * @returns Promise containing the offer
  */
 export const createOffer = async (offer: Offer) => {
-    logger.debug(`${serviceName}: Creating offer ${offer.id}`)
-    return await offerModel.create(offer);
-}
+  logger.debug(`${serviceName}: Creating offer ${offer.id}`);
+  return await offerModel.create(offer);
+};
 
 /**
  * Updates an offer.
@@ -42,12 +42,12 @@ export const createOffer = async (offer: Offer) => {
  * @returns Promise containing the updated offer
  */
 export const updateOffer = async (id: string, offer: Offer) => {
-    logger.debug(`${serviceName}: Updating offer with id: ${id} with ${offer}`)
-    return offerModel.findByIdAndUpdate(id, offer, {
-        new: true,
-        runValidators: true
-    });
-}
+  logger.debug(`${serviceName}: Updating offer with id: ${id} with ${offer}`);
+  return offerModel.findByIdAndUpdate(id, offer, {
+    new: true,
+    runValidators: true,
+  });
+};
 
 /**
  * Deletes an offer.
@@ -55,18 +55,18 @@ export const updateOffer = async (id: string, offer: Offer) => {
  * @returns Promise containing the deleted offer
  */
 export const delOffer = async (id: string) => {
-    logger.debug(`${serviceName}: Deleting offer with id: ${id}`)
-    return offerModel.findByIdAndDelete(id);
-}
+  logger.debug(`${serviceName}: Deleting offer with id: ${id}`);
+  return offerModel.findByIdAndDelete(id);
+};
 
 /**
  * Finds all offers -- Used only for debugging.
  * @returns Promise containing all offers
  */
 export const findAllOffers = async () => {
-    logger.debug(`${serviceName}: Finding all offers`)
-    return offerModel.find();
-}
+  logger.debug(`${serviceName}: Finding all offers`);
+  return offerModel.find();
+};
 
 /**
  * Returns all suggested offers of a user.
@@ -74,9 +74,9 @@ export const findAllOffers = async () => {
  * @returns Promise containing the deleted advert.
  */
 export const findAllOffersByOfferor = async (offeror: User) => {
-    logger.debug(`${serviceName}: Requesting all offers of offeror: ${offeror}`)
-    return offerModel.find({'offeror': offeror});
-}
+  logger.debug(`${serviceName}: Requesting all offers of offeror: ${offeror}`);
+  return offerModel.find({ offeror: offeror });
+};
 
 /**
  * Returns all received offers of a user.
@@ -84,9 +84,9 @@ export const findAllOffersByOfferor = async (offeror: User) => {
  * @returns Promise containing the deleted advert.
  */
 export const findAllOffersByOfferee = async (offeree: User) => {
-    logger.debug(`${serviceName}: Requesting all offers of offeree: ${offeree}`)
-    return offerModel.find({'offeree': offeree});
-}
+  logger.debug(`${serviceName}: Requesting all offers of offeree: ${offeree}`);
+  return offerModel.find({ offeree: offeree });
+};
 
 /**
  * Returns all offers related to an advert.
@@ -94,6 +94,8 @@ export const findAllOffersByOfferee = async (offeree: User) => {
  * @returns Promise containing the deleted advert.
  */
 export const findAllOffersByAdvert = async (advert: Advert) => {
-    logger.debug(`${serviceName}: Requesting all offers related to advert: ${advert}`)
-    return offerModel.find({'advert': advert});
-}
+  logger.debug(
+    `${serviceName}: Requesting all offers related to advert: ${advert}`,
+  );
+  return offerModel.find({ advert: advert });
+};
