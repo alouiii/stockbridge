@@ -2,7 +2,7 @@ import orderModel from '../models/Order';
 import type { Order } from '../entities/orderEntity';
 import logger from '../config/logger';
 import { AppError } from '../utils/errorHandler';
-import { Offer } from '../entities/offerEntity';
+import { ObjectId } from 'mongoose';
 
 const serviceName = 'orderServices';
 
@@ -69,10 +69,10 @@ export const findAllOrders = async () => {
 
 /**
  * Returns an order created from an offer.
- * @param category
+ * @param offer : id of the offer
  * @returns Promise containing the deleted advert.
  */
-export const findOrderByOffer = async (offer: Offer) => {
+export const findOrderByOffer = async (offer: string) => {
   logger.debug(`${serviceName}: Requesting the order of offer: ${offer}`);
   return orderModel.find({ offer: offer });
 };

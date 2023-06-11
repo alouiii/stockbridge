@@ -100,7 +100,7 @@ export const getOrdersOfOffer = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const { offer } = req.params;
 
-    const order = await findOrderByOffer(offer as unknown as Offer); // This will be changed later to handle correct ref type
+    const order = await findOrderByOffer(offer);
     res.status(204).json(order);
   },
 );

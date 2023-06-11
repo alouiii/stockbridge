@@ -13,6 +13,7 @@ import {
 import { AuthenticatedRequest } from '../middlewares/authMiddleware';
 import { Advert } from '../entities/advertEntity';
 import { User } from '../entities/userEntity';
+import { ObjectId, Types } from 'mongoose';
 
 /**
  * This method returns a offer by id   *
@@ -99,7 +100,7 @@ export const getOffersByAdvert = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const { advert } = req.params;
 
-    const offer = await findAllOffersByAdvert(advert as unknown as Advert);
+    const offer = await findAllOffersByAdvert(advert);
     res.status(204).json(offer);
   },
 );
@@ -114,7 +115,7 @@ export const getOffersByOfferor = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const { offeror } = req.params;
 
-    const offer = await findAllOffersByOfferor(offeror as unknown as User);
+    const offer = await findAllOffersByOfferor(offeror);
     res.status(204).json(offer);
   },
 );
@@ -129,7 +130,7 @@ export const getOffersByOfferee = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const { offeree } = req.params;
 
-    const offer = await findAllOffersByOfferee(offeree as unknown as User);
+    const offer = await findAllOffersByOfferee(offeree);
     res.status(204).json(offer);
   },
 );

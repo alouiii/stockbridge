@@ -13,7 +13,7 @@ export interface Offer {
   price: number;
   quantity: number;
   status: OfferStatus;
-  message: string;
+  message?: string;
   createdAt: Date;
   offeror: Types.ObjectId;
   offeree: Types.ObjectId;

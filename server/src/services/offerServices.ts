@@ -2,8 +2,6 @@ import offerModel from '../models/Offer';
 import type { Offer } from '../entities/offerEntity';
 import logger from '../config/logger';
 import { AppError } from '../utils/errorHandler';
-import { User } from '../entities/userEntity';
-import { Advert } from '../entities/advertEntity';
 
 const serviceName = 'offerServices';
 
@@ -70,30 +68,30 @@ export const findAllOffers = async () => {
 
 /**
  * Returns all suggested offers of a user.
- * @param category
+ * @param offeror : Id of the offeror
  * @returns Promise containing the deleted advert.
  */
-export const findAllOffersByOfferor = async (offeror: User) => {
+export const findAllOffersByOfferor = async (offeror: string) => {
   logger.debug(`${serviceName}: Requesting all offers of offeror: ${offeror}`);
   return offerModel.find({ offeror: offeror });
 };
 
 /**
  * Returns all received offers of a user.
- * @param category
+ * @param offeree : Id of the offeree
  * @returns Promise containing the deleted advert.
  */
-export const findAllOffersByOfferee = async (offeree: User) => {
+export const findAllOffersByOfferee = async (offeree: string) => {
   logger.debug(`${serviceName}: Requesting all offers of offeree: ${offeree}`);
   return offerModel.find({ offeree: offeree });
 };
 
 /**
  * Returns all offers related to an advert.
- * @param category
+ * @param advert : Id of the advert
  * @returns Promise containing the deleted advert.
  */
-export const findAllOffersByAdvert = async (advert: Advert) => {
+export const findAllOffersByAdvert = async (advert: string) => {
   logger.debug(
     `${serviceName}: Requesting all offers related to advert: ${advert}`,
   );
