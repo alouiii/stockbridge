@@ -9,7 +9,6 @@ import {
   findOrderByOffer,
 } from '../services/orderServices';
 import { AuthenticatedRequest } from '../middlewares/authMiddleware';
-import { Offer } from '../entities/offerEntity';
 
 /**
  * This method returns a order by id
@@ -86,7 +85,7 @@ export const deleteOrder = asyncHandler(
     } */
 
     const order = await delOrder(id);
-    res.status(204).json(order);
+    res.status(200).json(order);
   },
 );
 
@@ -101,6 +100,6 @@ export const getOrdersOfOffer = asyncHandler(
     const { offer } = req.params;
 
     const order = await findOrderByOffer(offer);
-    res.status(204).json(order);
+    res.status(200).json(order);
   },
 );

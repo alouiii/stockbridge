@@ -11,9 +11,7 @@ import {
   findAllOffersByOfferee,
 } from '../services/offerServices';
 import { AuthenticatedRequest } from '../middlewares/authMiddleware';
-import { Advert } from '../entities/advertEntity';
-import { User } from '../entities/userEntity';
-import { ObjectId, Types } from 'mongoose';
+
 
 /**
  * This method returns a offer by id   *
@@ -101,7 +99,7 @@ export const getOffersByAdvert = asyncHandler(
     const { advert } = req.params;
 
     const offer = await findAllOffersByAdvert(advert);
-    res.status(204).json(offer);
+    res.status(200).json(offer);
   },
 );
 
@@ -116,7 +114,7 @@ export const getOffersByOfferor = asyncHandler(
     const { offeror } = req.params;
 
     const offer = await findAllOffersByOfferor(offeror);
-    res.status(204).json(offer);
+    res.status(200).json(offer);
   },
 );
 
@@ -129,8 +127,9 @@ export const getOffersByOfferor = asyncHandler(
 export const getOffersByOfferee = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const { offeree } = req.params;
-
+    console.log(offeree);
     const offer = await findAllOffersByOfferee(offeree);
-    res.status(204).json(offer);
+    console.log(offer);
+    res.status(200).json(offer);
   },
 );
