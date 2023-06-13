@@ -1,7 +1,4 @@
 import { ApiClient } from '../apiClient';
-import { Offer } from './offer';
-import { Review } from './review';
-import { User } from './user';
 
 export enum AdvertType {
   Sell,
@@ -60,6 +57,7 @@ export interface Advert {
   reviews?: string[];
   imageurl?: string;
   color?: string;
+  createdAt: Date;
 }
 
 const apiClient = new ApiClient();

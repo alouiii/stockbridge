@@ -13,14 +13,13 @@ type ProductOverviewSectionProps = React.DetailedHTMLProps<
 > &
   Partial<{
     advert: Advert;
-    userid: string;
     advertID: string;
   }>;
 
 const ProductOverviewSection: React.FC<ProductOverviewSectionProps> = (
   props,
 ) => {
-  const owner = props.userid === props.advert?.store;
+  const owner = localStorage.getItem('currentUser') === props.advert?.store;
   const button_text = !owner
     ? props.advert?.type === 'Sell'
       ? 'Buy'

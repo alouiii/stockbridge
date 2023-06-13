@@ -16,7 +16,6 @@ type StoreDetailsProps = React.DetailedHTMLProps<
     storeName: String, 
     rating: number, 
     advert?: Advert,
-    userID?: string;
   }>;
 function colorMap(status: OfferStatus): string {
   switch (status) {

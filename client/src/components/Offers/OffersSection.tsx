@@ -1,43 +1,18 @@
+import { useEffect, useState } from 'react';
 import { Advert } from '../../api/collections/advert';
 import { Offer, OfferStatus } from '../../api/collections/offer';
 import { BodyText } from '../Text/BodyText';
 import { OfferSection } from './OfferSection';
 
-const OffersSection = (offers: Offer[], advert: Advert) => {
-  //TODO: REMOVE MOCKDATA
-  if (offers.length == 0) {
-    offers = [
-      {
-        _id: '',
-        createdAt: new Date(),
-        message: 'Hi I am interested',
-        price: 2,
-        quantity: 2,
-        status: OfferStatus.OPEN,
-        offeror: {
-          _id: '',
-          name: 'Store Name',
-          rating: 4,
-        },
-      },
-      {
-        _id: '',
-        createdAt: new Date(),
-        message: 'Hi I am interested',
-        price: 2,
-        quantity: 2,
-        status: OfferStatus.CANCELED,
-      },
-      {
-        _id: '',
-        createdAt: new Date(),
-        message: 'Hi I am interested',
-        price: 2,
-        quantity: 2,
-        status: OfferStatus.ACCEPTED,
-      },
-    ];
-  }
+const OffersSection = (offerIds: string[], advert: Advert) => {
+  
+  const [offers, setOffers] = useState([] as Offer[])
+  useEffect(() => {
+    const fetchData = async () => {
+      
+    }
+    fetchData()
+  }, [])
 
   const openOffers = offers.filter((o) => o.status === OfferStatus.OPEN);
   const acceptedOffers = offers.filter(

@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react';
 import { Button, Col, Form, Modal, Row, Image } from 'react-bootstrap';
+import { json } from 'react-router-dom';
 import {
   Advert,
   updateAdvert,
@@ -7,6 +8,7 @@ import {
   ProductCategory,
   Colors
 } from '../../api/collections/advert';
+import { User } from '../../api/collections/user';
 import { palette } from '../../utils/colors';
 
 type EditAdvertContentProps = React.DetailedHTMLProps<
@@ -17,7 +19,6 @@ type EditAdvertContentProps = React.DetailedHTMLProps<
     isShowing: boolean;
     onClose: () => void;
     advert?: Advert;
-    userID: string;
     advertID?: string;
   }>;
 
@@ -49,7 +50,6 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
     quantity: props.advert?.quantity ? props.advert?.quantity : 0,
     price: props.advert?.price ? props.advert?.price : 0,
     category: props.advert?.category ? props.advert?.category : '',
-    store: props.advert?.store ? props.advert?.store : props.userID,
   });
 
   const handleChange = (event: any) => {
@@ -92,6 +92,12 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
     quantity: false,
     type: false,
   };
+  let currentUser: { [x: string]: any; } | null = null;
+  const localUser = localStorage.getItem('currentUser')
+  if (localUser !== null) {
+    currentUser = JSON.parse(localUser);
+  }
+  console.log('currentUser: ', currentUser)
   const handleSubmit = async () => {
     if (!formData.productname) {
       validationErrors.productname = true;
@@ -108,7 +114,6 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
     if (!isChecked) {
       validationErrors.type = true;
     }
-
     if (Object.values(validationErrors).some((e) => e)) {
       console.log('Errors are happening');
       setErrors(validationErrors);
@@ -118,7 +123,6 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
           await updateAdvert(props.advertID, {
             productname: formData.productname,
             description: formData.description,
-            //type: isChecked,
             prioritized: false,
             color: formData.color,
             expirationDate: new Date(formData.expirationDate),
@@ -129,22 +133,25 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
             imageurl: encodedImage,
           } as Advert);
         } else {
-          await createAdvert({
-            productname: formData.productname,
-            description: formData.description,
-            prioritized: false,
-            color: formData.color,
-            expirationDate: new Date(formData.expirationDate),
-            purchaseDate: new Date(formData.purchaseDate),
-            quantity: formData.quantity,
-            price: formData.price,
-            advertStatus: 'Ongoing',
-            category: formData.category,
-            date: new Date(),
-            store: formData.store,
-            imageurl: encodedImage,
-            type: isChecked,
-          } as Advert);
+          if (currentUser != null) {
+            await createAdvert({
+              productname: formData.productname,
+              description: formData.description,
+              prioritized: false,
+              color: formData.color,
+              expirationDate: new Date(formData.expirationDate),
+              purchaseDate: new Date(formData.purchaseDate),
+              quantity: formData.quantity,
+              price: formData.price,
+              status: 'Ongoing',
+              category: formData.category,
+              createdAt: new Date(),
+              store: currentUser._id,
+              imageurl: encodedImage,
+              type: isChecked,
+            });
+          }
+          
         }
         setErrors({
           productname: false,

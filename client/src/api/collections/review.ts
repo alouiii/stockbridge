@@ -7,8 +7,8 @@ export interface Review {
   rating: number;
   description: string;
   createdAt: Date;
-  reviewer: User;
-  reviewedAdvert: Advert;
+  reviewer: string;
+  reviewedAdvert: string;
 }
 
 const apiClient = new ApiClient();

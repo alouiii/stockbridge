@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ApiClient } from '../api/apiClient';
 import { Advert, Colors, getAdvert } from '../api/collections/advert';
-import { getOffer, Offer } from '../api/collections/offer';
-import { getReview, Review } from '../api/collections/review';
 import { getStore, User } from '../api/collections/user';
 import { OffersSection } from '../components/Offers/OffersSection';
 import { Page } from '../components/Page';
@@ -30,41 +28,20 @@ const ProductOverview = () => {
     reviews: [],
     imageurl: '',
     color: Colors.Blue,
+    createdAt: new Date()
   } as Advert);
-  const [offers, setOffers] = useState([] as Offer[]);
-  const [reviews, setReviews] = useState([] as Review[]);
+  const [offers, setOffers] = useState([] as string[]);
+  const [reviews, setReviews] = useState([] as string[]);
   const [store, setStore] = useState({} as User);
   const [user, setUser] = useState({} as User);
   useEffect(() => {
     const fetchData = async () => {
     try {
-      const api = new ApiClient()
-      await api.get('auth/verify', { withCredentials: true })
-          const currentUser = localStorage.getItem('currentUser');
-          if (currentUser) {
-            setUser(JSON.parse(currentUser));
-          }
           if (id) {
             const fetchedAdvert = await getAdvert(id);
             if (fetchedAdvert.store) {
              const fetchedStore = await getStore(fetchedAdvert.store);
              setStore(fetchedStore);
-            }
-            if (fetchedAdvert.offers) {
-              const offers = []
-              for (const offerID in fetchedAdvert.offers) {
-                const fetchedOffer = await getOffer(offerID);
-                offers.push(fetchedOffer);
-              }
-              setOffers(offers)
-            }
-            if (fetchedAdvert.reviews) {
-              const reviews: Review[] = []
-              for (const reviewID in fetchedAdvert.reviews) {
-                const fetchedReview = await getReview(reviewID);
-                offers.push(fetchedReview);
-              }
-              setReviews(reviews)
             }
             setAdvert(fetchedAdvert as Advert);
           }
@@ -74,8 +51,7 @@ const ProductOverview = () => {
   fetchData()
 }, []);
   
-  const owner = store._id == user._id;
-  /*  userID === advert?.issuer?.id && advert?.offers?.length > 0; */
+  const owner = store._id == localStorage.getItem('currentUser');
   return (
     <Page>
      

@@ -14,6 +14,8 @@ type OfferBarProps = React.DetailedHTMLProps<
   Partial<{
     offer: Offer;
     advert: Advert;
+    storeName: string, 
+    rating: number
   }>;
 
 const OfferBar: React.FC<OfferBarProps> = (props) => {
@@ -55,9 +57,9 @@ const OfferBar: React.FC<OfferBarProps> = (props) => {
             color: 'black',
           }}
         >
-          {props?.offer?.offeror ? props.offer.offeror?.name : 'No Name given'}
+          {props?.storeName? props.storeName : 'No Name given'}
           {Ratings(
-            props?.offer?.offeror?.rating ? props.offer.offeror.rating : 0,
+            props?.rating ? props.rating : 0,
           )}
         </BodyText>
         <BodyText

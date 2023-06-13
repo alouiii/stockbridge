@@ -2,24 +2,9 @@ import { Review } from '../../api/collections/review';
 import { BodyText } from '../Text/BodyText';
 import { Reviewbar } from './Reviewbar';
 
-const ReviewsSection = (reviews: Review[]) => {
+const ReviewsSection = (reviews: string[]) => {
   if (reviews.length == 0) {
-    reviews = [
-      {
-        _id: '',
-        rating: 4,
-        description: 'New review 2',
-        createdAt: new Date('07.06.2023'),
-        reviewer: {
-          _id: '6470e8a153c3e3e95e30176b',
-          name: 'Reviewer Name',
-          rating: 3,
-        },
-        reviewedAdvert: {
-          _id: '647ddfb46d74b615e34256bc',
-        },
-      },
-    ];
+    reviews = [];
   }
   return (
     <div
@@ -50,7 +35,7 @@ const ReviewsSection = (reviews: Review[]) => {
         }}
       >
         {reviews.map((review) => (
-          <Reviewbar review={review} />
+          Reviewbar(review)
         ))}
       </div>
     </div>

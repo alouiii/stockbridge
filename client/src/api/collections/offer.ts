@@ -15,8 +15,8 @@ export interface Offer {
   status?: OfferStatus;
   message?: string;
   createdAt?: Date;
-  offeror?: User;
-  offeree?: User;
+  offeror?: string;
+  offeree?: string;
   advert?: string;
 }
 
