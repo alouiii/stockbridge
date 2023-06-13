@@ -6,7 +6,6 @@ import { Ratings } from '../Ratings';
 import { StoreDetailsModal } from '../Store/StoreDetailsModal';
 import { BodyText } from '../Text/BodyText';
 
-
 const Reviewbar = (reviewId: string) => {
   const [showModal, setShowModal] = useState(false);
   const closeModal = () => {
@@ -17,24 +16,24 @@ const Reviewbar = (reviewId: string) => {
     setShowModal(true);
   };
   const [review, setReview] = useState({} as Review);
-  const [store, setStore] = useState({} as User)
+  const [store, setStore] = useState({} as User);
   useEffect(() => {
     const fetchData = async () => {
-      try { 
-            if (reviewId) {
-              const fetchedReview = await getReview(reviewId);
-              if (fetchedReview.reviewer) {
-               const fetchedStore = await getStore(fetchedReview.reviewer);
-               setStore(fetchedStore);
-              }
-              setReview(fetchedReview as Review);
-            }
-    } catch (error) {
-      console.error(error);
-    }
-    }
-    fetchData()
-  }, [])
+      try {
+        if (reviewId) {
+          const fetchedReview = await getReview(reviewId);
+          if (fetchedReview.reviewer) {
+            const fetchedStore = await getStore(fetchedReview.reviewer);
+            setStore(fetchedStore);
+          }
+          setReview(fetchedReview as Review);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
   return (
     <>
       <div

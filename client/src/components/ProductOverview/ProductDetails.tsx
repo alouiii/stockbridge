@@ -1,7 +1,7 @@
 import { Advert } from '../../api/collections/advert';
 import { BodyText } from '../Text/BodyText';
 import { ProductAttribute } from './ProductAttribute';
-import { Image } from "react-bootstrap";
+import { Image } from 'react-bootstrap';
 
 const ProductDetails = (advert: Advert) => {
   return (
@@ -15,25 +15,27 @@ const ProductDetails = (advert: Advert) => {
         width: 'auto',
       }}
     >
-      {
-        advert.imageurl && <Image
+      {advert.imageurl && (
+        <Image
+          style={{
+            width: '30%',
+            height: 'auto',
+            borderRadius: '60px',
+            borderColor: 'transparent',
+          }}
+          src={advert?.imageurl}
+        />
+      )}
+
+      <div
         style={{
-          width: '30%',
-          height: 'auto',
-          borderRadius: '60px',
-          borderColor: 'transparent',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'start',
+          marginLeft: '10%',
+          marginRight: '10%',
         }}
-        src={advert?.imageurl}
-      />
-      }
-       
-      <div style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "start",
-        marginLeft: "10%",
-        marginRight: "10%"
-      }}>
+      >
         <BodyText
           style={{
             fontFamily: 'Poppins',
@@ -42,9 +44,7 @@ const ProductDetails = (advert: Advert) => {
             fontWeight: 600,
           }}
         >
-          {advert.productname
-            ? advert.productname
-            : 'Fake Product Name'}
+          {advert.productname ? advert.productname : 'Fake Product Name'}
         </BodyText>
         <BodyText
           style={{
@@ -53,7 +53,7 @@ const ProductDetails = (advert: Advert) => {
             fontSize: '16px',
             fontWeight: 300,
             marginLeft: '10px',
-            wordBreak: 'break-all'
+            wordBreak: 'break-all',
           }}
         >
           {advert?.description

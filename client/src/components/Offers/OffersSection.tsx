@@ -5,14 +5,11 @@ import { BodyText } from '../Text/BodyText';
 import { OfferSection } from './OfferSection';
 
 const OffersSection = (offerIds: string[], advert: Advert) => {
-  
-  const [offers, setOffers] = useState([] as Offer[])
+  const [offers, setOffers] = useState([] as Offer[]);
   useEffect(() => {
-    const fetchData = async () => {
-      
-    }
-    fetchData()
-  }, [])
+    const fetchData = async () => {};
+    fetchData();
+  }, []);
 
   const openOffers = offers.filter((o) => o.status === OfferStatus.OPEN);
   const acceptedOffers = offers.filter(

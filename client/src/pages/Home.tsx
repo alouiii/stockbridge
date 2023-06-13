@@ -65,7 +65,7 @@ export function Home() {
 
   return (
     <Page>
-      <PostOrSearch/>
+      <PostOrSearch />
       <div
         style={{
           position: 'relative',

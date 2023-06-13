@@ -7,13 +7,13 @@ import { Button } from 'react-bootstrap';
 import { Advert } from '../../api/collections/advert';
 import { OfferModal } from '../Offers/OfferModal';
 
-type ProductOverviewSectionProps = {advert: Advert;};
+type ProductOverviewSectionProps = { advert: Advert };
 
 const ProductOverviewSection: React.FC<ProductOverviewSectionProps> = (
   props,
 ) => {
-  let currentUser: { [x: string]: any; } | null = null;
-  const localUser = localStorage.getItem('currentUser')
+  let currentUser: { [x: string]: any } | null = null;
+  const localUser = localStorage.getItem('currentUser');
   if (localUser !== null) {
     currentUser = JSON.parse(localUser);
   }

@@ -13,9 +13,9 @@ type StoreDetailsProps = React.DetailedHTMLProps<
     isShowing: boolean;
     onClose: () => void;
     offer?: Offer;
-    storeName: String, 
-    rating: number, 
-    advert?: Advert,
+    storeName: String;
+    rating: number;
+    advert?: Advert;
   }>;
 function colorMap(status: OfferStatus): string {
   switch (status) {
@@ -202,9 +202,7 @@ const StoreDetailsModal: FC<StoreDetailsProps> = (props) => {
               <Form.Label>
                 {props.advert?.type === 'Sell' ? 'Seller' : 'Buyer'}:{' '}
                 {props.storeName}
-                {Ratings(
-                  props.rating? props.rating : 0,
-                )}
+                {Ratings(props.rating ? props.rating : 0)}
               </Form.Label>
             </Row>
             <Row>

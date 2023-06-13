@@ -34,9 +34,7 @@ const ReviewsSection = (reviews: string[]) => {
           width: '100%',
         }}
       >
-        {reviews.map((review) => (
-          Reviewbar(review)
-        ))}
+        {reviews.map((review) => Reviewbar(review))}
       </div>
     </div>
   );

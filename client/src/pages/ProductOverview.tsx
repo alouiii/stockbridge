@@ -28,46 +28,45 @@ const ProductOverview = () => {
     reviews: [],
     imageurl: '',
     color: Colors.Blue,
-    createdAt: new Date()
+    createdAt: new Date(),
   } as Advert);
   const [store, setStore] = useState({} as User);
   useEffect(() => {
     const fetchData = async () => {
-    try {
-          if (id) {
-            const fetchedAdvert = await getAdvert(id);
-            if (fetchedAdvert.store) {
-             const fetchedStore = await getStore(fetchedAdvert.store);
-             setStore(fetchedStore);
-            }
-            setAdvert(fetchedAdvert as Advert);
+      try {
+        if (id) {
+          const fetchedAdvert = await getAdvert(id);
+          if (fetchedAdvert.store) {
+            const fetchedStore = await getStore(fetchedAdvert.store);
+            setStore(fetchedStore);
           }
-  } catch (error) {
-    console.error(error);
-  }}
-  fetchData()
-}, []);
-  
+          setAdvert(fetchedAdvert as Advert);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
+
   const owner = store._id == localStorage.getItem('currentUser');
   return (
     <Page>
-     
       {advert ? (
-         <div
-         style={{
-          width: '100%',
-          maxWidth: '100vw', // Set the maximum width to the viewport width
-          
-         }}>
-        <StoreDetailsBar category={advert.category} store={store} />
-        <ProductOverviewSection advert={advert}/>
-        {(owner && advert.offers) && OffersSection(advert.offers, advert)}
-        {advert.reviews && ReviewsSection(advert.reviews)}
+        <div
+          style={{
+            width: '100%',
+            maxWidth: '100vw', // Set the maximum width to the viewport width
+          }}
+        >
+          <StoreDetailsBar category={advert.category} store={store} />
+          <ProductOverviewSection advert={advert} />
+          {owner && advert.offers && OffersSection(advert.offers, advert)}
+          {advert.reviews && ReviewsSection(advert.reviews)}
         </div>
-        ) : (
-      <p>Loading ...</p>
-    )}
-      
+      ) : (
+        <p>Loading ...</p>
+      )}
     </Page>
   );
 };

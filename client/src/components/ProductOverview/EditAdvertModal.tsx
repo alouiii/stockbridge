@@ -6,7 +6,7 @@ import {
   updateAdvert,
   createAdvert,
   ProductCategory,
-  Colors
+  Colors,
 } from '../../api/collections/advert';
 import { palette } from '../../utils/colors';
 
@@ -90,12 +90,12 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
     quantity: false,
     type: false,
   };
-  let currentUser: { [x: string]: any; } | null = null;
-  const localUser = localStorage.getItem('currentUser')
+  let currentUser: { [x: string]: any } | null = null;
+  const localUser = localStorage.getItem('currentUser');
   if (localUser !== null) {
     currentUser = JSON.parse(localUser);
   }
-  console.log('currentUser: ', currentUser)
+  console.log('currentUser: ', currentUser);
   const handleSubmit = async () => {
     if (!formData.productname) {
       validationErrors.productname = true;
@@ -149,7 +149,6 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
               type: isChecked,
             });
           }
-          
         }
         setErrors({
           productname: false,
