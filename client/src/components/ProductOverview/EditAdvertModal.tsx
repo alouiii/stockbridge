@@ -1,14 +1,13 @@
 import React, { FC, useState } from 'react';
-import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
+import { Button, Col, Form, Modal, Row, Image } from 'react-bootstrap';
 import {
   Advert,
   updateAdvert,
   createAdvert,
   ProductCategory,
-  Colors,
+  Colors
 } from '../../api/collections/advert';
 import { palette } from '../../utils/colors';
-import { Img } from '../Img';
 
 type EditAdvertContentProps = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLDivElement>,
@@ -226,7 +225,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                 </div>
                 {encodedImage && (
                   <div className="flex-col items-end justify-end">
-                    <Img
+                    <Image
                       style={{
                         width: '160px',
                         height: '160px',

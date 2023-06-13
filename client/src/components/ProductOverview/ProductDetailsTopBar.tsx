@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import edit from '../../assets/edit-pencil.svg';
-import { Button } from 'react-bootstrap';
+import { Button, Image } from 'react-bootstrap';
 import { Advert } from '../../api/collections/advert';
 import { EditAdvertModal } from './EditAdvertModal';
 import { BodyText } from '../Text/BodyText';
-import { Img } from '../Img';
 
 type ProductDetailsTopBarProps = Partial<{
   owner: boolean;
@@ -51,7 +50,7 @@ const ProductDetailsTopBar: React.FC<ProductDetailsTopBarProps> = (props) => {
           }}
           onClick={openModal}
         >
-          <Img src={edit}></Img>
+          <Image src={edit}></Image>
         </Button>
       )}
       {showModal && (

@@ -44,7 +44,7 @@ const ProductOverviewSection: React.FC<ProductOverviewSectionProps> = (
         flexDirection: 'column',
         alignItems: 'start',
         gap: '30px',
-        width: 'full',
+        width: 'auto',
         marginTop: '10%',
       }}
     >
@@ -63,7 +63,7 @@ const ProductOverviewSection: React.FC<ProductOverviewSectionProps> = (
           padding: '40px',
         }}
       >
-        <ProductDetails advert={props.advert}></ProductDetails>
+        {props.advert && ProductDetails(props.advert)}
         {showModal && (
           <OfferModal
             isShowing={showModal}

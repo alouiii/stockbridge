@@ -53,7 +53,6 @@ const OfferBar: React.FC<OfferBarProps> = (props) => {
             font: 'light',
             fontFamily: 'Poppins',
             color: 'black',
-            width: 'full',
           }}
         >
           {props?.offer?.offeror ? props.offer.offeror?.name : 'No Name given'}
@@ -66,7 +65,6 @@ const OfferBar: React.FC<OfferBarProps> = (props) => {
             font: 'light',
             fontFamily: 'Poppins',
             color: 'black',
-            width: 'full',
           }}
         >
           {props?.offer?.createdAt?.toLocaleDateString()}
@@ -74,13 +72,11 @@ const OfferBar: React.FC<OfferBarProps> = (props) => {
       </div>
       <div
         style={{
-          width: 'auto',
           display: 'flex',
           flexDirection: 'row',
           gap: '5%',
           alignItems: 'center',
           justifyContent: 'center',
-          padding: '10px',
           marginLeft: '20%',
         }}
       >

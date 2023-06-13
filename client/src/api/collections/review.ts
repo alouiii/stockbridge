@@ -3,7 +3,7 @@ import { Advert } from './advert';
 import { User } from './user';
 
 export interface Review {
-  id: string;
+  _id: string;
   rating: number;
   description: string;
   createdAt: Date;

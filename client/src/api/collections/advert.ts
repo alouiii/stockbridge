@@ -44,7 +44,7 @@ export enum ProductCategory {
 }
 
 export interface Advert {
-  id?: string;
+  _id?: string;
   productname?: string;
   prioritized?: boolean;
   quantity?: number;
@@ -55,9 +55,9 @@ export interface Advert {
   status?: string;
   type?: string;
   category?: string;
-  offers?: Offer[];
-  store?: User;
-  reviews?: Review[];
+  offers?: string[];
+  store?: string;
+  reviews?: string[];
   imageurl?: string;
   color?: string;
 }

@@ -9,7 +9,7 @@ export enum OfferStatus {
 }
 
 export interface Offer {
-  id?: string;
+  _id?: string;
   price?: number;
   quantity?: number;
   status?: OfferStatus;

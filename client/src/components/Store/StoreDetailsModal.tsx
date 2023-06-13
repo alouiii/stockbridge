@@ -1,9 +1,8 @@
 import React, { FC, useState } from 'react';
-import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
+import { Button, Col, Form, Modal, Row, Image } from 'react-bootstrap';
 import { Advert } from '../../api/collections/advert';
 import { Offer, OfferStatus } from '../../api/collections/offer';
 import { palette } from '../../utils/colors';
-import { Img } from '../Img';
 import { Ratings } from '../Ratings';
 
 type StoreDetailsProps = React.DetailedHTMLProps<
@@ -14,7 +13,9 @@ type StoreDetailsProps = React.DetailedHTMLProps<
     isShowing: boolean;
     onClose: () => void;
     offer?: Offer;
-    advert?: Advert;
+    storeName: String, 
+    rating: number, 
+    advert?: Advert,
     userID?: string;
   }>;
 function colorMap(status: OfferStatus): string {
@@ -152,7 +153,7 @@ const StoreDetailsModal: FC<StoreDetailsProps> = (props) => {
           }}
         >
           <Col>
-            <Img
+            <Image
               style={{
                 width: '160px',
                 height: '160px',
@@ -201,9 +202,9 @@ const StoreDetailsModal: FC<StoreDetailsProps> = (props) => {
             <Row>
               <Form.Label>
                 {props.advert?.type === 'Sell' ? 'Seller' : 'Buyer'}:{' '}
-                {props.advert?.store?.name}
+                {props.storeName}
                 {Ratings(
-                  props.advert?.store?.rating ? props.advert.store.rating : 0,
+                  props.rating? props.rating : 0,
                 )}
               </Form.Label>
             </Row>

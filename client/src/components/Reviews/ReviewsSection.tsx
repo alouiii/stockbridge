@@ -6,7 +6,7 @@ const ReviewsSection = (reviews: Review[]) => {
   if (reviews.length == 0) {
     reviews = [
       {
-        id: '',
+        _id: '',
         rating: 4,
         description: 'New review 2',
         createdAt: new Date('07.06.2023'),
@@ -16,7 +16,7 @@ const ReviewsSection = (reviews: Review[]) => {
           rating: 3,
         },
         reviewedAdvert: {
-          id: '647ddfb46d74b615e34256bc',
+          _id: '647ddfb46d74b615e34256bc',
         },
       },
     ];

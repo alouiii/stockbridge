@@ -8,7 +8,7 @@ const OffersSection = (offers: Offer[], advert: Advert) => {
   if (offers.length == 0) {
     offers = [
       {
-        id: '',
+        _id: '',
         createdAt: new Date(),
         message: 'Hi I am interested',
         price: 2,
@@ -21,7 +21,7 @@ const OffersSection = (offers: Offer[], advert: Advert) => {
         },
       },
       {
-        id: '',
+        _id: '',
         createdAt: new Date(),
         message: 'Hi I am interested',
         price: 2,
@@ -29,7 +29,7 @@ const OffersSection = (offers: Offer[], advert: Advert) => {
         status: OfferStatus.CANCELED,
       },
       {
-        id: '',
+        _id: '',
         createdAt: new Date(),
         message: 'Hi I am interested',
         price: 2,
@@ -54,7 +54,6 @@ const OffersSection = (offers: Offer[], advert: Advert) => {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        width: '100%',
         padding: '30px',
       }}
     >
@@ -74,7 +73,6 @@ const OffersSection = (offers: Offer[], advert: Advert) => {
         style={{
           alignItems: 'center',
           justifyContent: 'center',
-          width: '100%',
         }}
       >
         {openOffers.length > 0 && (

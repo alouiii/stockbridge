@@ -38,7 +38,6 @@ const OfferSection: React.FC<OfferSectionProps> = (props) => {
         alignItems: 'center',
         justifyContent: 'center',
         paddingTop: '7%',
-        width: '100%',
         padding: '30px',
       }}
     >
