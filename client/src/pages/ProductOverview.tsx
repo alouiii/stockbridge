@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ApiClient } from '../api/apiClient';
 import { Advert, Colors, getAdvert } from '../api/collections/advert';
+import { getReview, Review } from '../api/collections/review';
 import { getStore, User } from '../api/collections/user';
 import { OffersSection } from '../components/Offers/OffersSection';
 import { Page } from '../components/Page';
@@ -31,6 +32,7 @@ const ProductOverview = () => {
     createdAt: new Date(),
   } as Advert);
   const [store, setStore] = useState({} as User);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -41,6 +43,7 @@ const ProductOverview = () => {
             setStore(fetchedStore);
           }
           setAdvert(fetchedAdvert as Advert);
+          console.log(fetchedAdvert);
         }
       } catch (error) {
         console.error(error);
@@ -67,9 +70,9 @@ const ProductOverview = () => {
           <StoreDetailsBar category={advert.category} store={store} />
           <ProductOverviewSection advert={advert} />
           {owner && advert.offers && OffersSection(advert.offers, advert)}
-          {advert.reviews &&
-            advert.reviews.length > 0 &&
-            ReviewsSection(advert.reviews)}
+          {advert.reviews && advert.reviews.length > 0 && advert._id && (
+            <ReviewsSection advertID={advert._id} />
+          )}
         </div>
       ) : (
         <p>Loading ...</p>

@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { ApiClient } from '../../api/apiClient';
+import { FC, useEffect, useState } from 'react';
 import { getReview, Review } from '../../api/collections/review';
 import { getStore, User } from '../../api/collections/user';
 import { Ratings } from '../Ratings';
 import { StoreDetailsModal } from '../Store/StoreDetailsModal';
 import { BodyText } from '../Text/BodyText';
 
-const Reviewbar = (reviewId: string) => {
+type ReviewBarProps = {
+  review: Review;
+  store: User;
+};
+const Reviewbar: FC<ReviewBarProps> = (props) => {
   const [showModal, setShowModal] = useState(false);
   const closeModal = () => {
     setShowModal(false);
@@ -15,25 +18,6 @@ const Reviewbar = (reviewId: string) => {
   const openModal = () => {
     setShowModal(true);
   };
-  const [review, setReview] = useState({} as Review);
-  const [store, setStore] = useState({} as User);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (reviewId) {
-          const fetchedReview = await getReview(reviewId);
-          if (fetchedReview.reviewer) {
-            const fetchedStore = await getStore(fetchedReview.reviewer);
-            setStore(fetchedStore);
-          }
-          setReview(fetchedReview as Review);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
-  }, []);
   return (
     <>
       <div
@@ -68,7 +52,7 @@ const Reviewbar = (reviewId: string) => {
             }}
             onClick={openModal}
           >
-            {store.name}
+            {props.store.name}
           </BodyText>
           {showModal && (
             <StoreDetailsModal
@@ -85,8 +69,8 @@ const Reviewbar = (reviewId: string) => {
               width: 'full',
             }}
           >
-            {review.createdAt.toLocaleDateString()}
-            {Ratings(review.rating ? review.rating : 0)}
+            {props.review.createdAt.toString().substring(0, 10)}
+            {Ratings(props.review.rating ? props.review.rating : 0)}
           </BodyText>
         </div>
         <div
@@ -102,7 +86,7 @@ const Reviewbar = (reviewId: string) => {
           }}
         >
           <BodyText style={{ color: 'GrayText', font: 'light' }}>
-            {review?.description}
+            {props.review?.description}
           </BodyText>
         </div>
       </div>

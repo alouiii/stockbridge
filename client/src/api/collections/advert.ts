@@ -57,7 +57,7 @@ export interface Advert {
   reviews?: string[];
   imageurl?: string;
   color?: string;
-  createdAt: Date;
+  createdAt?: Date;
 }
 
 const apiClient = new ApiClient();
@@ -76,7 +76,6 @@ export async function updateAdvert(
   id: string,
   advert: Advert,
 ): Promise<Advert> {
-  console.log('UPDATING ADVERT: ', id);
   return await apiClient.put<Advert>(`/adverts/${id}`, advert, {
     withCredentials: false,
   });

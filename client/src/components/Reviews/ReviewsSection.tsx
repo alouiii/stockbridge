@@ -1,11 +1,31 @@
-import { Review } from '../../api/collections/review';
+import { FC, useEffect, useState } from 'react';
+import { getAllReviews, getReview, Review } from '../../api/collections/review';
+import { getStore, User } from '../../api/collections/user';
 import { BodyText } from '../Text/BodyText';
 import { Reviewbar } from './Reviewbar';
 
-const ReviewsSection = (reviews: string[]) => {
-  if (reviews.length == 0) {
-    reviews = [];
-  }
+type ReviewsSectionProps = {
+  advertID: string;
+};
+const ReviewsSection: FC<ReviewsSectionProps> = (props) => {
+  const [reviews, setReviews] = useState(
+    [] as { review: Review; store: User }[],
+  );
+  useEffect(() => {
+    const fetchData = async () => {
+      let allReviews = await getAllReviews();
+      let fetchedReviews: { review: Review; store: User }[] = [];
+      allReviews = allReviews.filter(
+        (r) => r.reviewedAdvert === props.advertID,
+      );
+      for (const review of allReviews) {
+        const store = await getStore(review.reviewer);
+        fetchedReviews.push({ review: review, store: store });
+      }
+      setReviews(fetchedReviews);
+    };
+    fetchData();
+  }, []);
   return (
     <div
       style={{
@@ -32,9 +52,14 @@ const ReviewsSection = (reviews: string[]) => {
           alignItems: 'center',
           justifyContent: 'center',
           width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '30px',
         }}
       >
-        {reviews.map((review) => Reviewbar(review))}
+        {reviews.map((r, i) => (
+          <Reviewbar review={r.review} store={r.store} />
+        ))}
       </div>
     </div>
   );

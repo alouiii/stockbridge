@@ -64,8 +64,12 @@ export const putAdvert = asyncHandler(
     /* if (id !== req.user?.id) {
         throw new AppError('Not authorized to access this route', 'Not authorized to access this route',401)
     } */
-
-    const advert = await updateAdvert(id, req.body);
+    const newAdvert = req.body;
+    const existingAdvert = await findAdvertById(id);
+    newAdvert.reviews = existingAdvert.reviews
+      ? existingAdvert.reviews
+      : [] + newAdvert.reviews;
+    const advert = await updateAdvert(id, newAdvert);
     res.status(200).json(advert);
   },
 );

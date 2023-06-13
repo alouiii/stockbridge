@@ -65,7 +65,7 @@ export function Home() {
     }*/
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   return (
     <Page>
       <PostOrSearch />
@@ -122,73 +122,80 @@ export function Home() {
           Active Adverts
         </Title>
         <div
-          style={{ marginTop: 100, display: 'flex', flexDirection: 'column'}}
+          style={{ marginTop: 100, display: 'flex', flexDirection: 'column' }}
         >
-          <div style={{
-            display: "flex", 
-            flexDirection: "column",
-            gap: "50px",
-            justifyContent: "center",
-            alignItems: "center"
-          }}>
           <div
             style={{
               display: 'flex',
-              flexDirection: 'row',
+              flexDirection: 'column',
+              gap: '50px',
+              justifyContent: 'center',
               alignItems: 'center',
-              justifyContent: "center",
-              marginBottom: "15px"
             }}
           >
-            <div style={{
-              display: "flex",
-              flexDirection: "row"
-            }}>
-              
-              <div style={{
-              display: "flex",
-              flexDirection: "row",
-              gap: 20,
-              position: 'absolute',
-              left: '60%',
-              transform: 'translate(-60%)',
-              
-            }}>
-                <BodyText
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: '15px',
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                }}
+              >
+                <div
                   style={{
-                    color: palette.subSectionsBgAccent,
-                    fontSize: 30,
-                    fontWeight: 600,
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: 20,
+                    position: 'absolute',
+                    left: '60%',
+                    transform: 'translate(-60%)',
                   }}
                 >
-                  Selling
-                </BodyText>
-                <BodyText
-                  style={{ color: palette.subSectionsBgLighter, fontSize: 30 }}
-                >
-                  Buying
-                </BodyText>
+                  <BodyText
+                    style={{
+                      color: palette.subSectionsBgAccent,
+                      fontSize: 30,
+                      fontWeight: 600,
+                    }}
+                  >
+                    Selling
+                  </BodyText>
+                  <BodyText
+                    style={{
+                      color: palette.subSectionsBgLighter,
+                      fontSize: 30,
+                    }}
+                  >
+                    Buying
+                  </BodyText>
+                </div>
+                <Image
+                  style={{
+                    position: 'absolute',
+                    right: 15,
+                  }}
+                  src={sortIcon}
+                />
               </div>
-              <Image
-              style={{
-                position: "absolute", right: 15
-              }}
-                src={sortIcon}
-              />
+              <div></div>
             </div>
             <div>
+              {adverts.map((a, i) => (
+                <Button onClick={() => navigate(`/productoverview/${a._id}`)}>
+                  {a.productname}
+                </Button>
+              ))}
+            </div>
           </div>
-          </div>
-          <div>
-            {
-              adverts.map((a, i) => <Button onClick={() => navigate(`/productoverview/${a._id}`)}>{a.productname}</Button> )
-            }
-          </div>
-         
-          </div>
-         
+
           <Filters />
-          
         </div>
       </div>
     </Page>

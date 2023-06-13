@@ -35,3 +35,7 @@ export async function updateReview(
 export async function deleteReview(id: string): Promise<void> {
   return await apiClient.delete<void>(`/reviews/${id}`);
 }
+
+export async function getAllReviews(): Promise<Review[]> {
+  return await apiClient.get<Review[]>(`/reviews/`);
+}

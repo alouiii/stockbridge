@@ -109,7 +109,7 @@ const StoreDetailsModal: FC<StoreDetailsProps> = (props) => {
             >
               {props.offer
                 ? props.offer.createdAt?.toDateString().substring(0, 10)
-                : new Date().toLocaleDateString().substring(0, 10)}
+                : new Date().toDateString().substring(0, 10)}
             </Form.Label>
           </Col>
         </Row>

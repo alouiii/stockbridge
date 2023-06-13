@@ -450,7 +450,6 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                     margin: '5px',
                   }}
                 >
-                  {' '}
                   Description
                 </Form.Label>
                 <Form.Control
