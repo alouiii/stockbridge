@@ -19,7 +19,7 @@ const ProductDetailsTopBar: React.FC<ProductDetailsTopBarProps> = (props) => {
     if (props.owner) {
       setShowAdvertModal(false);
     } else {
-      setShowReviewModal(false)
+      setShowReviewModal(false);
     }
     window.location.reload();
   };
@@ -27,9 +27,8 @@ const ProductDetailsTopBar: React.FC<ProductDetailsTopBarProps> = (props) => {
     if (props.owner) {
       setShowAdvertModal(true);
     } else {
-      setShowReviewModal(true)
+      setShowReviewModal(true);
     }
-    
   };
   return (
     <div
@@ -51,17 +50,17 @@ const ProductDetailsTopBar: React.FC<ProductDetailsTopBarProps> = (props) => {
       >
         PRODUCT DETAILS
       </BodyText>
-        <Button
-          style={{
-            width: 'full',
-            marginRight: '20px',
-            backgroundColor: 'transparent',
-            borderColor: 'transparent',
-          }}
-          onClick={openModal}
-        >
-          <Image src={props.owner ? edit : review}></Image>
-        </Button>
+      <Button
+        style={{
+          width: 'full',
+          marginRight: '20px',
+          backgroundColor: 'transparent',
+          borderColor: 'transparent',
+        }}
+        onClick={openModal}
+      >
+        <Image src={props.owner ? edit : review}></Image>
+      </Button>
       {showAdvertModal && (
         <EditAdvertModal
           isShowing={showAdvertModal}

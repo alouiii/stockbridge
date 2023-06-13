@@ -85,3 +85,7 @@ export async function updateAdvert(
 export async function deleteAdvert(id: string): Promise<void> {
   return await apiClient.delete<void>(`/adverts/${id}`);
 }
+
+export async function getAllAdverts(): Promise<Advert[]> {
+  return await apiClient.get<Advert[]>('/adverts/');
+}

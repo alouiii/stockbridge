@@ -11,11 +11,12 @@ import { Filters } from '../components/Home/Filters';
 import { BodyText } from '../components/Text/BodyText';
 import sortIcon from '../assets/sort-icon.svg';
 import { ColoredLine } from '../components/ColoredLine';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { LoginContext } from '../contexts/LoginContext';
 import { ApiClient } from '../api/apiClient';
-import { Image } from 'react-bootstrap';
-import userEvent from '@testing-library/user-event';
+import { Button, Image } from 'react-bootstrap';
+import { Advert, getAllAdverts } from '../api/collections/advert';
+import { useNavigate } from 'react-router-dom';
 
 const stepDescriptions: { message: string; icon: string }[] = [
   {
@@ -36,17 +37,19 @@ export function Home() {
   const matches = useMediaQuery('(min-width: 768px)');
 
   const { setLoggedIn, setUser } = useContext(LoginContext);
-
+  const [adverts, setAdverts] = useState([] as Advert[]);
   useEffect(() => {
     new ApiClient()
       .get('auth/verify', { withCredentials: true })
-      .then(() => {
+      .then(async () => {
         const currentLoginStatus = localStorage.getItem('loginStatus');
         const currentUser = localStorage.getItem('currentUser');
         if (currentLoginStatus && currentUser) {
           setLoggedIn(true);
           setUser(JSON.parse(currentUser));
         }
+        const fetchedAdverts = await getAllAdverts();
+        setAdverts(fetchedAdverts);
       })
       .catch((error) => {
         setLoggedIn(false);
@@ -62,7 +65,7 @@ export function Home() {
     }*/
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  const navigate = useNavigate()
   return (
     <Page>
       <PostOrSearch />
@@ -118,32 +121,74 @@ export function Home() {
         <Title style={{ fontSize: 36, textAlign: 'center', paddingTop: 20 }}>
           Active Adverts
         </Title>
-        <div style={{ marginTop: 100 }}>
-          <Image src={sortIcon} style={{ position: 'absolute', right: 0 }} />
+        <div
+          style={{ marginTop: 100, display: 'flex', flexDirection: 'column'}}
+        >
+          <div style={{
+            display: "flex", 
+            flexDirection: "column",
+            gap: "50px",
+            justifyContent: "center",
+            alignItems: "center"
+          }}>
           <div
             style={{
               display: 'flex',
               flexDirection: 'row',
-              gap: 20,
-              justifyContent: 'center',
+              alignItems: 'center',
+              justifyContent: "center",
+              marginBottom: "15px"
             }}
           >
-            <BodyText
+            <div style={{
+              display: "flex",
+              flexDirection: "row"
+            }}>
+              
+              <div style={{
+              display: "flex",
+              flexDirection: "row",
+              gap: 20,
+              position: 'absolute',
+              left: '60%',
+              transform: 'translate(-60%)',
+              
+            }}>
+                <BodyText
+                  style={{
+                    color: palette.subSectionsBgAccent,
+                    fontSize: 30,
+                    fontWeight: 600,
+                  }}
+                >
+                  Selling
+                </BodyText>
+                <BodyText
+                  style={{ color: palette.subSectionsBgLighter, fontSize: 30 }}
+                >
+                  Buying
+                </BodyText>
+              </div>
+              <Image
               style={{
-                color: palette.subSectionsBgAccent,
-                fontSize: 30,
-                fontWeight: 600,
+                position: "absolute", right: 15
               }}
-            >
-              Selling
-            </BodyText>
-            <BodyText
-              style={{ color: palette.subSectionsBgLighter, fontSize: 30 }}
-            >
-              Buying
-            </BodyText>
+                src={sortIcon}
+              />
+            </div>
+            <div>
           </div>
+          </div>
+          <div>
+            {
+              adverts.map((a, i) => <Button onClick={() => navigate(`/productoverview/${a._id}`)}>{a.productname}</Button> )
+            }
+          </div>
+         
+          </div>
+         
           <Filters />
+          
         </div>
       </div>
     </Page>

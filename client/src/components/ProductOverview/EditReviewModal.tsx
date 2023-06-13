@@ -35,7 +35,7 @@ const EditReviewModal: FC<EditReviewContentProps> = (props) => {
 
   const [errors, setErrors] = useState({
     description: false,
-    rating: false
+    rating: false,
   });
 
   // todo: check file format (only picture formats allowed)
@@ -46,15 +46,13 @@ const EditReviewModal: FC<EditReviewContentProps> = (props) => {
       if (file != undefined) {
         const reader = new FileReader();
         reader.readAsDataURL(file);
-        reader.onloadend = () => {
-          
-        };
+        reader.onloadend = () => {};
       }
     }
   };
   const validationErrors = {
     description: false,
-    rating: false
+    rating: false,
   };
   let currentUser: { [x: string]: any } | null = null;
   const localUser = localStorage.getItem('currentUser');
@@ -63,7 +61,7 @@ const EditReviewModal: FC<EditReviewContentProps> = (props) => {
   }
   const handleSubmit = async () => {
     if (!formData.description) {
-      validationErrors.description= true;
+      validationErrors.description = true;
     }
     if (!formData.rating) {
       validationErrors.rating = true;
@@ -73,16 +71,15 @@ const EditReviewModal: FC<EditReviewContentProps> = (props) => {
       setErrors(validationErrors);
     } else {
       try {
-        
-          await createReview({
-            description: formData.description,
-            rating: formData.rating,
-            reviewer: currentUser?._id,
-            reviewedAdvert: props.advertID
-          } as Review);
+        await createReview({
+          description: formData.description,
+          rating: formData.rating,
+          reviewer: currentUser?._id,
+          reviewedAdvert: props.advertID,
+        } as Review);
         setErrors({
           description: false,
-          rating: false
+          rating: false,
         });
         if (props.onClose) props?.onClose();
       } catch (error) {
@@ -95,8 +92,7 @@ const EditReviewModal: FC<EditReviewContentProps> = (props) => {
       <Modal.Header closeButton>
         <Modal.Title>Review details:</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
-      </Modal.Body>
+      <Modal.Body></Modal.Body>
       <Modal.Footer>
         <Button
           className="text-white"

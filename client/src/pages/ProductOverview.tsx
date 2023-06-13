@@ -67,7 +67,9 @@ const ProductOverview = () => {
           <StoreDetailsBar category={advert.category} store={store} />
           <ProductOverviewSection advert={advert} />
           {owner && advert.offers && OffersSection(advert.offers, advert)}
-          {(advert.reviews && advert.reviews.length > 0) && ReviewsSection(advert.reviews)}
+          {advert.reviews &&
+            advert.reviews.length > 0 &&
+            ReviewsSection(advert.reviews)}
         </div>
       ) : (
         <p>Loading ...</p>
