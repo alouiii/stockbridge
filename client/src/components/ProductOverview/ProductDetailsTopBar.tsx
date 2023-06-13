@@ -8,7 +8,6 @@ import { BodyText } from '../Text/BodyText';
 type ProductDetailsTopBarProps = Partial<{
   owner: boolean;
   advert?: Advert;
-  advertID: string;
 }>;
 
 const ProductDetailsTopBar: React.FC<ProductDetailsTopBarProps> = (props) => {
@@ -40,7 +39,7 @@ const ProductDetailsTopBar: React.FC<ProductDetailsTopBarProps> = (props) => {
       >
         PRODUCT DETAILS
       </BodyText>
-      {!props.owner && (
+      {props.owner && (
         <Button
           style={{
             width: 'full',
@@ -58,7 +57,6 @@ const ProductDetailsTopBar: React.FC<ProductDetailsTopBarProps> = (props) => {
           isShowing={showModal}
           onClose={closeModal}
           advert={props.advert}
-          advertID={props.advertID}
         />
       )}
     </div>

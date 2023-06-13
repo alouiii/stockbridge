@@ -8,7 +8,6 @@ import {
   ProductCategory,
   Colors
 } from '../../api/collections/advert';
-import { User } from '../../api/collections/user';
 import { palette } from '../../utils/colors';
 
 type EditAdvertContentProps = React.DetailedHTMLProps<
@@ -19,7 +18,6 @@ type EditAdvertContentProps = React.DetailedHTMLProps<
     isShowing: boolean;
     onClose: () => void;
     advert?: Advert;
-    advertID?: string;
   }>;
 
 const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
@@ -119,8 +117,8 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
       setErrors(validationErrors);
     } else {
       try {
-        if (props.advertID) {
-          await updateAdvert(props.advertID, {
+        if (props.advert?._id) {
+          await updateAdvert(props.advert._id, {
             productname: formData.productname,
             description: formData.description,
             prioritized: false,

@@ -7,19 +7,17 @@ import { Button } from 'react-bootstrap';
 import { Advert } from '../../api/collections/advert';
 import { OfferModal } from '../Offers/OfferModal';
 
-type ProductOverviewSectionProps = React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLDivElement>,
-  HTMLDivElement
-> &
-  Partial<{
-    advert: Advert;
-    advertID: string;
-  }>;
+type ProductOverviewSectionProps = {advert: Advert;};
 
 const ProductOverviewSection: React.FC<ProductOverviewSectionProps> = (
   props,
 ) => {
-  const owner = localStorage.getItem('currentUser') === props.advert?.store;
+  let currentUser: { [x: string]: any; } | null = null;
+  const localUser = localStorage.getItem('currentUser')
+  if (localUser !== null) {
+    currentUser = JSON.parse(localUser);
+  }
+  const owner = currentUser?._id === props.advert?.store;
   const button_text = !owner
     ? props.advert?.type === 'Sell'
       ? 'Buy'
@@ -50,7 +48,6 @@ const ProductOverviewSection: React.FC<ProductOverviewSectionProps> = (
       <ProductDetailsTopBar
         owner={owner}
         advert={props.advert}
-        advertID={props.advertID}
       ></ProductDetailsTopBar>
       <div
         style={{

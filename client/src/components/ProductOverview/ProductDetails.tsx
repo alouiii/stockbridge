@@ -15,7 +15,8 @@ const ProductDetails = (advert: Advert) => {
         width: 'auto',
       }}
     >
-        <Image
+      {
+        advert.imageurl && <Image
         style={{
           width: '30%',
           height: 'auto',
@@ -24,6 +25,8 @@ const ProductDetails = (advert: Advert) => {
         }}
         src={advert?.imageurl}
       />
+      }
+       
       <div style={{
         display: "flex",
         flexDirection: "column",

@@ -30,10 +30,7 @@ const ProductOverview = () => {
     color: Colors.Blue,
     createdAt: new Date()
   } as Advert);
-  const [offers, setOffers] = useState([] as string[]);
-  const [reviews, setReviews] = useState([] as string[]);
   const [store, setStore] = useState({} as User);
-  const [user, setUser] = useState({} as User);
   useEffect(() => {
     const fetchData = async () => {
     try {
@@ -63,9 +60,9 @@ const ProductOverview = () => {
           
          }}>
         <StoreDetailsBar category={advert.category} store={store} />
-        <ProductOverviewSection advert={advert} advertID={id} />
-        {owner && OffersSection(offers, advert)}
-        {ReviewsSection(reviews)}
+        <ProductOverviewSection advert={advert}/>
+        {(owner && advert.offers) && OffersSection(advert.offers, advert)}
+        {advert.reviews && ReviewsSection(advert.reviews)}
         </div>
         ) : (
       <p>Loading ...</p>
