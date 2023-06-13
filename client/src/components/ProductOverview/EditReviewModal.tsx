@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Button, Col, Form, Modal, Row, Image } from 'react-bootstrap';
+import { Button, Form, Modal } from 'react-bootstrap';
 import { updateAdvert } from '../../api/collections/advert';
 import { Review, createReview } from '../../api/collections/review';
 import { palette } from '../../utils/colors';
@@ -16,19 +16,8 @@ type EditReviewContentProps = React.DetailedHTMLProps<
   }>;
 
 const EditReviewModal: FC<EditReviewContentProps> = (props) => {
-  const [formData, setFormData] = useState({
-    description: '',
-    rating: 0,
-  });
+  const [description, setDescription] = useState('');
 
-  const handleChange = (event: any) => {
-    event.preventDefault();
-    const { name, value } = event.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
   const [errors, setErrors] = useState({
     description: false,
     rating: false,
@@ -37,8 +26,13 @@ const EditReviewModal: FC<EditReviewContentProps> = (props) => {
 
   const handleRatingChange = (newRating: number) => {
     setRating(newRating);
-    formData.rating = newRating;
   };
+  const handleDescriptionChange = (event: any) => {
+    event.preventDefault();
+    const { _, value } = event.target;
+    setDescription(value);
+  };
+
   // todo: check file format (only picture formats allowed)
   const handleFileInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
@@ -62,10 +56,10 @@ const EditReviewModal: FC<EditReviewContentProps> = (props) => {
     currentUser = JSON.parse(localUser);
   }
   const handleSubmit = async () => {
-    if (!formData.description) {
+    if (!description) {
       validationErrors.description = true;
     }
-    if (!formData.rating) {
+    if (!rating) {
       validationErrors.rating = true;
     }
     if (Object.values(validationErrors).some((e) => e)) {
@@ -75,8 +69,8 @@ const EditReviewModal: FC<EditReviewContentProps> = (props) => {
       try {
         if (props.advertID) {
           const createdReview = await createReview({
-            description: formData.description,
-            rating: formData.rating,
+            description: description,
+            rating: rating,
             reviewer: currentUser?._id,
             reviewedAdvert: props.advertID,
             createdAt: new Date(),
@@ -131,8 +125,8 @@ const EditReviewModal: FC<EditReviewContentProps> = (props) => {
               as="textarea"
               rows={3}
               name="description"
-              value={formData.description}
-              onChange={handleChange}
+              value={description}
+              onChange={handleDescriptionChange}
             ></Form.Control>
           </Form.Group>
         </Form>

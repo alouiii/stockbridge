@@ -1,6 +1,5 @@
 import React, { FC, useState } from 'react';
 import { Button, Col, Form, Modal, Row, Image } from 'react-bootstrap';
-import { json } from 'react-router-dom';
 import {
   Advert,
   updateAdvert,
