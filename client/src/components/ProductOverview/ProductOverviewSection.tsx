@@ -43,6 +43,7 @@ const ProductOverviewSection: React.FC<ProductOverviewSectionProps> = (
         gap: '30px',
         width: 'auto',
         marginTop: '10%',
+        marginBottom: "10%"
       }}
     >
       <ProductDetailsTopBar

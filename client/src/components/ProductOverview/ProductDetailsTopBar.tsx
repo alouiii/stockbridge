@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import edit from '../../assets/edit-pencil.svg';
+import review from '../../assets/carbon_review.svg';
 import { Button, Image } from 'react-bootstrap';
 import { Advert } from '../../api/collections/advert';
 import { EditAdvertModal } from './EditAdvertModal';
 import { BodyText } from '../Text/BodyText';
+import { EditReviewModal } from './EditReviewModal';
 
 type ProductDetailsTopBarProps = Partial<{
   owner: boolean;
@@ -11,13 +13,23 @@ type ProductDetailsTopBarProps = Partial<{
 }>;
 
 const ProductDetailsTopBar: React.FC<ProductDetailsTopBarProps> = (props) => {
-  const [showModal, setShowModal] = useState(false);
+  const [showAdvertModal, setShowAdvertModal] = useState(false);
+  const [showReviewModal, setShowReviewModal] = useState(false);
   const closeModal = () => {
-    setShowModal(false);
+    if (props.owner) {
+      setShowAdvertModal(false);
+    } else {
+      setShowReviewModal(false)
+    }
     window.location.reload();
   };
   const openModal = () => {
-    setShowModal(true);
+    if (props.owner) {
+      setShowAdvertModal(true);
+    } else {
+      setShowReviewModal(true)
+    }
+    
   };
   return (
     <div
@@ -39,7 +51,6 @@ const ProductDetailsTopBar: React.FC<ProductDetailsTopBarProps> = (props) => {
       >
         PRODUCT DETAILS
       </BodyText>
-      {props.owner && (
         <Button
           style={{
             width: 'full',
@@ -49,14 +60,20 @@ const ProductDetailsTopBar: React.FC<ProductDetailsTopBarProps> = (props) => {
           }}
           onClick={openModal}
         >
-          <Image src={edit}></Image>
+          <Image src={props.owner ? edit : review}></Image>
         </Button>
-      )}
-      {showModal && (
+      {showAdvertModal && (
         <EditAdvertModal
-          isShowing={showModal}
+          isShowing={showAdvertModal}
           onClose={closeModal}
           advert={props.advert}
+        />
+      )}
+      {showReviewModal && (
+        <EditReviewModal
+          isShowing={showReviewModal}
+          onClose={closeModal}
+          advertID={props.advert?._id}
         />
       )}
     </div>

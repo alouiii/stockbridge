@@ -49,7 +49,12 @@ const ProductOverview = () => {
     fetchData();
   }, []);
 
-  const owner = store._id == localStorage.getItem('currentUser');
+  let currentUser: { [x: string]: any } | null = null;
+  const localUser = localStorage.getItem('currentUser');
+  if (localUser !== null) {
+    currentUser = JSON.parse(localUser);
+  }
+  const owner = store._id == currentUser?._id;
   return (
     <Page>
       {advert ? (
@@ -62,7 +67,7 @@ const ProductOverview = () => {
           <StoreDetailsBar category={advert.category} store={store} />
           <ProductOverviewSection advert={advert} />
           {owner && advert.offers && OffersSection(advert.offers, advert)}
-          {advert.reviews && ReviewsSection(advert.reviews)}
+          {(advert.reviews && advert.reviews.length > 0) && ReviewsSection(advert.reviews)}
         </div>
       ) : (
         <p>Loading ...</p>

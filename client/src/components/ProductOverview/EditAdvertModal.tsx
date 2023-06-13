@@ -95,7 +95,6 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
   if (localUser !== null) {
     currentUser = JSON.parse(localUser);
   }
-  console.log('currentUser: ', currentUser);
   const handleSubmit = async () => {
     if (!formData.productname) {
       validationErrors.productname = true;
