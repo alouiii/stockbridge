@@ -31,7 +31,7 @@ export const protect = asyncHandler(
     }
 
     try {
-      // Verify token
+      // Verify token // test
       const decoded: JwtPayload = jwt.verify(
         jwtToken,
         environment.JWT_SECRET,
