@@ -5,15 +5,11 @@ import { Review, createReview } from '../../api/collections/review';
 import { palette } from '../../utils/colors';
 import { Ratings } from '../Ratings';
 
-type EditReviewContentProps = React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLDivElement>,
-  HTMLDivElement
-> &
-  Partial<{
-    isShowing: boolean;
-    onClose: () => void;
-    advertID: string;
-  }>;
+type EditReviewContentProps = {
+  isShowing: boolean;
+  onClose: () => void;
+  advertID?: string;
+};
 
 const EditReviewModal: FC<EditReviewContentProps> = (props) => {
   const [description, setDescription] = useState('');

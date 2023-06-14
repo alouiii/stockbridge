@@ -5,19 +5,14 @@ import { Offer, OfferStatus } from '../../api/collections/offer';
 import { palette } from '../../utils/colors';
 import { Ratings } from '../Ratings';
 
-type OfferContentProps = React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLDivElement>,
-  HTMLDivElement
-> &
-  Partial<{
-    isShowing: boolean;
-    onClose: () => void;
-    offer?: Offer;
-    advert: Advert;
-    storeName: String;
-    rating: number;
-    userID: string;
-  }>;
+type OfferContentProps = {
+  isShowing: boolean;
+  onClose: () => void;
+  offer?: Offer;
+  advert?: Advert;
+  storeName?: String;
+  rating?: number;
+};
 function colorMap(status: OfferStatus): string {
   switch (status) {
     case OfferStatus.OPEN:

@@ -7,10 +7,10 @@ import { EditAdvertModal } from './EditAdvertModal';
 import { BodyText } from '../Text/BodyText';
 import { EditReviewModal } from './EditReviewModal';
 
-type ProductDetailsTopBarProps = Partial<{
+type ProductDetailsTopBarProps = {
   owner: boolean;
   advert?: Advert;
-}>;
+};
 
 const ProductDetailsTopBar: React.FC<ProductDetailsTopBarProps> = (props) => {
   const [showAdvertModal, setShowAdvertModal] = useState(false);

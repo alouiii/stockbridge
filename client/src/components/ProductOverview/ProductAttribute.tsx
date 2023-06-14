@@ -1,17 +1,15 @@
+import { fontSize } from '@mui/system';
 import React from 'react';
 import { BodyText } from '../Text/BodyText';
 
-type ProductAttributeProps = React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLDivElement>,
-  HTMLDivElement
-> &
-  Partial<{
-    name: string;
-    value: string | number | Date;
-    unit: string;
-    border: boolean;
-    margin: string;
-  }>;
+type ProductAttributeProps = {
+  name: string;
+  value?: string | number | Date;
+  unit?: string;
+  border?: boolean;
+  margin?: string;
+  fontSize?: string;
+};
 const ProductAttribute: React.FC<ProductAttributeProps> = (props) => {
   return (
     <div
@@ -31,23 +29,23 @@ const ProductAttribute: React.FC<ProductAttributeProps> = (props) => {
         style={{
           fontWeight: 'bold',
           fontFamily: 'Poppins',
-          width: 'auto',
-          fontSize: '20px',
+          width: '100%',
+          fontSize: props.fontSize ? props.fontSize : '20px',
         }}
       >
         {props.name}:{' '}
       </BodyText>
       <BodyText
         style={{
-          width: props.border ? '150px' : 'auto',
-          height: props.border ? '40px' : 'auto',
+          width: props.border ? '150px' : '100%',
+          height: props.border ? '40px' : '100%',
           borderRadius: '10px',
           border: props?.border ? '3px solid black' : '',
           textAlign: 'center',
           justifyContent: 'center',
           fontFamily: 'Poppins',
           font: 'light',
-          fontSize: '20px',
+          fontSize: props.fontSize ? props.fontSize : '20px',
         }}
       >
         {`${props?.value} ${props?.unit ? props?.unit : ''}`}

@@ -1,22 +1,18 @@
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
 import { Button, Col, Form, Modal, Row, Image } from 'react-bootstrap';
 import { Advert } from '../../api/collections/advert';
 import { Offer, OfferStatus } from '../../api/collections/offer';
 import { palette } from '../../utils/colors';
 import { Ratings } from '../Ratings';
 
-type StoreDetailsProps = React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLDivElement>,
-  HTMLDivElement
-> &
-  Partial<{
-    isShowing: boolean;
-    onClose: () => void;
-    offer?: Offer;
-    storeName: String;
-    rating: number;
-    advert?: Advert;
-  }>;
+type StoreDetailsProps = {
+  isShowing: boolean;
+  onClose: () => void;
+  offer?: Offer;
+  storeName?: String;
+  rating?: number;
+  advert?: Advert;
+};
 function colorMap(status: OfferStatus): string {
   switch (status) {
     case OfferStatus.OPEN:

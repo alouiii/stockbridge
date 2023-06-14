@@ -7,16 +7,12 @@ import { OfferModal } from './OfferModal';
 import { Ratings } from '../Ratings';
 require('./offerBarStyle.scss');
 
-type OfferBarProps = React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLDivElement>,
-  HTMLDivElement
-> &
-  Partial<{
-    offer: Offer;
-    advert: Advert;
-    storeName: string;
-    rating: number;
-  }>;
+type OfferBarProps = {
+  offer: Offer;
+  advert: Advert;
+  storeName: string;
+  rating: number;
+};
 
 const OfferBar: React.FC<OfferBarProps> = (props) => {
   const [showModal, setShowModal] = useState(false);
@@ -93,6 +89,8 @@ const OfferBar: React.FC<OfferBarProps> = (props) => {
           onClose={closeModal}
           advert={props.advert}
           offer={props.offer}
+          storeName={props.storeName}
+          rating={props.rating}
         />
       )}
     </div>

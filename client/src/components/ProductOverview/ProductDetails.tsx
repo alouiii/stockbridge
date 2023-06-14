@@ -19,7 +19,6 @@ const ProductDetails = (advert: Advert) => {
         <Image
           style={{
             width: '30%',
-            height: 'auto',
             borderRadius: '60px',
             borderColor: 'transparent',
           }}

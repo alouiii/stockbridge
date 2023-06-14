@@ -9,15 +9,11 @@ import {
 } from '../../api/collections/advert';
 import { palette } from '../../utils/colors';
 
-type EditAdvertContentProps = React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLDivElement>,
-  HTMLDivElement
-> &
-  Partial<{
-    isShowing: boolean;
-    onClose: () => void;
-    advert?: Advert;
-  }>;
+type EditAdvertContentProps = {
+  isShowing: boolean;
+  onClose: () => void;
+  advert?: Advert;
+};
 
 const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
   const [isChecked, setIsChecked] = useState(
@@ -41,7 +37,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
     productname: props.advert?.productname ? props.advert?.productname : '',
     description: props.advert?.description ? props.advert?.description : '',
     prioritized: props.advert?.prioritized ? props.advert?.prioritized : false,
-    color: props.advert?.color ? props.advert?.color : '',
+    color: props.advert?.color ? props.advert?.color : 'Blue',
     purchaseDate: purchaseDate,
     expirationDate: expirationDate,
     quantity: props.advert?.quantity ? props.advert?.quantity : 0,
