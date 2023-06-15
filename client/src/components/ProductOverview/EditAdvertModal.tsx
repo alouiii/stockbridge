@@ -1,5 +1,5 @@
-import React, { FC, useState } from 'react';
-import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
+import React, { FC, useRef, useState } from 'react';
+import { Button, Col, Form, Modal, Row, Image } from 'react-bootstrap';
 import {
   Advert,
   updateAdvert,
@@ -8,7 +8,7 @@ import {
   Colors,
 } from '../../api/collections/advert';
 import { palette } from '../../utils/colors';
-import { Img } from '../Img';
+import defaultPostAdvertImage from '../../assets/advertPostAdvert.svg';
 
 type EditAdvertContentProps = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLDivElement>,
@@ -70,12 +70,19 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
     type: false,
   });
 
-  // todo: check file format (only picture formats allowed)
-  const handleFileInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImageClick = () => {
+    if (fileInputRef.current != null) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleUploadImage = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     if (event.target.files) {
       const file = event.target.files[0];
-      if (file != undefined) {
+      if (file !== undefined) {
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onloadend = () => {
@@ -86,6 +93,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
       }
     }
   };
+
   const validationErrors = {
     productname: false,
     category: false,
@@ -163,7 +171,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
   return (
     <Modal show={props.isShowing} onHide={props.onClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Advert details:</Modal.Title>
+        <Modal.Title>Advert Details</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
@@ -176,7 +184,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                     color: palette.gray,
                   }}
                 >
-                  Sell/ Ask:
+                  Type:
                 </Form.Label>
                 <Form.Check
                   inline
@@ -203,40 +211,48 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
               </Form.Group>
             </Col>
             <Col>
-              <Form.Group
+              <div
                 style={{
-                  textAlign: 'center',
+                  backgroundColor: encodedImage ? undefined : 'lightgray',
+                  width: 100,
+                  height: 100,
+                  position: 'absolute',
+                  right: 50,
+                  borderRadius: '50%',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}
-                controlId="FileUpload"
               >
-                <div className="custom-file">
+                <div>
                   <Form.Control
                     type="file"
-                    onChange={handleFileInput}
+                    ref={fileInputRef}
+                    accept="image/*"
+                    onChange={handleUploadImage}
                     style={{
-                      backgroundColor: 'transparent',
-                      borderColor: 'black',
-                      borderRadius: 15,
-                      alignContent: 'start',
-                      justifyContent: 'start',
-                      marginBottom: '10px',
+                      display: 'none',
                     }}
                     id="customFile"
                   />
                 </div>
-                {encodedImage && (
-                  <div className="flex-col items-end justify-end">
-                    <Img
-                      style={{
-                        width: '160px',
-                        height: '160px',
-                        borderRadius: '60px',
-                      }}
-                      src={encodedImage}
-                    />
-                  </div>
-                )}
-              </Form.Group>
+                <Image
+                  src={encodedImage}
+                  alt="Advert Image"
+                  onError={(e: React.SyntheticEvent<HTMLImageElement>) =>
+                    (e.currentTarget.src = defaultPostAdvertImage)
+                  }
+                  roundedCircle
+                  style={{
+                    width: encodedImage ? '100%' : '40%',
+                    objectFit: 'cover',
+                    aspectRatio: '1/1',
+                    cursor: 'pointer',
+                  }}
+                  fluid
+                  onClick={handleImageClick}
+                />
+              </div>
             </Col>
           </Row>
           <Row>
