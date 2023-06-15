@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, useContext, useRef, useState } from 'react';
 import { Button, Col, Form, Modal, Row, Image } from 'react-bootstrap';
 import {
   Advert,
@@ -9,20 +9,17 @@ import {
 } from '../../api/collections/advert';
 import { palette } from '../../utils/colors';
 import defaultPostAdvertImage from '../../assets/advertPostAdvert.svg';
+import { LoginContext } from '../../contexts/LoginContext';
 
-type EditAdvertContentProps = React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLDivElement>,
-  HTMLDivElement
-> &
-  Partial<{
-    isShowing: boolean;
-    onClose: () => void;
-    advert?: Advert;
-    userID: string;
-    advertID?: string;
-  }>;
+type EditAdvertContentProps = {
+  isShowing: boolean;
+  onClose: () => void;
+  advert?: Advert;
+};
 
 const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
+  const { user } = useContext(LoginContext);
+
   const [isChecked, setIsChecked] = useState(
     props.advert?.type ? props.advert?.type : '',
   );
@@ -50,7 +47,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
     quantity: props.advert?.quantity ? props.advert?.quantity : 0,
     price: props.advert?.price ? props.advert?.price : 0,
     category: props.advert?.category ? props.advert?.category : '',
-    store: props.advert?.store ? props.advert?.store : props.userID,
+    store: props.advert?.store ? props.advert?.store : user?._id,
   });
 
   const handleChange = (event: any) => {
@@ -123,8 +120,8 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
       setErrors(validationErrors);
     } else {
       try {
-        if (props.advertID) {
-          await updateAdvert(props.advertID, {
+        if (props.advert?.id) {
+          await updateAdvert(props.advert.id, {
             productname: formData.productname,
             description: formData.description,
             //type: isChecked,

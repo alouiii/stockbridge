@@ -59,7 +59,6 @@ const ProductDetailsTopBar: React.FC<ProductDetailsTopBarProps> = (props) => {
           isShowing={showModal}
           onClose={closeModal}
           advert={props.advert}
-          advertID={props.advertID}
         />
       )}
     </div>
