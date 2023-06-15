@@ -8,13 +8,15 @@ type AdvertsTabContentProps = {
 };
 const AdvertsTabContent: FC<AdvertsTabContentProps> = (props) => {
   return (
-    <div style={{
-      width: "auto"
-    }}>
+    <div
+      style={{
+        width: 'auto',
+      }}
+    >
       {Object.values(ProductCategory).map((c, i) => {
-        const adverts_in_category = props.adverts.filter(
-          (advert) => advert.category === c,
-        );
+        const adverts_in_category = props.adverts
+          .filter((advert) => advert.category === c)
+          .splice(0, 10);
         return (
           adverts_in_category.length > 0 && (
             <div

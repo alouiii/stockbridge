@@ -12,7 +12,6 @@ import {
 } from '../services/offerServices';
 import { AuthenticatedRequest } from '../middlewares/authMiddleware';
 
-
 /**
  * This method returns a offer by id   *
  * @param req - The request object

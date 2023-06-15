@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { Button, Col, Form, Modal, Row, Image } from 'react-bootstrap';
 import { Advert } from '../../api/collections/advert';
-import { Offer, OfferStatus } from '../../api/collections/offer';
+import { createOffer, Offer, OfferStatus } from '../../api/collections/offer';
 import { palette } from '../../utils/colors';
 import { Ratings } from '../Ratings';
 
@@ -31,6 +31,7 @@ const OfferModal: FC<OfferContentProps> = (props) => {
   const [formData, setFormData] = useState({
     quantity: props.offer?.quantity ? props.offer?.quantity : 0,
     price: props.offer?.price ? props.offer?.price : 0,
+    createdAt: new Date(),
   });
 
   const handleChange = (event: any) => {
@@ -64,16 +65,7 @@ const OfferModal: FC<OfferContentProps> = (props) => {
       setErrors(validationErrors);
     } else {
       try {
-        /* await axiosClient
-                    .post("offers", {
-                        quantity: formData.quantity,
-                        price: formData.price,
-                        status: OfferStatus.OPEN,
-                        createdAt: new Date(),
-                        offeror: props.userID,
-                        offeree: props.store?.id,
-                    })
-                */
+        await createOffer(formData as Offer);
         setErrors({
           price: false,
           quantity: false,

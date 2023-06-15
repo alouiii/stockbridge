@@ -9,8 +9,8 @@ import {
   getAdvertsByCategory,
 } from '../services/advertServices';
 import { AuthenticatedRequest } from '../middlewares/authMiddleware';
-import { AppError } from '../utils/errorHandler';
 import { ProductCategory } from '../entities/advertEntity';
+import logger from '../config/logger';
 
 /**
  * This method returns an advert by id   *
@@ -68,10 +68,10 @@ export const putAdvert = asyncHandler(
     } */
     const newAdvert = req.body;
     const existingAdvert = await findAdvertById(id);
-    newAdvert.reviews = existingAdvert.reviews
-      ? existingAdvert.reviews
-      : [] + newAdvert.reviews;
-    const advert = await updateAdvert(id, newAdvert);
+    existingAdvert.reviews = (existingAdvert.reviews || []).concat(
+      newAdvert.reviews,
+    );
+    const advert = await updateAdvert(id, existingAdvert);
     res.status(200).json(advert);
   },
 );

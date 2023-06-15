@@ -15,7 +15,11 @@ export const offerRouter = Router();
 
 offerRouter.route('/').post(postOffer).get(protect, getOffers);
 
-offerRouter.route('/:id').get(protect, getOffer).put(putOffer).delete(deleteOffer);
+offerRouter
+  .route('/:id')
+  .get(protect, getOffer)
+  .put(putOffer)
+  .delete(deleteOffer);
 
 offerRouter.route('/getOfferByAdvert/:advert').get(getOffersByAdvert);
 

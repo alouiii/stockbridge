@@ -45,83 +45,84 @@ const AdvertsSection: FC = () => {
         }}
       >
         <Filters />
-        <div style={{
-          width: "100%"
-        }}>
-        <Tab.Container
-          activeKey={activeTab != null ? activeTab : 'selling'}
-          onSelect={handleTabSelect}
-         
+        <div
+          style={{
+            width: '100%',
+          }}
         >
-          <Nav
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              gap: 20,
-              position: 'absolute',
-              left: '60%',
-              transform: 'translate(-60%)',
-            }}
-            variant="tabs"
+          <Tab.Container
+            activeKey={activeTab != null ? activeTab : 'selling'}
+            onSelect={handleTabSelect}
           >
-            <NavItem>
-              <Nav.Link
-                style={{
-                  color: palette.subSectionsBgAccent,
-                  fontSize: 30,
-                  fontWeight: 600,
-                }}
-                eventKey="selling"
-              >
-                Selling
-              </Nav.Link>
-            </NavItem>
-            <NavItem>
-              <Nav.Link
-                style={{
-                  color: palette.subSectionsBgLighter,
-                  fontSize: 30,
-                }}
-                eventKey="buying"
-              >
-                Buying
-              </Nav.Link>
-            </NavItem>
-          </Nav>
-          <Button
-            style={{
-              position: 'absolute',
-              right: '2%',
-              backgroundColor: 'transparent',
-              borderColor: 'transparent',
-            }}
-          >
-            <Image
+            <Nav
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                gap: 20,
+                position: 'absolute',
+                left: '60%',
+                transform: 'translate(-60%)',
+              }}
+              variant="tabs"
+            >
+              <NavItem>
+                <Nav.Link
+                  style={{
+                    color: palette.subSectionsBgAccent,
+                    fontSize: 30,
+                    fontWeight: 600,
+                  }}
+                  eventKey="selling"
+                >
+                  Selling
+                </Nav.Link>
+              </NavItem>
+              <NavItem>
+                <Nav.Link
+                  style={{
+                    color: palette.subSectionsBgLighter,
+                    fontSize: 30,
+                  }}
+                  eventKey="buying"
+                >
+                  Buying
+                </Nav.Link>
+              </NavItem>
+            </Nav>
+            <Button
               style={{
                 position: 'absolute',
-                right: 15,
+                right: '2%',
+                backgroundColor: 'transparent',
+                borderColor: 'transparent',
               }}
-              src={sortIcon}
-            />
-          </Button>
-          <Tab.Content
-            style={{
-              marginTop: '200px',
-              marginLeft: '100px',
-            }}
-          >
-            <Tab.Pane eventKey="selling">
-              <AdvertsTabContent
-                adverts={adverts.filter((a) => a.type === 'Sell')}
+            >
+              <Image
+                style={{
+                  position: 'absolute',
+                  right: 15,
+                }}
+                src={sortIcon}
               />
-            </Tab.Pane>
-            <Tab.Pane eventKey="buying">
-              <AdvertsTabContent
-                adverts={adverts.filter((a) => a.type === 'Ask')}
-              />
-            </Tab.Pane>
-          </Tab.Content>
-        </Tab.Container>
+            </Button>
+            <Tab.Content
+              style={{
+                marginTop: '200px',
+                marginLeft: '100px',
+              }}
+            >
+              <Tab.Pane eventKey="selling">
+                <AdvertsTabContent
+                  adverts={adverts.filter((a) => a.type === 'Sell')}
+                />
+              </Tab.Pane>
+              <Tab.Pane eventKey="buying">
+                <AdvertsTabContent
+                  adverts={adverts.filter((a) => a.type === 'Ask')}
+                />
+              </Tab.Pane>
+            </Tab.Content>
+          </Tab.Container>
         </div>
       </Stack>
     </div>

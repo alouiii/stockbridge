@@ -64,6 +64,7 @@ const EditReviewModal: FC<EditReviewContentProps> = (props) => {
     } else {
       try {
         if (props.advertID) {
+          console.log('A new review is being created!');
           const createdReview = await createReview({
             description: description,
             rating: rating,
@@ -71,6 +72,7 @@ const EditReviewModal: FC<EditReviewContentProps> = (props) => {
             reviewedAdvert: props.advertID,
             createdAt: new Date(),
           } as Review);
+          console.log('creared review: ', createdReview);
           await updateAdvert(props.advertID, {
             reviews: [createdReview._id],
           });
@@ -79,7 +81,7 @@ const EditReviewModal: FC<EditReviewContentProps> = (props) => {
           description: false,
           rating: false,
         });
-        if (props.onClose) props?.onClose();
+        //if (props.onClose) props?.onClose();
       } catch (error) {
         console.error(error);
       }
