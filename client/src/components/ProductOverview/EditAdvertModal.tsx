@@ -188,6 +188,8 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   inline
                   required
                   type="radio"
+                  name="type"
+                  id="Sell"
                   label="Sell"
                   onChange={props.advert ? undefined : handleType}
                   value={'Sell'}
@@ -197,6 +199,8 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   inline
                   required
                   type="radio"
+                  name="type"
+                  id="Ask"
                   label="Ask"
                   onChange={props.advert ? undefined : handleType}
                   value={'Ask'}
@@ -227,6 +231,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                     style={{
                       display: 'none',
                     }}
+                    id="customFile"
                   />
                 </div>
                 <Image
@@ -266,6 +271,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   required
                   type="text"
                   placeholder="Product Name"
+                  name="productname"
                   value={formData.productname}
                   onChange={handleChange}
                   isInvalid={!!errors.productname}
@@ -295,6 +301,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   required
                   placeholder="Product Category"
                   value={formData.category}
+                  name="category"
                   onChange={handleChange}
                   isInvalid={!!errors.category}
                 >
@@ -324,6 +331,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   }}
                   placeholder="Product Category"
                   value={formData.color}
+                  name="color"
                   onChange={handleChange}
                 >
                   {Object.values(Colors)
@@ -352,6 +360,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                 }}
                 type="date"
                 value={formData.purchaseDate}
+                name="purchaseDate"
                 onChange={handleChange}
               />
             </Col>
@@ -371,6 +380,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                 }}
                 type="date"
                 value={formData.expirationDate}
+                name="expirationDate"
                 onChange={handleChange}
               />
             </Col>
@@ -393,6 +403,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                     margin: 5,
                   }}
                   type="number"
+                  name="quantity"
                   value={formData.quantity}
                   onChange={handleChange}
                   required
@@ -417,6 +428,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                     margin: 5,
                   }}
                   type="number"
+                  name="price"
                   value={formData.price}
                   onChange={handleChange}
                   required
@@ -444,6 +456,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   }}
                   as="textarea"
                   rows={3}
+                  name="description"
                   value={formData.description}
                   onChange={handleChange}
                 ></Form.Control>
