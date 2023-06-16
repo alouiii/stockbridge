@@ -13,12 +13,12 @@ import { protect } from '../middlewares/authMiddleware';
 
 export const offerRouter = Router();
 
-offerRouter.route('/').post(postOffer).get(protect, getOffers);
+offerRouter.route('/').post(protect, postOffer).get(protect, getOffers);
 
-offerRouter.route('/:id').get(protect, getOffer).put(putOffer).delete(deleteOffer);
+offerRouter.route('/:id').get(protect, getOffer).put(protect, putOffer).delete(protect, deleteOffer);
 
-offerRouter.route('/getOfferByAdvert/:advert').get(getOffersByAdvert);
+offerRouter.route('/getOfferByAdvert/:advert').get(protect, getOffersByAdvert);
 
-offerRouter.route('/getOfferByOfferor/:offeror').get(getOffersByOfferor);
+offerRouter.route('/getOfferByOfferor/:offeror').get(protect, getOffersByOfferor);
 
-offerRouter.route('/getOfferByOfferee/:offeree').get(getOffersByOfferee);
+offerRouter.route('/getOfferByOfferee/:offeree').get(protect, getOffersByOfferee);
