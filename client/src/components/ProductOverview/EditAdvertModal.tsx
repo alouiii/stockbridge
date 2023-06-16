@@ -24,7 +24,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
   const matches = useMediaQuery('(min-width: 992px)');
 
   const [isChecked, setIsChecked] = useState(
-    props.advert?.type ? props.advert?.type : '',
+    props.advert?.type ?? '',
   );
 
   const handleType = (event: any) => {
@@ -37,20 +37,20 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
     ? props.advert.expirationDate.toString().substring(0, 10)
     : '';
   const [encodedImage, setEncodedImage] = useState(
-    props.advert?.imageurl ? props.advert?.imageurl : '',
+    props.advert?.imageurl ?? '',
   );
   console.log('Constructing Form for advert: ', props.advert);
   const [formData, setFormData] = useState({
-    productname: props.advert?.productname ? props.advert?.productname : '',
-    description: props.advert?.description ? props.advert?.description : '',
-    prioritized: props.advert?.prioritized ? props.advert?.prioritized : false,
-    color: props.advert?.color ? props.advert?.color : '',
+    productname: props.advert?.productname ?? '',
+    description: props.advert?.description ?? '',
+    prioritized: props.advert?.prioritized ?? false,
+    color: props.advert?.color ?? '',
     purchaseDate: purchaseDate,
     expirationDate: expirationDate,
-    quantity: props.advert?.quantity ? props.advert?.quantity : 0,
-    price: props.advert?.price ? props.advert?.price : 0,
-    category: props.advert?.category ? props.advert?.category : '',
-    store: props.advert?.store ? props.advert?.store : user?._id,
+    quantity: props.advert?.quantity ?? 0,
+    price: props.advert?.price ?? 0,
+    category: props.advert?.category ?? '',
+    store: props.advert?.store ?? user?._id,
   });
 
   const handleChange = (event: any) => {
