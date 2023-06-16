@@ -106,8 +106,8 @@ export const getOffersByAdvert = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const { advert } = req.params;
     const userId = new ObjectId(req.user?.id);
-    const offers = await findAllOffersByAdvert(advert);
-    _findAndCheckRelatedOffers(userId, offers);
+    let offers = await findAllOffersByAdvert(advert);
+    offers = _findAndCheckRelatedOffers(userId, offers);
 
     res.status(200).json(offers);
   },
@@ -124,8 +124,7 @@ export const getOffersByOfferor = asyncHandler(
     const { offeror } = req.params;
 
     const userId = req.user?.id;
-    if(userId != offeror)
-    {
+    if (userId != offeror) {
       throw new AppError(
         'Not authorized to access this route',
         'Not authorized to access this route',
@@ -148,8 +147,7 @@ export const getOffersByOfferee = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const { offeree } = req.params;
     const userId = req.user?.id;
-    if(userId != offeree)
-    {
+    if (userId != offeree) {
       throw new AppError(
         'Not authorized to access this route',
         'Not authorized to access this route',
