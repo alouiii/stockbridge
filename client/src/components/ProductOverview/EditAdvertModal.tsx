@@ -23,12 +23,12 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
 
   const matches = useMediaQuery('(min-width: 992px)');
 
-  const [isChecked, setIsChecked] = useState(
-    props.advert?.type ?? '',
-  );
+  const fileInputRef = useRef<HTMLInputElement>(null); // to handle the upload of the image
+
+  const [advertType, setAdvertType] = useState(props.advert?.type ?? '');
 
   const handleType = (event: any) => {
-    setIsChecked(event.target.value);
+    setAdvertType(event.target.value);
   };
   const purchaseDate = props.advert?.purchaseDate
     ? props.advert.purchaseDate.toString().substring(0, 10)
@@ -39,7 +39,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
   const [encodedImage, setEncodedImage] = useState(
     props.advert?.imageurl ?? '',
   );
-  console.log('Constructing Form for advert: ', props.advert);
+
   const [formData, setFormData] = useState({
     productname: props.advert?.productname ?? '',
     description: props.advert?.description ?? '',
@@ -69,8 +69,6 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
     quantity: false,
     type: false,
   });
-
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageClick = () => {
     if (fileInputRef.current != null) {
@@ -114,7 +112,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
     if (!formData.price) {
       validationErrors.price = true;
     }
-    if (!isChecked) {
+    if (!advertType) {
       validationErrors.type = true;
     }
 
@@ -127,7 +125,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
           await updateAdvert(props.advert.id, {
             productname: formData.productname,
             description: formData.description,
-            //type: isChecked,
+            //type: advertType,
             prioritized: false,
             color: formData.color,
             expirationDate: new Date(formData.expirationDate),
@@ -152,7 +150,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
             date: new Date(),
             store: formData.store,
             imageurl: encodedImage,
-            type: isChecked,
+            type: advertType,
           } as Advert);
         }
         setErrors({
@@ -190,23 +188,19 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   inline
                   required
                   type="radio"
-                  name="type"
-                  id="Sell"
                   label="Sell"
                   onChange={props.advert ? undefined : handleType}
                   value={'Sell'}
-                  checked={isChecked === 'Sell'}
+                  checked={advertType === 'Sell'}
                 />
                 <Form.Check
                   inline
                   required
                   type="radio"
-                  name="type"
-                  id="Ask"
                   label="Ask"
                   onChange={props.advert ? undefined : handleType}
                   value={'Ask'}
-                  checked={isChecked === 'Ask'}
+                  checked={advertType === 'Ask'}
                 />
               </Form.Group>
             </Col>
@@ -233,7 +227,6 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                     style={{
                       display: 'none',
                     }}
-                    id="customFile"
                   />
                 </div>
                 <Image
@@ -273,7 +266,6 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   required
                   type="text"
                   placeholder="Product Name"
-                  name="productname"
                   value={formData.productname}
                   onChange={handleChange}
                   isInvalid={!!errors.productname}
@@ -303,7 +295,6 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   required
                   placeholder="Product Category"
                   value={formData.category}
-                  name="category"
                   onChange={handleChange}
                   isInvalid={!!errors.category}
                 >
@@ -333,7 +324,6 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   }}
                   placeholder="Product Category"
                   value={formData.color}
-                  name="color"
                   onChange={handleChange}
                 >
                   {Object.values(Colors)
@@ -362,7 +352,6 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                 }}
                 type="date"
                 value={formData.purchaseDate}
-                name="purchaseDate"
                 onChange={handleChange}
               />
             </Col>
@@ -382,7 +371,6 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                 }}
                 type="date"
                 value={formData.expirationDate}
-                name="expirationDate"
                 onChange={handleChange}
               />
             </Col>
@@ -405,7 +393,6 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                     margin: 5,
                   }}
                   type="number"
-                  name="quantity"
                   value={formData.quantity}
                   onChange={handleChange}
                   required
@@ -430,7 +417,6 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                     margin: 5,
                   }}
                   type="number"
-                  name="price"
                   value={formData.price}
                   onChange={handleChange}
                   required
@@ -458,7 +444,6 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   }}
                   as="textarea"
                   rows={3}
-                  name="description"
                   value={formData.description}
                   onChange={handleChange}
                 ></Form.Control>
