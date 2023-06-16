@@ -10,6 +10,7 @@ import {
 import { palette } from '../../utils/colors';
 import defaultPostAdvertImage from '../../assets/advertPostAdvert.svg';
 import { LoginContext } from '../../contexts/LoginContext';
+import useMediaQuery from '../../hooks/useMediaQuery';
 
 type EditAdvertContentProps = {
   isShowing: boolean;
@@ -19,6 +20,8 @@ type EditAdvertContentProps = {
 
 const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
   const { user } = useContext(LoginContext);
+
+  const matches = useMediaQuery('(min-width: 992px)');
 
   const [isChecked, setIsChecked] = useState(
     props.advert?.type ? props.advert?.type : '',
@@ -166,19 +169,19 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
     }
   };
   return (
-    <Modal show={props.isShowing} onHide={props.onClose}>
+    <Modal size="lg" show={props.isShowing} onHide={props.onClose}>
       <Modal.Header closeButton>
         <Modal.Title>Advert Details</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
           <Row>
-            <Col>
+            <Col style={{ marginTop: 30 }}>
               <Form.Group className="mb-3">
                 <Form.Label
                   style={{
-                    padding: '10px',
-                    color: palette.gray,
+                    paddingLeft: 10,
+                    paddingRight: 20,
                   }}
                 >
                   Type:
@@ -211,10 +214,10 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
               <div
                 style={{
                   backgroundColor: encodedImage ? undefined : 'lightgray',
-                  width: 100,
-                  height: 100,
+                  width: 160,
+                  height: 160,
                   position: 'absolute',
-                  right: 50,
+                  right: matches ? 100 : 50,
                   borderRadius: '50%',
                   display: 'flex',
                   justifyContent: 'center',
@@ -239,7 +242,6 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   onError={(e: React.SyntheticEvent<HTMLImageElement>) =>
                     (e.currentTarget.src = defaultPostAdvertImage)
                   }
-                  roundedCircle
                   style={{
                     width: encodedImage ? '100%' : '40%',
                     objectFit: 'cover',
@@ -252,23 +254,21 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
               </div>
             </Col>
           </Row>
-          <Row>
-            <Col>
+          <Row style={{ marginTop: 50 }}>
+            <Col md={6}>
               <Form.Group>
                 <Form.Label
                   style={{
-                    padding: '10px',
-                    color: palette.gray,
-                    margin: '5px',
+                    paddingLeft: 10,
                   }}
                 >
                   Product Name
                 </Form.Label>
                 <Form.Control
                   style={{
-                    padding: '10px',
+                    padding: 10,
                     color: palette.gray,
-                    margin: '5px',
+                    margin: 5,
                   }}
                   required
                   type="text"
@@ -277,7 +277,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   value={formData.productname}
                   onChange={handleChange}
                   isInvalid={!!errors.productname}
-                ></Form.Control>
+                />
                 <Form.Control.Feedback type="invalid">
                   {errors.productname}
                 </Form.Control.Feedback>
@@ -289,18 +289,16 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
               <Form.Group controlId="category">
                 <Form.Label
                   style={{
-                    padding: '10px',
-                    color: palette.gray,
-                    margin: '5px',
+                    paddingLeft: 10,
                   }}
                 >
                   Product Category
                 </Form.Label>
                 <Form.Select
                   style={{
-                    padding: '10px',
+                    padding: 10,
                     color: palette.gray,
-                    margin: '5px',
+                    margin: 5,
                   }}
                   required
                   placeholder="Product Category"
@@ -322,18 +320,16 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
               <Form.Group>
                 <Form.Label
                   style={{
-                    padding: '10px',
-                    color: palette.gray,
-                    margin: '5px',
+                    paddingLeft: 10,
                   }}
                 >
                   Product Color
                 </Form.Label>
                 <Form.Select
                   style={{
-                    padding: '10px',
+                    padding: 10,
                     color: palette.gray,
-                    margin: '5px',
+                    margin: 5,
                   }}
                   placeholder="Product Category"
                   value={formData.color}
@@ -353,18 +349,16 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
             <Col>
               <Form.Label
                 style={{
-                  padding: '10px',
-                  color: palette.gray,
-                  margin: '5px',
+                  paddingLeft: 10,
                 }}
               >
                 Purchase Date
               </Form.Label>
               <Form.Control
                 style={{
-                  padding: '10px',
+                  padding: 10,
                   color: palette.gray,
-                  margin: '5px',
+                  margin: 5,
                 }}
                 type="date"
                 value={formData.purchaseDate}
@@ -375,18 +369,16 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
             <Col>
               <Form.Label
                 style={{
-                  padding: '10px',
-                  color: palette.gray,
-                  margin: '5px',
+                  paddingLeft: 10,
                 }}
               >
                 Expiration Date
               </Form.Label>
               <Form.Control
                 style={{
-                  padding: '10px',
+                  padding: 10,
                   color: palette.gray,
-                  margin: '5px',
+                  margin: 5,
                 }}
                 type="date"
                 value={formData.expirationDate}
@@ -400,9 +392,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
               <Form.Group>
                 <Form.Label
                   style={{
-                    padding: '10px',
-                    color: palette.gray,
-                    margin: '5px',
+                    paddingLeft: 10,
                   }}
                 >
                   {' '}
@@ -410,9 +400,9 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                 </Form.Label>
                 <Form.Control
                   style={{
-                    padding: '10px',
+                    padding: 10,
                     color: palette.gray,
-                    margin: '5px',
+                    margin: 5,
                   }}
                   type="number"
                   name="quantity"
@@ -427,9 +417,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
               <Form.Group>
                 <Form.Label
                   style={{
-                    padding: '10px',
-                    color: palette.gray,
-                    margin: '5px',
+                    paddingLeft: 10,
                   }}
                 >
                   {' '}
@@ -437,9 +425,9 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                 </Form.Label>
                 <Form.Control
                   style={{
-                    padding: '10px',
+                    padding: 10,
                     color: palette.gray,
-                    margin: '5px',
+                    margin: 5,
                   }}
                   type="number"
                   name="price"
@@ -456,9 +444,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
               <Form.Group>
                 <Form.Label
                   style={{
-                    padding: '10px',
-                    color: palette.gray,
-                    margin: '5px',
+                    paddingLeft: 10,
                   }}
                 >
                   {' '}
@@ -466,9 +452,9 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                 </Form.Label>
                 <Form.Control
                   style={{
-                    padding: '10px',
+                    padding: 10,
                     color: palette.gray,
-                    margin: '5px',
+                    margin: 5,
                   }}
                   as="textarea"
                   rows={3}
@@ -486,8 +472,8 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
           className="text-white"
           onClick={handleSubmit}
           style={{
-            background: palette.green,
-            borderColor: palette.green,
+            background: palette.subSectionsBgAccent,
+            borderColor: palette.subSectionsBgAccent,
           }}
         >
           Submit
