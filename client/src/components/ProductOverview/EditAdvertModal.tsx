@@ -41,7 +41,7 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
     productname: props.advert?.productname ?? '',
     description: props.advert?.description ?? '',
     prioritized: props.advert?.prioritized ?? false,
-    color: props.advert?.color ?? '',
+    color: props.advert?.color ?? undefined,
     purchaseDate: props.advert?.purchaseDate ?? undefined,
     expirationDate: props.advert?.expirationDate ?? undefined,
     quantity: props.advert?.quantity ?? 0,
