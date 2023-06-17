@@ -1,4 +1,4 @@
-import React, { FC, useContext, useRef, useState } from 'react';
+import React, { FC, useContext, useEffect, useRef, useState } from 'react';
 import { Button, Col, Form, Modal, Row, Image } from 'react-bootstrap';
 import {
   Advert,
@@ -11,6 +11,10 @@ import { palette } from '../../utils/colors';
 import defaultPostAdvertImage from '../../assets/advertPostAdvert.svg';
 import { LoginContext } from '../../contexts/LoginContext';
 import useMediaQuery from '../../hooks/useMediaQuery';
+import {
+  checkExpirationDateAvert,
+  checkPurchaseDateAdvert,
+} from '../../utils/functions';
 
 type EditAdvertContentProps = {
   isShowing: boolean;
@@ -18,24 +22,25 @@ type EditAdvertContentProps = {
   advert?: Advert;
 };
 
-const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
+export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
   const { user } = useContext(LoginContext);
 
   const matches = useMediaQuery('(min-width: 992px)');
 
   const fileInputRef = useRef<HTMLInputElement>(null); // to handle the upload of the image
 
-  const [advertType, setAdvertType] = useState(props.advert?.type ?? '');
+  const [advertType, setAdvertType] = useState(props.advert?.type ?? 'Sell');
 
   const handleType = (event: any) => {
     setAdvertType(event.target.value);
   };
-  const purchaseDate = props.advert?.purchaseDate
+  /*const purchaseDate = props.advert?.purchaseDate
     ? props.advert.purchaseDate.toString().substring(0, 10)
     : '';
   const expirationDate = props.advert?.expirationDate
     ? props.advert.expirationDate.toString().substring(0, 10)
     : '';
+  */
   const [encodedImage, setEncodedImage] = useState(
     props.advert?.imageurl ?? '',
   );
@@ -45,8 +50,8 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
     description: props.advert?.description ?? '',
     prioritized: props.advert?.prioritized ?? false,
     color: props.advert?.color ?? '',
-    purchaseDate: purchaseDate,
-    expirationDate: expirationDate,
+    purchaseDate: props.advert?.purchaseDate ?? undefined,
+    expirationDate: props.advert?.expirationDate ?? undefined,
     quantity: props.advert?.quantity ?? 0,
     price: props.advert?.price ?? 0,
     category: props.advert?.category ?? '',
@@ -54,6 +59,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
   });
 
   const handleChange = (event: any) => {
+    // we put type any because we are handling various events, such as HTML input, HTML select ecc
     event.preventDefault();
     const { name, value } = event.target;
     setFormData({
@@ -117,7 +123,6 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
     }
 
     if (Object.values(validationErrors).some((e) => e)) {
-      console.log('Errors are happening');
       setErrors(validationErrors);
     } else {
       try {
@@ -128,8 +133,8 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
             //type: advertType,
             prioritized: false,
             color: formData.color,
-            expirationDate: new Date(formData.expirationDate),
-            purchaseDate: new Date(formData.purchaseDate),
+            expirationDate: formData.expirationDate,
+            purchaseDate: formData.purchaseDate,
             quantity: formData.quantity,
             price: formData.price,
             category: formData.category,
@@ -141,8 +146,8 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
             description: formData.description,
             prioritized: false,
             color: formData.color,
-            expirationDate: new Date(formData.expirationDate),
-            purchaseDate: new Date(formData.purchaseDate),
+            expirationDate: formData.expirationDate,
+            purchaseDate: formData.purchaseDate,
             quantity: formData.quantity,
             price: formData.price,
             advertStatus: 'Ongoing',
@@ -166,6 +171,9 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
       }
     }
   };
+
+  useEffect(() => console.log(formData.quantity), [formData.quantity]);
+
   return (
     <Modal size="lg" show={props.isShowing} onHide={props.onClose}>
       <Modal.Header closeButton>
@@ -180,6 +188,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   style={{
                     paddingLeft: 10,
                     paddingRight: 20,
+                    fontWeight: '600',
                   }}
                 >
                   Type:
@@ -241,7 +250,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                     (e.currentTarget.src = defaultPostAdvertImage)
                   }
                   style={{
-                    width: encodedImage ? '100%' : '40%',
+                    width: encodedImage ? '100%' : '30%',
                     objectFit: 'cover',
                     aspectRatio: '1/1',
                     cursor: 'pointer',
@@ -258,6 +267,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                 <Form.Label
                   style={{
                     paddingLeft: 10,
+                    fontWeight: '600',
                   }}
                 >
                   Product Name
@@ -288,6 +298,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                 <Form.Label
                   style={{
                     paddingLeft: 10,
+                    fontWeight: '600',
                   }}
                 >
                   Product Category
@@ -308,8 +319,8 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   <option> -- Select Category -- </option>
                   {Object.values(ProductCategory)
                     .filter((key) => isNaN(Number(key)))
-                    .map((c) => (
-                      <option>{c}</option>
+                    .map((c, index) => (
+                      <option key={index}>{c}</option>
                     ))}
                 </Form.Select>
               </Form.Group>
@@ -319,6 +330,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                 <Form.Label
                   style={{
                     paddingLeft: 10,
+                    fontWeight: '600',
                   }}
                 >
                   Product Color
@@ -336,8 +348,8 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                 >
                   {Object.values(Colors)
                     .filter((key) => isNaN(Number(key)))
-                    .map((c) => (
-                      <option>{c}</option>
+                    .map((c, index) => (
+                      <option key={index}>{c}</option>
                     ))}
                 </Form.Select>
               </Form.Group>
@@ -348,6 +360,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
               <Form.Label
                 style={{
                   paddingLeft: 10,
+                  fontWeight: '600',
                 }}
               >
                 Purchase Date
@@ -359,15 +372,21 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   margin: 5,
                 }}
                 type="date"
-                value={formData.purchaseDate}
+                max={new Date().toISOString().substring(0, 10)}
+                value={formData.purchaseDate?.toString() ?? ''}
                 name="purchaseDate"
-                onChange={handleChange}
+                onChange={(e) => {
+                  if (checkPurchaseDateAdvert(e.target.value)) {
+                    handleChange(e);
+                  }
+                }}
               />
             </Col>
             <Col>
               <Form.Label
                 style={{
                   paddingLeft: 10,
+                  fontWeight: '600',
                 }}
               >
                 Expiration Date
@@ -379,9 +398,14 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   margin: 5,
                 }}
                 type="date"
-                value={formData.expirationDate}
+                min={new Date().toISOString().substring(0, 10)}
+                value={formData.expirationDate?.toString() ?? ''}
                 name="expirationDate"
-                onChange={handleChange}
+                onChange={(e) => {
+                  if (checkExpirationDateAvert(e.target.value)) {
+                    handleChange(e);
+                  }
+                }}
               />
             </Col>
           </Row>
@@ -391,9 +415,9 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                 <Form.Label
                   style={{
                     paddingLeft: 10,
+                    fontWeight: '600',
                   }}
                 >
-                  {' '}
                   Quantity (pcs)
                 </Form.Label>
                 <Form.Control
@@ -404,8 +428,19 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   }}
                   type="number"
                   name="quantity"
-                  value={formData.quantity}
-                  onChange={handleChange}
+                  min={0}
+                  step={1}
+                  value={Number(formData.quantity).toString()}
+                  onChange={(e) => {
+                    if (parseInt(e.target.value) > 0) {
+                      handleChange(e);
+                    } else {
+                      setFormData({
+                        ...formData,
+                        quantity: 0,
+                      });
+                    }
+                  }}
                   required
                   isInvalid={!!errors.quantity}
                 ></Form.Control>
@@ -416,6 +451,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                 <Form.Label
                   style={{
                     paddingLeft: 10,
+                    fontWeight: '600',
                   }}
                 >
                   {' '}
@@ -429,8 +465,19 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   }}
                   type="number"
                   name="price"
-                  value={formData.price}
-                  onChange={handleChange}
+                  min={0}
+                  step={10}
+                  value={Number(formData.price).toString()}
+                  onChange={(e) => {
+                    if (parseInt(e.target.value) > 0) {
+                      handleChange(e);
+                    } else {
+                      setFormData({
+                        ...formData,
+                        price: 0,
+                      });
+                    }
+                  }}
                   required
                   isInvalid={!!errors.price}
                 ></Form.Control>
@@ -443,6 +490,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                 <Form.Label
                   style={{
                     paddingLeft: 10,
+                    fontWeight: '600',
                   }}
                 >
                   {' '}
@@ -480,5 +528,3 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
     </Modal>
   );
 };
-
-export { EditAdvertModal };
