@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect, useRef, useState } from 'react';
+import React, { FC, useContext, useRef, useState } from 'react';
 import { Button, Col, Form, Modal, Row, Image } from 'react-bootstrap';
 import {
   Advert,
@@ -31,16 +31,6 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
 
   const [advertType, setAdvertType] = useState(props.advert?.type ?? 'Sell');
 
-  const handleType = (event: any) => {
-    setAdvertType(event.target.value);
-  };
-  /*const purchaseDate = props.advert?.purchaseDate
-    ? props.advert.purchaseDate.toString().substring(0, 10)
-    : '';
-  const expirationDate = props.advert?.expirationDate
-    ? props.advert.expirationDate.toString().substring(0, 10)
-    : '';
-  */
   const [encodedImage, setEncodedImage] = useState(
     props.advert?.imageurl ?? '',
   );
@@ -58,14 +48,12 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
     store: props.advert?.store ?? user?._id,
   });
 
-  const handleChange = (event: any) => {
-    // we put type any because we are handling various events, such as HTML input, HTML select ecc
-    event.preventDefault();
-    const { name, value } = event.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+  const validationErrors = {
+    productname: false,
+    category: false,
+    price: false,
+    quantity: false,
+    type: false,
   };
 
   const [errors, setErrors] = useState({
@@ -75,6 +63,20 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
     quantity: false,
     type: false,
   });
+
+  const handleType = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setAdvertType(event.target.value);
+  };
+
+  const handleChange = (event: any) => {
+    // we put type any because we are handling various events, such as HTML input, HTML select ecc
+    event.preventDefault();
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
   const handleImageClick = () => {
     if (fileInputRef.current != null) {
@@ -98,13 +100,6 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
     }
   };
 
-  const validationErrors = {
-    productname: false,
-    category: false,
-    price: false,
-    quantity: false,
-    type: false,
-  };
   const handleSubmit = async () => {
     if (!formData.productname) {
       validationErrors.productname = true;
@@ -171,8 +166,6 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
       }
     }
   };
-
-  useEffect(() => console.log(formData.quantity), [formData.quantity]);
 
   return (
     <Modal size="lg" show={props.isShowing} onHide={props.onClose}>
