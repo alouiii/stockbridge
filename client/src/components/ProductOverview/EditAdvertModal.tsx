@@ -302,8 +302,11 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   onChange={handleChange}
                   isInvalid={!!errors.productname}
                 />
-                <Form.Control.Feedback type="invalid">
-                  {errors.productname}
+                <Form.Control.Feedback
+                  style={{ paddingLeft: 10 }}
+                  type="invalid"
+                >
+                  Product name missing
                 </Form.Control.Feedback>
               </Form.Group>
             </Col>
@@ -339,6 +342,12 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                       <option key={index}>{c}</option>
                     ))}
                 </Form.Select>
+                <Form.Control.Feedback
+                  style={{ paddingLeft: 10 }}
+                  type="invalid"
+                >
+                  Category missing
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
             <Col>
@@ -357,7 +366,7 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                     color: palette.gray,
                     margin: 5,
                   }}
-                  placeholder="Product Category"
+                  placeholder="Color"
                   value={formData.color}
                   name="color"
                   onChange={handleChange}
@@ -459,7 +468,13 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   }}
                   required
                   isInvalid={!!errors.quantity}
-                ></Form.Control>
+                />
+                <Form.Control.Feedback
+                  style={{ paddingLeft: 10 }}
+                  type="invalid"
+                >
+                  Quantity missing
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
             <Col>
@@ -470,7 +485,6 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                     fontWeight: '600',
                   }}
                 >
-                  {' '}
                   Price (€)
                 </Form.Label>
                 <Form.Control
@@ -496,7 +510,13 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   }}
                   required
                   isInvalid={!!errors.price}
-                ></Form.Control>
+                />
+                <Form.Control.Feedback
+                  style={{ paddingLeft: 10 }}
+                  type="invalid"
+                >
+                  Price missing
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
           </Row>
@@ -519,7 +539,7 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                     margin: 5,
                   }}
                   as="textarea"
-                  rows={3}
+                  rows={2}
                   name="description"
                   value={formData.description}
                   onChange={handleChange}
