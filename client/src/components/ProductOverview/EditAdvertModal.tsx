@@ -9,12 +9,14 @@ import {
 } from '../../api/collections/advert';
 import { palette } from '../../utils/colors';
 import defaultPostAdvertImage from '../../assets/advertPostAdvert.svg';
+import trashIcon from '../../assets/trash-bin.svg';
 import { LoginContext } from '../../contexts/LoginContext';
 import useMediaQuery from '../../hooks/useMediaQuery';
 import {
   checkExpirationDateAvert,
   checkPurchaseDateAdvert,
 } from '../../utils/functions';
+import { BodyText } from '../Text/BodyText';
 
 type EditAdvertContentProps = {
   isShowing: boolean;
@@ -222,6 +224,8 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   display: 'flex',
                   justifyContent: 'center',
                   alignItems: 'center',
+                  flexDirection: 'column',
+                  gap: 5,
                 }}
               >
                 <div>
@@ -245,12 +249,31 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   style={{
                     width: encodedImage ? '100%' : '30%',
                     objectFit: 'cover',
-                    aspectRatio: '1/1',
                     cursor: 'pointer',
                   }}
-                  fluid
                   onClick={handleImageClick}
+                  fluid
                 />
+                {!encodedImage ? (
+                  <BodyText
+                    style={{ fontSize: 15, cursor: 'pointer' }}
+                    onClick={handleImageClick}
+                  >
+                    Add photo
+                  </BodyText>
+                ) : (
+                  <Image
+                    src={trashIcon}
+                    alt="delete icon"
+                    style={{
+                      width: 25,
+                      objectFit: 'cover',
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => setEncodedImage('')}
+                    fluid
+                  />
+                )}
               </div>
             </Col>
           </Row>
