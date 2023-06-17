@@ -12,6 +12,7 @@ import { OfferSection } from './OfferSection';
 type OffersSectionProps = {
   advert: Advert;
   storeName: string;
+  rating: number;
 };
 
 const OffersSection: FC<OffersSectionProps> = (props) => {
@@ -40,6 +41,7 @@ const OffersSection: FC<OffersSectionProps> = (props) => {
           offers={openOffers}
           advert={props.advert}
           storeName={props.storeName}
+          rating={props.rating}
         />
       )}
       {acceptedOffers.length > 0 && (
@@ -48,6 +50,7 @@ const OffersSection: FC<OffersSectionProps> = (props) => {
           offers={acceptedOffers}
           advert={props.advert}
           storeName={props.storeName}
+          rating={props.rating}
         />
       )}
       {rejectedOffers.length > 0 && (
@@ -56,6 +59,7 @@ const OffersSection: FC<OffersSectionProps> = (props) => {
           offers={rejectedOffers}
           advert={props.advert}
           storeName={props.storeName}
+          rating={props.rating}
         />
       )}
       {canceledOffers.length > 0 && (
@@ -64,6 +68,7 @@ const OffersSection: FC<OffersSectionProps> = (props) => {
           offers={canceledOffers}
           advert={props.advert}
           storeName={props.storeName}
+          rating={props.rating}
         />
       )}
     </ReviewOfferSection>

@@ -53,26 +53,33 @@ const OfferModal: FC<OfferContentProps> = (props) => {
     });
   };
 
-  const [errors, setErrors] = useState({
-    price: false,
-    quantity: false,
-  });
-
-  const validationErrors = {
-    price: false,
-    quantity: false,
-  };
+  const [validated, setValidated] = useState(false);
+  const [errors, setErrors] = useState(
+    {} as {
+      price: string;
+      quantity: string;
+    },
+  );
   const handleSubmit = async () => {
-    if (!formData.quantity) {
-      validationErrors.quantity = true;
-    }
-    if (!formData.price) {
-      validationErrors.price = true;
-    }
-    if (Object.values(validationErrors).some((e) => e)) {
-      console.log('Errors are happening');
-      setErrors(validationErrors);
-    } else {
+    setErrors({
+      price: formData.price
+        ? formData.price > 0
+          ? ''
+          : 'Please set a product price higher than 0'
+        : 'Price is required.',
+      quantity: formData.quantity
+        ? props.advert?.quantity! - formData.quantity >= 0
+          ? ''
+          : 'The available quantity is less than the required quantity'
+        : 'Quantity is required.',
+    });
+    console.log(Object.values(errors));
+    setValidated(
+      !Object.values(errors)
+        .map((e) => e !== '')
+        .reduce((r, e) => r && e, true),
+    );
+    if (validated) {
       try {
         const createdOffer = await createOffer(formData as Offer);
         if (props.advert?._id) {
@@ -81,10 +88,6 @@ const OfferModal: FC<OfferContentProps> = (props) => {
             offers: [createdOffer._id!],
           });
         }
-        setErrors({
-          price: false,
-          quantity: false,
-        });
         if (props.onClose) props?.onClose();
       } catch (error) {
         console.error(error);
@@ -154,17 +157,23 @@ const OfferModal: FC<OfferContentProps> = (props) => {
             alignItems: 'center',
           }}
         >
-          <Col>
-            <Image
-              style={{
-                width: '160px',
-                height: '160px',
-                borderRadius: '60px',
-              }}
-              src={props.advert?.imageurl}
-            />
-          </Col>
-          <Col>
+          {props.advert?.imageurl && (
+            <Col>
+              <Image
+                style={{
+                  width: '160px',
+                  height: '160px',
+                  borderRadius: '60px',
+                }}
+                src={props.advert?.imageurl}
+              />
+            </Col>
+          )}
+          <Col
+            style={{
+              marginLeft: props.advert?.imageurl ? '' : '100px',
+            }}
+          >
             <Row>
               <Form.Label>{props.advert?.productname}</Form.Label>
             </Row>
@@ -203,7 +212,8 @@ const OfferModal: FC<OfferContentProps> = (props) => {
           <Col>
             <Row>
               <Form.Label>
-                {props.advert?.type === 'Sell' ? 'Seller' : 'Buyer'}:     {props.storeName}
+                {props.advert?.type === 'Sell' ? 'Seller' : 'Buyer'}:{' '}
+                {props.storeName}
                 {Ratings(props.rating ? props.rating : 0)}
               </Form.Label>
             </Row>
@@ -223,7 +233,6 @@ const OfferModal: FC<OfferContentProps> = (props) => {
                     width: props.offer ? '60px' : '110px',
                   }}
                 >
-                  {' '}
                   Price {props.offer ? '' : '(€)'}
                 </Form.Label>
                 {props.offer ? (
@@ -237,18 +246,23 @@ const OfferModal: FC<OfferContentProps> = (props) => {
                     {props.offer.price} €
                   </Form.Label>
                 ) : (
-                  <Form.Control
-                    style={{
-                      width: '30%',
-                      color: palette.gray,
-                    }}
-                    type="number"
-                    name="price"
-                    value={formData.price}
-                    onChange={handleChange}
-                    required
-                    isInvalid={!!errors.price}
-                  ></Form.Control>
+                  <>
+                    <Form.Control
+                      style={{
+                        width: '30%',
+                        color: palette.gray,
+                      }}
+                      type="number"
+                      name="price"
+                      value={formData.price}
+                      onChange={handleChange}
+                      required
+                      isInvalid={!!errors.price}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.price}
+                    </Form.Control.Feedback>
+                  </>
                 )}
               </Form.Group>
             </Row>
@@ -268,7 +282,6 @@ const OfferModal: FC<OfferContentProps> = (props) => {
                     width: props.offer ? '60px' : '110px',
                   }}
                 >
-                  {' '}
                   Quantity {props.offer ? '' : '(pcs)'}
                 </Form.Label>
                 {props.offer ? (
@@ -282,18 +295,23 @@ const OfferModal: FC<OfferContentProps> = (props) => {
                     {props.offer.quantity} pcs
                   </Form.Label>
                 ) : (
-                  <Form.Control
-                    style={{
-                      width: '30%',
-                      color: palette.gray,
-                    }}
-                    type="number"
-                    name="quantity"
-                    value={formData.quantity}
-                    onChange={handleChange}
-                    required
-                    isInvalid={!!errors.quantity}
-                  ></Form.Control>
+                  <>
+                    <Form.Control
+                      style={{
+                        width: '30%',
+                        color: palette.gray,
+                      }}
+                      type="number"
+                      name="quantity"
+                      value={formData.quantity}
+                      onChange={handleChange}
+                      required
+                      isInvalid={!!errors.quantity}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.quantity}
+                    </Form.Control.Feedback>
+                  </>
                 )}
               </Form.Group>
             </Row>

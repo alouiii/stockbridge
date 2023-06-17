@@ -9,6 +9,7 @@ type OfferSectionProps = {
   offers: Offer[];
   advert: Advert;
   storeName: string;
+  rating: number;
 };
 
 function colorMap(status: OfferStatus): string {
@@ -68,7 +69,7 @@ const OfferSection: React.FC<OfferSectionProps> = (props) => {
                   offer={offer}
                   advert={props.advert}
                   storeName={props.storeName}
-                  rating={3}
+                  rating={props.rating}
                 />
               </React.Fragment>
             ))

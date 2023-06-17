@@ -73,7 +73,13 @@ const ProductOverview = () => {
         >
           <StoreDetailsBar category={advert.category} store={store} />
           <ProductOverviewSection advert={advert} store={store} />
-          {owner && advert.offers && <OffersSection advert={advert} storeName={store.name || ''} />}
+          {owner && advert.offers && advert.offers.length > 0 && (
+            <OffersSection
+              advert={advert}
+              storeName={store.name || ''}
+              rating={store.rating || 0}
+            />
+          )}
           {advert.reviews && advert.reviews.length > 0 && advert._id && (
             <ReviewsSection advertID={advert._id} />
           )}

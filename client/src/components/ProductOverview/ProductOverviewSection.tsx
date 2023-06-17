@@ -8,7 +8,7 @@ import { Advert } from '../../api/collections/advert';
 import { OfferModal } from '../Offers/OfferModal';
 import { User } from '../../api/collections/user';
 
-type ProductOverviewSectionProps = { advert: Advert , store: User };
+type ProductOverviewSectionProps = { advert: Advert; store: User };
 
 const ProductOverviewSection: React.FC<ProductOverviewSectionProps> = (
   props,
