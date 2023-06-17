@@ -11,7 +11,6 @@ const ProductDetails = (advert: Advert) => {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'start',
-        paddingTop: '1%',
         width: 'auto',
       }}
     >
@@ -55,13 +54,11 @@ const ProductDetails = (advert: Advert) => {
             wordBreak: 'break-all',
           }}
         >
-          {advert?.description
-            ? advert.description
-            : 'Here goes the product description!'}
+          {advert?.description ? advert.description : ''}
         </BodyText>
         {advert?.color && (
           <ProductAttribute
-            margin="10%"
+            margin=""
             name="Color"
             value={advert?.color}
           ></ProductAttribute>

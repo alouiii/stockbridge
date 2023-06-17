@@ -1,14 +1,11 @@
 import { FC, useEffect, useState } from 'react';
-import { Button, Nav, NavItem, Stack, Tab } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { Stack } from 'react-bootstrap';
 import { Advert, getAllAdverts } from '../../api/collections/advert';
-import { palette } from '../../utils/colors';
 import { Title } from '../Text/Title';
 import { Filters } from './Filters';
-import sortIcon from '../../assets/sort-icon.svg';
-import { Image } from 'react-bootstrap';
+import Tabs from '../ContentTabs/Tabs';
+import ContentTab from '../ContentTabs/ContentTab';
 import { AdvertsTabContent } from './AdvertsTabContent';
-
 const AdvertsSection: FC = () => {
   const [adverts, setAdverts] = useState([] as Advert[]);
   useEffect(() => {
@@ -50,7 +47,7 @@ const AdvertsSection: FC = () => {
             width: '100%',
           }}
         >
-          <Tab.Container
+          {/* <Tab.Container
             activeKey={activeTab != null ? activeTab : 'selling'}
             onSelect={handleTabSelect}
           >
@@ -122,7 +119,25 @@ const AdvertsSection: FC = () => {
                 />
               </Tab.Pane>
             </Tab.Content>
-          </Tab.Container>
+          </Tab.Container> */}
+          <div
+            style={{
+              marginLeft: '5%',
+            }}
+          >
+            <Tabs>
+              <ContentTab title="Selling">
+                <AdvertsTabContent
+                  adverts={adverts.filter((a) => a.type === 'Sell')}
+                />
+              </ContentTab>
+              <ContentTab title="Buying">
+                <AdvertsTabContent
+                  adverts={adverts.filter((a) => a.type === 'Ask')}
+                />
+              </ContentTab>
+            </Tabs>
+          </div>
         </div>
       </Stack>
     </div>

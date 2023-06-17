@@ -14,9 +14,9 @@ const AdvertsTabContent: FC<AdvertsTabContentProps> = (props) => {
       }}
     >
       {Object.values(ProductCategory).map((c, i) => {
-        const adverts_in_category = props.adverts
-          .filter((advert) => advert.category === c)
-          .splice(0, 10);
+        const adverts_in_category = props.adverts.filter(
+          (advert) => advert.category === c,
+        );
         return (
           adverts_in_category.length > 0 && (
             <div

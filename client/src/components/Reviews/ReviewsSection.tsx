@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { getAllReviews, getReview, Review } from '../../api/collections/review';
 import { getStore, User } from '../../api/collections/user';
+import { ReviewOfferSection } from '../ProductOverview/ReviewOfferSection';
 import { BodyText } from '../Text/BodyText';
 import { Reviewbar } from './Reviewbar';
 
@@ -11,6 +12,7 @@ const ReviewsSection: FC<ReviewsSectionProps> = (props) => {
   const [reviews, setReviews] = useState(
     [] as { review: Review; store: User }[],
   );
+  console.log(props.advertID);
   useEffect(() => {
     const fetchData = async () => {
       let allReviews = await getAllReviews();
@@ -18,6 +20,7 @@ const ReviewsSection: FC<ReviewsSectionProps> = (props) => {
       allReviews = allReviews.filter(
         (r) => r.reviewedAdvert === props.advertID,
       );
+      console.log(allReviews);
       for (const review of allReviews) {
         const store = await getStore(review.reviewer);
         fetchedReviews.push({ review: review, store: store });
@@ -27,41 +30,20 @@ const ReviewsSection: FC<ReviewsSectionProps> = (props) => {
     fetchData();
   }, []);
   return (
-    <div
-      style={{
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '60px',
-        width: 'full',
-      }}
-    >
-      <BodyText
-        style={{
-          fontFamily: 'poppins',
-          color: 'black',
-          width: '100%',
-          fontSize: '36px',
-          fontWeight: 600,
-          paddingLeft: '10px',
-        }}
-      >
-        REVIEWS
-      </BodyText>
+    <ReviewOfferSection section="REVIEWS">
       <div
         style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '100%',
           display: 'flex',
           flexDirection: 'column',
           gap: '30px',
+          padding: '30px',
         }}
       >
         {reviews.map((r, i) => (
           <Reviewbar review={r.review} store={r.store} />
         ))}
       </div>
-    </div>
+    </ReviewOfferSection>
   );
 };
 

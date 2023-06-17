@@ -17,11 +17,11 @@ const ProductAttribute: React.FC<ProductAttributeProps> = (props) => {
         marginTop: props.margin ? props.margin : '',
         display: 'flex',
         flexDirection: 'row',
-        gap: props.border ? '7%' : '3%',
-        textAlign: 'center',
+        textAlign: 'start',
         alignItems: 'center',
-        justifyContent: 'start',
-        width: '100%',
+        justifyContent: 'center',
+
+        gap: '30px',
         color: 'black',
       }}
     >
@@ -29,20 +29,20 @@ const ProductAttribute: React.FC<ProductAttributeProps> = (props) => {
         style={{
           fontWeight: 'bold',
           fontFamily: 'Poppins',
-          width: '100%',
+          width: '150px',
           fontSize: props.fontSize ? props.fontSize : '20px',
         }}
       >
-        {props.name}:{' '}
+        {props.name}:
       </BodyText>
       <BodyText
         style={{
-          width: props.border ? '150px' : '100%',
-          height: props.border ? '40px' : '100%',
+          width: '150px',
+          height: props.border ? '40px' : '',
           borderRadius: '10px',
           border: props?.border ? '3px solid black' : '',
-          textAlign: 'center',
-          justifyContent: 'center',
+          textAlign: props.border ? 'center' : 'start',
+          justifyContent: 'start',
           fontFamily: 'Poppins',
           font: 'light',
           fontSize: props.fontSize ? props.fontSize : '20px',

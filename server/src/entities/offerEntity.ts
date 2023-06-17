@@ -1,11 +1,11 @@
-import { Types } from 'mongoose';
 import { Advert } from './advertEntity';
 import { User } from './userEntity';
 
 export enum OfferStatus {
-  PENDING,
-  ACCEPTED,
-  DENIED,
+  OPEN = 'Open',
+  ACCEPTED = 'Accepted',
+  REJECTED = 'REJECTED',
+  CANCELED = 'Canceled',
 }
 
 export interface Offer {
@@ -15,7 +15,7 @@ export interface Offer {
   status: OfferStatus;
   message?: string;
   createdAt: Date;
-  offeror: Types.ObjectId;
-  offeree: Types.ObjectId;
-  advert: Types.ObjectId;
+  offeror: User;
+  offeree: User;
+  advert: Advert;
 }

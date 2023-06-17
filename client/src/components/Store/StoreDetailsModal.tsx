@@ -64,16 +64,6 @@ const StoreDetailsModal: FC<StoreDetailsProps> = (props) => {
       setErrors(validationErrors);
     } else {
       try {
-        /* await axiosClient
-                    .post("offers", {
-                        quantity: formData.quantity,
-                        price: formData.price,
-                        status: OfferStatus.OPEN,
-                        createdAt: new Date(),
-                        offeror: props.userID,
-                        offeree: props.store?.id,
-                    })
-                */
         setErrors({
           price: false,
           quantity: false,
@@ -122,7 +112,7 @@ const StoreDetailsModal: FC<StoreDetailsProps> = (props) => {
                   fontWeight: 800,
                 }}
               >
-                Status:{' '}
+                Status:
               </Form.Label>
               <Form.Label
                 style={{

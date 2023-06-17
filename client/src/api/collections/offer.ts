@@ -41,3 +41,7 @@ export async function updateOffer(id: string, offer: Offer): Promise<Offer> {
 export async function deleteOffer(id: string): Promise<void> {
   return await apiClient.delete<void>(`/offers/${id}`);
 }
+
+export async function getOffersByAdvert(advert: string): Promise<Offer[]> {
+  return await apiClient.get<Offer[]>(`/offers/getOffersByAdvert/${advert}`);
+}

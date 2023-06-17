@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { Button, Col, Form, Modal, Row, Image } from 'react-bootstrap';
-import { Advert } from '../../api/collections/advert';
+import { Advert, updateAdvert } from '../../api/collections/advert';
 import { createOffer, Offer, OfferStatus } from '../../api/collections/offer';
 import { palette } from '../../utils/colors';
 import { Ratings } from '../Ratings';
@@ -28,11 +28,21 @@ function colorMap(status: OfferStatus): string {
   }
 }
 const OfferModal: FC<OfferContentProps> = (props) => {
+  let currentUser: { [x: string]: any } | null = null;
+  const localUser = localStorage.getItem('currentUser');
+  if (localUser !== null) {
+    currentUser = JSON.parse(localUser);
+  }
+
   const [formData, setFormData] = useState({
     quantity: props.offer?.quantity ? props.offer?.quantity : 0,
     price: props.offer?.price ? props.offer?.price : 0,
     createdAt: new Date(),
-  });
+    status: OfferStatus.OPEN,
+    offeror: currentUser?._id,
+    offeree: props.advert?.store,
+    advert: props.advert?._id,
+  } as Offer);
 
   const handleChange = (event: any) => {
     event.preventDefault();
@@ -61,11 +71,16 @@ const OfferModal: FC<OfferContentProps> = (props) => {
     }
     if (Object.values(validationErrors).some((e) => e)) {
       console.log('Errors are happening');
-      console.log(validationErrors);
       setErrors(validationErrors);
     } else {
       try {
-        await createOffer(formData as Offer);
+        const createdOffer = await createOffer(formData as Offer);
+        if (props.advert?._id) {
+          console.log('Updating advert: ', props.advert._id);
+          updateAdvert(props.advert._id, {
+            offers: [createdOffer._id!],
+          });
+        }
         setErrors({
           price: false,
           quantity: false,
@@ -96,8 +111,8 @@ const OfferModal: FC<OfferContentProps> = (props) => {
               }}
             >
               {props.offer
-                ? props.offer.createdAt?.toDateString().substring(0, 10)
-                : new Date().toLocaleDateString().substring(0, 10)}
+                ? props.offer.createdAt?.toString().substring(0, 10)
+                : new Date().toString().substring(0, 10)}
             </Form.Label>
           </Col>
         </Row>
@@ -114,7 +129,7 @@ const OfferModal: FC<OfferContentProps> = (props) => {
                   fontWeight: 800,
                 }}
               >
-                Status:{' '}
+                Status:
               </Form.Label>
               <Form.Label
                 style={{
@@ -188,8 +203,7 @@ const OfferModal: FC<OfferContentProps> = (props) => {
           <Col>
             <Row>
               <Form.Label>
-                {props.advert?.type === 'Sell' ? 'Seller' : 'Buyer'}:{' '}
-                {props.storeName}
+                {props.advert?.type === 'Sell' ? 'Seller' : 'Buyer'}:     {props.storeName}
                 {Ratings(props.rating ? props.rating : 0)}
               </Form.Label>
             </Row>

@@ -8,6 +8,7 @@ type OfferSectionProps = {
   status: OfferStatus;
   offers: Offer[];
   advert: Advert;
+  storeName: string;
 };
 
 function colorMap(status: OfferStatus): string {
@@ -33,7 +34,6 @@ const OfferSection: React.FC<OfferSectionProps> = (props) => {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        paddingTop: '7%',
         padding: '30px',
       }}
     >
@@ -55,7 +55,6 @@ const OfferSection: React.FC<OfferSectionProps> = (props) => {
           flexDirection: 'column',
           gap: '40px',
           width: '100%',
-          marginTop: '37px',
           alignItems: 'center',
           fontFamily: 'Poppins',
         }}
@@ -68,7 +67,7 @@ const OfferSection: React.FC<OfferSectionProps> = (props) => {
                 <OfferBar
                   offer={offer}
                   advert={props.advert}
-                  storeName={''}
+                  storeName={props.storeName}
                   rating={3}
                 />
               </React.Fragment>

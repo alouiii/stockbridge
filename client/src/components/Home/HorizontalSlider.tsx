@@ -1,30 +1,20 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Advert } from '../../api/collections/advert';
-import {
-  Button,
-  Card,
-  Carousel,
-  Container,
-  Image,
-  Row,
-  Stack,
-} from 'react-bootstrap';
+import { Col, Container, Image, Row } from 'react-bootstrap';
 import { ProductAttribute } from '../ProductOverview/ProductAttribute';
 import { BodyText } from '../Text/BodyText';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
 
-type HorizontalSliderProps = {
+type AdvertsGridProps = {
   adverts: Advert[];
 };
-const HorizontalSlider: FC<HorizontalSliderProps> = (props) => {
+const AdvertsGrid: FC<AdvertsGridProps> = (props) => {
   const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
-
+  const x = Math.round(screenWidth / 400);
   const grouped: Advert[][] = [];
-  const x = Math.floor(screenWidth / 400);
-  for (let i = 0; i < props.adverts.length / x; i += x) {
-    grouped.push(props.adverts.slice(i, i + x));
+  const adverts = props.adverts.slice(0, x * 2);
+  for (let i = 0; i < adverts.length / x; i += 1) {
+    grouped.push(adverts.slice(i * x, i * x + x));
   }
 
   useEffect(() => {
@@ -41,47 +31,44 @@ const HorizontalSlider: FC<HorizontalSliderProps> = (props) => {
   const navigate = useNavigate();
   return (
     <>
-      <Carousel
-        style={{
-          height: '350px',
-        }}
-      >
-        <Carousel.Item
-          style={{
-            overflowX: 'auto',
-          }}
-        >
-          <Stack
-            direction="horizontal"
-            className="justify-content-start align-items-start"
-            gap={3}
+      <Container>
+        {grouped.map((g) => (
+          <Row
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              gap: '3%',
+              marginTop: '2%',
+            }}
           >
-            {props.adverts.map((a) => (
-              <Card
+            {g.map((a) => (
+              <Col
+                md={x}
                 style={{
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'center',
-                  height: '330px',
-                  width: '280px',
+                  height: '350px',
+                  width: '300px',
                   background: 'transparent',
                   border: 'solid 1px black',
                   borderRadius: '15px',
                   padding: '20px',
                   cursor: 'pointer',
+                  marginBottom: '2%',
                 }}
                 onClick={() => navigate(`/productoverview/${a._id}`)}
               >
-                {a.imageurl && (
-                  <div
-                    style={{
-                      width: '80%',
-                      height: '40%',
-                      marginTop: '5px',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
-                  >
+                <div
+                  style={{
+                    width: '80%',
+                    height: '40%',
+                    marginTop: '5px',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  {a.imageurl ? (
                     <Image
                       style={{
                         width: '100%',
@@ -92,8 +79,21 @@ const HorizontalSlider: FC<HorizontalSliderProps> = (props) => {
                       }}
                       src={a.imageurl}
                     />
-                  </div>
-                )}
+                  ) : (
+                    <BodyText
+                      style={{
+                        fontFamily: 'Poppins',
+                        fontSize: '32px',
+                        color: 'black',
+                        position: 'relative',
+                        textAlign: 'center',
+                        top: 50,
+                      }}
+                    >
+                      {a.productname}
+                    </BodyText>
+                  )}
+                </div>
 
                 <div
                   style={{
@@ -106,16 +106,17 @@ const HorizontalSlider: FC<HorizontalSliderProps> = (props) => {
                     width: '100%',
                   }}
                 >
-                  <BodyText
-                    style={{
-                      fontFamily: 'Poppins',
-                      fontSize: '18px',
-                      color: 'black',
-                      width: '40%',
-                    }}
-                  >
-                    {a.productname}
-                  </BodyText>
+                  {a.imageurl && (
+                    <BodyText
+                      style={{
+                        fontFamily: 'Poppins',
+                        fontSize: '18px',
+                        color: 'black',
+                      }}
+                    >
+                      {a.productname}
+                    </BodyText>
+                  )}
                   <div
                     style={{
                       display: 'flex',
@@ -142,7 +143,11 @@ const HorizontalSlider: FC<HorizontalSliderProps> = (props) => {
                   style={{
                     fontFamily: 'Poppins',
                     fontSize: '16px',
+                    overflow: 'hidden',
+                    whiteSpace: 'nowrap',
+                    textOverflow: 'ellipsis',
                     color: 'GrayText',
+                    height: '20px',
                   }}
                 >
                   {a.description}
@@ -158,13 +163,13 @@ const HorizontalSlider: FC<HorizontalSliderProps> = (props) => {
                 >
                   {a.createdAt?.toString().substring(0, 10)}
                 </BodyText>
-              </Card>
+              </Col>
             ))}
-          </Stack>
-        </Carousel.Item>
-      </Carousel>
+          </Row>
+        ))}
+      </Container>
     </>
   );
 };
 
-export { HorizontalSlider };
+export { AdvertsGrid as HorizontalSlider };

@@ -452,6 +452,7 @@ const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                     padding: '10px',
                     color: palette.gray,
                     margin: '5px',
+                    overflow: 'hidden',
                   }}
                   as="textarea"
                   rows={3}

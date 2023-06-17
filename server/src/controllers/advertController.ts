@@ -11,6 +11,7 @@ import {
 import { AuthenticatedRequest } from '../middlewares/authMiddleware';
 import { ProductCategory } from '../entities/advertEntity';
 import logger from '../config/logger';
+import { AppError } from '../utils/errorHandler';
 
 /**
  * This method returns an advert by id   *
@@ -62,16 +63,28 @@ export const postAdvert = asyncHandler(
 export const putAdvert = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const { id } = req.params;
-
-    /* if (id !== req.user?.id) {
-        throw new AppError('Not authorized to access this route', 'Not authorized to access this route',401)
-    } */
     const newAdvert = req.body;
+    logger.warn(newAdvert);
     const existingAdvert = await findAdvertById(id);
-    existingAdvert.reviews = (existingAdvert.reviews || []).concat(
-      newAdvert.reviews,
-    );
-    const advert = await updateAdvert(id, existingAdvert);
+    /* if (existingAdvert.store.id !== req.user?.id) {
+      if (Object.keys(newAdvert).some((k) => k !== 'reviews' && k !== 'offers'))
+        throw new AppError(
+          'Not authorized to access this route',
+          'Not authorized to access this route',
+          401,
+        );
+    } */
+
+    if (newAdvert.reviews) {
+      newAdvert.reviews = (existingAdvert.reviews || []).concat(
+        newAdvert.reviews,
+      );
+    }
+
+    if (newAdvert.offers) {
+      newAdvert.offers = (existingAdvert.offers || []).concat(newAdvert.offers);
+    }
+    const advert = await updateAdvert(id, newAdvert);
     res.status(200).json(advert);
   },
 );

@@ -21,8 +21,8 @@ offerRouter
   .put(putOffer)
   .delete(deleteOffer);
 
-offerRouter.route('/getOfferByAdvert/:advert').get(getOffersByAdvert);
+offerRouter.route('/getOffersByAdvert/:advert').get(getOffersByAdvert);
 
-offerRouter.route('/getOfferByOfferor/:offeror').get(getOffersByOfferor);
+offerRouter.route('/getOffersByOfferor/:offeror').get(getOffersByOfferor);
 
-offerRouter.route('/getOfferByOfferee/:offeree').get(getOffersByOfferee);
+offerRouter.route('/getOffersByOfferee/:offeree').get(getOffersByOfferee);

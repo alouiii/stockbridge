@@ -15,7 +15,7 @@ export const getStore = asyncHandler(
     const { id } = req.params;
     let user = (await findUserById(id)) as User;
     res.status(200).json({
-      id: user.id,
+      _id: user.id,
       name: user.name,
       address: user.address,
       rating: user.rating,

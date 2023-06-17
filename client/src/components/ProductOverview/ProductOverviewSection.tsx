@@ -6,8 +6,9 @@ import { ProductDetails } from './ProductDetails';
 import { Button } from 'react-bootstrap';
 import { Advert } from '../../api/collections/advert';
 import { OfferModal } from '../Offers/OfferModal';
+import { User } from '../../api/collections/user';
 
-type ProductOverviewSectionProps = { advert: Advert };
+type ProductOverviewSectionProps = { advert: Advert , store: User };
 
 const ProductOverviewSection: React.FC<ProductOverviewSectionProps> = (
   props,
@@ -43,7 +44,7 @@ const ProductOverviewSection: React.FC<ProductOverviewSectionProps> = (
         gap: '30px',
         width: 'auto',
         marginTop: '10%',
-        marginBottom: '10%',
+        marginBottom: '5%',
       }}
     >
       <ProductDetailsTopBar
@@ -66,6 +67,8 @@ const ProductOverviewSection: React.FC<ProductOverviewSectionProps> = (
             isShowing={showModal}
             onClose={closeModal}
             advert={props.advert}
+            storeName={props.store.name}
+            rating={props.store.rating}
           />
         )}
         <Button

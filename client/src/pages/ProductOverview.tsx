@@ -57,7 +57,11 @@ const ProductOverview = () => {
   if (localUser !== null) {
     currentUser = JSON.parse(localUser);
   }
-  const owner = store._id == currentUser?._id;
+
+  const owner = store._id === currentUser?._id;
+  console.log(owner);
+  console.log(store);
+  console.log(currentUser);
   return (
     <Page>
       {advert ? (
@@ -68,8 +72,8 @@ const ProductOverview = () => {
           }}
         >
           <StoreDetailsBar category={advert.category} store={store} />
-          <ProductOverviewSection advert={advert} />
-          {owner && advert.offers && OffersSection(advert.offers, advert)}
+          <ProductOverviewSection advert={advert} store={store} />
+          {owner && advert.offers && <OffersSection advert={advert} storeName={store.name || ''} />}
           {advert.reviews && advert.reviews.length > 0 && advert._id && (
             <ReviewsSection advertID={advert._id} />
           )}

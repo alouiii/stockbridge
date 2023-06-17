@@ -5,6 +5,7 @@ import { Advert } from '../../api/collections/advert';
 import { BodyText } from '../Text/BodyText';
 import { OfferModal } from './OfferModal';
 import { Ratings } from '../Ratings';
+import { InfoBar } from '../ProductOverview/InfoBar';
 require('./offerBarStyle.scss');
 
 type OfferBarProps = {
@@ -25,64 +26,55 @@ const OfferBar: React.FC<OfferBarProps> = (props) => {
     setShowModal(true);
   };
   return (
-    <div
-      style={{
-        border: 'solid',
-        borderColor: 'lightgray',
-        borderRadius: '15px',
-        justifyContent: 'start',
-        width: '100%',
-        cursor: 'pointer',
-      }}
-      onClick={openModal}
-    >
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          width: '100%',
-          paddingLeft: '30px',
-          paddingTop: '30px',
-          gap: '80%',
-        }}
-      >
-        <BodyText
-          style={{
-            font: 'light',
-            fontFamily: 'Poppins',
-            color: 'black',
-          }}
-        >
-          {props?.storeName ? props.storeName : 'No Name given'}
-          {Ratings(props?.rating ? props.rating : 0)}
-        </BodyText>
-        <BodyText
-          style={{
-            font: 'light',
-            fontFamily: 'Poppins',
-            color: 'black',
-          }}
-        >
-          {props?.offer?.createdAt?.toLocaleDateString()}
-        </BodyText>
-      </div>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          gap: '5%',
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginLeft: '20%',
-        }}
-      >
-        <ProductAttribute
-          name="Quantity"
-          value={props?.offer?.quantity}
-          unit="pcs"
-        />
-        <ProductAttribute name="Price" value={props?.offer?.price} unit="€" />
-      </div>
+    <>
+      <InfoBar
+        onClick={openModal}
+        contentLine1={
+          <>
+            <BodyText
+              style={{
+                font: 'light',
+                fontFamily: 'Poppins',
+                color: 'black',
+              }}
+            >
+              {props?.storeName ? props.storeName : 'No Name given'}
+              {Ratings(props?.rating ? props.rating : 0)}
+            </BodyText>
+            <BodyText
+              style={{
+                font: 'light',
+                fontFamily: 'Poppins',
+                color: 'black',
+              }}
+            >
+              {props?.offer?.createdAt?.toString().slice(0, 10)}
+            </BodyText>
+          </>
+        }
+        contentLine2={
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginLeft: '10%',
+            }}
+          >
+            <ProductAttribute
+              name="Quantity"
+              value={props?.offer?.quantity}
+              unit="pcs"
+            />
+            <ProductAttribute
+              name="Price"
+              value={props?.offer?.price}
+              unit="€"
+            />
+          </div>
+        }
+      />
       {showModal && (
         <OfferModal
           isShowing={showModal}
@@ -93,7 +85,7 @@ const OfferBar: React.FC<OfferBarProps> = (props) => {
           rating={props.rating}
         />
       )}
-    </div>
+    </>
   );
 };
 
