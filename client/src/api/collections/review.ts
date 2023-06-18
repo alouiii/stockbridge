@@ -41,5 +41,7 @@ export async function getAllReviews(): Promise<Review[]> {
 }
 
 export async function getReviewsByAdvert(advertId: string): Promise<Review[]> {
-  return await apiClient.get<Review[]>(`/reviews/getReviewsByAdvert/${advertId}`);
+  return await apiClient.get<Review[]>(
+    `/reviews/getReviewsByAdvert/${advertId}`,
+  );
 }

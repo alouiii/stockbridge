@@ -167,7 +167,7 @@ async function _checkUserCanEditOrDeleteOffer(req: AuthenticatedRequest) {
   let userId = new ObjectId(req.user?.id);
   const { id } = req.params;
 
-  // The user editing or deleting must be the offeror. 
+  // The user editing or deleting must be the offeror.
   if ((await findOfferById(id)).offeror.equals(userId)) {
     throw new AppError(
       'Not authorized to edit this route',
@@ -184,7 +184,9 @@ async function _checkUserCanEditOrDeleteOffer(req: AuthenticatedRequest) {
  * @returns the filtered list.
  */
 function _findAndCheckRelatedOffers(userId: ObjectId, offers: Offer[]): any {
-  let relatedOffers = offers.filter(x => x.offeror.equals(userId) || x.offeree.equals(userId));
+  let relatedOffers = offers.filter(
+    (x) => x.offeror.equals(userId) || x.offeree.equals(userId),
+  );
 
   // If no offers are retrieved with this request, throw an exception to inform the user.
   if (!relatedOffers?.length) {

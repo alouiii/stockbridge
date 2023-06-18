@@ -1,5 +1,10 @@
 import { FC, useEffect, useState } from 'react';
-import { getAllReviews, getReview, getReviewsByAdvert, Review } from '../../api/collections/review';
+import {
+  getAllReviews,
+  getReview,
+  getReviewsByAdvert,
+  Review,
+} from '../../api/collections/review';
 import { getStore, User } from '../../api/collections/user';
 import { ReviewOfferSection } from '../ProductOverview/ReviewOfferSection';
 import { BodyText } from '../Text/BodyText';

@@ -72,11 +72,9 @@ export const findAllReviews = async () => {
  * @param advertId
  * @returns Promise containing the list of adverts
  */
- export const getReviewsByAdvert = async (advertId: string) => {
+export const getReviewsByAdvert = async (advertId: string) => {
   logger.debug(
     `${serviceName}: Requesting all reviews for advert: ${advertId}`,
   );
-  return reviewModel.find({reviewedAdvert : advertId });
+  return reviewModel.find({ reviewedAdvert: advertId });
 };
-  
-

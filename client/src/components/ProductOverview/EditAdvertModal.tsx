@@ -26,7 +26,6 @@ type EditAdvertContentProps = {
 };
 
 export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
-  
   const { user, loggedIn } = useContext(LoginContext);
 
   const matches = useMediaQuery('(min-width: 992px)');
@@ -46,7 +45,6 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
   const handleType = (event: any) => {
     setAdvertType(event.target.value);
   };
-
 
   const [formData, setFormData] = useState({
     productname: props.advert?.productname ?? '',
@@ -159,8 +157,7 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
               type: advertType,
             });
           }
-          }
-        
+        }
       } catch (error) {
         console.error(error);
       }
@@ -210,69 +207,74 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   value={'Ask'}
                   checked={advertType === 'Ask'}
                 />
-                <Form.Control.Feedback style={{ paddingLeft: 10 }} type="invalid">
+                <Form.Control.Feedback
+                  style={{ paddingLeft: 10 }}
+                  type="invalid"
+                >
                   {errors.type}
                 </Form.Control.Feedback>
               </Form.Group>
             </Col>
-            <Col style={{
-                  backgroundColor: encodedImage ? undefined : 'lightgray',
-                  width: matches ? 200 : 160,
-                  height: matches ? 200 : 160,
-                  position: 'absolute',
-                  right: matches ? 100 : 50,
-                  borderRadius: '50%',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  flexDirection: 'column',
-                  gap: 5,
-                }}>
-                  <Form.Control
-                    type="file"
-                    ref={fileInputRef}
-                    accept="image/*"
-                    onChange={handleUploadImage}
-                    style={{
-                      display: 'none',
-                    }}
-                    id="customFile"
-                  />
-                
+            <Col
+              style={{
+                backgroundColor: encodedImage ? undefined : 'lightgray',
+                width: matches ? 200 : 160,
+                height: matches ? 200 : 160,
+                position: 'absolute',
+                right: matches ? 100 : 50,
+                borderRadius: '50%',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'column',
+                gap: 5,
+              }}
+            >
+              <Form.Control
+                type="file"
+                ref={fileInputRef}
+                accept="image/*"
+                onChange={handleUploadImage}
+                style={{
+                  display: 'none',
+                }}
+                id="customFile"
+              />
+
+              <Image
+                src={encodedImage}
+                alt="Advert Image"
+                onError={(e: React.SyntheticEvent<HTMLImageElement>) =>
+                  (e.currentTarget.src = defaultPostAdvertImage)
+                }
+                style={{
+                  width: encodedImage ? '100%' : '30%',
+                  objectFit: 'cover',
+                  cursor: 'pointer',
+                }}
+                onClick={handleImageClick}
+                fluid
+              />
+              {!encodedImage ? (
+                <BodyText
+                  style={{ fontSize: 15, cursor: 'pointer' }}
+                  onClick={handleImageClick}
+                >
+                  Add photo
+                </BodyText>
+              ) : (
                 <Image
-                  src={encodedImage}
-                  alt="Advert Image"
-                  onError={(e: React.SyntheticEvent<HTMLImageElement>) =>
-                    (e.currentTarget.src = defaultPostAdvertImage)
-                  }
+                  src={trashIcon}
+                  alt="delete icon"
                   style={{
-                    width: encodedImage ? '100%' : '30%',
+                    width: 25,
                     objectFit: 'cover',
                     cursor: 'pointer',
                   }}
-                  onClick={handleImageClick}
+                  onClick={() => setEncodedImage('')}
                   fluid
                 />
-                {!encodedImage ? (
-                  <BodyText
-                    style={{ fontSize: 15, cursor: 'pointer' }}
-                    onClick={handleImageClick}
-                  >
-                    Add photo
-                  </BodyText>
-                ) : (
-                  <Image
-                    src={trashIcon}
-                    alt="delete icon"
-                    style={{
-                      width: 25,
-                      objectFit: 'cover',
-                      cursor: 'pointer',
-                    }}
-                    onClick={() => setEncodedImage('')}
-                    fluid
-                  />
-                )}
+              )}
             </Col>
           </Row>
           <Row style={{ marginTop: 50 }}>
@@ -300,7 +302,10 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   onChange={handleChange}
                   isInvalid={!!errors.name}
                 ></Form.Control>
-                <Form.Control.Feedback style={{ paddingLeft: 10 }} type="invalid">
+                <Form.Control.Feedback
+                  style={{ paddingLeft: 10 }}
+                  type="invalid"
+                >
                   {errors.name}
                 </Form.Control.Feedback>
               </Form.Group>
@@ -337,7 +342,10 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                       <option key={index}>{c}</option>
                     ))}
                 </Form.Select>
-                <Form.Control.Feedback style={{ paddingLeft: 10 }} type="invalid">
+                <Form.Control.Feedback
+                  style={{ paddingLeft: 10 }}
+                  type="invalid"
+                >
                   {errors.category}
                 </Form.Control.Feedback>
               </Form.Group>
@@ -461,7 +469,10 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   required
                   isInvalid={!!errors.quantity}
                 ></Form.Control>
-                <Form.Control.Feedback style={{ paddingLeft: 10 }} type="invalid">
+                <Form.Control.Feedback
+                  style={{ paddingLeft: 10 }}
+                  type="invalid"
+                >
                   {errors.quantity}
                 </Form.Control.Feedback>
               </Form.Group>
@@ -499,7 +510,10 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   required
                   isInvalid={!!errors.price}
                 ></Form.Control>
-                <Form.Control.Feedback style={{ paddingLeft: 10 }} type="invalid">
+                <Form.Control.Feedback
+                  style={{ paddingLeft: 10 }}
+                  type="invalid"
+                >
                   {errors.price}
                 </Form.Control.Feedback>
               </Form.Group>

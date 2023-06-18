@@ -95,7 +95,7 @@ export const deleteReview = asyncHandler(
  * @param res - The response object
  * @returns list of reviews.
  */
- export const getAllReviewsByAdvert = asyncHandler(
+export const getAllReviewsByAdvert = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const { advertId } = req.params;
     const reviews = await getReviewsByAdvert(advertId);

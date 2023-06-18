@@ -117,4 +117,3 @@ export function checkExpirationDateAvert(date: string) {
   }
   return false;
 }
-

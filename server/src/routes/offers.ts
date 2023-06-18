@@ -15,10 +15,18 @@ export const offerRouter = Router();
 
 offerRouter.route('/').post(protect, postOffer).get(protect, getOffers);
 
-offerRouter.route('/:id').get(protect, getOffer).put(protect, putOffer).delete(protect, deleteOffer);
+offerRouter
+  .route('/:id')
+  .get(protect, getOffer)
+  .put(protect, putOffer)
+  .delete(protect, deleteOffer);
 
 offerRouter.route('/getOffersByAdvert/:advert').get(getOffersByAdvert);
 
-offerRouter.route('/getOfferByOfferor/:offeror').get(protect, getOffersByOfferor);
+offerRouter
+  .route('/getOfferByOfferor/:offeror')
+  .get(protect, getOffersByOfferor);
 
-offerRouter.route('/getOfferByOfferee/:offeree').get(protect, getOffersByOfferee);
+offerRouter
+  .route('/getOfferByOfferee/:offeree')
+  .get(protect, getOffersByOfferee);
