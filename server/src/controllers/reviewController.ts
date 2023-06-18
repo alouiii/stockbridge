@@ -6,6 +6,7 @@ import {
   updateReview,
   delReview,
   findAllReviews,
+  getReviewsByAdvert,
 } from '../services/reviewServices';
 import { AuthenticatedRequest } from '../middlewares/authMiddleware';
 
@@ -85,5 +86,19 @@ export const deleteReview = asyncHandler(
 
     const review = await delReview(id);
     res.status(204).json(review);
+  },
+);
+
+/**
+ * This method gets all reviews of a specific advert   *
+ * @param req - The request object
+ * @param res - The response object
+ * @returns list of reviews.
+ */
+ export const getAllReviewsByAdvert = asyncHandler(
+  async (req: AuthenticatedRequest, res: Response) => {
+    const { advertId } = req.params;
+    const reviews = await getReviewsByAdvert(advertId);
+    res.status(200).json(reviews);
   },
 );

@@ -1,3 +1,4 @@
+import { Types } from 'mongoose';
 import { Advert } from './advertEntity';
 import { User } from './userEntity';
 
@@ -15,7 +16,7 @@ export interface Offer {
   status: OfferStatus;
   message?: string;
   createdAt: Date;
-  offeror: User;
-  offeree: User;
-  advert: Advert;
+  offeror: Types.ObjectId;
+  offeree: Types.ObjectId;
+  advert: Types.ObjectId;
 }

@@ -77,3 +77,4 @@ export const getAdvertsByCategory = async (category: ProductCategory) => {
   );
   return advertModel.find({ category: category });
 };
+  

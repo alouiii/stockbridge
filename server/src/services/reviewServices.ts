@@ -2,6 +2,7 @@ import reviewModel from '../models/Review';
 import type { Review } from '../entities/reviewEntity';
 import logger from '../config/logger';
 import { AppError } from '../utils/errorHandler';
+import advertModel from '../models/Advert';
 
 const serviceName = 'reviewServices';
 
@@ -65,3 +66,17 @@ export const findAllReviews = async () => {
   logger.debug(`${serviceName}: Finding all reviews`);
   return reviewModel.find();
 };
+
+/**
+ * Returns all reviews of the requested advert
+ * @param advertId
+ * @returns Promise containing the list of adverts
+ */
+ export const getReviewsByAdvert = async (advertId: string) => {
+  logger.debug(
+    `${serviceName}: Requesting all reviews for advert: ${advertId}`,
+  );
+  return reviewModel.find({reviewedAdvert : advertId });
+};
+  
+
