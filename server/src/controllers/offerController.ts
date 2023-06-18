@@ -11,6 +11,9 @@ import {
   findAllOffersByOfferee,
 } from '../services/offerServices';
 import { AuthenticatedRequest } from '../middlewares/authMiddleware';
+import { ObjectId } from 'mongodb';
+import { AppError } from '../utils/errorHandler';
+import { Offer } from '../entities/offerEntity';
 
 /**
  * This method returns a offer by id   *
@@ -21,8 +24,11 @@ import { AuthenticatedRequest } from '../middlewares/authMiddleware';
 export const getOffer = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const { id } = req.params;
-    //verifyIfAuthorized(id, req);
-    const offer = await findOfferById(id);
+    const userId = new ObjectId(req.user?.id);
+
+    let offer = await findOfferById(id);
+    offer = _findAndCheckRelatedOffers(userId, [offer])[0];
+
     res.status(200).json(offer);
   },
 );
@@ -35,7 +41,11 @@ export const getOffer = asyncHandler(
  */
 export const getOffers = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
-    const offers = await findAllOffers();
+    const userId = new ObjectId(req.user?.id);
+    let offers = await findAllOffers();
+    // Return only offers related to the user.
+    offers = _findAndCheckRelatedOffers(userId, offers);
+
     res.status(200).json(offers);
   },
 );
@@ -62,10 +72,7 @@ export const postOffer = asyncHandler(
 export const putOffer = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const { id } = req.params;
-
-    /* if (id !== req.user?.id) {
-        throw new AppError('Not authorized to access this route', 'Not authorized to access this route',401)
-    } */
+    _checkUserCanEditOrDeleteOffer(req);
 
     const offer = await updateOffer(id, req.body);
     res.status(200).json(offer);
@@ -81,6 +88,7 @@ export const putOffer = asyncHandler(
 export const deleteOffer = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const { id } = req.params;
+    _checkUserCanEditOrDeleteOffer(req);
 
     const offer = await delOffer(id);
     res.status(204).json(offer);
@@ -96,9 +104,11 @@ export const deleteOffer = asyncHandler(
 export const getOffersByAdvert = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const { advert } = req.params;
+    const userId = new ObjectId(req.user?.id);
+    let offers = await findAllOffersByAdvert(advert);
+    offers = _findAndCheckRelatedOffers(userId, offers);
 
-    const offer = await findAllOffersByAdvert(advert);
-    res.status(200).json(offer);
+    res.status(200).json(offers);
   },
 );
 
@@ -112,8 +122,17 @@ export const getOffersByOfferor = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const { offeror } = req.params;
 
-    const offer = await findAllOffersByOfferor(offeror);
-    res.status(200).json(offer);
+    const userId = req.user?.id;
+    if (userId != offeror) {
+      throw new AppError(
+        'Not authorized to access this route',
+        'Not authorized to access this route',
+        401,
+      );
+    }
+
+    const offers = await findAllOffersByOfferor(offeror);
+    res.status(200).json(offers);
   },
 );
 
@@ -126,9 +145,55 @@ export const getOffersByOfferor = asyncHandler(
 export const getOffersByOfferee = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const { offeree } = req.params;
-    console.log(offeree);
+    const userId = req.user?.id;
+    if (userId != offeree) {
+      throw new AppError(
+        'Not authorized to access this route',
+        'Not authorized to access this route',
+        401,
+      );
+    }
+
     const offer = await findAllOffersByOfferee(offeree);
-    console.log(offer);
     res.status(200).json(offer);
   },
 );
+
+/**
+ * Checks if a user can edit or delete an offer with a given id.
+ * @param req The request containing the to be checked ids.
+ */
+async function _checkUserCanEditOrDeleteOffer(req: AuthenticatedRequest) {
+  let userId = new ObjectId(req.user?.id);
+  const { id } = req.params;
+
+  // The user editing or deleting must be the offeror. 
+  if ((await findOfferById(id)).offeror.equals(userId)) {
+    throw new AppError(
+      'Not authorized to edit this route',
+      'Not authorized to edit this route',
+      401,
+    );
+  }
+}
+
+/**
+ * Returns a filtered list of that contains only offers related to the requesting user.
+ * @param userId the requesting userId.
+ * @param offers the returned offers list before the user check.
+ * @returns the filtered list.
+ */
+function _findAndCheckRelatedOffers(userId: ObjectId, offers: Offer[]): any {
+  let relatedOffers = offers.filter(x => x.offeror.equals(userId) || x.offeree.equals(userId));
+
+  // If no offers are retrieved with this request, throw an exception to inform the user.
+  if (!relatedOffers?.length) {
+    throw new AppError(
+      'Not authorized to access this route',
+      'Not authorized to access this route',
+      401,
+    );
+  }
+
+  return relatedOffers;
+}

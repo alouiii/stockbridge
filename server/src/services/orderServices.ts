@@ -2,7 +2,6 @@ import orderModel from '../models/Order';
 import type { Order } from '../entities/orderEntity';
 import logger from '../config/logger';
 import { AppError } from '../utils/errorHandler';
-import { ObjectId } from 'mongoose';
 
 const serviceName = 'orderServices';
 
