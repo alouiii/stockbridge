@@ -59,15 +59,6 @@ export const delReview = async (id: string) => {
 };
 
 /**
- * Find all reviews // TODO: This is a test function, remove it later
- * @returns Promise containing all reviews
- */
-export const findAllReviews = async () => {
-  logger.debug(`${serviceName}: Finding all reviews`);
-  return reviewModel.find();
-};
-
-/**
  * Returns all reviews of the requested advert
  * @param advertId
  * @returns Promise containing the list of adverts

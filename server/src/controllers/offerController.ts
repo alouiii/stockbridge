@@ -5,7 +5,6 @@ import {
   createOffer,
   updateOffer,
   delOffer,
-  findAllOffers,
   findAllOffersByAdvert,
   findAllOffersByOfferor,
   findAllOffersByOfferee,
@@ -33,22 +32,6 @@ export const getOffer = asyncHandler(
   },
 );
 
-/**
- * This method returns all offers   *
- * @param req - The request object
- * @param res - The response object
- * @returns an array of offer objects.
- */
-export const getOffers = asyncHandler(
-  async (req: AuthenticatedRequest, res: Response) => {
-    const userId = new ObjectId(req.user?.id);
-    let offers = await findAllOffers();
-    // Return only offers related to the user.
-    offers = _findAndCheckRelatedOffers(userId, offers);
-
-    res.status(200).json(offers);
-  },
-);
 
 /**
  * This method creates a new offer. * TODO: This method should be removed later

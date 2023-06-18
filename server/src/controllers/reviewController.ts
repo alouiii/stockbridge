@@ -5,7 +5,6 @@ import {
   createReview,
   updateReview,
   delReview,
-  findAllReviews,
   getReviewsByAdvert,
 } from '../services/reviewServices';
 import { AuthenticatedRequest } from '../middlewares/authMiddleware';
@@ -22,19 +21,6 @@ export const getReview = asyncHandler(
     //verifyIfAuthorized(id, req);
     const review = await findReviewById(id);
     res.status(200).json(review);
-  },
-);
-
-/**
- * This method returns all reviews   *
- * @param req - The request object
- * @param res - The response object
- * @returns an array of review objects.
- */
-export const getReviews = asyncHandler(
-  async (req: AuthenticatedRequest, res: Response) => {
-    const reviews = await findAllReviews();
-    res.status(200).json(reviews);
   },
 );
 

@@ -2,7 +2,6 @@ import { Router } from 'express';
 import {
   deleteOffer,
   getOffer,
-  getOffers,
   getOffersByAdvert,
   getOffersByOfferee,
   getOffersByOfferor,
@@ -13,7 +12,7 @@ import { protect } from '../middlewares/authMiddleware';
 
 export const offerRouter = Router();
 
-offerRouter.route('/').post(protect, postOffer).get(protect, getOffers);
+offerRouter.route('/').post(protect, postOffer);
 
 offerRouter
   .route('/:id')
