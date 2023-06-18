@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 import { ProductDetailsTopBar } from './ProductDetailsTopBar';
 import { ProductDetails } from './ProductDetails';
@@ -7,18 +7,15 @@ import { Button } from 'react-bootstrap';
 import { Advert } from '../../api/collections/advert';
 import { OfferModal } from '../Offers/OfferModal';
 import { User } from '../../api/collections/user';
+import { LoginContext } from '../../contexts/LoginContext';
 
 type ProductOverviewSectionProps = { advert: Advert; store: User };
 
 const ProductOverviewSection: React.FC<ProductOverviewSectionProps> = (
   props,
 ) => {
-  let currentUser: { [x: string]: any } | null = null;
-  const localUser = localStorage.getItem('currentUser');
-  if (localUser !== null) {
-    currentUser = JSON.parse(localUser);
-  }
-  const owner = currentUser?._id === props.advert?.store;
+  const { user, loggedIn } = useContext(LoginContext);
+  const owner = user?._id === props.advert?.store;
   const button_text = !owner
     ? props.advert?.type === 'Sell'
       ? 'Buy'

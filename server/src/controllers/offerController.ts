@@ -106,7 +106,7 @@ export const getOffersByAdvert = asyncHandler(
     const { advert } = req.params;
     const userId = new ObjectId(req.user?.id);
     let offers = await findAllOffersByAdvert(advert);
-    offers = _findAndCheckRelatedOffers(userId, offers);
+    //offers = _findAndCheckRelatedOffers(userId, offers);
 
     res.status(200).json(offers);
   },

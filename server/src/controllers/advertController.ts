@@ -64,7 +64,6 @@ export const putAdvert = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const { id } = req.params;
     const newAdvert = req.body;
-    logger.warn(newAdvert);
     const existingAdvert = await findAdvertById(id);
     /* if (existingAdvert.store.id !== req.user?.id) {
       if (Object.keys(newAdvert).some((k) => k !== 'reviews' && k !== 'offers'))

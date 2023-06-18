@@ -57,11 +57,7 @@ const ProductOverview = () => {
   if (localUser !== null) {
     currentUser = JSON.parse(localUser);
   }
-
   const owner = store._id === currentUser?._id;
-  console.log(owner);
-  console.log(store);
-  console.log(currentUser);
   return (
     <Page>
       {advert ? (

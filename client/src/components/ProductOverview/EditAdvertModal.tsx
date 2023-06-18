@@ -30,8 +30,6 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
 
   const matches = useMediaQuery('(min-width: 992px)');
 
-  const navigate = useNavigate();
-
   const fileInputRef = useRef<HTMLInputElement>(null); // to handle the upload of the image
 
   const [encodedImage, setEncodedImage] = useState(
@@ -39,7 +37,7 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
   );
 
   const [advertType, setAdvertType] = useState(
-    props.advert?.type ? props.advert?.type : '',
+    props.advert?.type ? props.advert?.type : 'Sell',
   );
 
   const handleType = (event: any) => {
@@ -47,38 +45,47 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
   };
 
   const [formData, setFormData] = useState({
-    productname: props.advert?.productname ?? '',
-    description: props.advert?.description ?? '',
+    productname: props.advert?.productname ?? undefined,
+    description: props.advert?.description ?? undefined,
     prioritized: props.advert?.prioritized ?? false,
     color: props.advert?.color ?? undefined,
-    purchaseDate: props.advert?.purchaseDate ?? undefined,
-    expirationDate: props.advert?.expirationDate ?? undefined,
-    quantity: props.advert?.quantity ?? 0,
-    price: props.advert?.price ?? 0,
+    purchaseDate: props.advert?.purchaseDate
+      ? props.advert?.purchaseDate.toString().substring(0, 10)
+      : undefined,
+    expirationDate: props.advert?.expirationDate
+      ? props.advert.expirationDate.toString().substring(0, 10)
+      : undefined,
+    Quantity: props.advert?.quantity ?? undefined,
+    Price: props.advert?.price ?? undefined,
     category: props.advert?.category ?? '',
     store: props.advert?.store ?? user?._id,
+  });
+  const [errors, setErrors] = useState({
+    productname: '',
+    category: '',
+    Price: '',
+    Quantity: '',
   });
 
   const handleChange = (event: any) => {
     // we put type any because we are handling various events, such as HTML input, HTML select ecc
     event.preventDefault();
-    const { name, value } = event.target;
+    const { name, value, type } = event.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: type == 'number' ? parseInt(value) : value,
+    });
+    setErrors({
+      ...errors,
+      [name]: value
+        ? type == 'number'
+          ? parseInt(value) > 0
+            ? ''
+            : `${name} must be higher than 0`
+          : ''
+        : `${name} is missing`,
     });
   };
-
-  const [validated, setValidated] = useState(false);
-  const [errors, setErrors] = useState(
-    {} as {
-      name: string;
-      category: string;
-      type: string;
-      price: string;
-      quantity: string;
-    },
-  );
 
   const handleImageClick = () => {
     if (fileInputRef.current != null) {
@@ -102,28 +109,22 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
     }
   };
 
-  const handleSubmit = async () => {
-    setErrors({
-      name: formData.productname ? '' : 'Name is required.',
-      category: formData.category ? '' : 'Category is required.',
-      type: advertType ? '' : 'Type is required.',
-      price: formData.price
-        ? formData.price > 0
-          ? ''
-          : 'Please set a product price higher than 0'
-        : 'Price is required.',
-      quantity: formData.quantity
-        ? formData.quantity > 0
-          ? ''
-          : 'Please set a product quantity higher than 0'
-        : 'Quantity is required.',
-    });
-    setValidated(
-      !Object.values(errors)
-        .map((e) => e !== '')
-        .reduce((r, e) => r && e, true),
+  const isValid = () => {
+    return (
+      formData.productname &&
+      formData.category &&
+      formData.Price &&
+      formData.Quantity
     );
-    if (validated && loggedIn) {
+  };
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async () => {
+    if (!loggedIn) {
+      navigate('/signIn');
+    }
+    if (isValid()) {
       try {
         if (props.advert?._id) {
           await updateAdvert(props.advert._id, {
@@ -133,35 +134,49 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
             color: formData.color ? formData.color : undefined,
             expirationDate: new Date(formData.expirationDate ?? ''),
             purchaseDate: new Date(formData.purchaseDate ?? ''),
-            quantity: formData.quantity,
-            price: formData.price,
+            quantity: formData.Quantity,
+            price: formData.Price,
             category: formData.category,
             imageurl: encodedImage,
           } as Advert);
         } else {
-          if (user) {
-            await createAdvert({
-              productname: formData.productname,
-              description: formData.description,
-              prioritized: false,
-              color: formData.color ? formData.color : undefined,
-              expirationDate: new Date(formData.expirationDate ?? ''),
-              purchaseDate: new Date(formData.purchaseDate ?? ''),
-              quantity: formData.quantity,
-              price: formData.price,
-              status: 'Ongoing',
-              category: formData.category,
-              createdAt: new Date(),
-              store: user._id,
-              imageurl: encodedImage,
-              type: advertType,
-            });
-          }
+          await createAdvert({
+            productname: formData.productname,
+            description: formData.description,
+            prioritized: false,
+            color: formData.color ? formData.color : undefined,
+            expirationDate: new Date(formData.expirationDate ?? ''),
+            purchaseDate: new Date(formData.purchaseDate ?? ''),
+            quantity: formData.Quantity,
+            price: formData.Price,
+            status: 'Ongoing',
+            category: formData.category,
+            createdAt: new Date(),
+            store: user?._id,
+            imageurl: encodedImage,
+            type: advertType,
+          });
         }
       } catch (error) {
         console.error(error);
+      } finally {
+        if (props.onClose) props?.onClose();
       }
-      if (props.onClose) props?.onClose();
+    } else {
+      setErrors({
+        productname: formData.productname ? '' : 'Product Name is missing',
+        category: formData.category ? '' : 'Category is missing',
+        Price: formData.Price
+          ? formData.Price > 0
+            ? ''
+            : 'Price must be greater than 0'
+          : 'Price is missing',
+        Quantity: formData.Quantity
+          ? formData.Quantity > 0
+            ? ''
+            : 'Quantity must be greater than 0'
+          : 'Quantity is missing',
+      });
     }
   };
 
@@ -203,16 +218,10 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   name="type"
                   id="Ask"
                   label="Ask"
-                  onChange={props.advert ? undefined : handleType}
+                  onChange={props.advert ? () => {} : handleType}
                   value={'Ask'}
                   checked={advertType === 'Ask'}
                 />
-                <Form.Control.Feedback
-                  style={{ paddingLeft: 10 }}
-                  type="invalid"
-                >
-                  {errors.type}
-                </Form.Control.Feedback>
               </Form.Group>
             </Col>
             <Col
@@ -300,13 +309,13 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   name="productname"
                   value={formData.productname}
                   onChange={handleChange}
-                  isInvalid={!!errors.name}
+                  isInvalid={!!errors.productname}
                 ></Form.Control>
                 <Form.Control.Feedback
                   style={{ paddingLeft: 10 }}
                   type="invalid"
                 >
-                  {errors.name}
+                  Product name is missing
                 </Form.Control.Feedback>
               </Form.Group>
             </Col>
@@ -371,6 +380,7 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   name="color"
                   onChange={handleChange}
                 >
+                  <option> -- Select Color -- </option>
                   {Object.values(Colors)
                     .filter((key) => isNaN(Number(key)))
                     .map((c, index) => (
@@ -452,28 +462,19 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                     margin: 5,
                   }}
                   type="number"
-                  name="quantity"
-                  min={0}
+                  name="Quantity"
+                  min={1}
                   step={1}
-                  value={Number(formData.quantity).toString()}
-                  onChange={(e) => {
-                    if (parseInt(e.target.value) > 0) {
-                      handleChange(e);
-                    } else {
-                      setFormData({
-                        ...formData,
-                        quantity: 0,
-                      });
-                    }
-                  }}
+                  value={Number(formData.Quantity ?? '')}
+                  onChange={handleChange}
                   required
-                  isInvalid={!!errors.quantity}
+                  isInvalid={!!errors.Quantity}
                 ></Form.Control>
                 <Form.Control.Feedback
                   style={{ paddingLeft: 10 }}
                   type="invalid"
                 >
-                  {errors.quantity}
+                  {errors.Quantity}
                 </Form.Control.Feedback>
               </Form.Group>
             </Col>
@@ -494,27 +495,18 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                     margin: 5,
                   }}
                   type="number"
-                  name="price"
-                  min={0}
-                  value={Number(formData.price).toString()}
-                  onChange={(e) => {
-                    if (parseInt(e.target.value) > 0) {
-                      handleChange(e);
-                    } else {
-                      setFormData({
-                        ...formData,
-                        price: 0,
-                      });
-                    }
-                  }}
+                  name="Price"
+                  min={1}
+                  value={formData.Price ?? ''}
+                  onChange={handleChange}
                   required
-                  isInvalid={!!errors.price}
+                  isInvalid={!!errors.Price}
                 ></Form.Control>
                 <Form.Control.Feedback
                   style={{ paddingLeft: 10 }}
                   type="invalid"
                 >
-                  {errors.price}
+                  {errors.Price}
                 </Form.Control.Feedback>
               </Form.Group>
             </Col>
@@ -551,7 +543,6 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
       <Modal.Footer>
         <Button
           className="text-white"
-          type="submit"
           style={{
             background: palette.subSectionsBgAccent,
             borderColor: palette.subSectionsBgAccent,
