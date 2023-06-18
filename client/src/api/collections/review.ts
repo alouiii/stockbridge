@@ -39,3 +39,7 @@ export async function deleteReview(id: string): Promise<void> {
 export async function getAllReviews(): Promise<Review[]> {
   return await apiClient.get<Review[]>(`/reviews/`);
 }
+
+export async function getReviewsByAdvert(advertId: string): Promise<Review[]> {
+  return await apiClient.get<Review[]>(`/reviews/getReviewsByAdvert/${advertId}`);
+}

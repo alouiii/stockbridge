@@ -215,9 +215,7 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                 </Form.Control.Feedback>
               </Form.Group>
             </Col>
-            <Col>
-              <div
-                style={{
+            <Col style={{
                   backgroundColor: encodedImage ? undefined : 'lightgray',
                   width: matches ? 200 : 160,
                   height: matches ? 200 : 160,
@@ -229,9 +227,7 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   alignItems: 'center',
                   flexDirection: 'column',
                   gap: 5,
-                }}
-              >
-                <div>
+                }}>
                   <Form.Control
                     type="file"
                     ref={fileInputRef}
@@ -242,7 +238,7 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                     }}
                     id="customFile"
                   />
-                </div>
+                
                 <Image
                   src={encodedImage}
                   alt="Advert Image"
@@ -277,7 +273,6 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                     fluid
                   />
                 )}
-              </div>
             </Col>
           </Row>
           <Row style={{ marginTop: 50 }}>
@@ -490,7 +485,6 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   type="number"
                   name="price"
                   min={0}
-                  step={10}
                   value={Number(formData.price).toString()}
                   onChange={(e) => {
                     if (parseInt(e.target.value) > 0) {
