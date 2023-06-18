@@ -17,6 +17,7 @@ import {
   checkPurchaseDateAdvert,
 } from '../../utils/functions';
 import { BodyText } from '../Text/BodyText';
+import { useNavigate } from 'react-router-dom';
 
 type EditAdvertContentProps = {
   isShowing: boolean;
@@ -25,9 +26,11 @@ type EditAdvertContentProps = {
 };
 
 export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
-  const { user } = useContext(LoginContext);
+  const { user, loggedIn } = useContext(LoginContext);
 
   const matches = useMediaQuery('(min-width: 992px)');
+
+  const navigate = useNavigate();
 
   const fileInputRef = useRef<HTMLInputElement>(null); // to handle the upload of the image
 
@@ -50,20 +53,11 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
     store: props.advert?.store ?? user?._id,
   });
 
-  const validationErrors = {
-    productname: false,
-    category: false,
-    price: false,
-    quantity: false,
-    type: false,
-  };
-
   const [errors, setErrors] = useState({
     productname: false,
     category: false,
     price: false,
     quantity: false,
-    type: false,
   });
 
   const handleType = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -103,68 +97,66 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
   };
 
   const handleSubmit = async () => {
-    if (!formData.productname) {
-      validationErrors.productname = true;
-    }
-    if (!formData.category) {
-      validationErrors.category = true;
-    }
-    if (!formData.quantity) {
-      validationErrors.quantity = true;
-    }
-    if (!formData.price) {
-      validationErrors.price = true;
-    }
-    if (!advertType) {
-      validationErrors.type = true;
-    }
-
-    if (Object.values(validationErrors).some((e) => e)) {
-      setErrors(validationErrors);
+    if (
+      !formData.productname ||
+      !formData.category ||
+      !formData.quantity ||
+      !formData.price
+    ) {
+      setErrors({
+        productname: !formData.productname,
+        category: !formData.category,
+        quantity: !formData.quantity,
+        price: !formData.price,
+      });
     } else {
-      try {
-        if (props.advert?.id) {
-          await updateAdvert(props.advert.id, {
-            productname: formData.productname,
-            description: formData.description,
-            //type: advertType,
-            prioritized: false,
-            color: formData.color,
-            expirationDate: formData.expirationDate,
-            purchaseDate: formData.purchaseDate,
-            quantity: formData.quantity,
-            price: formData.price,
-            category: formData.category,
-            imageurl: encodedImage,
-          } as Advert);
-        } else {
-          await createAdvert({
-            productname: formData.productname,
-            description: formData.description,
-            prioritized: false,
-            color: formData.color,
-            expirationDate: formData.expirationDate,
-            purchaseDate: formData.purchaseDate,
-            quantity: formData.quantity,
-            price: formData.price,
-            advertStatus: 'Ongoing',
-            category: formData.category,
-            date: new Date(),
-            store: formData.store,
-            imageurl: encodedImage,
-            type: advertType,
-          } as Advert);
+      if (loggedIn) {
+        try {
+          if (props.advert?.id) {
+            // it means that we are modifying an existing advert
+            await updateAdvert(props.advert.id, {
+              productname: formData.productname,
+              description: formData.description,
+              //prioritized: false,
+              color: formData.color,
+              expirationDate: formData.expirationDate,
+              purchaseDate: formData.purchaseDate,
+              quantity: formData.quantity,
+              price: formData.price,
+              category: formData.category,
+              imageurl: encodedImage,
+            } as Advert);
+          } else {
+            await createAdvert({
+              productname: formData.productname,
+              description: formData.description,
+              prioritized: false,
+              color: formData.color,
+              expirationDate: formData.expirationDate,
+              purchaseDate: formData.purchaseDate,
+              quantity: formData.quantity,
+              price: formData.price,
+              advertStatus: 'Ongoing',
+              category: formData.category,
+              date: new Date(),
+              store: formData.store,
+              imageurl: encodedImage,
+              type: advertType,
+            } as Advert);
+          }
+          setErrors({
+            productname: false,
+            category: false,
+            price: false,
+            quantity: false,
+          });
+        } catch (error) {
+          console.error(error); // missing error handling!
+        } finally {
+          props.onClose(); //close the modal
         }
-        setErrors({
-          productname: false,
-          category: false,
-          price: false,
-          quantity: false,
-          type: false,
-        });
-        if (props.onClose) props?.onClose();
-      } catch (error) {
-        console.error(error);
+      } else {
+        navigate('/signIn'); // if the user is not logged redirect to signIn page
       }
     }
   };
@@ -216,8 +208,8 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
               <div
                 style={{
                   backgroundColor: encodedImage ? undefined : 'lightgray',
-                  width: 160,
-                  height: 160,
+                  width: matches ? 200 : 160,
+                  height: matches ? 200 : 160,
                   position: 'absolute',
                   right: matches ? 100 : 50,
                   borderRadius: '50%',
