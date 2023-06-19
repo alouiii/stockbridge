@@ -49,23 +49,7 @@ export const getAdvert = asyncHandler(
  * @returns an array of advert objects.
  */
 export const getAdverts = asyncHandler(
-  async (req: AuthenticatedRequest, res: Response) => {
-    let jwtToken;
-
-    if (req.cookies && req.cookies.jwtToken) {
-      jwtToken = req.cookies.jwtToken;
-    }
-
-    // Make sure token exists
-    if (!jwtToken) {
-      throw new AppError(
-        'Not authorized to access this route',
-        'Not authorized to access this route',
-        401,
-      );
-    } else {
-      logger.info('Authorized to access the route /adverts');
-    }
+  async (req: AuthenticatedRequest, res: Response) => {    
     const adverts = await findAllAdverts();
     res.status(200).json(adverts);
   },
