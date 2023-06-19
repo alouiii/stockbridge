@@ -15,11 +15,6 @@ const AdvertsSection: FC = () => {
     };
     fetchData();
   }, []);
-  const [activeTab, setActiveTab] = useState<string | null>('selling');
-
-  const handleTabSelect = (selectedTab: string | null) => {
-    setActiveTab(selectedTab);
-  };
 
   return (
     <div

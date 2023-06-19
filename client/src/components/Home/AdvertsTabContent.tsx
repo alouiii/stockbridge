@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { ProductCategory, Advert } from '../../api/collections/advert';
 import { BodyText } from '../Text/BodyText';
-import { HorizontalSlider } from './HorizontalSlider';
+import { AdvertsGrid } from './AdvertsGrid';
 
 type AdvertsTabContentProps = {
   adverts: Advert[];
@@ -35,7 +35,7 @@ const AdvertsTabContent: FC<AdvertsTabContentProps> = (props) => {
               >
                 {c}
               </BodyText>
-              <HorizontalSlider adverts={adverts_in_category} />
+              <AdvertsGrid adverts={adverts_in_category} />
             </div>
           )
         );

@@ -10,11 +10,14 @@ type AdvertsGridProps = {
 };
 const AdvertsGrid: FC<AdvertsGridProps> = (props) => {
   const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
-  const x = Math.round(screenWidth / 400);
+  const x = Math.round((screenWidth * 0.8) / 370);
+  console.log(x);
   const grouped: Advert[][] = [];
   const adverts = props.adverts.slice(0, x * 2);
   for (let i = 0; i < adverts.length / x; i += 1) {
-    grouped.push(adverts.slice(i * x, i * x + x));
+    console.log(`from ${i * x} to ${i * x + x}`);
+    grouped.push(adverts.slice(i * x, x * (i + 1)));
+    console.log(grouped);
   }
 
   useEffect(() => {
@@ -172,4 +175,4 @@ const AdvertsGrid: FC<AdvertsGridProps> = (props) => {
   );
 };
 
-export { AdvertsGrid as HorizontalSlider };
+export { AdvertsGrid };

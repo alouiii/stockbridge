@@ -22,6 +22,7 @@ export function PostOrSearch() {
 
   const closeModal = () => {
     setShowModal(false);
+    window.location.reload();
   };
   return (
     <>
