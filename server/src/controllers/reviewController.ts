@@ -8,6 +8,8 @@ import {
   getReviewsByAdvert,
 } from '../services/reviewServices';
 import { AuthenticatedRequest } from '../middlewares/authMiddleware';
+import logger from '../config/logger';
+import { AppError } from '../utils/errorHandler';
 
 /**
  * This method returns a review by id   *
@@ -17,8 +19,23 @@ import { AuthenticatedRequest } from '../middlewares/authMiddleware';
  */
 export const getReview = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
+    let jwtToken;
+
+    if (req.cookies && req.cookies.jwtToken) {
+      jwtToken = req.cookies.jwtToken;
+    }
+
+    // Make sure token exists
+    if (!jwtToken) {
+      throw new AppError(
+        'Not authorized to access this route',
+        'Not authorized to access this route',
+        401,
+      );
+    } else {
+      logger.info('Authorized to access the route /reviews');
+    }
     const { id } = req.params;
-    //verifyIfAuthorized(id, req);
     const review = await findReviewById(id);
     res.status(200).json(review);
   },
@@ -32,6 +49,22 @@ export const getReview = asyncHandler(
  */
 export const postReview = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
+    let jwtToken;
+
+    if (req.cookies && req.cookies.jwtToken) {
+      jwtToken = req.cookies.jwtToken;
+    }
+
+    // Make sure token exists
+    if (!jwtToken) {
+      throw new AppError(
+        'Not authorized to access this route',
+        'Not authorized to access this route',
+        401,
+      );
+    } else {
+      logger.info('Authorized to access the route /reviews');
+    }
     const review = await createReview(req.body);
     res.status(201).json(review);
   },
@@ -45,6 +78,22 @@ export const postReview = asyncHandler(
  */
 export const putReview = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
+    let jwtToken;
+
+    if (req.cookies && req.cookies.jwtToken) {
+      jwtToken = req.cookies.jwtToken;
+    }
+
+    // Make sure token exists
+    if (!jwtToken) {
+      throw new AppError(
+        'Not authorized to access this route',
+        'Not authorized to access this route',
+        401,
+      );
+    } else {
+      logger.info('Authorized to access the route /reviews');
+    }
     const { id } = req.params;
 
     /* if (id !== req.user?.id) {
@@ -64,6 +113,22 @@ export const putReview = asyncHandler(
  */
 export const deleteReview = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
+    let jwtToken;
+
+    if (req.cookies && req.cookies.jwtToken) {
+      jwtToken = req.cookies.jwtToken;
+    }
+
+    // Make sure token exists
+    if (!jwtToken) {
+      throw new AppError(
+        'Not authorized to access this route',
+        'Not authorized to access this route',
+        401,
+      );
+    } else {
+      logger.info('Authorized to access the route /reviews');
+    }
     const { id } = req.params;
 
     /* if (id !== req.user?.id) {
@@ -83,6 +148,22 @@ export const deleteReview = asyncHandler(
  */
 export const getAllReviewsByAdvert = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
+    let jwtToken;
+
+    if (req.cookies && req.cookies.jwtToken) {
+      jwtToken = req.cookies.jwtToken;
+    }
+
+    // Make sure token exists
+    if (!jwtToken) {
+      throw new AppError(
+        'Not authorized to access this route',
+        'Not authorized to access this route',
+        401,
+      );
+    } else {
+      logger.info('Authorized to access the route /adverts');
+    }
     const { advertId } = req.params;
     const reviews = await getReviewsByAdvert(advertId);
     res.status(200).json(reviews);

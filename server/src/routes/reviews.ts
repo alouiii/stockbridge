@@ -6,10 +6,17 @@ import {
   postReview,
   putReview,
 } from '../controllers/reviewController';
+import { protect } from '../middlewares/authMiddleware';
 
 export const reviewRouter = Router();
 
-reviewRouter.route('/').post(postReview);
+reviewRouter.route('/').post(protect, postReview);
 
-reviewRouter.route('/:id').get(getReview).put(putReview).delete(deleteReview);
-reviewRouter.route('/getReviewsByAdvert/:advertId').get(getAllReviewsByAdvert);
+reviewRouter
+  .route('/:id')
+  .get(protect, getReview)
+  .put(protect, putReview)
+  .delete(protect, deleteReview);
+reviewRouter
+  .route('/getReviewsByAdvert/:advertId')
+  .get(protect, getAllReviewsByAdvert);

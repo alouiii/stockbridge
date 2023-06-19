@@ -21,6 +21,20 @@ import { AppError } from '../utils/errorHandler';
  */
 export const getAdvert = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
+    let jwtToken;
+
+    if (req.cookies && req.cookies.jwtToken) {
+      jwtToken = req.cookies.jwtToken;
+    }
+
+    // Make sure token exists
+    if (!jwtToken) {
+      throw new AppError(
+        'Not authorized to access this route',
+        'Not authorized to access this route',
+        401,
+      );
+    }
     const { id } = req.params;
     //verifyIfAuthorized(id, req);
     const advert = await findAdvertById(id);
@@ -36,6 +50,22 @@ export const getAdvert = asyncHandler(
  */
 export const getAdverts = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
+    let jwtToken;
+
+    if (req.cookies && req.cookies.jwtToken) {
+      jwtToken = req.cookies.jwtToken;
+    }
+
+    // Make sure token exists
+    if (!jwtToken) {
+      throw new AppError(
+        'Not authorized to access this route',
+        'Not authorized to access this route',
+        401,
+      );
+    } else {
+      logger.info('Authorized to access the route /adverts');
+    }
     const adverts = await findAllAdverts();
     res.status(200).json(adverts);
   },
@@ -49,6 +79,22 @@ export const getAdverts = asyncHandler(
  */
 export const postAdvert = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
+    let jwtToken;
+
+    if (req.cookies && req.cookies.jwtToken) {
+      jwtToken = req.cookies.jwtToken;
+    }
+
+    // Make sure token exists
+    if (!jwtToken) {
+      throw new AppError(
+        'Not authorized to access this route',
+        'Not authorized to access this route',
+        401,
+      );
+    } else {
+      logger.info('Authorized to access the route /adverts');
+    }
     const advert = await createAdvert(req.body);
     res.status(201).json(advert);
   },
@@ -65,15 +111,22 @@ export const putAdvert = asyncHandler(
     const { id } = req.params;
     const newAdvert = req.body;
     const existingAdvert = await findAdvertById(id);
-    /* if (existingAdvert.store.id !== req.user?.id) {
-      if (Object.keys(newAdvert).some((k) => k !== 'reviews' && k !== 'offers'))
-        throw new AppError(
-          'Not authorized to access this route',
-          'Not authorized to access this route',
-          401,
-        );
-    } */
+    let jwtToken;
 
+    if (req.cookies && req.cookies.jwtToken) {
+      jwtToken = req.cookies.jwtToken;
+    }
+
+    // Make sure token exists
+    if (!jwtToken) {
+      throw new AppError(
+        'Not authorized to access this route',
+        'Not authorized to access this route',
+        401,
+      );
+    } else {
+      logger.info('Authorized to access the route /adverts');
+    }
     if (newAdvert.reviews) {
       newAdvert.reviews = (existingAdvert.reviews || []).concat(
         newAdvert.reviews,
@@ -96,11 +149,23 @@ export const putAdvert = asyncHandler(
  */
 export const deleteAdvert = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
-    const { id } = req.params;
+    let jwtToken;
 
-    /* if (id !== req.user?.id) {
-        throw new AppError('Not authorized to access this route', 'Not authorized to access this route',401)
-    } */
+    if (req.cookies && req.cookies.jwtToken) {
+      jwtToken = req.cookies.jwtToken;
+    }
+
+    // Make sure token exists
+    if (!jwtToken) {
+      throw new AppError(
+        'Not authorized to access this route',
+        'Not authorized to access this route',
+        401,
+      );
+    } else {
+      logger.info('Authorized to access the route /adverts');
+    }
+    const { id } = req.params;
 
     const advert = await delAdvert(id);
     res.status(204).json(advert);

@@ -20,7 +20,7 @@ offerRouter
   .put(protect, putOffer)
   .delete(protect, deleteOffer);
 
-offerRouter.route('/getOffersByAdvert/:advert').get(getOffersByAdvert);
+offerRouter.route('/getOffersByAdvert/:advert').get(protect, getOffersByAdvert);
 
 offerRouter
   .route('/getOfferByOfferor/:offeror')

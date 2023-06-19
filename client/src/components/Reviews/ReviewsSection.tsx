@@ -1,8 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import {
-  getReviewsByAdvert,
-  Review,
-} from '../../api/collections/review';
+import { getReviewsByAdvert, Review } from '../../api/collections/review';
 import { getStore, User } from '../../api/collections/user';
 import { ReviewOfferSection } from '../ProductOverview/ReviewOfferSection';
 import { Reviewbar } from './Reviewbar';
