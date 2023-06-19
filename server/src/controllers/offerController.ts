@@ -32,7 +32,6 @@ export const getOffer = asyncHandler(
   },
 );
 
-
 /**
  * This method creates a new offer. * TODO: This method should be removed later
  * @param req - The request object

@@ -63,12 +63,14 @@ export interface Advert {
 const apiClient = new ApiClient();
 
 export async function getAdvert(id: string): Promise<Advert> {
-  return await apiClient.get<Advert>(`/adverts/${id}`);
+  return await apiClient.get<Advert>(`/adverts/${id}`, {
+    withCredentials: true,
+  });
 }
 
 export async function createAdvert(advert: Advert): Promise<Advert> {
   return await apiClient.post<Advert>(`/adverts/`, advert, {
-    withCredentials: false,
+    withCredentials: true,
   });
 }
 
@@ -77,14 +79,18 @@ export async function updateAdvert(
   advert: Advert,
 ): Promise<Advert> {
   return await apiClient.put<Advert>(`/adverts/${id}`, advert, {
-    withCredentials: false,
+    withCredentials: true,
   });
 }
 
 export async function deleteAdvert(id: string): Promise<void> {
-  return await apiClient.delete<void>(`/adverts/${id}`);
+  return await apiClient.delete<void>(`/adverts/${id}`, {
+    withCredentials: true,
+  });
 }
 
 export async function getAllAdverts(): Promise<Advert[]> {
-  return await apiClient.get<Advert[]>('/adverts/');
+  return await apiClient.get<Advert[]>('/adverts/', {
+    withCredentials: true,
+  });
 }
