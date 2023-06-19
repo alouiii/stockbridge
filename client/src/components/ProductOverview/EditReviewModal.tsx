@@ -1,7 +1,8 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { updateAdvert } from '../../api/collections/advert';
 import { Review, createReview } from '../../api/collections/review';
+import { LoginContext } from '../../contexts/LoginContext';
 import { palette } from '../../utils/colors';
 import { Ratings } from '../Ratings';
 
@@ -46,11 +47,7 @@ const EditReviewModal: FC<EditReviewContentProps> = (props) => {
     description: false,
     rating: false,
   };
-  let currentUser: { [x: string]: any } | null = null;
-  const localUser = localStorage.getItem('currentUser');
-  if (localUser !== null) {
-    currentUser = JSON.parse(localUser);
-  }
+  const {user, loggedIn} = useContext(LoginContext);
   const handleSubmit = async () => {
     if (!description) {
       validationErrors.description = true;
@@ -67,7 +64,7 @@ const EditReviewModal: FC<EditReviewContentProps> = (props) => {
           const createdReview = await createReview({
             description: description,
             rating: rating,
-            reviewer: currentUser?._id,
+            reviewer: user?._id,
             reviewedAdvert: props.advertID,
             createdAt: new Date(),
           } as Review);

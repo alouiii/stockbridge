@@ -33,15 +33,21 @@ export async function updateReview(
 }
 
 export async function deleteReview(id: string): Promise<void> {
-  return await apiClient.delete<void>(`/reviews/${id}`);
+  return await apiClient.delete<void>(`/reviews/${id}`,{
+    withCredentials: true,
+  });
 }
 
 export async function getAllReviews(): Promise<Review[]> {
-  return await apiClient.get<Review[]>(`/reviews/`);
+  return await apiClient.get<Review[]>(`/reviews/`, {
+    withCredentials: true,
+  });
 }
 
 export async function getReviewsByAdvert(advertId: string): Promise<Review[]> {
   return await apiClient.get<Review[]>(
-    `/reviews/getReviewsByAdvert/${advertId}`,
+    `/reviews/getReviewsByAdvert/${advertId}`, {
+      withCredentials: true
+    }
   );
 }

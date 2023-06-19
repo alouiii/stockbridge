@@ -1,14 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { ApiClient } from '../api/apiClient';
 import { Advert, Colors, getAdvert } from '../api/collections/advert';
-import { getReview, Review } from '../api/collections/review';
 import { getStore, User } from '../api/collections/user';
 import { OffersSection } from '../components/Offers/OffersSection';
 import { Page } from '../components/Page';
 import { ProductOverviewSection } from '../components/ProductOverview/ProductOverviewSection';
 import { ReviewsSection } from '../components/Reviews/ReviewsSection';
 import { StoreDetailsBar } from '../components/Store/StoreDetailsBar';
+import { LoginContext } from '../contexts/LoginContext';
 
 const ProductOverview = () => {
   const { id } = useParams();
@@ -52,12 +51,8 @@ const ProductOverview = () => {
     fetchData();
   }, []);
 
-  let currentUser: { [x: string]: any } | null = null;
-  const localUser = localStorage.getItem('currentUser');
-  if (localUser !== null) {
-    currentUser = JSON.parse(localUser);
-  }
-  const owner = store._id === currentUser?._id;
+  const { user, loggedIn } = useContext(LoginContext);
+  const owner = store._id === user?._id;
   return (
     <Page>
       {advert ? (

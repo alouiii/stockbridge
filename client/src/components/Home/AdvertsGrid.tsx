@@ -42,6 +42,7 @@ const AdvertsGrid: FC<AdvertsGridProps> = (props) => {
               flexDirection: 'row',
               gap: '3%',
               marginTop: '2%',
+              marginBottom: "2%"
             }}
           >
             {g.map((a) => (

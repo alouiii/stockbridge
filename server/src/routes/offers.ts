@@ -3,7 +3,6 @@ import {
   deleteOffer,
   getOffer,
   getOffersByAdvert,
-  getOffersByOfferee,
   getOffersByOfferor,
   postOffer,
   putOffer,
@@ -20,12 +19,12 @@ offerRouter
   .put(protect, putOffer)
   .delete(protect, deleteOffer);
 
-offerRouter.route('/getOffersByAdvert/:advert').get(protect, getOffersByAdvert);
+offerRouter.route('/getOffersByAdvert/:advert').get(protect,getOffersByAdvert);
 
 offerRouter
   .route('/getOfferByOfferor/:offeror')
   .get(protect, getOffersByOfferor);
 
-offerRouter
+/* offerRouter
   .route('/getOfferByOfferee/:offeree')
-  .get(protect, getOffersByOfferee);
+  .get(protect, getOffersByOfferee); */

@@ -13,6 +13,7 @@ import { AuthenticatedRequest } from '../middlewares/authMiddleware';
 import { ObjectId } from 'mongodb';
 import { AppError } from '../utils/errorHandler';
 import { Offer } from '../entities/offerEntity';
+import logger from '../config/logger';
 
 /**
  * This method returns a offer by id   *
@@ -84,12 +85,27 @@ export const deleteOffer = asyncHandler(
  * @returns deleted offer object.
  */
 export const getOffersByAdvert = asyncHandler(
-  async (req: AuthenticatedRequest, res: Response) => {
-    const { advert } = req.params;
-    const userId = new ObjectId(req.user?.id);
-    let offers = await findAllOffersByAdvert(advert);
-    offers = _findAndCheckRelatedOffers(userId, offers);
+  async (req: AuthenticatedRequest, res: Response) => { 
+    
+    let jwtToken;
 
+    if (req.cookies && req.cookies.jwtToken) {
+      jwtToken = req.cookies.jwtToken;
+    }
+
+    // Make sure token exists
+    if (!jwtToken) {
+      throw new AppError(
+        'Not authorized to access this route',
+        'Not authorized to access this route',
+        401,
+      );
+    } else {
+      logger.info('Authorized to access the route /adverts');
+    }
+    const { advert } = req.params;
+    let offers = await findAllOffersByAdvert(advert);
+    //offers = _findAndCheckRelatedOffers(offers);
     res.status(200).json(offers);
   },
 );
@@ -124,7 +140,7 @@ export const getOffersByOfferor = asyncHandler(
  * @param res - The response object
  * @returns deleted offer object.
  */
-export const getOffersByOfferee = asyncHandler(
+/* export const getOffersByOfferee = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const { offeree } = req.params;
     const userId = req.user?.id;
@@ -139,7 +155,7 @@ export const getOffersByOfferee = asyncHandler(
     const offer = await findAllOffersByOfferee(offeree);
     res.status(200).json(offer);
   },
-);
+); */
 
 /**
  * Checks if a user can edit or delete an offer with a given id.
@@ -150,7 +166,7 @@ async function _checkUserCanEditOrDeleteOffer(req: AuthenticatedRequest) {
   const { id } = req.params;
 
   // The user editing or deleting must be the offeror.
-  if ((await findOfferById(id)).offeror.equals(userId)) {
+  if ((await findOfferById(id)).offeror === userId) {
     throw new AppError(
       'Not authorized to edit this route',
       'Not authorized to edit this route',
@@ -167,7 +183,7 @@ async function _checkUserCanEditOrDeleteOffer(req: AuthenticatedRequest) {
  */
 function _findAndCheckRelatedOffers(userId: ObjectId, offers: Offer[]): any {
   let relatedOffers = offers.filter(
-    (x) => x.offeror.equals(userId) || x.offeree.equals(userId),
+    (x) => x.offeror === userId || x.offeree === userId,
   );
 
   // If no offers are retrieved with this request, throw an exception to inform the user.

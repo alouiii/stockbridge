@@ -1,7 +1,8 @@
-import React, { FC, useState } from 'react';
+import { FC, useContext, useState } from 'react';
 import { Button, Col, Form, Modal, Row, Image } from 'react-bootstrap';
 import { Advert, updateAdvert } from '../../api/collections/advert';
 import { createOffer, Offer, OfferStatus } from '../../api/collections/offer';
+import { LoginContext } from '../../contexts/LoginContext';
 import { palette } from '../../utils/colors';
 import { Ratings } from '../Ratings';
 
@@ -28,18 +29,15 @@ function colorMap(status: OfferStatus): string {
   }
 }
 const OfferModal: FC<OfferContentProps> = (props) => {
-  let currentUser: { [x: string]: any } | null = null;
-  const localUser = localStorage.getItem('currentUser');
-  if (localUser !== null) {
-    currentUser = JSON.parse(localUser);
-  }
+  
+  const {user, loggedIn } = useContext(LoginContext);
 
   const [formData, setFormData] = useState({
-    quantity: props.offer?.quantity ? props.offer?.quantity : 0,
-    price: props.offer?.price ? props.offer?.price : 0,
+    Quantity: props.offer?.quantity ? props.offer?.quantity : 0,
+    Price: props.offer?.price ? props.offer?.price : 0,
     createdAt: new Date(),
     status: OfferStatus.OPEN,
-    offeror: currentUser?._id,
+    offeror:user?._id,
     offeree: props.advert?.store,
     advert: props.advert?._id,
   } as Offer);
@@ -56,30 +54,18 @@ const OfferModal: FC<OfferContentProps> = (props) => {
   const [validated, setValidated] = useState(false);
   const [errors, setErrors] = useState(
     {} as {
-      price: string;
-      quantity: string;
+      Price: string;
+      Quantity: string;
     },
   );
-  const handleSubmit = async () => {
-    setErrors({
-      price: formData.price
-        ? formData.price > 0
-          ? ''
-          : 'Please set a product price higher than 0'
-        : 'Price is required.',
-      quantity: formData.quantity
-        ? props.advert?.quantity! - formData.quantity >= 0
-          ? ''
-          : 'The available quantity is less than the required quantity'
-        : 'Quantity is required.',
-    });
-    console.log(Object.values(errors));
-    setValidated(
-      !Object.values(errors)
-        .map((e) => e !== '')
-        .reduce((r, e) => r && e, true),
+  const isValid = () => {
+    return (
+      formData.price &&
+      formData.quantity
     );
-    if (validated) {
+  };
+  const handleSubmit = async () => {
+    if (isValid()) {
       try {
         const createdOffer = await createOffer(formData as Offer);
         if (props.advert?._id) {
@@ -92,6 +78,19 @@ const OfferModal: FC<OfferContentProps> = (props) => {
       } catch (error) {
         console.error(error);
       }
+    } else {
+      setErrors({
+        Price: formData.price
+          ? formData.price > 0
+            ? ''
+            : 'Price must be greater than 0'
+          : 'Price is missing',
+        Quantity: formData.quantity
+          ? formData.quantity > 0
+            ? formData.quantity < props.advert?.quantity! ? '' : 'Quantity must be less or equal to available Quantity'
+            : 'Quantity must be greater than 0'
+          : 'Quantity is missing',
+      });
     }
   };
   const status = props.offer ? props.offer.status : OfferStatus.OPEN;
@@ -257,10 +256,10 @@ const OfferModal: FC<OfferContentProps> = (props) => {
                       value={formData.price}
                       onChange={handleChange}
                       required
-                      isInvalid={!!errors.price}
+                      isInvalid={!!errors.Price}
                     />
                     <Form.Control.Feedback type="invalid">
-                      {errors.price}
+                      {errors.Price}
                     </Form.Control.Feedback>
                   </>
                 )}
@@ -306,10 +305,10 @@ const OfferModal: FC<OfferContentProps> = (props) => {
                       value={formData.quantity}
                       onChange={handleChange}
                       required
-                      isInvalid={!!errors.quantity}
+                      isInvalid={!!errors.Quantity}
                     />
                     <Form.Control.Feedback type="invalid">
-                      {errors.quantity}
+                      {errors.Quantity}
                     </Form.Control.Feedback>
                   </>
                 )}

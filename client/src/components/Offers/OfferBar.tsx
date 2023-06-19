@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ProductAttribute } from '../ProductOverview/ProductAttribute';
 import { Offer } from '../../api/collections/offer';
 import { Advert } from '../../api/collections/advert';
@@ -6,17 +6,18 @@ import { BodyText } from '../Text/BodyText';
 import { OfferModal } from './OfferModal';
 import { Ratings } from '../Ratings';
 import { InfoBar } from '../ProductOverview/InfoBar';
+import { LoginContext } from '../../contexts/LoginContext';
+import { getStore, User } from '../../api/collections/user';
 require('./offerBarStyle.scss');
 
 type OfferBarProps = {
   offer: Offer;
   advert: Advert;
-  storeName: string;
-  rating: number;
 };
 
 const OfferBar: React.FC<OfferBarProps> = (props) => {
   const [showModal, setShowModal] = useState(false);
+  const { user, loggedIn } = useContext(LoginContext);
   const closeModal = () => {
     setShowModal(false);
     //change to set Advert
@@ -25,6 +26,23 @@ const OfferBar: React.FC<OfferBarProps> = (props) => {
   const openModal = () => {
     setShowModal(true);
   };
+  const [offerer, setOfferer] = useState({} as User)
+  const [offeree, setOfferee] = useState({} as User)
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+
+      
+      const offerer = await getStore(props.offer.offeror!); 
+      const offeree = await getStore(props.advert.store!);
+      setOfferer (offerer);
+      setOfferee(offeree);
+    } catch (error) {
+      console.error(error);
+    }
+    }
+    fetchData();
+  }, [])
   return (
     <>
       <InfoBar
@@ -38,8 +56,8 @@ const OfferBar: React.FC<OfferBarProps> = (props) => {
                 color: 'black',
               }}
             >
-              {props?.storeName ? props.storeName : 'No Name given'}
-              {Ratings(props?.rating ? props.rating : 0)}
+              {offerer.name ??  'No Name given'}
+              {Ratings(offerer.rating ?? 0)}
             </BodyText>
             <BodyText
               style={{
@@ -81,8 +99,8 @@ const OfferBar: React.FC<OfferBarProps> = (props) => {
           onClose={closeModal}
           advert={props.advert}
           offer={props.offer}
-          storeName={props.storeName}
-          rating={props.rating}
+          storeName={offeree.name!}
+          rating={offeree.rating!}
         />
       )}
     </>

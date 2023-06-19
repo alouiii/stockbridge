@@ -68,8 +68,6 @@ const OfferSection: React.FC<OfferSectionProps> = (props) => {
                 <OfferBar
                   offer={offer}
                   advert={props.advert}
-                  storeName={props.storeName}
-                  rating={props.rating}
                 />
               </React.Fragment>
             ))
