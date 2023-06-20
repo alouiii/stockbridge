@@ -197,7 +197,7 @@ async function _checkUserCanEditOrDeleteOffer(req: AuthenticatedRequest) {
  * @returns the filtered list.
  */
 function _findAndCheckRelatedOffers(userId: ObjectId, offers: Offer[]): any {
-  let relatedOffers = offers.filter(x => x.offeror.equals(userId) || x.offeree.equals(userId));
+  let relatedOffers = offers.filter(x => (x.offeror && x.offeror.equals(userId)) || (x.offeree && x.offeree.equals(userId)));
 
   // If no offers are retrieved with this request, throw an exception to inform the user.
   if (!relatedOffers?.length) {
