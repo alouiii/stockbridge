@@ -3,7 +3,10 @@ import { User } from '../entities/userEntity';
 import environment from '../utils/environment';
 import Stripe from 'stripe';
 import { AppError } from '../utils/errorHandler';
-import { handleSuccessfulPaymentIntent } from './userServices';
+import {
+  handleSubscription,
+  handleSuccessfulPaymentIntent,
+} from './userServices';
 
 const serviceName = 'stripeService';
 const stripe = new Stripe(environment.STRIPE_SECRET_KEY, {
@@ -66,10 +69,7 @@ export const createStripeSetupIntent = async (user: User) => {
   });
 };
 
-//TODO: Make sure that user does not have a subscription already
-//TODO: Create a property in our database for the subscription
 //TODO: How to handle the subscription edit
-//TODO: How to handle the subscription cancellation
 export const createStripeSubscription = async (
   user: User,
   subscriptionType: string,
@@ -90,6 +90,16 @@ export const createStripeSubscription = async (
       break;
     default:
       throw new AppError('Invalid subscription', 'Invalid subscription', 400);
+  }
+  const customer = (await stripe.customers.retrieve(user.stripeCustomerId, {
+    expand: ['subscriptions'],
+  })) as Stripe.Customer;
+  if (customer.subscriptions && customer.subscriptions.data.length > 0) {
+    throw new AppError(
+      'User already has a subscription',
+      'User already has a subscription',
+      400,
+    );
   }
   const subscription = await stripe.subscriptions.create({
     customer: user.stripeCustomerId,
@@ -116,6 +126,29 @@ export const createStripeSubscription = async (
   });
 
   return { subscription, paymentIntent };
+};
+
+export const cancelStripeSubscription = async (user: User) => {
+  logger.debug(
+    `${serviceName}: Canceling stripe subscription for ${user.email}`,
+  );
+  const customer = (await stripe.customers.retrieve(user.stripeCustomerId, {
+    expand: ['subscriptions'],
+  })) as Stripe.Customer;
+  logger.debug('#################################');
+  logger.debug(customer.subscriptions);
+  if (
+    !customer.subscriptions ||
+    customer.subscriptions.data.length !== 1 ||
+    !customer.subscriptions.data[0].id
+  ) {
+    throw new AppError(
+      'User does not have a subscription',
+      'User does not have a subscription',
+      400,
+    );
+  }
+  return await stripe.subscriptions.del(customer.subscriptions.data[0].id);
 };
 
 //TODO: Handle the event subscription.updated / subscription.deleted / subscription.created
@@ -157,6 +190,29 @@ export const webhookHandler = async (
           default_payment_method: setupIntent.payment_method as string,
         },
       });
+      break;
+    case 'customer.subscription.updated':
+      logger.debug(`${serviceName}: Subscription was updated!`);
+    case 'customer.subscription.deleted':
+      logger.debug(`${serviceName}: Subscription was deleted!`);
+    case 'customer.subscription.created':
+      logger.debug(`${serviceName}: Subscription was created!`);
+      const subscription = event.data.object as Stripe.Subscription;
+      if (
+        subscription.metadata.product !== 'Basic Subscription' &&
+        subscription.metadata.product !== 'Advanced Subscription' &&
+        subscription.metadata.product !== 'Premium Subscription'
+      ) {
+        throw new AppError('Invalid subscription', 'Invalid subscription', 400);
+      }
+      await handleSubscription(
+        subscription.metadata.userId,
+        subscription.status,
+        subscription.metadata.product,
+        new Date(subscription.current_period_start),
+        new Date(subscription.current_period_end),
+      );
+
       break;
     default:
       logger.debug(`${serviceName}: Received ${event.type}`);

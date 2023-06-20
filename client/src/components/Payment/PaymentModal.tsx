@@ -79,7 +79,7 @@ export default function PaymentModal(props: PaymentModalProps) {
           redirect: 'if_required',
           confirmParams: {
             // Make sure to change this to your payment completion page
-            return_url: 'http://localhost:3000',
+            return_url: 'http://localhost:3000/userInfo',
           },
         }));
         break;
@@ -88,7 +88,7 @@ export default function PaymentModal(props: PaymentModalProps) {
           elements,
           redirect: 'if_required',
           confirmParams: {
-            return_url: 'http://localhost:3000',
+            return_url: 'http://localhost:3000/userInfo',
           },
         }));
         break;

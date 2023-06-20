@@ -43,9 +43,17 @@ const subscriptionSchema = new mongoose.Schema<Subscription>({
     type: Types.Date,
     required: [true, 'Please add an end date'],
   },
-  renew: {
-    type: Types.Boolean,
-    required: [true, 'Please add a renew'],
+  status: {
+    type: Types.String,
+    enum: ['active', 'inactive'],
+  },
+  type: {
+    type: Types.String,
+    enum: [
+      'Basic Subscription',
+      'Advanced Subscription',
+      'Premium Subscription',
+    ],
   },
 });
 

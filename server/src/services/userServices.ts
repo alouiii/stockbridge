@@ -96,14 +96,42 @@ export const handleSuccessfulPaymentIntent = async (
     case 'Basic Subscription':
     case 'Advanced Subscription':
     case 'Premium Subscription':
-      user.subscription = {
-        renew: true,
-        from: new Date(),
-        to: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-      };
       break;
     default:
       throw new AppError('Product not found', 'Product not found', 404);
   }
+  await userModel.findByIdAndUpdate(user.id, user);
+};
+
+export const handleSubscription = async (
+  userId: string,
+  status: string,
+  subscriptionType?:
+    | 'Basic Subscription'
+    | 'Advanced Subscription'
+    | 'Premium Subscription',
+  startDate?: Date,
+  endDate?: Date,
+) => {
+  logger.debug(
+    `${serviceName}: Handling subscription for ${userId} for ${status} with ${subscriptionType}`,
+  );
+  const user = (await userModel.findById(userId)) as User;
+  if (status === 'active') {
+    user.subscription = {
+      status: 'active',
+      from: startDate!,
+      to: endDate!,
+      type: subscriptionType!,
+    };
+  } else {
+    user.subscription = {
+      status: 'inactive',
+      from: startDate!,
+      to: endDate!,
+      type: subscriptionType!,
+    };
+  }
+  logger.debug(`${serviceName}: Updating user ${userId} with ${user}`);
   await userModel.findByIdAndUpdate(user.id, user);
 };

@@ -39,9 +39,9 @@ const PaymentElement = (props: PaymentElementProps) => {
         createSetupIntent().then((res) => setClientSecret(res));
         break;
       case 'subscription':
-        createSubscription(props.product!).then((res) =>
-          setClientSecret(res.clientSecret),
-        );
+        createSubscription(props.product!)
+          .then((res) => setClientSecret(res.clientSecret))
+          .catch((err) => alert(err.response.data.message));
     }
   }, [props.amount, props.product, props.type]);
 

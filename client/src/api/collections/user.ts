@@ -9,9 +9,10 @@ export interface Address {
 }
 
 export interface Subscription {
-  from?: Date;
-  to?: Date;
-  renew?: boolean;
+  from: Date;
+  to: Date;
+  status: 'active' | 'inactive';
+  type: 'Basic Subscription' | 'Advanced Subscription' | 'Premium Subscription';
 }
 
 export interface PaymentMethod {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Page } from '../components/Page';
 import { ProfileHeader } from '../components/Profile/ProfileHeader';
 import '../styles/userInfo.css';
@@ -6,6 +6,7 @@ import { palette } from '../utils/colors';
 
 import useMediaQuery from './../hooks/useMediaQuery';
 import { useState, ReactElement } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import { ProfileSectionTab } from '../components/ContentTabs/ProfileSectionTab';
 import MyAdvertsContent from '../components/Profile/ProfileSectionsContent/MyAdvertsContent';
@@ -67,7 +68,18 @@ const leftTabs: {
  */
 export function UserInfo() {
   const matches = useMediaQuery('(min-width: 768px)');
+  const location = useLocation();
+
   const [selectedProfileSection, setSelectedProfileSection] = useState(0);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const selectValue = searchParams.get('select');
+
+    if (selectValue) {
+      setSelectedProfileSection(Number(selectValue));
+    }
+  }, [location.search]);
 
   return (
     <Page>

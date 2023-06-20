@@ -4,6 +4,7 @@ import { AuthenticatedRequest } from '../middlewares/authMiddleware';
 import { AppError } from '../utils/errorHandler';
 import { User } from '../entities/userEntity';
 import {
+  cancelStripeSubscription,
   createStripePaymentIntent,
   createStripeSetupIntent,
   createStripeSubscription,
@@ -45,6 +46,14 @@ export const createSubscription = asyncHandler(
       subscriptionId: subscription.id,
       clientSecret: paymentIntent.client_secret,
     });
+  },
+);
+
+export const cancelSubscription = asyncHandler(
+  async (req: AuthenticatedRequest, res: Response) => {
+    const user = req.user as User;
+    const subscription = await cancelStripeSubscription(user);
+    res.status(204);
   },
 );
 

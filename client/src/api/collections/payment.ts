@@ -38,3 +38,9 @@ export async function createSubscription(
     },
   );
 }
+
+export async function cancelSubscription() {
+  return await apiClient.delete<void>(`/stripe/cancel-subscription`, {
+    withCredentials: true,
+  });
+}

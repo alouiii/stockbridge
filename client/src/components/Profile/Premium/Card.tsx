@@ -2,18 +2,22 @@ import React from 'react';
 import { Button, Card as BootStrapCard } from 'react-bootstrap';
 import { palette } from '../../../utils/colors';
 
-interface CardProps {
+export interface CardProps {
   header: string;
   price: number;
   features: string[];
   buttonLabel: string;
   outline: boolean;
-  buttonOnClick: (amount: number, product: string) => () => void;
+  buttonOnClick?: (amount: number, product: string) => () => void;
+  disabled: boolean;
 }
 const Card = (props: CardProps) => {
   return (
     <BootStrapCard
-      className="shadow-sm p-0 m-auto text-center"
+      className={
+        'shadow-sm p-0 m-auto text-center' +
+        (props.outline ? '' : ' opacity-50')
+      }
       style={{ width: '18rem' }}
     >
       <BootStrapCard.Header>
@@ -31,7 +35,8 @@ const Card = (props: CardProps) => {
         </ul>
         <Button
           type="button"
-          onClick={props.buttonOnClick(props.price, props.header)}
+          disabled={props.disabled}
+          onClick={props.buttonOnClick!(props.price, props.header)}
           className={'btn btn-lg btn-block mb-2'}
           style={{
             width: '100%',
