@@ -53,20 +53,22 @@ export const getOffers = asyncHandler(
 );
 
 /**
- * This method creates a new offer. * TODO: This method should be removed later
+ * This method creates a new offer.
  * @param req - The request object
  * @param res - The response object
  * @returns created offer object.
  */
 export const postOffer = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
-    const {offeror, offeree, advert} = req.params;
+    const {offeror, offeree, advert} = req.body;
     const relatedAdvert = await findAdvertById(advert);
-    if (offeror == offeree || offeror == relatedAdvert.store.id)
+    // Type conversion for comparaison
+    let offerorId = new ObjectId(offeror) , userId = new ObjectId(relatedAdvert.store.id);
+    if (offeror == offeree  || offerorId.equals(userId))
     {
       throw new AppError(
-        'Not allowed to create this route',
-        'Not allowed to create this route',
+        'Not allowed to create offers for own adverts',
+        'Not allowed to create offers for own adverts',
         400,
       );
     }
