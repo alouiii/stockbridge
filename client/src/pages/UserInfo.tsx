@@ -124,7 +124,7 @@ export function UserInfo() {
 
         {isLoading ? (
           <Spinner
-            animation="border"
+            animation="grow"
             role="status"
             style={{ position: 'absolute', left: '50%', top: '50%' }}
           />
