@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Page } from '../components/Page';
 import { ProfileHeader } from '../components/Profile/ProfileHeader';
 import '../styles/userInfo.css';
@@ -15,6 +15,8 @@ import BuyingContent from '../components/Profile/ProfileSectionsContent/BuyingCo
 import PremiumContent from '../components/Profile/ProfileSectionsContent/PremiumContent';
 import HelpQaContent from '../components/Profile/ProfileSectionsContent/HelpQaContent';
 import StoreDetailsForm from '../components/Profile/StoreDetails/StoreDetailsForm';
+import { LoginContext } from '../contexts/LoginContext';
+import { Spinner } from 'react-bootstrap';
 
 /**
  * Contains the tabs displayed on the sidebar of the profile page and their corresponding content
@@ -67,9 +69,9 @@ const leftTabs: {
  * The page containing the user information (profile): Ads, Offers, Subsriptions...
  */
 export function UserInfo() {
+  const { isLoading } = useContext(LoginContext);
   const matches = useMediaQuery('(min-width: 768px)');
   const location = useLocation();
-
   const [selectedProfileSection, setSelectedProfileSection] = useState(0);
 
   useEffect(() => {
@@ -120,9 +122,17 @@ export function UserInfo() {
           </div>
         </div>
 
-        <div className="col-10" style={{ paddingTop: '5em' }}>
-          {leftTabs[selectedProfileSection].content}
-        </div>
+        {isLoading ? (
+          <Spinner
+            animation="border"
+            role="status"
+            style={{ position: 'absolute', left: '50%', top: '50%' }}
+          />
+        ) : (
+          <div className="col-10" style={{ paddingTop: '5em' }}>
+            {leftTabs[selectedProfileSection].content}
+          </div>
+        )}
       </div>
     </Page>
   );
