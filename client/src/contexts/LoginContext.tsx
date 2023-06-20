@@ -43,7 +43,7 @@ export const LoginContextProvider = ({
     };
 
     checkAuthentication();
-  });
+  }, []);
 
   return (
     <LoginContext.Provider
