@@ -17,7 +17,7 @@ offerRouter.route('/').post(protect, postOffer).get(protect, getOffers);
 
 offerRouter.route('/:id').get(protect, getOffer).put(protect, putOffer).delete(protect, deleteOffer);
 
-offerRouter.route('/getOfferByAdvert/:advert').get(protect, getOffersByAdvert);
+offerRouter.route('/getOffersByAdvert/:advert').get(protect, getOffersByAdvert);
 
 offerRouter.route('/getOfferByOfferor/:offeror').get(protect, getOffersByOfferor);
 

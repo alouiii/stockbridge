@@ -14,6 +14,7 @@ import { AuthenticatedRequest } from '../middlewares/authMiddleware';
 import { ObjectId } from 'mongodb';
 import { AppError } from '../utils/errorHandler';
 import { Offer } from '../entities/offerEntity';
+import { findAdvertById } from '../services/advertServices';
 
 
 /**
@@ -59,6 +60,17 @@ export const getOffers = asyncHandler(
  */
 export const postOffer = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
+    const {offeror, offeree, advert} = req.params;
+    const relatedAdvert = await findAdvertById(advert);
+    if (offeror == offeree || offeror == relatedAdvert.store.id)
+    {
+      throw new AppError(
+        'Not allowed to create this route',
+        'Not allowed to create this route',
+        400,
+      );
+    }
+
     const offer = await createOffer(req.body);
     res.status(201).json(offer);
   },
