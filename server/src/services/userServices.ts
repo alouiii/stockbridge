@@ -41,6 +41,15 @@ export const createUser = async (user: User) => {
  */
 export const updateUser = async (id: string, user: User) => {
   logger.debug(`${serviceName}: Updating user with id: ${id} with ${user}`);
+
+  if (user.hasOwnProperty('prioritisationTickets')) {
+    throw new AppError(
+      'Cannot update prioritisation tickets',
+      'Cannot update prioritisation tickets',
+      403,
+    );
+  }
+
   return userModel.findByIdAndUpdate(id, user, {
     new: true,
     runValidators: true,
@@ -64,4 +73,37 @@ export const delUser = async (id: string) => {
 export const findAllUsers = async () => {
   logger.debug(`${serviceName}: Finding all users`);
   return userModel.find();
+};
+
+export const handleSuccessfulPaymentIntent = async (
+  userId: string,
+  product: string,
+) => {
+  logger.debug(
+    `${serviceName}: Handling successful payment intent for ${userId}`,
+  );
+  const user = (await userModel.findById(userId)) as User;
+  switch (product) {
+    case 'Basic Pack':
+      user.prioritisationTickets += 5;
+      break;
+    case 'Advanced Pack':
+      user.prioritisationTickets += 10;
+      break;
+    case 'Premium Pack':
+      user.prioritisationTickets += 20;
+      break;
+    case 'Basic Subscription':
+    case 'Advanced Subscription':
+    case 'Premium Subscription':
+      user.subscription = {
+        renew: true,
+        from: new Date(),
+        to: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+      };
+      break;
+    default:
+      throw new AppError('Product not found', 'Product not found', 404);
+  }
+  await userModel.findByIdAndUpdate(user.id, user);
 };

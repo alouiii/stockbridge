@@ -31,6 +31,7 @@ export interface User {
   subscription: Subscription;
   paymentMethod: PaymentMethod;
   rating: number;
+  stripeCustomerId: string;
 
   getSignedJwtToken(): string;
 

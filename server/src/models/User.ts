@@ -102,6 +102,11 @@ const userSchema = new mongoose.Schema<User>({
     min: 0,
     max: 5,
   },
+  stripeCustomerId: {
+    type: Types.String,
+    required: false,
+    unique: true,
+  },
   address: addressSchema,
   subscription: subscriptionSchema,
   paymentMethod: paymentMethodSchema,
