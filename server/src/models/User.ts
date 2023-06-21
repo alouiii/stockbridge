@@ -45,7 +45,14 @@ const subscriptionSchema = new mongoose.Schema<Subscription>({
   },
   status: {
     type: Types.String,
-    enum: ['active', 'inactive'],
+    enum: [
+      'active',
+      'past_due',
+      'unpaid',
+      'canceled',
+      'incomplete',
+      'incomplete_expired',
+    ],
   },
   type: {
     type: Types.String,
@@ -133,10 +140,7 @@ userSchema.pre('save', async function (next) {
   }
 
   const salt = await bcrypt.genSalt(10);
-  const hash = await bcrypt.hash(
-    this.password,
-    salt,
-  );
+  const hash = await bcrypt.hash(this.password, salt);
   this.password = hash;
 });
 

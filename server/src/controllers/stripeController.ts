@@ -8,6 +8,7 @@ import {
   createStripePaymentIntent,
   createStripeSetupIntent,
   createStripeSubscription,
+  getSubscriptionInvoiceLink,
   webhookHandler,
 } from '../services/stripeService';
 import logger from '../config/logger';
@@ -52,8 +53,16 @@ export const createSubscription = asyncHandler(
 export const cancelSubscription = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const user = req.user as User;
-    const subscription = await cancelStripeSubscription(user);
-    res.status(204);
+    await cancelStripeSubscription(user);
+    res.status(204).send();
+  },
+);
+
+export const InvoiceLink = asyncHandler(
+  async (req: AuthenticatedRequest, res: Response) => {
+    const user = req.user as User;
+    const invoiceLink = await getSubscriptionInvoiceLink(user);
+    res.status(200).send(invoiceLink);
   },
 );
 

@@ -1,9 +1,12 @@
-import React, { ReactElement, useContext, useState } from 'react';
+import React, { ReactElement, useContext, useEffect, useState } from 'react';
 import Card, { CardProps } from '../Premium/Card';
 import { Container, Row } from 'react-bootstrap';
 import PaymentElement from '../../Payment/PaymentElement';
 import { LoginContext } from '../../../contexts/LoginContext';
-import { cancelSubscription } from '../../../api/collections/payment';
+import {
+  cancelSubscription,
+  getInvoiceLink,
+} from '../../../api/collections/payment';
 
 type Props = {
   children: ReactElement[];
@@ -71,9 +74,14 @@ const PremiumContent: React.FC<Props> = () => {
   const [showModal, setShowModal] = useState(false);
   const [amount, setAmount] = useState(0);
   const [product, setProduct] = useState('');
+  const [promptPay, setPromptPay] = useState<boolean>(false);
+  const [invoiceLink, setInvoiceLink] = useState<string>('');
+  // const [isLoading, setIsLoading] = useState<boolean>(false);
   const { user } = useContext(LoginContext);
-
-  if (user?.subscription && user?.subscription.status === 'active') {
+  if (
+    user?.subscription &&
+    ['unpaid', 'past_due', 'active'].includes(user?.subscription?.status)
+  ) {
     subscriptionPlans.forEach((obj) => {
       if (obj.header === user?.subscription?.type) {
         obj.buttonLabel = 'Cancel Subscription';
@@ -92,6 +100,15 @@ const PremiumContent: React.FC<Props> = () => {
       }
     });
   }
+  useEffect(() => {
+    if (
+      user?.subscription &&
+      ['unpaid', 'past_due'].includes(user?.subscription?.status)
+    ) {
+      setPromptPay(true);
+      getInvoiceLink().then((link) => setInvoiceLink(link));
+    }
+  }, [user]);
 
   const plans = subscriptionPlans.map((obj, i) => {
     return (
@@ -141,6 +158,18 @@ const PremiumContent: React.FC<Props> = () => {
         <Row className="mb-5 justify-content-center text-center">
           <h2> Subscription Plans </h2>
         </Row>
+        {promptPay && (
+          <Row className="mb-5 justify-content-center text-center">
+            <h4>
+              You have an unpaid invoice. Please pay the invoice before
+              purchasing a new subscription.
+            </h4>
+            <a href={invoiceLink} target="_blank" rel="noreferrer">
+              {' '}
+              Click here to pay the invoice{' '}
+            </a>
+          </Row>
+        )}
         <Row className="d-flex flex-row flex-nowrap overflow-auto justify-content-center">
           {plans}
         </Row>

@@ -2,6 +2,7 @@ import userModel from '../models/User';
 import type { User } from '../entities/userEntity';
 import logger from '../config/logger';
 import { AppError } from '../utils/errorHandler';
+import { type status } from '../entities/userEntity';
 
 const serviceName = 'userServices';
 
@@ -105,7 +106,7 @@ export const handleSuccessfulPaymentIntent = async (
 
 export const handleSubscription = async (
   userId: string,
-  status: string,
+  status: status,
   subscriptionType?:
     | 'Basic Subscription'
     | 'Advanced Subscription'
@@ -117,21 +118,12 @@ export const handleSubscription = async (
     `${serviceName}: Handling subscription for ${userId} for ${status} with ${subscriptionType}`,
   );
   const user = (await userModel.findById(userId)) as User;
-  if (status === 'active') {
-    user.subscription = {
-      status: 'active',
-      from: startDate!,
-      to: endDate!,
-      type: subscriptionType!,
-    };
-  } else {
-    user.subscription = {
-      status: 'inactive',
-      from: startDate!,
-      to: endDate!,
-      type: subscriptionType!,
-    };
-  }
+  user.subscription = {
+    status: status,
+    from: startDate!,
+    to: endDate!,
+    type: subscriptionType!,
+  };
   logger.debug(`${serviceName}: Updating user ${userId} with ${user}`);
   await userModel.findByIdAndUpdate(user.id, user);
 };

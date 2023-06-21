@@ -44,3 +44,9 @@ export async function cancelSubscription() {
     withCredentials: true,
   });
 }
+
+export async function getInvoiceLink() {
+  return await apiClient.get<string>(`/stripe/get-invoice-link`, {
+    withCredentials: true,
+  });
+}

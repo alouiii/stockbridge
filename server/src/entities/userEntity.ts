@@ -1,3 +1,11 @@
+export type status =
+  | 'active'
+  | 'past_due'
+  | 'unpaid'
+  | 'canceled'
+  | 'incomplete'
+  | 'incomplete_expired';
+
 export interface Address {
   street: string;
   houseNumber: string;
@@ -9,7 +17,7 @@ export interface Address {
 export interface Subscription {
   from: Date;
   to: Date;
-  status: 'active' | 'inactive';
+  status: status;
   type: 'Basic Subscription' | 'Advanced Subscription' | 'Premium Subscription';
 }
 

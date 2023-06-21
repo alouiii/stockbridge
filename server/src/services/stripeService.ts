@@ -69,6 +69,23 @@ export const createStripeSetupIntent = async (user: User) => {
   });
 };
 
+const delUselessSubscriptions = async (customer: Stripe.Customer) => {
+  if (customer.subscriptions) {
+    for (const subscription of customer.subscriptions.data) {
+      if (
+        ['canceled', 'incomplete', 'incomplete_expired'].includes(
+          subscription.status,
+        )
+      ) {
+        customer.subscriptions.data = customer.subscriptions.data.filter(
+          (sub) => sub.id !== subscription.id,
+        );
+        await stripe.subscriptions.del(subscription.id);
+      }
+    }
+  }
+};
+
 //TODO: How to handle the subscription edit
 export const createStripeSubscription = async (
   user: User,
@@ -94,7 +111,12 @@ export const createStripeSubscription = async (
   const customer = (await stripe.customers.retrieve(user.stripeCustomerId, {
     expand: ['subscriptions'],
   })) as Stripe.Customer;
+
+  await delUselessSubscriptions(customer);
+
   if (customer.subscriptions && customer.subscriptions.data.length > 0) {
+    logger.error('User already has a subscription');
+    logger.error(customer.subscriptions.data);
     throw new AppError(
       'User already has a subscription',
       'User already has a subscription',
@@ -135,7 +157,11 @@ export const cancelStripeSubscription = async (user: User) => {
   const customer = (await stripe.customers.retrieve(user.stripeCustomerId, {
     expand: ['subscriptions'],
   })) as Stripe.Customer;
-  logger.debug('#################################');
+
+  logger.debug('Deleting useless subscriptions');
+  logger.debug(customer.subscriptions);
+  await delUselessSubscriptions(customer);
+  logger.debug('Deleted useless subscriptions');
   logger.debug(customer.subscriptions);
   if (
     !customer.subscriptions ||
@@ -148,7 +174,35 @@ export const cancelStripeSubscription = async (user: User) => {
       400,
     );
   }
-  return await stripe.subscriptions.del(customer.subscriptions.data[0].id);
+  logger.info('Deleting subscription');
+  await stripe.subscriptions.del(customer.subscriptions.data[0].id);
+  logger.info('Deleted subscription');
+  return;
+};
+
+export const getSubscriptionInvoiceLink = async (user: User) => {
+  logger.debug(
+    `${serviceName}: Getting stripe subscription invoice for ${user.email}`,
+  );
+  const customer = (await stripe.customers.retrieve(user.stripeCustomerId, {
+    expand: ['subscriptions'],
+  })) as Stripe.Customer;
+  if (
+    !customer.subscriptions ||
+    customer.subscriptions.data.length !== 1 ||
+    !customer.subscriptions.data[0].id
+  ) {
+    throw new AppError(
+      'User does not have a subscription',
+      'User does not have a subscription',
+      400,
+    );
+  }
+  const subscription = customer.subscriptions.data[0];
+  const invoice = (await stripe.invoices.retrieve(
+    subscription.latest_invoice as string,
+  )) as Stripe.Invoice;
+  return invoice.hosted_invoice_url;
 };
 
 //TODO: Handle the event subscription.updated / subscription.deleted / subscription.created
@@ -205,17 +259,24 @@ export const webhookHandler = async (
       ) {
         throw new AppError('Invalid subscription', 'Invalid subscription', 400);
       }
-      await handleSubscription(
-        subscription.metadata.userId,
-        subscription.status,
-        subscription.metadata.product,
-        new Date(subscription.current_period_start),
-        new Date(subscription.current_period_end),
-      );
+      if (
+        subscription.status !== 'paused' &&
+        subscription.status !== 'trialing'
+      ) {
+        await handleSubscription(
+          subscription.metadata.userId,
+          subscription.status,
+          subscription.metadata.product,
+          new Date(subscription.current_period_start * 1000),
+          new Date(subscription.current_period_end * 1000),
+        );
+      } else {
+        throw new AppError('Invalid subscription', 'Invalid subscription', 400);
+      }
 
       break;
     default:
-      logger.debug(`${serviceName}: Received ${event.type}`);
+      logger.error(`${serviceName}: Received ${event.type} unhandled event`);
   }
   // Return a response to acknowledge receipt of the event
   return true;
