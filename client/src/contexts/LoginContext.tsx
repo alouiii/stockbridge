@@ -42,7 +42,7 @@ export const LoginContextProvider = ({
         })
         .catch(() => {
           setLoggedIn(false);
-          setLoggedIn(false);
+          setIsLoading(false);
           setUser(undefined);
         });
     };
