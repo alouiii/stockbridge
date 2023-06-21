@@ -28,9 +28,11 @@ interface PaymentElementProps {
 
 const PaymentElement = (props: PaymentElementProps) => {
   const [clientSecret, setClientSecret] = useState('');
-  const [show, setShow] = useState(true);
+  const [error, setError] = useState<string | undefined>(undefined);
 
   useEffect(() => {
+    setError(undefined);
+
     switch (props.type) {
       case 'paymentIntent':
         createPaymentIntent({
@@ -38,22 +40,22 @@ const PaymentElement = (props: PaymentElementProps) => {
           product: props.product!,
         }).then((res) => {
           setClientSecret(res);
-          setShow(false);
         });
         break;
       case 'setupIntent':
         createSetupIntent().then((res) => {
           setClientSecret(res);
-          setShow(false);
         });
         break;
       case 'subscription':
         createSubscription(props.product!)
           .then((res) => {
             setClientSecret(res.clientSecret);
-            setShow(false);
           })
-          .catch((err) => alert(err.response.data.message));
+          .catch((err) => {
+            setError(err.response.data.message);
+            setClientSecret('');
+          });
     }
   }, [props.amount, props.product, props.type]);
 
@@ -76,15 +78,15 @@ const PaymentElement = (props: PaymentElementProps) => {
         </Elements>
       ) : (
         <Modal
-          show={show}
-          onHide={() => setShow(false)}
+          show={props.show}
+          onHide={props.onHide}
           aria-labelledby="contained-modal-title-vcenter"
           size="sm"
           centered
         >
           <Modal.Header closeButton></Modal.Header>
           <Modal.Body className={'d-flex justify-content-center'}>
-            <Spinner role="status" />
+            {error ?? <Spinner role="status" />}
           </Modal.Body>
         </Modal>
       )}
