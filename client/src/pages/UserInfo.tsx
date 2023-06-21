@@ -79,7 +79,11 @@ export function UserInfo() {
     const selectValue = searchParams.get('select');
 
     if (selectValue) {
-      setSelectedProfileSection(Number(selectValue));
+      setSelectedProfileSection(
+        Number(selectValue) < leftTabs.length && Number(selectValue) >= 0
+          ? Number(selectValue)
+          : 0,
+      );
     }
   }, [location.search]);
 
