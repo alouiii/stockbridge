@@ -9,9 +9,9 @@ import {
   getAdvertsByCategory,
 } from '../services/advertServices';
 import { AuthenticatedRequest } from '../middlewares/authMiddleware';
-import logger from '../config/logger';
 import { AppError } from '../utils/errorHandler';
-import { ProductCategory } from '../entities/advertEntity';
+import { Advert, ProductCategory } from '../entities/advertEntity';
+import { ObjectId } from 'mongodb';
 
 /**
  * This method returns an advert by id   *
@@ -22,6 +22,7 @@ import { ProductCategory } from '../entities/advertEntity';
 export const getAdvert = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const { id } = req.params;
+   
     //verifyIfAuthorized(id, req);
     const advert = await findAdvertById(id);
     res.status(200).json(advert);
@@ -65,15 +66,18 @@ export const putAdvert = asyncHandler(
     const { id } = req.params;
     const newAdvert = req.body;
     const existingAdvert = await findAdvertById(id);
-    if (newAdvert.reviews) {
-      newAdvert.reviews = (existingAdvert.reviews || []).concat(
-        newAdvert.reviews,
-      );
-    }
+    
+    //TODO: These should be handled differently -- create the entity and the id is added here from there.
+    // if (newAdvert.reviews) {
+    //   newAdvert.reviews = (existingAdvert.reviews || []).concat(
+    //     newAdvert.reviews,
+    //   );
+    // }
 
-    if (newAdvert.offers) {
-      newAdvert.offers = (existingAdvert.offers || []).concat(newAdvert.offers);
-    }
+    // if (newAdvert.offers) {
+    //   newAdvert.offers = (existingAdvert.offers || []).concat(newAdvert.offers);
+    // }
+    _checkUserCanEditOrDeleteAdvert(req);
     const advert = await updateAdvert(id, newAdvert);
     res.status(200).json(advert);
   },
@@ -107,3 +111,22 @@ export const getAllAdvertsByCategory = asyncHandler(
     res.status(200).json(adverts);
   },
 );
+
+
+/**
+ * Checks if a user can edit or delete an advert with a given id.
+ * @param req The request containing the to be checked ids.
+ */
+async function _checkUserCanEditOrDeleteAdvert(req: AuthenticatedRequest) {
+  let userId = new ObjectId(req.user?.id);
+  const { id } = req.params;
+
+  // The user editing or deleting must be the one who created the advert.
+  if (!(await findAdvertById(id, false)).store.equals(userId)) {
+    throw new AppError(
+      'Not authorized to edit this route',
+      'Not authorized to edit this route',
+      401,
+    );
+  }
+}
