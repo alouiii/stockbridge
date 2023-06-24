@@ -2,18 +2,18 @@ import reviewModel from '../models/Review';
 import type { Review } from '../entities/reviewEntity';
 import logger from '../config/logger';
 import { AppError } from '../utils/errorHandler';
-import advertModel from '../models/Advert';
 
 const serviceName = 'reviewServices';
 
 /**
  * Find a review by id
  * @param id
+ * @param populate determines if the result should be populated
  * @returns Promise containing the review
  */
-export const findReviewById = async (id: string) => {
+export const findReviewById = async (id: string, populate = true) => {
   logger.debug(`${serviceName}: Finding review with id: ${id}`);
-  const review = await reviewModel.findById(id);
+  const review = populateResult(await reviewModel.findById(id), populate);
 
   if (!review) {
     logger.error(`${serviceName}: Review not found with id of ${id}`);
@@ -61,11 +61,23 @@ export const delReview = async (id: string) => {
 /**
  * Returns all reviews of the requested advert
  * @param advertId
+ * @param populate determines if the result should be populated
  * @returns Promise containing the list of adverts
  */
-export const getReviewsByAdvert = async (advertId: string) => {
+export const getReviewsByAdvert = async (advertId: string, populate = false) => {
   logger.debug(
     `${serviceName}: Requesting all reviews for advert: ${advertId}`,
   );
-  return reviewModel.find({ reviewedAdvert: advertId });
+  return populateResult(reviewModel.find({ reviewedAdvert: advertId }), populate);
 };
+
+/**
+ * Populates the referenced elements in a document
+ * @param queryResult The document to be populated
+ * @param populate Determines if the result should be populated
+ * @returns 
+ */
+function populateResult(queryResult : any, populate : boolean)
+{
+  return populate ? queryResult.populate(['reviewer', 'reviewedAdvert']) : queryResult;
+}
