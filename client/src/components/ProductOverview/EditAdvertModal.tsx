@@ -151,7 +151,7 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
             status: 'Ongoing',
             category: formData.category,
             createdAt: new Date(),
-            store: user?._id,
+            store: user,
             imageurl: encodedImage,
             type: advertType,
           });

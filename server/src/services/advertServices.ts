@@ -74,7 +74,7 @@ export const findAllAdverts = async (populate = true) => {
  * @param populate determines if the result should be populated
  * @returns Promise containing the deleted advert.
  */
-export const getAdvertsByCategory = async (category: ProductCategory, populate = false) => {
+export const getAdvertsByCategory = async (category: ProductCategory, populate = true) => {
   logger.debug(
     `${serviceName}: Requesting all adverts with category: ${category}`,
   );

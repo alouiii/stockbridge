@@ -4,6 +4,7 @@ import { ProductAttribute } from './ProductAttribute';
 import { Image } from 'react-bootstrap';
 
 const ProductDetails = (advert: Advert) => {
+  console.log(advert)
   return (
     <div
       style={{
