@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Page } from '../components/Page';
 import { ProfileHeader } from '../components/Profile/ProfileHeader';
 import '../styles/userInfo.css';
@@ -14,6 +14,8 @@ import BuyingContent from '../components/Profile/ProfileSectionsContent/BuyingCo
 import PremiumContent from '../components/Profile/ProfileSectionsContent/PremiumContent';
 import HelpQaContent from '../components/Profile/ProfileSectionsContent/HelpQaContent';
 import StoreDetailsForm from '../components/Profile/StoreDetails/StoreDetailsForm';
+import SelectedTabContext from '../contexts/SelectedTabContext';
+import context from 'react-bootstrap/esm/AccordionContext';
 
 /**
  * Contains the tabs displayed on the sidebar of the profile page and their corresponding content
@@ -65,9 +67,10 @@ const leftTabs: {
 /**
  * The page containing the user information (profile): Ads, Offers, Subsriptions...
  */
-export function UserInfo() {
+export function UserInfo(selected : any, setSelected : (index: number) => void) {
   const matches = useMediaQuery('(min-width: 768px)');
-  const [selectedProfileSection, setSelectedProfileSection] = useState(0);
+  const tabContext = useContext(SelectedTabContext);
+  //const [selectedProfileSection, setSelectedProfileSection] = useState(0);
 
   return (
     <Page>
@@ -100,8 +103,8 @@ export function UserInfo() {
                   title={section.text}
                   icon={section.icon}
                   index={sectionIndex}
-                  selectedTab={selectedProfileSection}
-                  setSelectedTab={setSelectedProfileSection}
+                  selectedTab={tabContext.selectedProfileSection}
+                  setSelectedTab={tabContext.setSelectedProfileSection}
                 />
               );
             })}
@@ -109,7 +112,7 @@ export function UserInfo() {
         </div>
 
         <div className="col-10" style={{ paddingTop: '5em' }}>
-          {leftTabs[selectedProfileSection].content}
+          {leftTabs[tabContext.selectedProfileSection].content}
         </div>
       </div>
     </Page>

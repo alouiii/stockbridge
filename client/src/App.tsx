@@ -6,9 +6,12 @@ import { SignUp } from './pages/SignUp';
 import { SignIn } from './pages/SignIn';
 import { LoginContextProvider } from './contexts/LoginContext';
 import ProductOverview from './pages/ProductOverview';
+import { SelectedTabContextProvider } from './contexts/SelectedTabContext';
+
 
 function App() {
   return (
+    <SelectedTabContextProvider>
     <LoginContextProvider>
       <Routes>
         <Route path="/" element={<Home />} />
@@ -18,6 +21,7 @@ function App() {
         <Route path="/productoverview/:id" Component={ProductOverview}></Route>
       </Routes>
     </LoginContextProvider>
+    </SelectedTabContextProvider>
   );
 }
 
