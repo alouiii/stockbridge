@@ -1,4 +1,5 @@
 import { ApiClient } from '../apiClient';
+import { Advert } from './advert';
 import { User } from './user';
 
 export enum OfferStatus {
@@ -15,9 +16,9 @@ export interface Offer {
   status?: OfferStatus;
   message?: string;
   createdAt?: Date;
-  offeror?: string;
-  offeree?: string;
-  advert?: string;
+  offeror?: User;
+  offeree?: User;
+  advert?: Advert;
 }
 
 const apiClient = new ApiClient();

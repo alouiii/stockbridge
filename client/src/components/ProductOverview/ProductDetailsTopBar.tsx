@@ -9,7 +9,7 @@ import { EditReviewModal } from './EditReviewModal';
 
 type ProductDetailsTopBarProps = {
   owner: boolean;
-  advert?: Advert;
+  advert: Advert;
 };
 
 const ProductDetailsTopBar: React.FC<ProductDetailsTopBarProps> = (props) => {
@@ -72,7 +72,7 @@ const ProductDetailsTopBar: React.FC<ProductDetailsTopBarProps> = (props) => {
         <EditReviewModal
           isShowing={showReviewModal}
           onClose={closeModal}
-          advertID={props.advert?._id}
+          advert={props.advert}
         />
       )}
     </div>

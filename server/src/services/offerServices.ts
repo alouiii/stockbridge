@@ -63,7 +63,7 @@ export const delOffer = async (id: string) => {
  * @param populate determines if the result should be populated
  * @returns Promise containing all offers
  */
-export const findAllOffers = async (populate = false) => {
+export const findAllOffers = async (populate = true) => {
   logger.debug(`${serviceName}: Finding all offers`);
   return populateResult(await offerModel.find(), populate);
 };
@@ -74,7 +74,7 @@ export const findAllOffers = async (populate = false) => {
  * @param populate determines if the result should be populated
  * @returns Promise containing the deleted advert.
  */
-export const findAllOffersByOfferor = async (offeror: string, populate = false) => {
+export const findAllOffersByOfferor = async (offeror: string, populate = true) => {
   logger.debug(`${serviceName}: Requesting all offers of offeror: ${offeror}`);
   return populateResult(offerModel.find({ offeror: offeror }), populate);
 };
@@ -85,7 +85,7 @@ export const findAllOffersByOfferor = async (offeror: string, populate = false) 
  * @param populate determines if the result should be populated
  * @returns Promise containing the deleted advert.
  */
-export const findAllOffersByOfferee = async (offeree: string, populate = false) => {
+export const findAllOffersByOfferee = async (offeree: string, populate = true) => {
   logger.debug(`${serviceName}: Requesting all offers of offeree: ${offeree}`);
   return populateResult(offerModel.find({ offeree: offeree }), populate);
 };
@@ -96,7 +96,7 @@ export const findAllOffersByOfferee = async (offeree: string, populate = false) 
  * @param populate determines if the result should be populated
  * @returns Promise containing the deleted advert.
  */
-export const findAllOffersByAdvert = async (advert: string, populate = false) => {
+export const findAllOffersByAdvert = async (advert: string, populate = true) => {
   logger.debug(
     `${serviceName}: Requesting all offers related to advert: ${advert}`,
   );

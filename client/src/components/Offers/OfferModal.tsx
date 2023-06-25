@@ -67,7 +67,7 @@ const OfferModal: FC<OfferContentProps> = (props) => {
         if (props.advert?._id) {
           console.log('Updating advert: ', props.advert._id);
           updateAdvert(props.advert._id, {
-            offers: [createdOffer._id!],
+            offers: [createdOffer],
           });
         }
         if (props.onClose) props?.onClose();

@@ -7,14 +7,16 @@ export interface Review {
   rating: number;
   description: string;
   createdAt: Date;
-  reviewer: string;
-  reviewedAdvert: string;
+  reviewer: User;
+  reviewedAdvert: Advert;
 }
 
 const apiClient = new ApiClient();
 
 export async function getReview(id: string): Promise<Review> {
-  return await apiClient.get<Review>(`/reviews/${id}`);
+  return await apiClient.get<Review>(`/reviews/${id}`, {
+    withCredentials: true,
+  });
 }
 
 export async function createReview(review: Review): Promise<Review> {

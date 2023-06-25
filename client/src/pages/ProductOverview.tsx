@@ -38,8 +38,7 @@ const ProductOverview = () => {
         if (id) {
           const fetchedAdvert = await getAdvert(id);
           if (fetchedAdvert.store) {
-            const fetchedStore = await getStore(fetchedAdvert.store);
-            setStore(fetchedStore);
+            setStore(fetchedAdvert.store);
           }
           setAdvert(fetchedAdvert as Advert);
           console.log(fetchedAdvert);
@@ -72,7 +71,7 @@ const ProductOverview = () => {
             />
           )}
           {advert.reviews && advert.reviews.length > 0 && advert._id && (
-            <ReviewsSection advertID={advert._id} />
+            <ReviewsSection advert={advert} />
           )}
         </div>
       ) : (
