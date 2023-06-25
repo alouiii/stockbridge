@@ -2,7 +2,10 @@ import userModel from '../models/User';
 import type { User } from '../entities/userEntity';
 import logger from '../config/logger';
 import { AppError } from '../utils/errorHandler';
-import { type status } from '../entities/userEntity';
+import {
+  type SubscriptionStatus,
+  SubscriptionType,
+} from '../entities/userEntity';
 
 const serviceName = 'userServices';
 
@@ -106,11 +109,8 @@ export const handleSuccessfulPaymentIntent = async (
 
 export const handleSubscription = async (
   userId: string,
-  status: status,
-  subscriptionType?:
-    | 'Basic Subscription'
-    | 'Advanced Subscription'
-    | 'Premium Subscription',
+  status: SubscriptionStatus,
+  subscriptionType?: SubscriptionType,
   startDate?: Date,
   endDate?: Date,
 ) => {

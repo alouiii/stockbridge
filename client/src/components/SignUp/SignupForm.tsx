@@ -12,11 +12,10 @@ import {
   checkPasswordLength,
   checkPasswordMatch,
 } from '../../utils/functions';
-import { PaymentModal as CustomPaymentModal } from './PaymentModal';
 import { ApiClient } from '../../api/apiClient';
 import { LoginContext } from '../../contexts/LoginContext';
 import { User, UserResponse } from '../../api/collections/user';
-import PaymentElement from '../Payment/PaymentElement';
+import PaymentElement, { PaymentType } from '../Payment/PaymentElement';
 
 enum ErrorType {
   EMAIL = 'Email format invalid',
@@ -406,7 +405,7 @@ export const SignupForm: FC = () => {
         <PaymentElement
           show={isModalShowing}
           onHide={() => setIsModalShowing(false)}
-          type="setupIntent"
+          type={PaymentType.SETUP_INTENT}
         />
       ) : undefined}
     </div>

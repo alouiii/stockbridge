@@ -1,10 +1,17 @@
-export type status =
-  | 'active'
-  | 'past_due'
-  | 'unpaid'
-  | 'canceled'
-  | 'incomplete'
-  | 'incomplete_expired';
+export enum SubscriptionStatus {
+  ACTIVE = 'active',
+  PAST_DUE = 'past_due',
+  UNPAID = 'unpaid',
+  CANCELED = 'canceled',
+  INCOMPLETE = 'incomplete',
+  INCOMPLETE_EXPIRED = 'incomplete_expired',
+}
+
+export enum SubscriptionType {
+  BASIC_SUBSCRIPTION = 'Basic Subscription',
+  ADVANCED_SUBSCRIPTION = 'Advanced Subscription',
+  PREMIUM_SUBSCRIPTION = 'Premium Subscription',
+}
 
 export interface Address {
   street: string;
@@ -17,8 +24,8 @@ export interface Address {
 export interface Subscription {
   from: Date;
   to: Date;
-  status: status;
-  type: 'Basic Subscription' | 'Advanced Subscription' | 'Premium Subscription';
+  status: SubscriptionStatus;
+  type: SubscriptionType;
 }
 
 export interface PaymentMethod {

@@ -1,16 +1,13 @@
-import React, { ReactElement, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Card, { CardProps } from '../Premium/Card';
 import { Container, Row } from 'react-bootstrap';
-import PaymentElement from '../../Payment/PaymentElement';
+import PaymentElement, { PaymentType } from '../../Payment/PaymentElement';
 import { LoginContext } from '../../../contexts/LoginContext';
 import {
   cancelSubscription,
   getInvoiceLink,
 } from '../../../api/collections/payment';
-
-type Props = {
-  children: ReactElement[];
-};
+import { SubscriptionStatus } from '../../../api/collections/user';
 
 const prioTickets: CardProps[] = [
   {
@@ -70,7 +67,7 @@ const subscriptionPlans: CardProps[] = [
   },
 ];
 
-const PremiumContent: React.FC<Props> = () => {
+const PremiumContent = () => {
   const [showModal, setShowModal] = useState(false);
   const [amount, setAmount] = useState(0);
   const [product, setProduct] = useState('');
@@ -80,7 +77,11 @@ const PremiumContent: React.FC<Props> = () => {
   const { user } = useContext(LoginContext);
   if (
     user?.subscription &&
-    ['unpaid', 'past_due', 'active'].includes(user?.subscription?.status)
+    [
+      SubscriptionStatus.UNPAID,
+      SubscriptionStatus.PAST_DUE,
+      SubscriptionStatus.ACTIVE,
+    ].includes(user?.subscription?.status)
   ) {
     subscriptionPlans.forEach((obj) => {
       if (obj.header === user?.subscription?.type) {
@@ -103,7 +104,9 @@ const PremiumContent: React.FC<Props> = () => {
   useEffect(() => {
     if (
       user?.subscription &&
-      ['unpaid', 'past_due'].includes(user?.subscription?.status)
+      [SubscriptionStatus.UNPAID, SubscriptionStatus.PAST_DUE].includes(
+        user?.subscription?.status,
+      )
     ) {
       setPromptPay(true);
       getInvoiceLink().then((link) => setInvoiceLink(link));
@@ -188,8 +191,8 @@ const PremiumContent: React.FC<Props> = () => {
           product={product}
           type={
             product.toLowerCase().includes('subscription')
-              ? 'subscription'
-              : 'paymentIntent'
+              ? PaymentType.SUBSCRIPTION
+              : PaymentType.PAYMENT_INTENT
           }
         />
       )}

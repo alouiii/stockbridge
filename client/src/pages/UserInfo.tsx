@@ -54,7 +54,7 @@ const leftTabs: {
   {
     text: 'Premium',
     icon: 'bi-bookmark-star',
-    content: <PremiumContent children={[]} />,
+    content: <PremiumContent />,
     isSelected: false,
   },
   {

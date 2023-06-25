@@ -1,5 +1,9 @@
 import logger from '../config/logger';
-import { User } from '../entities/userEntity';
+import {
+  SubscriptionStatus,
+  SubscriptionType,
+  User,
+} from '../entities/userEntity';
 import environment from '../utils/environment';
 import Stripe from 'stripe';
 import { AppError } from '../utils/errorHandler';
@@ -89,20 +93,20 @@ const delUselessSubscriptions = async (customer: Stripe.Customer) => {
 //TODO: How to handle the subscription edit
 export const createStripeSubscription = async (
   user: User,
-  subscriptionType: string,
+  subscriptionType: SubscriptionType,
 ) => {
   logger.debug(
     `${serviceName}: Creating stripe subscription for ${user.email}`,
   );
   let priceId;
   switch (subscriptionType) {
-    case 'Basic Subscription':
+    case SubscriptionType.BASIC_SUBSCRIPTION:
       priceId = 'price_1NKhLmHGv7rRxdJfB2dX1yVK';
       break;
-    case 'Advanced Subscription':
+    case SubscriptionType.ADVANCED_SUBSCRIPTION:
       priceId = 'price_1NKhMdHGv7rRxdJfiEeuXc1F';
       break;
-    case 'Premium Subscription':
+    case SubscriptionType.PREMIUM_SUBSCRIPTION:
       priceId = 'price_1NKhMwHGv7rRxdJf7PgR5sKa';
       break;
     default:
@@ -265,8 +269,8 @@ export const webhookHandler = async (
       ) {
         await handleSubscription(
           subscription.metadata.userId,
-          subscription.status,
-          subscription.metadata.product,
+          subscription.status as SubscriptionStatus,
+          subscription.metadata.product as SubscriptionType,
           new Date(subscription.current_period_start * 1000),
           new Date(subscription.current_period_end * 1000),
         );

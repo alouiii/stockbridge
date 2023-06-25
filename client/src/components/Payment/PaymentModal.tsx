@@ -1,22 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import {
   PaymentElement,
-  useStripe,
   useElements,
+  useStripe,
 } from '@stripe/react-stripe-js';
 import {
   PaymentIntentResult,
   StripePaymentElementOptions,
 } from '@stripe/stripe-js';
-import { Spinner, Modal } from 'react-bootstrap';
+import { Modal, Spinner } from 'react-bootstrap';
+import { PaymentProps, PaymentType } from './PaymentElement';
 
-interface PaymentModalProps {
-  show: boolean;
-  onHide: () => void;
-  type: 'paymentIntent' | 'setupIntent' | 'subscription';
-}
-
-export default function PaymentModal(props: PaymentModalProps) {
+export default function PaymentModal(props: PaymentProps) {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -72,8 +67,8 @@ export default function PaymentModal(props: PaymentModalProps) {
 
     let error;
     switch (props.type) {
-      case 'subscription':
-      case 'paymentIntent':
+      case PaymentType.SUBSCRIPTION:
+      case PaymentType.PAYMENT_INTENT:
         ({ error } = await stripe.confirmPayment({
           elements,
           redirect: 'if_required',
@@ -83,7 +78,7 @@ export default function PaymentModal(props: PaymentModalProps) {
           },
         }));
         break;
-      case 'setupIntent':
+      case PaymentType.SETUP_INTENT:
         ({ error } = await stripe.confirmSetup({
           elements,
           redirect: 'if_required',

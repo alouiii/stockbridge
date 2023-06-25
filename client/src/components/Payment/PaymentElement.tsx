@@ -18,15 +18,21 @@ const stripePromise = loadStripe(
   'pk_test_51NHlGhHGv7rRxdJfVV4bS3RR8WmrXfJVGPD7l4FWYdgIaOxeGSIFFDOtUiSSw8FYrHWgyy1VXTdPMThE0qttYumH00xBawo5RB',
 );
 
-interface PaymentElementProps {
+export enum PaymentType {
+  PAYMENT_INTENT = 'paymentIntent',
+  SETUP_INTENT = 'setupIntent',
+  SUBSCRIPTION = 'subscription',
+}
+
+export interface PaymentProps {
   amount?: number;
   show: boolean;
   onHide: () => void;
   product?: string;
-  type: 'paymentIntent' | 'setupIntent' | 'subscription';
+  type: PaymentType;
 }
 
-const PaymentElement = (props: PaymentElementProps) => {
+const PaymentElement = (props: PaymentProps) => {
   const [clientSecret, setClientSecret] = useState('');
   const [error, setError] = useState<string | undefined>(undefined);
 
@@ -34,7 +40,7 @@ const PaymentElement = (props: PaymentElementProps) => {
     setError(undefined);
 
     switch (props.type) {
-      case 'paymentIntent':
+      case PaymentType.PAYMENT_INTENT:
         createPaymentIntent({
           amount: props.amount!,
           product: props.product!,
@@ -42,12 +48,12 @@ const PaymentElement = (props: PaymentElementProps) => {
           setClientSecret(res);
         });
         break;
-      case 'setupIntent':
+      case PaymentType.SETUP_INTENT:
         createSetupIntent().then((res) => {
           setClientSecret(res);
         });
         break;
-      case 'subscription':
+      case PaymentType.SUBSCRIPTION:
         createSubscription(props.product!)
           .then((res) => {
             setClientSecret(res.clientSecret);
