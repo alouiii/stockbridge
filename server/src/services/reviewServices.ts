@@ -64,7 +64,7 @@ export const delReview = async (id: string) => {
  * @param populate determines if the result should be populated
  * @returns Promise containing the list of adverts
  */
-export const getReviewsByAdvert = async (advertId: string, populate = false) => {
+export const getReviewsByAdvert = async (advertId: string, populate = true) => {
   logger.debug(
     `${serviceName}: Requesting all reviews for advert: ${advertId}`,
   );

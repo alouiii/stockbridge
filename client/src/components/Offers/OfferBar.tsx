@@ -7,7 +7,7 @@ import { OfferModal } from './OfferModal';
 import { Ratings } from '../Ratings';
 import { InfoBar } from '../ProductOverview/InfoBar';
 import { LoginContext } from '../../contexts/LoginContext';
-import { getStore, User } from '../../api/collections/user';
+import { User } from '../../api/collections/user';
 require('./offerBarStyle.scss');
 
 type OfferBarProps = {
@@ -17,7 +17,6 @@ type OfferBarProps = {
 
 const OfferBar: React.FC<OfferBarProps> = (props) => {
   const [showModal, setShowModal] = useState(false);
-  const { user, loggedIn } = useContext(LoginContext);
   const closeModal = () => {
     setShowModal(false);
     //change to set Advert
@@ -31,10 +30,8 @@ const OfferBar: React.FC<OfferBarProps> = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const offerer = await getStore(props.offer.offeror!);
-        const offeree = await getStore(props.advert.store!);
-        setOfferer(offerer);
-        setOfferee(offeree);
+        setOfferer(props.offer.offeror!);
+        setOfferee(props.offer.offeree!);
       } catch (error) {
         console.error(error);
       }
