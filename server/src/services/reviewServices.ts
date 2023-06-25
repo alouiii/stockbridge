@@ -13,7 +13,7 @@ const serviceName = 'reviewServices';
  */
 export const findReviewById = async (id: string, populate = true) => {
   logger.debug(`${serviceName}: Finding review with id: ${id}`);
-  const review = populateResult(await reviewModel.findById(id), populate);
+  const review = await populateResult(reviewModel.findById(id), populate);
 
   if (!review) {
     logger.error(`${serviceName}: Review not found with id of ${id}`);
@@ -42,7 +42,7 @@ export const createReview = async (review: Review) => {
  */
 export const updateReview = async (id: string, review: Review) => {
   logger.debug(`${serviceName}: Updating review with id: ${id} with ${review}`);
-  return reviewModel.findByIdAndUpdate(id, review, {
+  return await reviewModel.findByIdAndUpdate(id, review, {
     new: true,
     runValidators: true,
   });
@@ -55,7 +55,7 @@ export const updateReview = async (id: string, review: Review) => {
  */
 export const delReview = async (id: string) => {
   logger.debug(`${serviceName}: Deleting review with id: ${id}`);
-  return reviewModel.findByIdAndDelete(id);
+  return await reviewModel.findByIdAndDelete(id);
 };
 
 /**
@@ -68,7 +68,7 @@ export const getReviewsByAdvert = async (advertId: string, populate = true) => {
   logger.debug(
     `${serviceName}: Requesting all reviews for advert: ${advertId}`,
   );
-  return populateResult(reviewModel.find({ reviewedAdvert: advertId }), populate);
+  return await populateResult(reviewModel.find({ reviewedAdvert: advertId }), populate);
 };
 
 /**

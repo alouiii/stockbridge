@@ -13,7 +13,7 @@ const serviceName = 'advertServices';
  */
 export const findAdvertById = async (id: string, populate = true) => {
   logger.debug(`${serviceName}: Finding advert with id: ${id}`);
-  const advert = populateResult(await advertModel.findById(id), populate);
+  const advert = await populateResult(advertModel.findById(id), populate);
 
   if (!advert) {
     logger.error(`${serviceName}: Advert not found with id of ${id}`);
@@ -42,7 +42,7 @@ export const createAdvert = async (advert: Advert) => {
  */
 export const updateAdvert = async (id: string, advert: Advert) => {
   logger.debug(`${serviceName}: Updating advert with id: ${id} with ${advert}`);
-  return advertModel.findByIdAndUpdate(id, advert, {
+  return await advertModel.findByIdAndUpdate(id, advert, {
     new: true,
     runValidators: true,
   });
@@ -55,7 +55,7 @@ export const updateAdvert = async (id: string, advert: Advert) => {
  */
 export const delAdvert = async (id: string) => {
   logger.debug(`${serviceName}: Deleting advert with id: ${id}`);
-  return advertModel.findByIdAndDelete(id);
+  return await advertModel.findByIdAndDelete(id);
 };
 
 /**
@@ -65,7 +65,7 @@ export const delAdvert = async (id: string) => {
  */
 export const findAllAdverts = async (populate = true) => {
   logger.debug(`${serviceName}: Finding all adverts`);
-  return populateResult(advertModel.find(), populate);
+  return await populateResult(advertModel.find(), populate);
 };
 
 /**
@@ -78,7 +78,7 @@ export const getAdvertsByCategory = async (category: ProductCategory, populate =
   logger.debug(
     `${serviceName}: Requesting all adverts with category: ${category}`,
   );
-  return populateResult(advertModel.find({ category: category }), populate);
+  return await populateResult(advertModel.find({ category: category }), populate);
 };
 
 /**

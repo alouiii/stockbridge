@@ -13,7 +13,7 @@ const serviceName = 'offerServices';
  */
 export const findOfferById = async (id: string, populate = true) => {
   logger.debug(`${serviceName}: Finding offer with id: ${id}`);
-  const offer = populateResult(await offerModel.findById(id), populate);
+  const offer = await populateResult(offerModel.findById(id), populate);
 
   if (!offer) {
     logger.error(`${serviceName}: Offer not found with id of ${id}`);
@@ -65,7 +65,7 @@ export const delOffer = async (id: string) => {
  */
 export const findAllOffers = async (populate = true) => {
   logger.debug(`${serviceName}: Finding all offers`);
-  return populateResult(await offerModel.find(), populate);
+  return await populateResult(offerModel.find(), populate);
 };
 
 /**
@@ -76,7 +76,7 @@ export const findAllOffers = async (populate = true) => {
  */
 export const findAllOffersByOfferor = async (offeror: string, populate = true) => {
   logger.debug(`${serviceName}: Requesting all offers of offeror: ${offeror}`);
-  return populateResult(offerModel.find({ offeror: offeror }), populate);
+  return await populateResult(offerModel.find({ offeror: offeror }), populate);
 };
 
 /**
@@ -87,7 +87,7 @@ export const findAllOffersByOfferor = async (offeror: string, populate = true) =
  */
 export const findAllOffersByOfferee = async (offeree: string, populate = true) => {
   logger.debug(`${serviceName}: Requesting all offers of offeree: ${offeree}`);
-  return populateResult(offerModel.find({ offeree: offeree }), populate);
+  return await populateResult(offerModel.find({ offeree: offeree }), populate);
 };
 
 /**
@@ -100,7 +100,7 @@ export const findAllOffersByAdvert = async (advert: string, populate = true) => 
   logger.debug(
     `${serviceName}: Requesting all offers related to advert: ${advert}`,
   );
-  return populateResult(offerModel.find({ advert: advert }), populate);
+  return await populateResult(offerModel.find({ advert: advert }), populate);
 };
 
 /**
