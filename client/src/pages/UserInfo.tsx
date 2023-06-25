@@ -1,12 +1,10 @@
-import React, { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { Page } from '../components/Page';
 import { ProfileHeader } from '../components/Profile/ProfileHeader';
 import '../styles/userInfo.css';
 import { palette } from '../utils/colors';
-
 import useMediaQuery from './../hooks/useMediaQuery';
-import { useState, ReactElement } from 'react';
-
+import { ReactElement } from 'react';
 import { ProfileSectionTab } from '../components/ContentTabs/ProfileSectionTab';
 import MyAdvertsContent from '../components/Profile/ProfileSectionsContent/MyAdvertsContent';
 import SellingContent from '../components/Profile/ProfileSectionsContent/SellingContent';
@@ -15,62 +13,85 @@ import PremiumContent from '../components/Profile/ProfileSectionsContent/Premium
 import HelpQaContent from '../components/Profile/ProfileSectionsContent/HelpQaContent';
 import StoreDetailsForm from '../components/Profile/StoreDetails/StoreDetailsForm';
 import SelectedTabContext from '../contexts/SelectedTabContext';
-import context from 'react-bootstrap/esm/AccordionContext';
+import { createBrowserHistory } from "history";
 
 /**
  * Contains the tabs displayed on the sidebar of the profile page and their corresponding content
  */
 const leftTabs: {
   text: string;
+  link: string;
   icon: string;
   content: ReactElement;
   isSelected: boolean;
 }[] = [
-  {
-    text: 'My Adverts',
-    icon: 'bi-cash-stack',
-    content: <MyAdvertsContent children={[]} />,
-    isSelected: false,
-  },
-  {
-    text: 'Selling',
-    icon: 'bi-cash-coin',
-    content: <SellingContent children={[]} />,
-    isSelected: true,
-  },
-  {
-    text: 'Buying',
-    icon: 'bi-box-seam',
-    content: <BuyingContent children={[]} />,
-    isSelected: false,
-  },
-  {
-    text: 'Store Details',
-    icon: 'bi-shop',
-    content: <StoreDetailsForm />,
-    isSelected: false,
-  },
-  {
-    text: 'Premium',
-    icon: 'bi-bookmark-star',
-    content: <PremiumContent children={[]} />,
-    isSelected: false,
-  },
-  {
-    text: 'Help and FAQ',
-    icon: 'bi-question-circle',
-    content: <HelpQaContent children={[]} />,
-    isSelected: false,
-  },
-];
+    {
+      text: 'My Adverts',
+      link: 'MyAdverts',
+      icon: 'bi-cash-stack',
+      content: <MyAdvertsContent children={[]} />,
+      isSelected: false,
+    },
+    {
+      text: 'Selling',
+      link: 'Selling',
+      icon: 'bi-cash-coin',
+      content: <SellingContent children={[]} />,
+      isSelected: true,
+    },
+    {
+      text: 'Buying',
+      link: 'Buying',
+      icon: 'bi-box-seam',
+      content: <BuyingContent children={[]} />,
+      isSelected: false,
+    },
+    {
+      text: 'Store Details',
+      link: 'StoreDetails',
+      icon: 'bi-shop',
+      content: <StoreDetailsForm />,
+      isSelected: false,
+    },
+    {
+      text: 'Premium',
+      link: 'Premium',
+      icon: 'bi-bookmark-star',
+      content: <PremiumContent children={[]} />,
+      isSelected: false,
+    },
+    {
+      text: 'Help And FAQ',
+      link: 'HelpAndFAQ',
+      icon: 'bi-question-circle',
+      content: <HelpQaContent children={[]} />,
+      isSelected: false,
+    },
+  ];
 
 /**
  * The page containing the user information (profile): Ads, Offers, Subsriptions...
  */
-export function UserInfo(selected : any, setSelected : (index: number) => void) {
+export function UserInfo() {
   const matches = useMediaQuery('(min-width: 768px)');
   const tabContext = useContext(SelectedTabContext);
-  //const [selectedProfileSection, setSelectedProfileSection] = useState(0);
+  const history = createBrowserHistory();
+
+  /**
+   * Sets the active tab from the link history.
+   */
+  useEffect(() => {
+    const filterParams = history.location.search.substring(1);
+    if (filterParams) {
+      tabContext.selectedProfileSection = Number(leftTabs.findIndex(x => filterParams == x.link));
+    }
+  }, []);
+  /**
+   * Sets the link to the active tab.
+   */
+  useEffect(() => {
+    history.push(`?${leftTabs[tabContext.selectedProfileSection].link}`);
+  }, [tabContext.selectedProfileSection]);
 
   return (
     <Page>
