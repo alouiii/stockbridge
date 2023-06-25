@@ -69,11 +69,23 @@ export const findAllAdverts = async () => {
 /**
  * Returns all adverts of the requested category
  * @param category
- * @returns Promise containing the deleted advert.
+ * @returns Promise containing the related adverts.
  */
 export const getAdvertsByCategory = async (category: ProductCategory) => {
   logger.debug(
     `${serviceName}: Requesting all adverts with category: ${category}`,
   );
   return advertModel.find({ category: category });
+};
+
+/**
+ * Returns all adverts of the requested store
+ * @param category
+ * @returns Promise containing the related adverts.
+ */
+export const getAdvertsByStore = async (store: string) => {
+  logger.debug(
+    `${serviceName}: Requesting all adverts of store: ${store}`,
+  );
+  return advertModel.find({ store: store });
 };

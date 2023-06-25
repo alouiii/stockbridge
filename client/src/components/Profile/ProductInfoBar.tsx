@@ -2,9 +2,11 @@ import React from 'react';
 import { Image } from 'react-bootstrap';
 import imagePlaceholder from '../../assets/product-placeholder.png';
 import { ProfileProdcutAttribute } from './ProfileProdcutAttribute';
+import { useNavigate } from 'react-router-dom';
 require('./profile.scss');
 
 type ProductProps = {
+  productId: string | undefined;
   imageUrl: string | undefined;
   name: string | undefined;
   date: string | undefined;
@@ -13,14 +15,16 @@ type ProductProps = {
 };
 
 const ProductInfoBar: React.FC<ProductProps> = ({
+  productId,
   imageUrl,
   name,
   date,
   quantity,
   price,
 }) => {
+  const navigate = useNavigate();
   return (
-    <li className="product-bar row">
+    <li className="product-bar row" onClick={() => navigate(`/productoverview/${productId}`)}>
       <div className="product-image col-2">
       <Image
           style={{

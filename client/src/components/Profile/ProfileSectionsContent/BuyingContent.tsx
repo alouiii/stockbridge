@@ -42,6 +42,7 @@ const BuyingContent: React.FC<Props> = ({ children }) => {
           {products.map((product, index) => {
             return (
               <ProductInfoBar
+                productId={"ffffff"}
                 imageUrl={product.imageUrl}
                 name={product.name}
                 date={product.date}

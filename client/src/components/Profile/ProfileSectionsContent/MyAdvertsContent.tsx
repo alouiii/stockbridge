@@ -2,9 +2,9 @@ import React, { ReactElement, useContext, useEffect, useState } from 'react';
 import Tabs from '../../ContentTabs/Tabs';
 import ContentTab from '../../ContentTabs/ContentTab';
 import ProductInfoBar from '../ProductInfoBar';
-import { Advert, getAdvert, getAllAdverts } from '../../../api/collections/advert';
+import { Advert, getAdvertsByUser } from '../../../api/collections/advert';
+import NoResultsMessage from '../NoResultsMessage';
 import { LoginContext } from '../../../contexts/LoginContext';
-import { getStore } from '../../../api/collections/user';
 
 
 const products: {
@@ -40,17 +40,18 @@ type Props = {
  * Component that displays the content of MyAdverts section.
  */
 const MyAdvertsContent: React.FC<Props> = ({ children }) => {
-  const [adverts, setAdverts] = useState([] as Advert[]);
+  const [buyingAdverts, setBuyingAdverts] = useState([] as Advert[]);
+  const [sellingAdverts, setSellingAdverts] = useState([] as Advert[]);
+  const { user, loggedIn } = useContext(LoginContext);
 useEffect(() => {
   const fetchData = async () => {
     try {
-        const fetchedAdverts = await getAllAdverts();
-        // if (fetchedAdvert.store) {
-        //   const fetchedStore = await getStore(fetchedAdvert.store);
-        //   //setStore(fetchedStore);
-        // }
-        setAdverts(fetchedAdverts as Advert[]);
-        console.log(fetchedAdverts);
+        const fetchedAdverts = await getAdvertsByUser(user?._id);
+        let sellingAds = fetchedAdverts.filter(x => x.type === 'Sell');
+        setSellingAdverts(sellingAds as Advert[]);
+        let buyingAds = fetchedAdverts.filter(x => x.type === 'Ask');
+        setBuyingAdverts(buyingAds as Advert[]);
+        console.log(sellingAds, buyingAds);
       
     } catch (error) {
       console.error(error);
@@ -58,16 +59,15 @@ useEffect(() => {
   };
   fetchData();
 }, []);
-
-const { user, loggedIn } = useContext(LoginContext);
   
   return (
     <div>
       <Tabs>
-        <ContentTab title="Buying Ads">
-        {adverts.map((product, _) => {
+      <ContentTab title="Selling Ads">
+        { sellingAdverts.length > 0 ? sellingAdverts.map((product, _) => {
             return (
               <ProductInfoBar
+                productId={product._id}
                 imageUrl={product.imageurl}
                 name={product.productname}
                 date={product.purchaseDate?.toString().substring(0, 10)}
@@ -75,10 +75,21 @@ const { user, loggedIn } = useContext(LoginContext);
                 price={product.price}
               />
             );
-          })}
+          }) : <NoResultsMessage />}
         </ContentTab>
-        <ContentTab title="Selling Ads">
-          Hola guys, this is the container for the selling Ads
+        <ContentTab title="Buying Ads">
+        { buyingAdverts.length > 0 ? buyingAdverts.map((product, _) => {
+            return (
+              <ProductInfoBar
+                productId={product._id}
+                imageUrl={product.imageurl}
+                name={product.productname}
+                date={product.purchaseDate?.toString().substring(0, 10)}
+                quantity={product.quantity}
+                price={product.price}
+              />
+            );
+          }) : <NoResultsMessage />}
         </ContentTab>
       </Tabs>
     </div>

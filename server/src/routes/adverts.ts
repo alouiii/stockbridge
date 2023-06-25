@@ -4,6 +4,7 @@ import {
   getAdvert,
   getAdverts,
   getAllAdvertsByCategory,
+  getAllAdvertsByStore,
   postAdvert,
   putAdvert,
 } from '../controllers/advertController';
@@ -20,3 +21,4 @@ advertRouter
   .delete(protect, deleteAdvert);
 
 advertRouter.route('/getAdvertsByCategory/:cat').get(protect,getAllAdvertsByCategory);
+advertRouter.route('/getAdvertsByStore/:store').get(protect,getAllAdvertsByStore);

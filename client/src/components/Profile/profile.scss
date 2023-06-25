@@ -43,4 +43,14 @@
   margin-bottom: 2em;
   max-width: 99%;
   padding: 0.5em;
+  cursor: pointer;
+}
+
+.no-results-message {
+  position: absolute;
+  top: 70%;
+  left: 55%;
+  transform: translate(-50%, -50%);
+  font-size: 2em;
+  color: #727272;
 }

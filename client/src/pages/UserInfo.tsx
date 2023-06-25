@@ -83,7 +83,7 @@ export function UserInfo() {
   useEffect(() => {
     const filterParams = history.location.search.substring(1);
     if (filterParams) {
-      tabContext.selectedProfileSection = Number(leftTabs.findIndex(x => filterParams == x.link));
+      tabContext.selectedProfileSection = Number(leftTabs.findIndex(x => filterParams === x.link));
     }
   }, []);
   /**
