@@ -7,7 +7,6 @@ type ReviewsSectionProps = {
   advert: Advert;
 };
 const ReviewsSection: FC<ReviewsSectionProps> = (props) => {
-  console.log(props.advert);
   return (
     <ReviewOfferSection section="REVIEWS">
       <div

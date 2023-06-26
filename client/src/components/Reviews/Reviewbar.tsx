@@ -28,7 +28,6 @@ const Reviewbar: FC<ReviewBarProps> = (props) => {
     fetchReview()
   } , [])
   
-  console.log('review: ',review)
   return (
     <>
       {review && review.reviewer && (
