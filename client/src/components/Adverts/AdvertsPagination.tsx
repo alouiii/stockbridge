@@ -46,7 +46,7 @@ export const AdvertsPagination: FC = () => {
         }}
       >
         <Filters />
-        <div className="row" style={{marginLeft: 10, marginRight: 8}}>
+        <div className="row" style={{marginLeft: 10, marginRight: 8, marginTop: 50}}>
           {items.map((item) => (
             <div className="col-md-4 mb-4" key={item.id}>
               <div className="card">

@@ -141,7 +141,7 @@ export const Filters: FC = () => {
             border: 'none',
           }}
         >
-          Confirm
+          Apply
         </Button>
       </div>
     </div>
