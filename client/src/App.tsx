@@ -6,6 +6,7 @@ import { SignUp } from './pages/SignUp';
 import { SignIn } from './pages/SignIn';
 import { LoginContextProvider } from './contexts/LoginContext';
 import ProductOverview from './pages/ProductOverview';
+import {Adverts} from "./pages/Adverts"
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/signIn" element={<SignIn />} />
         <Route path="/productoverview/:id" Component={ProductOverview}></Route>
+        <Route path="/adverts" element={<Adverts />}/>
       </Routes>
     </LoginContextProvider>
   );

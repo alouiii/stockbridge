@@ -33,7 +33,7 @@ export function Navbar() {
       style={{ backgroundColor: palette.pageBG, height: 100 }}
     >
       <Nav className="me-auto">
-        <Nav.Link to="/" as={NavLink}>
+        <Nav.Link to="/adverts" as={NavLink}>
           <img src={logo} alt="logo" />
         </Nav.Link>
       </Nav>
