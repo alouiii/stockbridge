@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import { Title } from '../Text/Title';
 import { Stack } from 'react-bootstrap';
-import { Filters } from '../Home/Filters';
+import { Filters } from './Filters';
 
 interface ItemToStore {
   postId: number;

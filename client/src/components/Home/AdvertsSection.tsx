@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { Stack } from 'react-bootstrap';
 import { Advert, getAllAdverts } from '../../api/collections/advert';
 import { Title } from '../Text/Title';
-import { Filters } from './Filters';
+import { Filters } from '../Adverts/Filters';
 import Tabs from '../ContentTabs/Tabs';
 import ContentTab from '../ContentTabs/ContentTab';
 import { AdvertsTabContent } from './AdvertsTabContent';

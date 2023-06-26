@@ -1,7 +1,7 @@
-import { FC, useState } from 'react';
+import { ChangeEvent, FC, useState } from 'react';
 import { Title } from '../Text/Title';
 import { palette } from '../../utils/colors';
-import { Dropdown, Form } from 'react-bootstrap';
+import { Button, Dropdown, Form } from 'react-bootstrap';
 import Slider from '@mui/material/Slider';
 import { BodyText } from '../Text/BodyText';
 import useMediaQuery from '../../hooks/useMediaQuery';
@@ -13,9 +13,30 @@ import { DatePicker } from '../DatePicker';
  * This components represents the filters section in the home page.
  */
 export const Filters: FC = () => {
+  const [category, setCategory] = useState<string>('');
   const [rangePrice, setRangePrice] = useState<number[]>([0, 1000]);
-  const [rangeQuantity, setRangeQuantity] = useState<number[]>([0, 100]);
+  const [rangeQuantity, setRangeQuantity] = useState<number[]>([0, 1000]);
+  const [date, setDate] = useState<Date>();
+  const [postalCode, setPostalCode] = useState<string>('');
+
   const matches = useMediaQuery('(min-width: 768px)');
+
+  const handleReset = () => {
+    setCategory('');
+    setRangePrice([0, 1000]);
+    setRangeQuantity([0, 1000]);
+    setDate(undefined);
+    setPostalCode('');
+  };
+
+  const handleConfirm = () => {
+    console.log(category, rangePrice, rangeQuantity, date, postalCode);
+  };
+
+  const handleCategoryClick = (category: string) => {
+    setCategory(category);
+  };
+
   return (
     <div
       style={{
@@ -24,8 +45,8 @@ export const Filters: FC = () => {
         borderRadius: 15,
         backgroundColor: palette.subSectionsBgLighter,
 
-        //display: matches ? 'flex' : 'none',
-        //flexDirection: 'column',
+        display: matches ? 'flex' : 'none',
+        flexDirection: 'column',
       }}
     >
       <Title style={{ textAlign: 'center', fontSize: 30, marginTop: 30 }}>
@@ -42,18 +63,18 @@ export const Filters: FC = () => {
             fontFamily: 'Poppins',
           }}
           id="dropdown-basic"
+          defaultValue={'Categories'}
         >
-          Categories
+          {category || 'Categories'}
         </Dropdown.Toggle>
-        <Dropdown.Menu>
+        <Dropdown.Menu style={{ maxHeight: 200, overflowY: 'scroll' }}>
           {Object.values(ProductCategory)
             .filter((key) => isNaN(Number(key)))
-            .map((c) => (
-              <Dropdown.Item href={`${c}`}>{c}</Dropdown.Item>
+            .map((c, index) => (
+              <Dropdown.Item key={index} onClick={() => handleCategoryClick(c)}>
+                {c}
+              </Dropdown.Item>
             ))}
-
-          {/*  <Dropdown.Item href="#/action-2">Plants</Dropdown.Item>
-          <Dropdown.Item href="#/action-3">Something else</Dropdown.Item> */}
         </Dropdown.Menu>
       </Dropdown>
       <div style={{ width: 200, marginTop: 20 }}>
@@ -77,13 +98,18 @@ export const Filters: FC = () => {
           onChange={(_, newRange) => setRangeQuantity(newRange as number[])}
           valueLabelDisplay="auto"
           min={0}
-          max={100}
+          max={1000}
         />
       </div>
-      <div style={{ marginTop: 20 }}>
-        <DatePicker />
+      <div
+        style={{
+          marginTop: 20,
+          textAlign: 'center',
+        }}
+      >
+        <DatePicker value={date} onDateChange={setDate} />
       </div>
-      <div style={{ marginTop: 30, width: 100 }}>
+      <div style={{ width: 100, margin: '0 auto', marginTop: 10 }}>
         <div className="row">
           <div>
             <Form.Group>
@@ -91,13 +117,32 @@ export const Filters: FC = () => {
                 Postal Code:
               </BodyText>
               <Form.Control
-                style={{ border: 'none' }}
+                style={{ border: 'none', textAlign: 'center' }}
                 type="text"
                 placeholder="XXXXX"
+                value={postalCode ?? ""}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  setPostalCode(e.target.value)
+                }
               />
             </Form.Group>
           </div>
         </div>
+      </div>
+      <div style={{ marginTop: 30, display: 'flex', justifyContent: 'center' }}>
+        <Button variant="secondary" onClick={handleReset}>
+          Reset
+        </Button>
+        <Button
+          onClick={handleConfirm}
+          style={{
+            marginLeft: 10,
+            backgroundColor: palette.subSectionsBgAccent,
+            border: 'none',
+          }}
+        >
+          Confirm
+        </Button>
       </div>
     </div>
   );
