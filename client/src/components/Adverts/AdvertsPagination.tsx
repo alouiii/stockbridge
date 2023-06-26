@@ -3,6 +3,7 @@ import ReactPaginate from 'react-paginate';
 import { Title } from '../Text/Title';
 import { Stack } from 'react-bootstrap';
 import { Filters } from './Filters';
+import useMediaQuery from '../../hooks/useMediaQuery';
 
 interface ItemToStore {
   postId: number;
@@ -32,21 +33,31 @@ export const AdvertsPagination: FC = () => {
     window.scrollTo({ top: 0 });
   };
 
+  const matches = useMediaQuery('(min-width: 768px)');
+
   return (
     <div
-      style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', marginBottom: 25 }}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'column',
+        marginBottom: 25,
+      }}
     >
       <Title style={{ fontWeight: 500, marginTop: 100 }}>Active Adverts</Title>
       <Stack
         style={{
           display: 'flex',
-          flexDirection: 'row',
+          flexDirection: matches ? 'row' : 'column',
           marginBottom: '15px',
           marginTop: 100,
         }}
       >
         <Filters />
-        <div className="row" style={{marginLeft: 10, marginRight: 8, marginTop: 50}}>
+        <div
+          className="row"
+          style={{ marginLeft: 10, marginRight: 8, marginTop: 50 }}
+        >
           {items.map((item) => (
             <div className="col-md-4 mb-4" key={item.id}>
               <div className="card">
