@@ -15,7 +15,7 @@ const ProductOverviewSection: React.FC<ProductOverviewSectionProps> = (
   props,
 ) => {
   const { user, loggedIn } = useContext(LoginContext);
-  const owner = user?._id === props.advert?.store;
+  const owner = user?._id === props.advert?.store?._id;
   const button_text = !owner
     ? props.advert?.type === 'Sell'
       ? 'Buy'
