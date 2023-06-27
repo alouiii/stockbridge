@@ -14,7 +14,6 @@ import { AuthenticatedRequest } from '../middlewares/authMiddleware';
 import { ObjectId } from 'mongodb';
 import { AppError } from '../utils/errorHandler';
 import { Offer } from '../entities/offerEntity';
-import logger from '../config/logger';
 import { findAdvertById } from '../services/advertServices';
 
 /**

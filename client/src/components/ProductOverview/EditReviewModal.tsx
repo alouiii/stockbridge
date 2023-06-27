@@ -1,6 +1,10 @@
 import React, { FC, useContext, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import { Advert, updateAdvert } from '../../api/collections/advert';
+import {
+  Advert,
+  PopulatedAdvert,
+  updateAdvert,
+} from '../../api/collections/advert';
 import { Review, createReview } from '../../api/collections/review';
 import { LoginContext } from '../../contexts/LoginContext';
 import { palette } from '../../utils/colors';
@@ -9,7 +13,7 @@ import { Ratings } from '../Ratings';
 type EditReviewContentProps = {
   isShowing: boolean;
   onClose: () => void;
-  advert?: Advert;
+  advert?: PopulatedAdvert;
 };
 
 const EditReviewModal: FC<EditReviewContentProps> = (props) => {
@@ -70,7 +74,7 @@ const EditReviewModal: FC<EditReviewContentProps> = (props) => {
           } as Review);
           // Don't mind thins line please it will be removed at my next PR
           await updateAdvert(props.advert._id!, {
-            reviews: [createdReview],
+            reviews: [createdReview._id],
           });
         }
         setErrors({
