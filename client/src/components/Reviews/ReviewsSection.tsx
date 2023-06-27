@@ -1,10 +1,10 @@
 import { FC } from 'react';
-import { Advert } from '../../api/collections/advert';
+import { Advert, PopulatedAdvert } from '../../api/collections/advert';
 import { ReviewOfferSection } from '../ProductOverview/ReviewOfferSection';
 import { Reviewbar } from './Reviewbar';
 
 type ReviewsSectionProps = {
-  advert: Advert;
+  advert: PopulatedAdvert;
 };
 const ReviewsSection: FC<ReviewsSectionProps> = (props) => {
   return (
@@ -17,9 +17,10 @@ const ReviewsSection: FC<ReviewsSectionProps> = (props) => {
           padding: '30px',
         }}
       >
-        {props.advert.reviews && props.advert.reviews.map((review, i) => (
-          <Reviewbar reviewID={review._id}/>
-        ))}
+        {props.advert.reviews &&
+          props.advert.reviews.map((review, i) => (
+            <Reviewbar reviewID={review._id} />
+          ))}
       </div>
     </ReviewOfferSection>
   );

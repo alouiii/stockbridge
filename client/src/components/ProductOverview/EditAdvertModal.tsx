@@ -6,6 +6,7 @@ import {
   createAdvert,
   ProductCategory,
   Colors,
+  PopulatedAdvert,
 } from '../../api/collections/advert';
 import { palette } from '../../utils/colors';
 import defaultPostAdvertImage from '../../assets/advertPostAdvert.svg';
@@ -22,7 +23,7 @@ import { useNavigate } from 'react-router-dom';
 type EditAdvertContentProps = {
   isShowing: boolean;
   onClose: () => void;
-  advert?: Advert;
+  advert?: PopulatedAdvert;
 };
 
 export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
@@ -151,7 +152,7 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
             status: 'Ongoing',
             category: formData.category,
             createdAt: new Date(),
-            store: user,
+            store: user?._id,
             imageurl: encodedImage,
             type: advertType,
           });

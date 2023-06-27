@@ -4,12 +4,12 @@ import { ProductDetailsTopBar } from './ProductDetailsTopBar';
 import { ProductDetails } from './ProductDetails';
 
 import { Button } from 'react-bootstrap';
-import { Advert } from '../../api/collections/advert';
+import { Advert, PopulatedAdvert } from '../../api/collections/advert';
 import { OfferModal } from '../Offers/OfferModal';
-import { User } from '../../api/collections/user';
+import { PopulatedUser, User } from '../../api/collections/user';
 import { LoginContext } from '../../contexts/LoginContext';
 
-type ProductOverviewSectionProps = { advert: Advert; store: User };
+type ProductOverviewSectionProps = { advert: PopulatedAdvert; store: User };
 
 const ProductOverviewSection: React.FC<ProductOverviewSectionProps> = (
   props,

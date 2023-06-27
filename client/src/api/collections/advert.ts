@@ -85,8 +85,8 @@ export interface PopulatedAdvert {
 
 const apiClient = new ApiClient();
 
-export async function getAdvert(id: string): Promise<Advert> {
-  return await apiClient.get<Advert>(`/adverts/${id}`, {
+export async function getAdvert(id: string): Promise<PopulatedAdvert> {
+  return await apiClient.get<PopulatedAdvert>(`/adverts/${id}`, {
     withCredentials: true,
   });
 }

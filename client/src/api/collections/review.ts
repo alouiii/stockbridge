@@ -7,8 +7,8 @@ export interface PopulatedReview {
   rating: number;
   description: string;
   createdAt: Date;
-  reviewer: string;
-  reviewedAdvert: string;
+  reviewer: User;
+  reviewedAdvert: Advert;
 }
 
 export interface Review {
@@ -16,14 +16,14 @@ export interface Review {
   rating: number;
   description: string;
   createdAt: Date;
-  reviewer: User;
-  reviewedAdvert: Advert;
+  reviewer: string;
+  reviewedAdvert: string;
 }
 
 const apiClient = new ApiClient();
 
-export async function getReview(id: string): Promise<Review> {
-  return await apiClient.get<Review>(`/reviews/${id}`, {
+export async function getReview(id: string): Promise<PopulatedReview> {
+  return await apiClient.get<PopulatedReview>(`/reviews/${id}`, {
     withCredentials: true,
   });
 }

@@ -35,8 +35,8 @@ export interface PopulatedOffer {
 
 const apiClient = new ApiClient();
 
-export async function getOffer(id: string): Promise<Offer> {
-  return await apiClient.get<Offer>(`/offers/${id}`, {
+export async function getOffer(id: string): Promise<PopulatedOffer> {
+  return await apiClient.get<PopulatedOffer>(`/offers/${id}`, {
     withCredentials: true,
   });
 }
@@ -59,8 +59,13 @@ export async function deleteOffer(id: string): Promise<void> {
   });
 }
 
-export async function getOffersByAdvert(advert: string): Promise<Offer[]> {
-  return await apiClient.get<Offer[]>(`/offers/getOffersByAdvert/${advert}`, {
-    withCredentials: true,
-  });
+export async function getOffersByAdvert(
+  advert: string,
+): Promise<PopulatedOffer[]> {
+  return await apiClient.get<PopulatedOffer[]>(
+    `/offers/getOffersByAdvert/${advert}`,
+    {
+      withCredentials: true,
+    },
+  );
 }

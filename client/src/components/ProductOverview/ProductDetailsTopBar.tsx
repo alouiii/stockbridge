@@ -2,14 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import edit from '../../assets/edit-pencil.svg';
 import review from '../../assets/carbon_review.svg';
 import { Button, Image } from 'react-bootstrap';
-import { Advert } from '../../api/collections/advert';
+import { Advert, PopulatedAdvert } from '../../api/collections/advert';
 import { EditAdvertModal } from './EditAdvertModal';
 import { BodyText } from '../Text/BodyText';
 import { EditReviewModal } from './EditReviewModal';
 
 type ProductDetailsTopBarProps = {
   owner: boolean;
-  advert: Advert;
+  advert: PopulatedAdvert;
 };
 
 const ProductDetailsTopBar: React.FC<ProductDetailsTopBarProps> = (props) => {
