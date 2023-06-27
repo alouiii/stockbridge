@@ -2,6 +2,15 @@ import { ApiClient } from '../apiClient';
 import { Advert } from './advert';
 import { User } from './user';
 
+export interface PopulatedReview {
+  _id: string;
+  rating: number;
+  description: string;
+  createdAt: Date;
+  reviewer: string;
+  reviewedAdvert: string;
+}
+
 export interface Review {
   _id: string;
   rating: number;

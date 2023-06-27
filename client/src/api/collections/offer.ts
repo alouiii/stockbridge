@@ -16,6 +16,18 @@ export interface Offer {
   status?: OfferStatus;
   message?: string;
   createdAt?: Date;
+  offeror?: string;
+  offeree?: string;
+  advert?: string;
+}
+
+export interface PopulatedOffer {
+  _id?: string;
+  price?: number;
+  quantity?: number;
+  status?: OfferStatus;
+  message?: string;
+  createdAt?: Date;
   offeror?: User;
   offeree?: User;
   advert?: Advert;

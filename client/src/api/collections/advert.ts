@@ -55,6 +55,26 @@ export interface Advert {
   status?: string;
   type?: string;
   category?: string;
+  offers?: string[];
+  store?: string;
+  reviews?: string[];
+  imageurl?: string;
+  color?: string;
+  createdAt?: Date;
+}
+
+export interface PopulatedAdvert {
+  _id?: string;
+  productname?: string;
+  prioritized?: boolean;
+  quantity?: number;
+  description?: string;
+  price?: number;
+  expirationDate?: Date;
+  purchaseDate?: Date;
+  status?: string;
+  type?: string;
+  category?: string;
   offers?: Offer[];
   store?: User;
   reviews?: Review[];

@@ -46,6 +46,19 @@ export interface User {
   rating?: number;
   phoneNumber?: string;
   createdAt?: Date;
+  address?: string;
+  subscription?: string;
+  paymentMethod?: PaymentMethod;
+}
+export interface PopulatedUser {
+  _id?: string;
+  name?: string;
+  email?: string;
+  password?: string;
+  prioritisationTickets?: number;
+  rating?: number;
+  phoneNumber?: string;
+  createdAt?: Date;
   address?: Address;
   subscription?: Subscription;
   paymentMethod?: PaymentMethod;
