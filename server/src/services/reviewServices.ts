@@ -68,16 +68,20 @@ export const getReviewsByAdvert = async (advertId: string, populate = true) => {
   logger.debug(
     `${serviceName}: Requesting all reviews for advert: ${advertId}`,
   );
-  return await populateResult(reviewModel.find({ reviewedAdvert: advertId }), populate);
+  return await populateResult(
+    reviewModel.find({ reviewedAdvert: advertId }),
+    populate,
+  );
 };
 
 /**
  * Populates the referenced elements in a document
  * @param queryResult The document to be populated
  * @param populate Determines if the result should be populated
- * @returns 
+ * @returns
  */
-function populateResult(queryResult : any, populate : boolean)
-{
-  return populate ? queryResult.populate(['reviewer', 'reviewedAdvert']) : queryResult;
+function populateResult(queryResult: any, populate: boolean) {
+  return populate
+    ? queryResult.populate(['reviewer', 'reviewedAdvert'])
+    : queryResult;
 }

@@ -1,5 +1,9 @@
 import { FC, useEffect, useState } from 'react';
-import { getReview, Review } from '../../api/collections/review';
+import {
+  getReview,
+  PopulatedReview,
+  Review,
+} from '../../api/collections/review';
 import { getStore, User } from '../../api/collections/user';
 import { InfoBar } from '../ProductOverview/InfoBar';
 import { Ratings } from '../Ratings';
@@ -19,15 +23,15 @@ const Reviewbar: FC<ReviewBarProps> = (props) => {
     setShowModal(true);
   };
 
-  const [review, setReview] = useState({} as Review)
+  const [review, setReview] = useState({} as PopulatedReview);
 
   useEffect(() => {
-    const fetchReview = async () => { 
-      setReview(await getReview(props.reviewID!))
-    }
-    fetchReview()
-  } , [])
-  
+    const fetchReview = async () => {
+      setReview(await getReview(props.reviewID!));
+    };
+    fetchReview();
+  }, []);
+
   return (
     <>
       {review && review.reviewer && (

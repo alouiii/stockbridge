@@ -55,6 +55,26 @@ export interface Advert {
   status?: string;
   type?: string;
   category?: string;
+  offers?: string[];
+  store?: string;
+  reviews?: string[];
+  imageurl?: string;
+  color?: string;
+  createdAt?: Date;
+}
+
+export interface PopulatedAdvert {
+  _id?: string;
+  productname?: string;
+  prioritized?: boolean;
+  quantity?: number;
+  description?: string;
+  price?: number;
+  expirationDate?: Date;
+  purchaseDate?: Date;
+  status?: string;
+  type?: string;
+  category?: string;
   offers?: Offer[];
   store?: User;
   reviews?: Review[];
@@ -65,8 +85,8 @@ export interface Advert {
 
 const apiClient = new ApiClient();
 
-export async function getAdvert(id: string): Promise<Advert> {
-  return await apiClient.get<Advert>(`/adverts/${id}`, {
+export async function getAdvert(id: string): Promise<PopulatedAdvert> {
+  return await apiClient.get<PopulatedAdvert>(`/adverts/${id}`, {
     withCredentials: true,
   });
 }
