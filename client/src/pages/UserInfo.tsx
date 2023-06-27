@@ -133,7 +133,7 @@ export function UserInfo() {
             style={{ position: 'absolute', left: '50%', top: '50%' }}
           />
         ) : (
-          <div className="col-10" style={{ paddingTop: '5em' }}>
+          <div className="col-10" style={{ paddingTop: '3em' }}>
             {leftTabs[selectedProfileSection].content}
           </div>
         )}
