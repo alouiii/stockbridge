@@ -112,8 +112,8 @@ export async function deleteAdvert(id: string): Promise<void> {
   });
 }
 
-export async function getAllAdverts(): Promise<Advert[]> {
-  return await apiClient.get<Advert[]>('/adverts/', {
+export async function getAllAdverts(): Promise<PopulatedAdvert[]> {
+  return await apiClient.get<PopulatedAdvert[]>('/adverts/', {
     withCredentials: true,
   });
 }
