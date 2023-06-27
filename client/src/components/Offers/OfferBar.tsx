@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ProductAttribute } from '../ProductOverview/ProductAttribute';
-import { Offer, PopulatedOffer } from '../../api/collections/offer';
-import { Advert, PopulatedAdvert } from '../../api/collections/advert';
+import { PopulatedOffer } from '../../api/collections/offer';
+import { PopulatedAdvert } from '../../api/collections/advert';
 import { BodyText } from '../Text/BodyText';
 import { OfferModal } from './OfferModal';
 import { Ratings } from '../Ratings';
 import { InfoBar } from '../ProductOverview/InfoBar';
-import { LoginContext } from '../../contexts/LoginContext';
 import { User } from '../../api/collections/user';
 require('./offerBarStyle.scss');
 
