@@ -174,6 +174,53 @@ export const getOffersByOfferee = asyncHandler(
 );
 
 /**
+ * This method gets all offers that match the request body parameters  *
+ * @param req - The request object
+ * @param res - The response object
+ * @returns deleted offer object.
+ */
+export const getUserSpecificOffers = asyncHandler(
+  async (req: AuthenticatedRequest, res: Response) => {
+    const { user, advertType, offerType } = req.body;
+    console.log('######################################################');
+    console.log(req.body);
+    const userId = req.user?.id;
+    
+    // if (userId != user) {
+    //   throw new AppError(
+    //     'Not authorized to access this route',
+    //     'Not authorized to access this route',
+    //     401,
+    //   );
+    // }
+
+    var offers: Offer[];
+    switch (offerType) {
+      case 'incoming': {
+        offers = await findAllOffersByOfferee(user);
+        break;
+      }
+      case 'outgoing': {
+        offers = await findAllOffersByOfferor(user);
+        break;
+      }
+      default: {
+        throw new AppError(
+          'Unknown offer type',
+          'Unknown offer type',
+          400,
+        );
+      }
+    }
+
+    // Comment out when the populate is merged
+    // offers = offers.filter(x => (x.advert as Advert).type === advertType);
+
+    res.status(200).json(offers);
+  },
+);
+
+/**
  * Checks if a user can edit or delete an offer with a given id.
  * @param req The request containing the to be checked ids.
  */

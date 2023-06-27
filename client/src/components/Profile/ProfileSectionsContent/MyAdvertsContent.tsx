@@ -14,22 +14,22 @@ const products: {
   quantity: number;
   price: number;
 }[] = [
-  {
-    imageUrl: 'https://placebear.com/g/200/200',
-    name: 'Product Name',
-    date: '01/01/2023',
-    quantity: 10,
-    price: 99.99,
-  },
+    {
+      imageUrl: 'https://placebear.com/g/200/200',
+      name: 'Product Name',
+      date: '01/01/2023',
+      quantity: 10,
+      price: 99.99,
+    },
 
-  {
-    imageUrl: 'http://via.placeholder.com/120x120&text=image2',
-    name: 'Product Testing Name 2',
-    date: '01/01/2010',
-    quantity: 100,
-    price: 15,
-  },
-];
+    {
+      imageUrl: 'http://via.placeholder.com/120x120&text=image2',
+      name: 'Product Testing Name 2',
+      date: '01/01/2010',
+      quantity: 100,
+      price: 15,
+    },
+  ];
 
 
 type Props = {
@@ -43,28 +43,28 @@ const MyAdvertsContent: React.FC<Props> = ({ children }) => {
   const [buyingAdverts, setBuyingAdverts] = useState([] as Advert[]);
   const [sellingAdverts, setSellingAdverts] = useState([] as Advert[]);
   const { user, loggedIn } = useContext(LoginContext);
-useEffect(() => {
-  const fetchData = async () => {
-    try {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
         const fetchedAdverts = await getAdvertsByUser(user?._id);
         let sellingAds = fetchedAdverts.filter(x => x.type === 'Sell');
         setSellingAdverts(sellingAds as Advert[]);
         let buyingAds = fetchedAdverts.filter(x => x.type === 'Ask');
         setBuyingAdverts(buyingAds as Advert[]);
         console.log(sellingAds, buyingAds);
-      
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  fetchData();
-}, []);
-  
+
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <div>
       <Tabs>
-      <ContentTab title="Selling Ads">
-        { sellingAdverts.length > 0 ? sellingAdverts.map((product, _) => {
+        <ContentTab title="Selling Ads">
+          {sellingAdverts.length > 0 ? sellingAdverts.map((product, _) => {
             return (
               <ProductInfoBar
                 productId={product._id}
@@ -78,7 +78,7 @@ useEffect(() => {
           }) : <NoResultsMessage />}
         </ContentTab>
         <ContentTab title="Buying Ads">
-        { buyingAdverts.length > 0 ? buyingAdverts.map((product, _) => {
+          {buyingAdverts.length > 0 ? buyingAdverts.map((product, _) => {
             return (
               <ProductInfoBar
                 productId={product._id}
