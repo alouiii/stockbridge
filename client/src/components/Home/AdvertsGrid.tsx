@@ -1,23 +1,20 @@
 import { FC, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Advert } from '../../api/collections/advert';
+import { Advert, PopulatedAdvert } from '../../api/collections/advert';
 import { Col, Container, Image, Row } from 'react-bootstrap';
 import { ProductAttribute } from '../ProductOverview/ProductAttribute';
 import { BodyText } from '../Text/BodyText';
 
 type AdvertsGridProps = {
-  adverts: Advert[];
+  adverts: PopulatedAdvert[];
 };
 const AdvertsGrid: FC<AdvertsGridProps> = (props) => {
   const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
   const x = Math.round((screenWidth * 0.8) / 370);
-  console.log(x);
-  const grouped: Advert[][] = [];
+  const grouped: PopulatedAdvert[][] = [];
   const adverts = props.adverts.slice(0, x * 2);
   for (let i = 0; i < adverts.length / x; i += 1) {
-    console.log(`from ${i * x} to ${i * x + x}`);
     grouped.push(adverts.slice(i * x, x * (i + 1)));
-    console.log(grouped);
   }
 
   useEffect(() => {

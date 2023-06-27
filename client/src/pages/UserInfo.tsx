@@ -1,10 +1,12 @@
-import { useContext, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Page } from '../components/Page';
 import { ProfileHeader } from '../components/Profile/ProfileHeader';
 import '../styles/userInfo.css';
 import { palette } from '../utils/colors';
 import useMediaQuery from './../hooks/useMediaQuery';
-import { ReactElement } from 'react';
+import { useState, ReactElement } from 'react';
+import { useLocation } from 'react-router-dom';
+
 import { ProfileSectionTab } from '../components/ContentTabs/ProfileSectionTab';
 import MyAdvertsContent from '../components/Profile/ProfileSectionsContent/MyAdvertsContent';
 import SellingContent from '../components/Profile/ProfileSectionsContent/SellingContent';
@@ -12,6 +14,8 @@ import BuyingContent from '../components/Profile/ProfileSectionsContent/BuyingCo
 import PremiumContent from '../components/Profile/ProfileSectionsContent/PremiumContent';
 import HelpQaContent from '../components/Profile/ProfileSectionsContent/HelpQaContent';
 import StoreDetailsForm from '../components/Profile/StoreDetails/StoreDetailsForm';
+import { LoginContext } from '../contexts/LoginContext';
+import { Spinner } from 'react-bootstrap';
 import SelectedTabContext from '../contexts/SelectedTabContext';
 import { createBrowserHistory } from "history";
 
@@ -73,7 +77,9 @@ const leftTabs: {
  * The page containing the user information (profile): Ads, Offers, Subsriptions...
  */
 export function UserInfo() {
+  const { isLoading } = useContext(LoginContext);
   const matches = useMediaQuery('(min-width: 768px)');
+  const location = useLocation();
   const tabContext = useContext(SelectedTabContext);
   const history = createBrowserHistory();
 
@@ -92,6 +98,7 @@ export function UserInfo() {
   useEffect(() => {
     history.push(`?${leftTabs[tabContext.selectedProfileSection].link}`);
   }, [tabContext.selectedProfileSection]);
+
 
   return (
     <Page>
@@ -132,9 +139,17 @@ export function UserInfo() {
           </div>
         </div>
 
-        <div className="col-10" style={{ paddingTop: '5em' }}>
+        {isLoading ? (
+          <Spinner
+            animation="grow"
+            role="status"
+            style={{ position: 'absolute', left: '50%', top: '50%' }}
+          />
+        ) : (
+          <div className="col-10" style={{ paddingTop: '5em' }}>
           {leftTabs[tabContext.selectedProfileSection].content}
         </div>
+        )}
       </div>
     </Page>
   );

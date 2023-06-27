@@ -1,12 +1,13 @@
 import { createContext, useEffect, useState } from 'react';
-import { User } from '../api/collections/user';
+import { PopulatedUser } from '../api/collections/user';
 import { ApiClient } from '../api/apiClient';
 
 export type LoginState = {
   loggedIn: boolean;
-  user: User | undefined;
+  user: PopulatedUser | undefined;
   setLoggedIn: (status: boolean) => void;
-  setUser: (user: User | undefined) => void;
+  setUser: (user: PopulatedUser | undefined) => void;
+  isLoading: boolean;
 };
 
 export type LoginContextProviderType = {
@@ -19,6 +20,7 @@ export const LoginContext = createContext<LoginState>({
   user: undefined,
   setLoggedIn: () => null,
   setUser: () => null,
+  isLoading: false,
 });
 
 //create the context provider
@@ -26,22 +28,25 @@ export const LoginContextProvider = ({
   children,
 }: LoginContextProviderType) => {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<PopulatedUser>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const checkAuthentication = async () => {
       await new ApiClient()
-        .get<User>('auth/verify', { withCredentials: true })
+        .get<PopulatedUser>('auth/verify', { withCredentials: true })
         .then((response) => {
           setLoggedIn(true);
           setUser(response); //the response of is a user
+          setIsLoading(false);
         })
         .catch(() => {
           setLoggedIn(false);
+          setIsLoading(false);
           setUser(undefined);
         });
     };
-
+    setIsLoading(true);
     checkAuthentication();
   }, []);
 
@@ -51,7 +56,8 @@ export const LoginContextProvider = ({
         loggedIn,
         user,
         setLoggedIn: (status: boolean) => setLoggedIn(status),
-        setUser: (user: User | undefined) => setUser(user),
+        setUser: (user: PopulatedUser | undefined) => setUser(user),
+        isLoading,
       }}
     >
       {children}
