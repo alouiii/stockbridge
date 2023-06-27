@@ -45,7 +45,7 @@ export const Filters: FC = () => {
 
   if (!matches) {
     return (
-      <div style={{ marginTop: 30, marginLeft: 10 }}>
+      <div style={{ marginTop: -10, marginLeft: 10 }}>
         <Button
           style={{ border: 'none', backgroundColor: 'white' }}
           onClick={handleButtonClick}

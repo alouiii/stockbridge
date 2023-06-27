@@ -4,6 +4,7 @@ import { Title } from '../Text/Title';
 import { Stack } from 'react-bootstrap';
 import { Filters } from './Filters';
 import useMediaQuery from '../../hooks/useMediaQuery';
+import { Sort } from './Sort';
 
 interface ItemToStore {
   postId: number;
@@ -44,7 +45,7 @@ export const AdvertsPagination: FC = () => {
         marginBottom: 25,
       }}
     >
-      <Title style={{ fontWeight: 500, marginTop: 100 }}>Active Adverts</Title>
+      <Title style={{ fontWeight: 500, marginTop: 80 }}>Active Adverts</Title>
       <Stack
         style={{
           display: 'flex',
@@ -56,7 +57,7 @@ export const AdvertsPagination: FC = () => {
         <Filters />
         <div
           className="row"
-          style={{ marginLeft: 10, marginRight: 8, marginTop: 50 }}
+          style={{ marginLeft: 10, marginRight: 8, marginTop: 125 }}
         >
           {items.map((item) => (
             <div className="col-md-4 mb-4" key={item.id}>
@@ -71,6 +72,9 @@ export const AdvertsPagination: FC = () => {
               </div>
             </div>
           ))}
+        </div>
+        <div style={{position: "absolute",right: 20}}>
+          <Sort />
         </div>
       </Stack>
 
