@@ -1,5 +1,6 @@
 import { Types } from 'mongoose';
 
+
 export enum OfferStatus {
   OPEN = 'Open',
   ACCEPTED = 'Accepted',
@@ -14,7 +15,7 @@ export interface Offer {
   status: OfferStatus;
   message?: string;
   createdAt: Date;
-  offeror: Types.ObjectId;// | User;
-  offeree: Types.ObjectId;// | User;
-  advert: Types.ObjectId;// | Advert;
+  offeror: Types.ObjectId;
+  offeree: Types.ObjectId;
+  advert: Types.ObjectId;
 }
