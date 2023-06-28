@@ -48,6 +48,7 @@ export interface User {
   paymentMethod: PaymentMethod;
   rating: number;
   stripeCustomerId: string;
+  registrationCompleted: boolean;
 
   getSignedJwtToken(): string;
 

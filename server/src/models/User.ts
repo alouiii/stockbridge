@@ -125,6 +125,10 @@ const userSchema = new mongoose.Schema<User>({
     required: false,
     unique: true,
   },
+  registrationCompleted: {
+    type: Types.Boolean,
+    default: false,
+  },
   address: addressSchema,
   subscription: subscriptionSchema,
   paymentMethod: paymentMethodSchema,

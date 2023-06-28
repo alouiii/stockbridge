@@ -5,7 +5,7 @@ import logo from '../assets/logo.svg';
 import { useContext } from 'react';
 import { LoginContext } from '../contexts/LoginContext';
 import { palette } from '../utils/colors';
-import { ApiClient } from '../api/apiClient';
+import { logout } from '../api/collections/user';
 
 /**
  * This component represents the navbar of our website.
@@ -16,8 +16,7 @@ export function Navbar() {
   const { loggedIn, setLoggedIn } = useContext(LoginContext);
 
   const handleLogoutClick = () => {
-    new ApiClient()
-      .post('/auth/logout', {}, { withCredentials: true })
+    logout()
       .then(() => {
         setLoggedIn(false);
         navigate('/'); //come back to homepage

@@ -1,6 +1,5 @@
 import { createContext, useEffect, useState } from 'react';
-import { User } from '../api/collections/user';
-import { ApiClient } from '../api/apiClient';
+import { User, verify } from '../api/collections/user';
 
 export type LoginState = {
   loggedIn: boolean;
@@ -33,12 +32,13 @@ export const LoginContextProvider = ({
 
   useEffect(() => {
     const checkAuthentication = async () => {
-      await new ApiClient()
-        .get<User>('auth/verify', { withCredentials: true })
+      await verify()
         .then((response) => {
-          setLoggedIn(true);
           setUser(response); //the response of is a user
           setIsLoading(false);
+          if (response.registrationCompleted) {
+            setLoggedIn(true);
+          }
         })
         .catch(() => {
           setLoggedIn(false);
