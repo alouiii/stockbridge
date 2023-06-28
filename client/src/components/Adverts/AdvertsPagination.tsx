@@ -68,7 +68,7 @@ export const AdvertsPagination: FC = () => {
           marginTop: 100,
         }}
       >
-        <Filters />
+        <Filters onUrlParamsChange={handleUrlParamsChange}/>
         <div
           className="row"
           style={{ marginLeft: 10, marginRight: 8, marginTop: 125 }}

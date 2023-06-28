@@ -10,11 +10,13 @@ import { ColoredLine } from '../ColoredLine';
 import { DatePicker } from '../DatePicker';
 import filtersIcon from '../../assets/filters.svg';
 import { FilterAdvertsModal } from './FilterAdvertsModal';
+import { ChildAdvertsPagination } from './AdvertsPagination';
+import { useLocation } from 'react-router-dom';
 
 /**
  * This components represents the filters section in the home page.
  */
-export const Filters: FC = () => {
+export const Filters: FC<ChildAdvertsPagination> = (props) => {
   const [category, setCategory] = useState<string>('');
   const [rangePrice, setRangePrice] = useState<number[]>([0, 1000]);
   const [rangeQuantity, setRangeQuantity] = useState<number[]>([0, 1000]);
@@ -32,8 +34,32 @@ export const Filters: FC = () => {
     setPostalCode('');
   };
 
+  const location = useLocation();
+
   const handleConfirm = () => {
-    console.log(category, rangePrice, rangeQuantity, date, postalCode);
+    const params = new URLSearchParams(location.search);
+
+    if (category) {
+      params.set('category', category);
+    }
+
+    if (rangePrice) {
+      //params.set('price', rangePrice); TODO
+    }
+
+    if (rangeQuantity) {
+      //params.set('quantity', rangeQuantity); TODO
+    }
+
+    if (date) {
+      params.set('date', date.toString());
+    }
+
+    if (postalCode) {
+      params.set('postalCode', postalCode);
+    }
+
+    props.onUrlParamsChange(params);
   };
 
   const handleCategoryClick = (category: string) => {
@@ -44,7 +70,8 @@ export const Filters: FC = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  if (!matches) { // if the screen is small 
+  if (!matches) {
+    // if the screen is small
     return (
       <div style={{ marginTop: -10, marginLeft: 10 }}>
         <Button
