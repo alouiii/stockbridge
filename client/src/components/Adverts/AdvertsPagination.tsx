@@ -14,8 +14,13 @@ interface ItemToStore {
   body: string;
 }
 
+export interface ChildAdvertsPagination {
+  onUrlParamsChange : (newUrlParams : React.SetStateAction<{}>) => void 
+}
+
 export const AdvertsPagination: FC = () => {
   const [items, setItems] = useState<ItemToStore[]>([]);
+  const [urlParams, setUrlParams] = useState({});
 
   const getComments = async (page: number) => {
     const res = await fetch(
@@ -35,6 +40,15 @@ export const AdvertsPagination: FC = () => {
   };
 
   const matches = useMediaQuery('(min-width: 768px)');
+
+  const handleUrlParamsChange = (newUrlParams: React.SetStateAction<{}>) => {
+    setUrlParams(newUrlParams);
+  };
+
+  useEffect(() => {
+    const url = `/adverts?${new URLSearchParams(urlParams).toString()}`;
+    console.log('Complete URL:', url);
+  }, [urlParams]);
 
   return (
     <div
@@ -74,7 +88,7 @@ export const AdvertsPagination: FC = () => {
           ))}
         </div>
         <div style={{position: "absolute",right: 20}}>
-          <Sort />
+          <Sort onUrlParamsChange={handleUrlParamsChange}/>
         </div>
       </Stack>
 
