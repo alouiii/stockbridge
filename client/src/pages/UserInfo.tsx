@@ -31,7 +31,7 @@ const leftTabs: {
       text: 'My Adverts',
       link: 'MyAdverts',
       icon: 'bi-cash-stack',
-      content: <MyAdvertsContent children={[]} />,
+      content: <MyAdvertsContent />,
       isSelected: false,
     },
     {

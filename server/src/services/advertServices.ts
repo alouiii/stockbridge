@@ -81,19 +81,21 @@ export const getAdvertsByCategory = async (
   logger.debug(
     `${serviceName}: Requesting all adverts with category: ${category}`,
   );
-  return advertModel.find({ category: category });
+  return await populateResult(advertModel.find({ category: category }),
+    populate)
 };
 
 /**
  * Returns all adverts of the requested store
  * @param category
+ * @param populate 
  * @returns Promise containing the related adverts.
  */
-export const getAdvertsByStore = async (store: string) => {
+export const getAdvertsByStore = async (store: string, populate = true) => {
   logger.debug(
     `${serviceName}: Requesting all adverts of store: ${store}`,
   );
-  return advertModel.find({ store: store });
+  return await populateResult(advertModel.find({ store: store }), populate);
 };
 
 /**

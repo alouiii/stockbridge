@@ -2,55 +2,26 @@ import React, { ReactElement, useContext, useEffect, useState } from 'react';
 import Tabs from '../../ContentTabs/Tabs';
 import ContentTab from '../../ContentTabs/ContentTab';
 import ProductInfoBar from '../ProductInfoBar';
-import { Advert, getAdvertsByUser } from '../../../api/collections/advert';
+import { Advert, PopulatedAdvert, getAdvertsByUser } from '../../../api/collections/advert';
 import NoResultsMessage from '../NoResultsMessage';
 import { LoginContext } from '../../../contexts/LoginContext';
 
 
-const products: {
-  imageUrl: string;
-  name: string;
-  date: string;
-  quantity: number;
-  price: number;
-}[] = [
-    {
-      imageUrl: 'https://placebear.com/g/200/200',
-      name: 'Product Name',
-      date: '01/01/2023',
-      quantity: 10,
-      price: 99.99,
-    },
-
-    {
-      imageUrl: 'http://via.placeholder.com/120x120&text=image2',
-      name: 'Product Testing Name 2',
-      date: '01/01/2010',
-      quantity: 100,
-      price: 15,
-    },
-  ];
-
-
-type Props = {
-  children: ReactElement[];
-};
-
 /**
  * Component that displays the content of MyAdverts section.
  */
-const MyAdvertsContent: React.FC<Props> = ({ children }) => {
-  const [buyingAdverts, setBuyingAdverts] = useState([] as Advert[]);
-  const [sellingAdverts, setSellingAdverts] = useState([] as Advert[]);
+const MyAdvertsContent: React.FC = ({  }) => {
+  const [buyingAdverts, setBuyingAdverts] = useState([] as PopulatedAdvert[]);
+  const [sellingAdverts, setSellingAdverts] = useState([] as PopulatedAdvert[]);
   const { user, loggedIn } = useContext(LoginContext);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const fetchedAdverts = await getAdvertsByUser(user?._id);
         let sellingAds = fetchedAdverts.filter(x => x.type === 'Sell');
-        setSellingAdverts(sellingAds as Advert[]);
+        setSellingAdverts(sellingAds as PopulatedAdvert[]);
         let buyingAds = fetchedAdverts.filter(x => x.type === 'Ask');
-        setBuyingAdverts(buyingAds as Advert[]);
+        setBuyingAdverts(buyingAds as PopulatedAdvert[]);
         console.log(sellingAds, buyingAds);
 
       } catch (error) {
