@@ -18,6 +18,9 @@ const OfferBar: React.FC<OfferBarProps> = (props) => {
   const [showModal, setShowModal] = useState(false);
   const closeModal = () => {
     setShowModal(false);
+  };
+  const closeModalOnSave = () => {
+    setShowModal(false);
     //change to set Advert
     window.location.reload();
   };
@@ -91,6 +94,7 @@ const OfferBar: React.FC<OfferBarProps> = (props) => {
         <OfferModal
           isShowing={showModal}
           onClose={closeModal}
+          onSave={closeModalOnSave}
           advert={props.advert}
           offer={props.offer}
           storeName={offeree.name!}

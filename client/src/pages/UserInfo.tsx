@@ -4,7 +4,6 @@ import { ProfileHeader } from '../components/Profile/ProfileHeader';
 import '../styles/userInfo.css';
 import { palette } from '../utils/colors';
 import useMediaQuery from './../hooks/useMediaQuery';
-import { useLocation } from 'react-router-dom';
 
 import { ProfileSectionTab } from '../components/ContentTabs/ProfileSectionTab';
 import MyAdvertsContent from '../components/Profile/ProfileSectionsContent/MyAdvertsContent';
@@ -39,14 +38,14 @@ const leftTabs: {
       text: 'Selling',
       link: 'Selling',
       icon: 'bi-cash-coin',
-      content: <SellingContent children={[]} />,
+      content: <SellingContent />,
       isSelected: true,
     },
     {
       text: 'Buying',
       link: 'Buying',
       icon: 'bi-box-seam',
-      content: <BuyingContent children={[]} />,
+      content: <BuyingContent />,
       isSelected: false,
     },
     {

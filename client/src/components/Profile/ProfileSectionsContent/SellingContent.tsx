@@ -2,19 +2,15 @@ import React, { ReactElement, useContext, useEffect, useState } from 'react';
 import Tabs from '../../ContentTabs/Tabs';
 import ContentTab from '../../ContentTabs/ContentTab';
 import { LoginContext } from '../../../contexts/LoginContext';
-import { Offer, PopulatedOffer, getUserSpecificOffers } from '../../../api/collections/offer';
-import { OfferBar } from '../../Offers/OfferBar';
-import { Advert, PopulatedAdvert } from '../../../api/collections/advert';
+import { PopulatedOffer, getUserSpecificOffers } from '../../../api/collections/offer';
+import { PopulatedAdvert } from '../../../api/collections/advert';
 import NoResultsMessage from '../NoResultsMessage';
-
-type Props = {
-  children: ReactElement[];
-};
+import { OfferBarUserProfile } from '../../Offers/OfferBarUserProfile';
 
 /**
  * Component that displays the content of Selling section.
  */
-const SellingContent: React.FC<Props> = ({ children }) => {
+const SellingContent: React.FC = () => {
   const { user, loggedIn } = useContext(LoginContext);
   const [outgoingOffers, setOutgoingOffers] = useState([] as PopulatedOffer[]);
   const [incomingOffers, setIncomingOffers] = useState([] as PopulatedOffer[]);
@@ -29,8 +25,6 @@ const SellingContent: React.FC<Props> = ({ children }) => {
         
         setOutgoingOffers(outgoingSell as PopulatedOffer[]);
         setIncomingOffers(incomingSell as PopulatedOffer[]);
-        // Debug
-        console.log(outgoingSell, incomingSell);
 
       } catch (error) {
         console.error(error);
@@ -48,14 +42,14 @@ const SellingContent: React.FC<Props> = ({ children }) => {
         <ContentTab title="Incoming Offers">
         {incomingOffers.length > 0 ? incomingOffers.map((offer, _) => {
             return (
-              <OfferBar offer={offer} advert={offer.advert as PopulatedAdvert} />
+              <OfferBarUserProfile offer={offer} advert={offer.advert as PopulatedAdvert} />
             );
           }) : <NoResultsMessage />}
         </ContentTab>
         <ContentTab title="Outgoing Offers">
         {outgoingOffers.length > 0 ? outgoingOffers.map((offer, _) => {
             return (
-              <OfferBar offer={offer} advert={offer.advert as PopulatedAdvert} />
+              <OfferBarUserProfile offer={offer} advert={offer.advert as PopulatedAdvert} />
             );
           }) : <NoResultsMessage />}
         </ContentTab>
