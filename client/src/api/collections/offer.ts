@@ -77,9 +77,9 @@ export async function getOffersByAdvert(
  * @param offerType 'outgoing' or 'incoming'
  * @returns 
  */
-export async function getUserSpecificOffers(user: string, advertType: string, offerType: string): Promise<Offer[]> {
+export async function getUserSpecificOffers(user: string, advertType: string, offerType: string): Promise<PopulatedOffer[]> {
   console.debug(user,advertType,offerType);
-  return await apiClient.get<Offer[]>(
+  return await apiClient.get<PopulatedOffer[]>(
     `/offers/getUserSpecificOffers/1234`, 
     {withCredentials: true},
     {'user': user, 'advertType': advertType, 'offerType': offerType}

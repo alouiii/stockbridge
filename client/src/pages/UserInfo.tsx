@@ -1,10 +1,9 @@
-import React, { useContext, useEffect } from 'react';
+import { useContext, useEffect, ReactElement } from 'react';
 import { Page } from '../components/Page';
 import { ProfileHeader } from '../components/Profile/ProfileHeader';
 import '../styles/userInfo.css';
 import { palette } from '../utils/colors';
 import useMediaQuery from './../hooks/useMediaQuery';
-import { useState, ReactElement } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { ProfileSectionTab } from '../components/ContentTabs/ProfileSectionTab';
@@ -61,7 +60,7 @@ const leftTabs: {
       text: 'Premium',
       link: 'Premium',
       icon: 'bi-bookmark-star',
-      content: <PremiumContent children={[]} />,
+      content: <PremiumContent />,
       isSelected: false,
     },
     {
@@ -77,11 +76,10 @@ const leftTabs: {
  * The page containing the user information (profile): Ads, Offers, Subsriptions...
  */
 export function UserInfo() {
+  const history = createBrowserHistory();
   const { isLoading } = useContext(LoginContext);
   const matches = useMediaQuery('(min-width: 768px)');
-  const location = useLocation();
   const tabContext = useContext(SelectedTabContext);
-  const history = createBrowserHistory();
 
   /**
    * Sets the active tab from the link history.
@@ -92,6 +90,7 @@ export function UserInfo() {
       tabContext.selectedProfileSection = Number(leftTabs.findIndex(x => filterParams === x.link));
     }
   }, []);
+
   /**
    * Sets the link to the active tab.
    */
