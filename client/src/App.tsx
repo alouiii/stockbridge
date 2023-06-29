@@ -13,6 +13,7 @@ import { ContactUs } from './pages/ContactUs';
 
 function App() {
   return (
+    <SelectedTabContextProvider>
     <LoginContextProvider>
       <Routes>
         <Route path="/" element={<Home />} />
@@ -24,6 +25,7 @@ function App() {
         <Route path="/productoverview/:id" Component={ProductOverview}></Route>
       </Routes>
     </LoginContextProvider>
+    </SelectedTabContextProvider>
   );
 }
 
