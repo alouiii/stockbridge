@@ -84,8 +84,7 @@ export const UserIconDropdown: FC = () => {
 
   const toggleDropDown = () => setDropdownOpen(!isDropdownOpen);
 
-  /** Autoclicks the selected tab section -- navigating through links requires  
-  * reloading the page which breaks the context.
+  /** Autoclicks the selected tab section instead of renavigating.
   */ 
   const autoClickTab = (index : number) => {
     const tabButton = document.getElementsByClassName("profile-section-tab-button")[index] as HTMLElement;
