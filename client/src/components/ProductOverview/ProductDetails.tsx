@@ -22,7 +22,7 @@ const ProductDetails = (advert: PopulatedAdvert) => {
             height: '20em',
             borderRadius: '60px',
             borderColor: 'transparent',
-            objectFit: 'contain'
+            objectFit: 'fill'
           }}
           src={advert?.imageurl ? advert?.imageurl : imagePlaceholder}
         />
