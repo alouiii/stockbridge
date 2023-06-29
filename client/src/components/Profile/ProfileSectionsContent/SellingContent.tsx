@@ -45,18 +45,8 @@ const SellingContent: React.FC = () => {
               <OfferBarUserProfile offer={offer} advert={offer.advert as PopulatedAdvert} />
             );
           }) : <NoResultsMessage />}
-        {incomingOffers.length > 0 ? incomingOffers.map((offer, _) => {
-            return (
-              <OfferBarUserProfile offer={offer} advert={offer.advert as PopulatedAdvert} />
-            );
-          }) : <NoResultsMessage />}
         </ContentTab>
         <ContentTab title="Outgoing Offers">
-        {outgoingOffers.length > 0 ? outgoingOffers.map((offer, _) => {
-            return (
-              <OfferBarUserProfile offer={offer} advert={offer.advert as PopulatedAdvert} />
-            );
-          }) : <NoResultsMessage />}
         {outgoingOffers.length > 0 ? outgoingOffers.map((offer, _) => {
             return (
               <OfferBarUserProfile offer={offer} advert={offer.advert as PopulatedAdvert} />
