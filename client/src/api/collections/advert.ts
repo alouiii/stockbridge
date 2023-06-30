@@ -49,6 +49,13 @@ export interface AdvertDto {
   pagination?: Pagination;
 }
 
+export interface CategoryDto {
+  categories: {
+    _id: string;
+    count: number;
+  }[];
+}
+
 interface Pagination {
   next?: {
     page: number;
@@ -129,14 +136,38 @@ export async function deleteAdvert(id: string): Promise<void> {
   });
 }
 
-export async function getAllAdverts(): Promise<AdvertDto> {
+/*export async function getAllAdverts(): Promise<AdvertDto> {
   return await apiClient.get<AdvertDto>('/adverts/', {
+    withCredentials: true,
+  });
+}*/
+
+export async function getAdvertsByUser(
+  store: string | undefined,
+): Promise<Advert[]> {
+  return await apiClient.get<Advert[]>(`/adverts/getAdvertsByStore/${store}`, {
     withCredentials: true,
   });
 }
 
-export async function getAdvertsByUser(store: string | undefined): Promise<Advert[]> {
-  return await apiClient.get<Advert[]>(`/adverts/getAdvertsByStore/${store}`, {
+export async function getAllAdverts(queryParams: any): Promise<AdvertDto> {
+  return await apiClient.get<AdvertDto>(
+    `/adverts`,
+    {
+      withCredentials: true,
+    },
+    queryParams,
+  );
+}
+
+export async function getPopularCategories(): Promise<CategoryDto> {
+  return await apiClient.get<CategoryDto>(`/adverts/getPopularCategories`, {
+    withCredentials: true,
+  });
+}
+
+export async function getPopularAdverts(): Promise<AdvertDto> {
+  return await apiClient.get<AdvertDto>(`/adverts/getPopularAdverts`, {
     withCredentials: true,
   });
 }

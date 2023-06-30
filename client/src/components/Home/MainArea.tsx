@@ -4,6 +4,7 @@ import { Button, Image } from 'react-bootstrap';
 import { Title } from '../Text/Title';
 import { useState } from 'react';
 import { EditAdvertModal } from '../ProductOverview/EditAdvertModal';
+import { useNavigate } from 'react-router-dom';
 
 
 export function MainArea() {
@@ -15,8 +16,9 @@ export function MainArea() {
 
   const closeModal = () => {
     setShowModal(false);
-    window.location.reload();
   };
+
+  const navigate = useNavigate()
 
   return (
     <>
@@ -80,7 +82,7 @@ export function MainArea() {
                 paddingLeft: 50,
                 paddingRight: 50,
               }}
-              onClick={() => openModal()}
+              onClick={() => navigate("/adverts")}
             >
               BROWSE ADVERTS
             </Button>

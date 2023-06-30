@@ -5,37 +5,42 @@ import { Stack } from 'react-bootstrap';
 import { Filters } from './Filters';
 import useMediaQuery from '../../hooks/useMediaQuery';
 import { Sort } from './Sort';
-
-interface ItemToStore {
-  postId: number;
-  id: number;
-  name: string;
-  email: string;
-  body: string;
-}
+import {
+  PopulatedAdvert,
+  ProductCategory,
+  getAllAdverts,
+} from '../../api/collections/advert';
+import { AdvertCard } from './AdvertCard';
+import { BodyText } from '../Text/BodyText';
 
 export interface ChildAdvertsPagination {
-  onUrlParamsChange : (newUrlParams : React.SetStateAction<{}>) => void 
+  onUrlParamsChange: (newUrlParams: React.SetStateAction<{}>) => void;
 }
 
 export const AdvertsPagination: FC = () => {
-  const [items, setItems] = useState<ItemToStore[]>([]);
+  const [adverts, setAdverts] = useState<PopulatedAdvert[]>([]);
+  const [totalNumberOfPages, setTotalNumberOfPages] = useState<number>(1);
   const [urlParams, setUrlParams] = useState({});
+  const [category, setCategory] = useState<ProductCategory>();
 
-  const getComments = async (page: number) => {
-    const res = await fetch(
-      `https://jsonplaceholder.typicode.com/comments?_page=${page}&limit=25`,
-    );
-    const data: ItemToStore[] = await res.json();
-    setItems(data);
+  const getAdverts = async (params: any) => {
+    getAllAdverts(params)
+      .then((res) => {
+        if (res.results && res.totalNumberOfPages) {
+          console.log(res.results);
+          setAdverts(res.results);
+          setTotalNumberOfPages(res.totalNumberOfPages);
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
   useEffect(() => {
-    getComments(1);
+    getAdverts({ page: 1 }); //page 1
   }, []);
 
   const handlePageClick = (selectedItem: { selected: number }) => {
-    getComments(selectedItem.selected + 1);
+    getAdverts({ page: selectedItem.selected + 1 });
     window.scrollTo({ top: 0 });
   };
 
@@ -46,8 +51,8 @@ export const AdvertsPagination: FC = () => {
   };
 
   useEffect(() => {
-    const url = `/adverts?${new URLSearchParams(urlParams).toString()}`;
-    console.log('Complete URL:', url);
+    console.log(new URLSearchParams(urlParams).toString());
+    getAdverts(urlParams);
   }, [urlParams]);
 
   return (
@@ -68,27 +73,35 @@ export const AdvertsPagination: FC = () => {
           marginTop: 100,
         }}
       >
-        <Filters onUrlParamsChange={handleUrlParamsChange}/>
+        <Filters onUrlParamsChange={handleUrlParamsChange} />
         <div
           className="row"
           style={{ marginLeft: 10, marginRight: 8, marginTop: 125 }}
         >
-          {items.map((item) => (
-            <div className="col-md-4 mb-4" key={item.id}>
-              <div className="card">
-                <div className="card-body">
-                  <h5 className="card-title">{item.name}</h5>
-                  <h6 className="card-subtitle mb-2 text-muted">
-                    Post ID: {item.postId}
-                  </h6>
-                  <p className="card-text">{item.body}</p>
-                </div>
-              </div>
+          {adverts.map((item, index) => (
+            <div className="col-md-4 mb-4" key={item._id}>
+              <AdvertCard
+                key={index}
+                id={item._id}
+                name={item.productname}
+                price={item.price}
+                quantity={item.quantity}
+                icon={item.imageurl}
+                description={item.description}
+                prioritized={item.prioritized}
+              />
             </div>
           ))}
         </div>
-        <div style={{position: "absolute",right: 20}}>
-          <Sort onUrlParamsChange={handleUrlParamsChange}/>
+        <div style={{ position: 'absolute', left: 400 }}>
+          {category ? (
+            <BodyText style={{ fontSize: 25, fontWeight: 500 }}>
+              {category}
+            </BodyText>
+          ) : undefined}
+        </div>
+        <div style={{ position: 'absolute', right: 20 }}>
+          <Sort onUrlParamsChange={handleUrlParamsChange} />
         </div>
       </Stack>
 
@@ -97,7 +110,7 @@ export const AdvertsPagination: FC = () => {
         breakLabel="..."
         nextLabel="next"
         onPageChange={handlePageClick}
-        pageCount={500 / 25}
+        pageCount={totalNumberOfPages}
         containerClassName="pagination justify-content-center"
         pageClassName="page-item"
         pageLinkClassName="page-link"

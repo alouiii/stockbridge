@@ -10,7 +10,7 @@ const AdvertsSection: FC = () => {
   const [adverts, setAdverts] = useState([] as PopulatedAdvert[]);
   useEffect(() => {
     const fetchData = async () => {
-      const fetchedAdverts = await getAllAdverts();
+      const fetchedAdverts = await getAllAdverts(1);
       if (fetchedAdverts.results) {
         setAdverts(fetchedAdverts.results);
       }

@@ -1,10 +1,22 @@
 import React, { FC } from 'react';
 import { Button, Image } from 'react-bootstrap';
-import icon from '../assets/howWorks1.svg'; // stupid icon just for testing
-import { BodyText } from './Text/BodyText';
-import { ColoredLine } from './ColoredLine';
+import { BodyText } from '../Text/BodyText';
+import { ColoredLine } from '../ColoredLine';
+import prioritizedIcon from '../../assets/prioritized.svg';
+import noImageAvailable from '../../assets/NoImageAvailable.jpg';
 
-export const AdvertCard: FC = () => {
+export interface AdvertCardProps {
+  id: string | undefined;
+  name: string | undefined;
+  description?: string;
+  price: number | undefined;
+  quantity: number | undefined;
+  icon?: string;
+  prioritized: boolean | undefined;
+  //purchasingDate: Date | undefined; errors because the DB is dirty
+}
+
+export const AdvertCard: FC<AdvertCardProps> = (props) => {
   return (
     <div
       style={{
@@ -12,39 +24,41 @@ export const AdvertCard: FC = () => {
         height: 425,
         borderRadius: 8,
         position: 'relative',
-        border: '1px solid black',
+        border: '2px solid black',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
       }}
     >
       <Image
-        src={icon}
+        src={props.icon || noImageAvailable}
         alt="image"
-        width={200}
-        height={200}
-        style={{ backgroundColor: 'red', marginTop: 15 }}
+        width={props.icon ? 200 : 230}
+        height={props.icon ? 200 : 150}
+        style={{ marginTop: 30 }}
       />
       <div
         style={{
           display: 'flex',
           flexDirection: 'row',
-          gap: 50,
+          gap: props.name && props.name?.length <= 25 ? 50 : 10,
           paddingLeft: 5,
           paddingRight: 5,
-          marginTop: 10
+          marginTop: 10,
         }}
       >
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <BodyText style={{ fontSize: 20, fontWeight: 600 }}>Orchids</BodyText>
+          <BodyText style={{ fontSize: 20, fontWeight: 600 }}>
+            {props.name}
+          </BodyText>
           <ColoredLine width={30} height={3} color="#4ECBA9" marginTop={-10} />
         </div>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <BodyText style={{ fontSize: 18, fontWeight: 500 }}>
-            Quantity: 10
+            Quantity: {props.quantity}
           </BodyText>
           <BodyText style={{ fontSize: 18, fontWeight: 500, marginTop: -10 }}>
-            Price: 10$
+            Price: {props.price}$
           </BodyText>
         </div>
       </div>
@@ -59,11 +73,12 @@ export const AdvertCard: FC = () => {
         <BodyText
           style={{ fontSize: 15, fontWeight: 400, textAlign: 'center' }}
         >
-          sakdjksdjksa jdkskdjakdjs kjdkajsdkja kdjkajkdjak sakdjksdjksa
-          jdkskdjakdjs kjdkajsdkja kdjkajkdjak
+          {props.description}
         </BodyText>
       </div>
-      <Button style={{ position: 'absolute', left: 10, bottom: 10 }}>View Advert</Button>
+      <Button style={{ position: 'absolute', left: 10, bottom: 10 }}>
+        View Advert
+      </Button>
       <BodyText
         style={{
           fontSize: 15,
@@ -76,6 +91,15 @@ export const AdvertCard: FC = () => {
       >
         10.05.23
       </BodyText>
+      {props.prioritized ? (
+        <Image
+          src={prioritizedIcon}
+          alt="prioritizedIcon"
+          width={40}
+          height={40}
+          style={{ position: 'absolute', right: 5 }}
+        />
+      ) : undefined}
     </div>
   );
 };
