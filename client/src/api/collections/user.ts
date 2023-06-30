@@ -108,8 +108,10 @@ export async function register(user: User): Promise<UserResponse> {
   });
 }
 
-export async function verify(): Promise<User> {
-  return await apiClient.get<User>(`/auth/verify`, { withCredentials: true });
+export async function verify(): Promise<PopulatedUser> {
+  return await apiClient.get<PopulatedUser>(`/auth/verify`, {
+    withCredentials: true,
+  });
 }
 
 export async function logout(): Promise<string> {
