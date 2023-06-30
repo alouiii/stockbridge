@@ -1,24 +1,25 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ProductAttribute } from '../ProductOverview/ProductAttribute';
-import { Offer } from '../../api/collections/offer';
-import { Advert } from '../../api/collections/advert';
+import { PopulatedOffer } from '../../api/collections/offer';
+import { PopulatedAdvert } from '../../api/collections/advert';
 import { BodyText } from '../Text/BodyText';
 import { OfferModal } from './OfferModal';
 import { Ratings } from '../Ratings';
 import { InfoBar } from '../ProductOverview/InfoBar';
-import { LoginContext } from '../../contexts/LoginContext';
-import { getStore, User } from '../../api/collections/user';
+import { User } from '../../api/collections/user';
 require('./offerBarStyle.scss');
 
 type OfferBarProps = {
-  offer: Offer;
-  advert: Advert;
+  offer: PopulatedOffer;
+  advert: PopulatedAdvert;
 };
 
 const OfferBar: React.FC<OfferBarProps> = (props) => {
   const [showModal, setShowModal] = useState(false);
-  const { user, loggedIn } = useContext(LoginContext);
   const closeModal = () => {
+    setShowModal(false);
+  };
+  const closeModalOnSave = () => {
     setShowModal(false);
     //change to set Advert
     window.location.reload();
@@ -31,10 +32,8 @@ const OfferBar: React.FC<OfferBarProps> = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const offerer = await getStore(props.offer.offeror!);
-        const offeree = await getStore(props.advert.store!);
-        setOfferer(offerer);
-        setOfferee(offeree);
+        setOfferer(props.offer.offeror!);
+        setOfferee(props.offer.offeree!);
       } catch (error) {
         console.error(error);
       }
@@ -95,6 +94,7 @@ const OfferBar: React.FC<OfferBarProps> = (props) => {
         <OfferModal
           isShowing={showModal}
           onClose={closeModal}
+          onSave={closeModalOnSave}
           advert={props.advert}
           offer={props.offer}
           storeName={offeree.name!}

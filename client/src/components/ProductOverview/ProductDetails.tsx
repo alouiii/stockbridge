@@ -1,9 +1,11 @@
-import { Advert } from '../../api/collections/advert';
+import { Advert, PopulatedAdvert } from '../../api/collections/advert';
 import { BodyText } from '../Text/BodyText';
 import { ProductAttribute } from './ProductAttribute';
 import { Image } from 'react-bootstrap';
+import imagePlaceholder from '../../assets/product-placeholder.png';
 
-const ProductDetails = (advert: Advert) => {
+const ProductDetails = (advert: PopulatedAdvert) => {
+  console.log(advert);
   return (
     <div
       style={{
@@ -14,16 +16,17 @@ const ProductDetails = (advert: Advert) => {
         width: 'auto',
       }}
     >
-      {advert.imageurl && (
-        <Image
+       <Image
           style={{
-            width: '30%',
+            width: '20em',
+            height: '20em',
             borderRadius: '60px',
             borderColor: 'transparent',
+            objectFit: 'fill'
           }}
-          src={advert?.imageurl}
+          src={advert?.imageurl ? advert?.imageurl : imagePlaceholder}
         />
-      )}
+      
 
       <div
         style={{

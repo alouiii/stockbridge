@@ -1,11 +1,13 @@
 import { createContext, useEffect, useState } from 'react';
 import { User, verify } from '../api/collections/user';
+import { PopulatedUser } from '../api/collections/user';
+import { ApiClient } from '../api/apiClient';
 
 export type LoginState = {
   loggedIn: boolean;
-  user: User | undefined;
+  user: PopulatedUser | undefined;
   setLoggedIn: (status: boolean) => void;
-  setUser: (user: User | undefined) => void;
+  setUser: (user: PopulatedUser | undefined) => void;
   isLoading: boolean;
 };
 
@@ -27,7 +29,7 @@ export const LoginContextProvider = ({
   children,
 }: LoginContextProviderType) => {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<PopulatedUser>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -46,7 +48,7 @@ export const LoginContextProvider = ({
           setUser(undefined);
         });
     };
-    setIsLoading(true);
+    //setIsLoading(true);
     checkAuthentication();
   }, []);
 
@@ -56,7 +58,7 @@ export const LoginContextProvider = ({
         loggedIn,
         user,
         setLoggedIn: (status: boolean) => setLoggedIn(status),
-        setUser: (user: User | undefined) => setUser(user),
+        setUser: (user: PopulatedUser | undefined) => setUser(user),
         isLoading,
       }}
     >

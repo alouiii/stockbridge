@@ -14,8 +14,8 @@ import { AuthenticatedRequest } from '../middlewares/authMiddleware';
 import { ObjectId } from 'mongodb';
 import { AppError } from '../utils/errorHandler';
 import { Offer } from '../entities/offerEntity';
-import logger from '../config/logger';
 import { findAdvertById } from '../services/advertServices';
+import { Advert } from '../entities/advertEntity';
 
 /**
  * This method returns a offer by id   *
@@ -120,7 +120,7 @@ export const getOffersByAdvert = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const { advert } = req.params;
     const userId = new ObjectId(req.user?.id);
-    let offers = await findAllOffersByAdvert(advert);
+    let offers = await findAllOffersByAdvert(advert, true);
     offers = _findAndCheckRelatedOffers(userId, offers);
     res.status(200).json(offers);
   },
@@ -174,6 +174,51 @@ export const getOffersByOfferee = asyncHandler(
 );
 
 /**
+ * This method gets all offers that match the request body parameters  *
+ * @param req - The request object
+ * @param res - The response object
+ * @returns deleted offer object.
+ */
+export const getUserSpecificOffers = asyncHandler(
+  async (req: AuthenticatedRequest, res: Response) => {
+    const { user, advertType, offerType } = req.query;
+    const userId = req.user?.id;
+    
+    if (userId != user) {
+      throw new AppError(
+        'Not authorized to access this route',
+        'Not authorized to access this route',
+        401,
+      );
+    }
+
+    var offers: Offer[];
+    switch (offerType) {
+      case 'incoming': {
+        offers = await findAllOffersByOfferee(user as string);
+        break;
+      }
+      case 'outgoing': {
+        offers = await findAllOffersByOfferor(user as string);
+        break;
+      }
+      default: {
+        throw new AppError(
+          'Unknown offer type',
+          'Unknown offer type',
+          400,
+        );
+      }
+    }
+
+    // Forced casting for the type Advert
+    offers = offers.filter(x => (x.advert as unknown as Advert).type === advertType);
+
+    res.status(200).json(offers);
+  },
+);
+
+/**
  * Checks if a user can edit or delete an offer with a given id.
  * @param req The request containing the to be checked ids.
  */
@@ -182,7 +227,7 @@ async function _checkUserCanEditOrDeleteOffer(req: AuthenticatedRequest) {
   const { id } = req.params;
 
   // The user editing or deleting must be the offeror.
-  if ((await findOfferById(id)).offeror.equals(userId)) {
+  if ((await findOfferById(id, false)).offeror.equals(userId)) {
     throw new AppError(
       'Not authorized to edit this route',
       'Not authorized to edit this route',
