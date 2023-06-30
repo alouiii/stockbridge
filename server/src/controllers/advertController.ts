@@ -7,11 +7,12 @@ import {
   delAdvert,
   findAllAdverts,
   getAdvertsByCategory,
+  getPopularCategories as getPopularCategoriesService,
+  getPopularAdverts as getPopularAdvertsService,
+  getAdvertsByStore,
 } from '../services/advertServices';
 import { AuthenticatedRequest } from '../middlewares/authMiddleware';
-import logger from '../config/logger';
-import { AppError } from '../utils/errorHandler';
-import { ProductCategory } from '../entities/advertEntity';
+import { Advert, ProductCategory } from '../entities/advertEntity';
 
 /**
  * This method returns an advert by id   *
@@ -22,22 +23,64 @@ import { ProductCategory } from '../entities/advertEntity';
 export const getAdvert = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const { id } = req.params;
-    //verifyIfAuthorized(id, req);
     const advert = await findAdvertById(id);
     res.status(200).json(advert);
   },
 );
 
 /**
- * This method returns all adverts   *
+ * This method returns all adverts
  * @param req - The request object
  * @param res - The response object
  * @returns an array of advert objects.
  */
 export const getAdverts = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
-    const adverts = await findAllAdverts();
-    res.status(200).json(adverts);
+    const reqQuery = { ...req.query };
+
+    ['search', 'sort', 'page', 'limit', 'radius'].forEach(
+      (param) => delete reqQuery[param],
+    );
+
+    let queryStr = JSON.stringify(reqQuery);
+
+    queryStr = queryStr.replace(
+      /\b(gt|gte|lt|lte|in)\b/g,
+      (match) => `$${match}`,
+    );
+
+    let sortBy: string[] = [];
+    let page = 1;
+    let limit = 25;
+    let search;
+    let radius = 0;
+    if (req.query.sort) {
+      sortBy = (req.query.sort as string).split(',');
+    }
+    if (req.query.page) {
+      page = parseInt(req.query.page as string);
+    }
+    if (req.query.limit) {
+      limit = parseInt(req.query.limit as string);
+    }
+    if (req.query.search) {
+      search = req.query.search as string;
+    }
+    if (req.query.radius) {
+      radius = parseInt(req.query.radius as string);
+    }
+
+    const results = await findAllAdverts(
+      page,
+      limit,
+      search,
+      sortBy,
+      radius === 0 ? undefined : radius,
+      radius === 0 ? undefined : req.user?.location?.coordinates,
+      queryStr,
+    );
+
+    res.status(200).json(results);
   },
 );
 
@@ -105,5 +148,47 @@ export const getAllAdvertsByCategory = asyncHandler(
     const { category } = req.params;
     const adverts = await getAdvertsByCategory(category as ProductCategory);
     res.status(200).json(adverts);
+  },
+);
+
+/**
+ * This method gets all adverts of a specific store   *
+ * @param req - The request object
+ * @param res - The response object
+ * @returns deleted advert object.
+ */
+export const getAllAdvertsByStore = asyncHandler(
+  async (req: AuthenticatedRequest, res: Response) => {
+    const { store } = req.params;
+    const adverts = await getAdvertsByStore(store);
+    res.status(200).json(adverts);
+  },
+);
+
+/**
+ * This method get the most popular categories (number specified as query param)
+ *
+ * @param req - The request object
+ * @param res - The response object
+ *
+ * @returns an array of strings containing the most popular categories
+ */
+export const getPopularCategories = asyncHandler(
+  async (req: AuthenticatedRequest, res: Response) => {
+    const limit = req.query.limit ? parseInt(req.query.limit as string) : 6;
+    const categories = await getPopularCategoriesService(limit);
+    res.status(200).json({ categories });
+  },
+);
+
+export const getPopularAdverts = asyncHandler(
+  async (req: AuthenticatedRequest, res: Response) => {
+    const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
+    const adverts = await getPopularAdvertsService(limit);
+    const results = [] as Advert[];
+    for (const advert of adverts) {
+      results.push(await findAdvertById(advert._id));
+    }
+    res.status(200).json({ results });
   },
 );
