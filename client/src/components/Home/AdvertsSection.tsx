@@ -38,7 +38,7 @@ const AdvertsSection: FC = () => {
           marginTop: '30px',
         }}
       >
-        <Filters onUrlParamsChange={()=>null}/>
+        <Filters/>
         <div
           style={{
             width: '100%',

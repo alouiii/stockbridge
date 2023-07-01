@@ -3,6 +3,7 @@ import { Image } from 'react-bootstrap';
 import categoriesIcon from '../assets/categories.svg';
 import { ProductCategory } from '../api/collections/advert';
 import { palette } from '../utils/colors';
+import { useNavigate } from 'react-router-dom';
 
 export const CategoriesDropdown: FC = () => {
   const productCategories: string[] = Object.values(ProductCategory);
@@ -11,10 +12,16 @@ export const CategoriesDropdown: FC = () => {
 
   const toggleDropDown = () => setDropdownOpen(!isDropdownOpen);
 
+  const navigate = useNavigate()
+
+  const handleItemClick = (el: string) => {
+    navigate(`/adverts?category=${el}`)
+  }
+
   const DropdownList = productCategories.map((el, index) => (
     <div
       key={index}
-      // onClick={() => handleItemClick(el)}
+      onClick={() => handleItemClick(el)}
       style={{
         cursor: 'pointer',
         textAlign: 'center',

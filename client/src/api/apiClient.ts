@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { QueryClient } from 'react-query';
 
 export class ApiClient {
   private baseURL: string = 'http://localhost:3001/api/v1'; //TODO: Make this env variable
@@ -22,7 +23,7 @@ export class ApiClient {
     queryParams?: any,
   ): Promise<T> {
     return (await queryParams)
-      ? this.request<T>({ url, method: 'GET', params: queryParams , ...config })
+      ? this.request<T>({ url, method: 'GET', params: queryParams, ...config })
       : this.request<T>({ url, method: 'GET', ...config });
   }
 
@@ -46,3 +47,5 @@ export class ApiClient {
     return await this.request<T>({ url, method: 'DELETE', ...config });
   }
 }
+
+export const queryClient = new QueryClient(); // Hooks for managing, caching and syncing asynchronous and remote data in React

@@ -1,8 +1,7 @@
 import React, { FC, useState } from 'react';
 import { Dropdown } from 'react-bootstrap';
 import { palette } from '../../utils/colors';
-import { useLocation } from 'react-router-dom';
-import { ChildAdvertsPagination } from './AdvertsPagination';
+import { useSearchParams } from 'react-router-dom';
 
 enum SortTypes {
   NONE = 'none',
@@ -14,31 +13,30 @@ enum SortTypes {
   DATE_DESC = '-creation_date', //check
 }
 
-export const Sort: FC<ChildAdvertsPagination> = (props) => {
+export const Sort: FC = () => {
   const [sortingType, setSortingType] = useState<string>('none');
-
-  const location = useLocation();
+  const [search, setSearch] = useSearchParams();
 
   const handleClick = (type: SortTypes) => {
     setSortingType(type);
 
     if (type !== SortTypes.NONE) {
-      const param = new URLSearchParams(location.search);
-      param.set('sort', type);
-      props.onUrlParamsChange(param)
+      search.set('sort', type);
+      setSearch(search, { replace: true });
+    } else {
+      search.delete('sort');
+      setSearch(search, { replace: true });
     }
   };
 
   const beautifyType = (type: string) => {
-    if(type.includes("-")){
-      return type.replace("-", "descending ")
-    }
-    else{
-      if(type !== "none"){
-        return "ascending " + type
-      }
-      else{
-        return type
+    if (type.includes('-')) {
+      return type.replace('-', 'descending ');
+    } else {
+      if (type !== 'none') {
+        return 'ascending ' + type;
+      } else {
+        return type;
       }
     }
   };

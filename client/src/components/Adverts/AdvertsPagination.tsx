@@ -1,59 +1,40 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import { Title } from '../Text/Title';
 import { Stack } from 'react-bootstrap';
 import { Filters } from './Filters';
 import useMediaQuery from '../../hooks/useMediaQuery';
 import { Sort } from './Sort';
-import {
-  PopulatedAdvert,
-  ProductCategory,
-  getAllAdverts,
-} from '../../api/collections/advert';
 import { AdvertCard } from './AdvertCard';
 import { BodyText } from '../Text/BodyText';
-
-export interface ChildAdvertsPagination {
-  onUrlParamsChange: (newUrlParams: React.SetStateAction<{}>) => void;
-}
+import { useSearchParams } from 'react-router-dom';
+import { useAdverts } from '../../hooks/useAdverts';
 
 export const AdvertsPagination: FC = () => {
-  const [adverts, setAdverts] = useState<PopulatedAdvert[]>([]);
-  const [totalNumberOfPages, setTotalNumberOfPages] = useState<number>(1);
-  const [urlParams, setUrlParams] = useState({});
-  const [category, setCategory] = useState<ProductCategory>();
+  const [search, setSearch] = useSearchParams();
 
-  const getAdverts = async (params: any) => {
-    getAllAdverts(params)
-      .then((res) => {
-        if (res.results && res.totalNumberOfPages) {
-          console.log(res.results);
-          setAdverts(res.results);
-          setTotalNumberOfPages(res.totalNumberOfPages);
-        }
-      })
-      .catch((err) => console.log(err));
-  };
+  const [category, setCategory] = useState<string>(search.get("category") ?? "");
+
+  const getAdverts = useAdverts();
+
+  const adverts = useMemo(() => {
+    return getAdverts.data?.results ?? [];
+  }, [getAdverts.data]);
 
   useEffect(() => {
-    getAdverts({ page: 1 }); //page 1
-  }, []);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [adverts]);
+
+  const totalNumberOfPages = useMemo(() => {
+    return getAdverts.data?.totalNumberOfPages ?? 1;
+  }, [getAdverts.data]);
 
   const handlePageClick = (selectedItem: { selected: number }) => {
-    getAdverts({ page: selectedItem.selected + 1 });
-    window.scrollTo({ top: 0 });
+    search.set('page', (selectedItem.selected + 1).toString());
+    setSearch(search, { replace: true });
   };
 
   const matches = useMediaQuery('(min-width: 768px)');
-
-  const handleUrlParamsChange = (newUrlParams: React.SetStateAction<{}>) => {
-    setUrlParams(newUrlParams);
-  };
-
-  useEffect(() => {
-    console.log(new URLSearchParams(urlParams).toString());
-    getAdverts(urlParams);
-  }, [urlParams]);
 
   return (
     <div
@@ -73,7 +54,7 @@ export const AdvertsPagination: FC = () => {
           marginTop: 100,
         }}
       >
-        <Filters onUrlParamsChange={handleUrlParamsChange} />
+        <Filters />
         <div
           className="row"
           style={{ marginLeft: 10, marginRight: 8, marginTop: 125 }}
@@ -101,7 +82,7 @@ export const AdvertsPagination: FC = () => {
           ) : undefined}
         </div>
         <div style={{ position: 'absolute', right: 20 }}>
-          <Sort onUrlParamsChange={handleUrlParamsChange} />
+          <Sort />
         </div>
       </Stack>
 

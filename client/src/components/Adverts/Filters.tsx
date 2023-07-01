@@ -10,14 +10,16 @@ import { ColoredLine } from '../ColoredLine';
 import { DatePicker } from '../DatePicker';
 import filtersIcon from '../../assets/filters.svg';
 import { FilterAdvertsModal } from './FilterAdvertsModal';
-import { ChildAdvertsPagination } from './AdvertsPagination';
-import { useLocation } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 /**
  * This components represents the filters section in the home page.
  */
-export const Filters: FC<ChildAdvertsPagination> = (props) => {
-  const [category, setCategory] = useState<string>('');
+export const Filters: FC = () => {
+  const [search, setSearch] = useSearchParams();
+  const [category, setCategory] = useState<string>(
+    search.get('category') ?? '',
+  );
   const [rangePrice, setRangePrice] = useState<number[]>([0, 1000]);
   const [rangeQuantity, setRangeQuantity] = useState<number[]>([0, 1000]);
   const [date, setDate] = useState<Date>();
@@ -32,34 +34,45 @@ export const Filters: FC<ChildAdvertsPagination> = (props) => {
     setRangeQuantity([0, 1000]);
     setDate(undefined);
     setPostalCode('');
+    search.delete('category');
+    search.delete('price[gte]');
+    search.delete('quantity[gte]');
+    search.delete('price[lte]');
+    search.delete('quantity[lte]');
+    setSearch(search, { replace: true });
   };
 
-  const location = useLocation();
-
   const handleConfirm = () => {
-    const params = new URLSearchParams(location.search);
-
     if (category) {
-      params.set('category', category);
+      search.set('category', category);
+      setSearch(search);
     }
 
     if (rangePrice) {
-      //params.set('price', rangePrice); TODO
+      const minPrice = rangePrice[0];
+      const maxPrice = rangePrice[1];
+      search.set('price[gte]', minPrice.toString());
+      search.set('price[lte]', maxPrice.toString());
+      setSearch(search);
     }
 
     if (rangeQuantity) {
-      //params.set('quantity', rangeQuantity); TODO
+      const minQuantity = rangeQuantity[0];
+      const maxQuantity = rangeQuantity[1];
+      search.set('quantity[gte]', minQuantity.toString());
+      search.set('quantity[lte]', maxQuantity.toString());
+      setSearch(search);
     }
 
     if (date) {
-      params.set('date', date.toString());
+      search.set('date', category);
+      setSearch(search);
     }
 
     if (postalCode) {
-      params.set('postalCode', postalCode);
+      search.set('postalCode', category); //to check
+      setSearch(search);
     }
-
-    props.onUrlParamsChange(params);
   };
 
   const handleCategoryClick = (category: string) => {

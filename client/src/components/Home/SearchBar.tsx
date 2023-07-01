@@ -1,6 +1,7 @@
 import { Button, Dropdown } from 'react-bootstrap';
 import { palette } from '../../utils/colors';
 import useMediaQuery from '../../hooks/useMediaQuery';
+import { useSearchParams } from 'react-router-dom';
 
 /**
  * Component that will manage the search of an advert...
