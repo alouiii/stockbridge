@@ -31,8 +31,8 @@ export function Navbar() {
   const [searchInput, setSearchInput] = useState<string>('');
 
   const handleSearchClick = () => {
-    search.set('search', searchInput);
-    setSearch(search);
+    //search.set('search', searchInput);
+    //setSearch(search); TODO
   };
 
   useEffect(() => {

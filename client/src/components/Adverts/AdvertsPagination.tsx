@@ -15,7 +15,9 @@ import { palette } from '../../utils/colors';
 export const AdvertsPagination: FC = () => {
   const [search, setSearch] = useSearchParams();
 
-  const [category, setCategory] = useState<string>('');
+  const [category, setCategory] = useState<string>(
+    search.get('category') ?? '',
+  );
 
   const getAdverts = useAdverts();
 
@@ -25,6 +27,13 @@ export const AdvertsPagination: FC = () => {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    const cat = search.get('category');
+    if (cat !== null && cat !== category) {
+      setCategory(cat);
+    } else {
+      setCategory('');
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [adverts]);
 
   const totalNumberOfPages = useMemo(() => {
@@ -37,14 +46,6 @@ export const AdvertsPagination: FC = () => {
   };
 
   const matches = useMediaQuery('(min-width: 768px)');
-
-  useEffect(() => {
-    const category = search.get('category');
-    if (category !== null) {
-      setCategory(category);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search.get('category')]);
 
   return (
     <div
@@ -68,29 +69,35 @@ export const AdvertsPagination: FC = () => {
         <div
           className="row"
           style={{
-            marginLeft: adverts ? 10 : 'auto',
-            marginRight: adverts ? 8 :'auto',
+            marginLeft: 'auto',
+            marginRight: 'auto',
             display: 'flex',
             justifyContent: 'center',
-            alignItems: 'center',
-            marginTop: adverts ? 125 : 0
+            marginTop: 125,
+            paddingLeft: 55,
           }}
         >
           {adverts ? (
-            adverts.map((item, index) => (
-              <div className="col-md-4 mb-4"key={item._id}>
-                <AdvertCard
-                  key={index}
-                  id={item._id}
-                  name={item.productname}
-                  price={item.price}
-                  quantity={item.quantity}
-                  icon={item.imageurl}
-                  description={item.description}
-                  prioritized={item.prioritized}
-                />
-              </div>
-            ))
+            adverts.length > 0 ? (
+              adverts.map((item, index) => (
+                <div className="col-md-4 mb-4" key={item._id}>
+                  <AdvertCard
+                    key={index}
+                    id={item._id}
+                    name={item.productname}
+                    price={item.price}
+                    quantity={item.quantity}
+                    icon={item.imageurl}
+                    description={item.description}
+                    prioritized={item.prioritized}
+                  />
+                </div>
+              ))
+            ) : (
+              <BodyText style={{ color: 'red', fontSize: 25 }}>
+                No data found
+              </BodyText>
+            )
           ) : (
             <FadeLoader color={palette.subSectionsBgAccent} />
           )}
@@ -107,7 +114,6 @@ export const AdvertsPagination: FC = () => {
           <Sort />
         </div>
       </Stack>
-
       <ReactPaginate
         previousLabel="previous"
         breakLabel="..."

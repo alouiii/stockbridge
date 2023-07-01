@@ -15,7 +15,7 @@ export const CategoriesDropdown: FC = () => {
   const navigate = useNavigate()
 
   const handleItemClick = (el: string) => {
-    navigate(`/adverts?category=${el}`)
+    //navigate(`/adverts?category=${el}`) TODO, does not work well
   }
 
   const DropdownList = productCategories.map((el, index) => (
