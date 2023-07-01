@@ -13,7 +13,7 @@ import { useAdverts } from '../../hooks/useAdverts';
 export const AdvertsPagination: FC = () => {
   const [search, setSearch] = useSearchParams();
 
-  const [category, setCategory] = useState<string>(search.get("category") ?? "");
+  const [category, setCategory] = useState<string>('');
 
   const getAdverts = useAdverts();
 
@@ -35,6 +35,14 @@ export const AdvertsPagination: FC = () => {
   };
 
   const matches = useMediaQuery('(min-width: 768px)');
+
+  useEffect(() => {
+    const category = search.get('category');
+    if (category !== null) {
+      setCategory(category);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search.get('category')]);
 
   return (
     <div

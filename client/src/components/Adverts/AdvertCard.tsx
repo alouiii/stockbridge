@@ -4,6 +4,7 @@ import { BodyText } from '../Text/BodyText';
 import { ColoredLine } from '../ColoredLine';
 import prioritizedIcon from '../../assets/prioritized.svg';
 import noImageAvailable from '../../assets/NoImageAvailable.jpg';
+import { useNavigate } from 'react-router-dom';
 
 export interface AdvertCardProps {
   id: string | undefined;
@@ -17,6 +18,7 @@ export interface AdvertCardProps {
 }
 
 export const AdvertCard: FC<AdvertCardProps> = (props) => {
+  const navigate = useNavigate()
   return (
     <div
       style={{
@@ -76,7 +78,10 @@ export const AdvertCard: FC<AdvertCardProps> = (props) => {
           {props.description}
         </BodyText>
       </div>
-      <Button style={{ position: 'absolute', left: 10, bottom: 10 }}>
+      <Button
+        style={{ position: 'absolute', left: 10, bottom: 10 }}
+        onClick={() => navigate(`/productoverview/${props.id}`)}
+      >
         View Advert
       </Button>
       <BodyText
