@@ -7,7 +7,8 @@ import {
   PopulatedAdvert,
   getPopularAdverts,
 } from '../../api/collections/advert';
-import { Spinner } from 'react-bootstrap';
+import { FadeLoader } from 'react-spinners';
+import { palette } from '../../utils/colors';
 
 /**
  * This component displays the top adverts from different categories, those that have been prioritized.
@@ -76,13 +77,7 @@ export const TopAdverts: FC = () => {
             })}
           </Carousel>
         ) : (
-          <Spinner
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          />
+          <FadeLoader color={palette.subSectionsBgAccent} />
         )}
       </div>
     </div>

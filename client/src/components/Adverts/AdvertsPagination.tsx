@@ -9,6 +9,8 @@ import { AdvertCard } from './AdvertCard';
 import { BodyText } from '../Text/BodyText';
 import { useSearchParams } from 'react-router-dom';
 import { useAdverts } from '../../hooks/useAdverts';
+import { FadeLoader } from 'react-spinners';
+import { palette } from '../../utils/colors';
 
 export const AdvertsPagination: FC = () => {
   const [search, setSearch] = useSearchParams();
@@ -18,7 +20,7 @@ export const AdvertsPagination: FC = () => {
   const getAdverts = useAdverts();
 
   const adverts = useMemo(() => {
-    return getAdverts.data?.results ?? [];
+    return getAdverts.data?.results;
   }, [getAdverts.data]);
 
   useEffect(() => {
@@ -41,7 +43,7 @@ export const AdvertsPagination: FC = () => {
     if (category !== null) {
       setCategory(category);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search.get('category')]);
 
   return (
@@ -65,23 +67,35 @@ export const AdvertsPagination: FC = () => {
         <Filters />
         <div
           className="row"
-          style={{ marginLeft: 10, marginRight: 8, marginTop: 125 }}
+          style={{
+            marginLeft: adverts ? 10 : 'auto',
+            marginRight: adverts ? 8 :'auto',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: adverts ? 125 : 0
+          }}
         >
-          {adverts.map((item, index) => (
-            <div className="col-md-4 mb-4" key={item._id}>
-              <AdvertCard
-                key={index}
-                id={item._id}
-                name={item.productname}
-                price={item.price}
-                quantity={item.quantity}
-                icon={item.imageurl}
-                description={item.description}
-                prioritized={item.prioritized}
-              />
-            </div>
-          ))}
+          {adverts ? (
+            adverts.map((item, index) => (
+              <div className="col-md-4 mb-4"key={item._id}>
+                <AdvertCard
+                  key={index}
+                  id={item._id}
+                  name={item.productname}
+                  price={item.price}
+                  quantity={item.quantity}
+                  icon={item.imageurl}
+                  description={item.description}
+                  prioritized={item.prioritized}
+                />
+              </div>
+            ))
+          ) : (
+            <FadeLoader color={palette.subSectionsBgAccent} />
+          )}
         </div>
+
         <div style={{ position: 'absolute', left: 400 }}>
           {category ? (
             <BodyText style={{ fontSize: 25, fontWeight: 500 }}>
