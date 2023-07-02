@@ -94,7 +94,7 @@ export const Filters: FC = () => {
   if (!matches) {
     // if the screen is small
     return (
-      <div style={{ marginTop: -10, marginLeft: 10 }}>
+      <div style={{ marginTop: -10, marginLeft: 10, zIndex: 1000 }}>
         <Button
           style={{ border: 'none', backgroundColor: 'white' }}
           onClick={handleButtonClick}

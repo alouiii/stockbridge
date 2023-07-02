@@ -51,7 +51,7 @@ export const Sort: FC = () => {
   };
 
   return (
-    <Dropdown>
+    <Dropdown style={{zIndex: 1000}}>
       <Dropdown.Toggle
         style={{ backgroundColor: palette.subSectionsBgAccent, border: 'none' }}
         id="dropdown-basic"
