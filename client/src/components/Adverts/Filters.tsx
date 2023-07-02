@@ -27,14 +27,14 @@ export const Filters: FC = () => {
   const matches = useMediaQuery('(min-width: 768px)');
 
   useEffect(() => {
-    const cat = search.get('category');
+    const cat = search.get('category[in]');
     if (cat !== null) {
       setCategory(cat);
     } else {
       setCategory('');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search.get('category')]);
+  }, [search.get('category[in]')]);
 
   const handleReset = () => {
     setCategory('');
@@ -42,17 +42,18 @@ export const Filters: FC = () => {
     setRangeQuantity([0, 1000]);
     setDate(undefined);
     setRangePosition([0, 1000]);
-    search.delete('category');
+    search.delete('category[in]');
     search.delete('price[gte]');
     search.delete('quantity[gte]');
     search.delete('price[lte]');
     search.delete('quantity[lte]');
+    search.delete('range');
     setSearch(search, { replace: true });
   };
 
   const handleConfirm = () => {
     if (category) {
-      search.set('category', category);
+      search.set('category[in]', category);
       setSearch(search);
     }
 
@@ -78,8 +79,8 @@ export const Filters: FC = () => {
     }
 
     if (rangePosition) {
-      //search.set('postalCode', category); //to check
-      //setSearch(search);
+      search.set('range', (rangePosition[1] - rangePosition[0]).toString()); //to check
+      setSearch(search);
     }
   };
 

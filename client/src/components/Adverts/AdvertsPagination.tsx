@@ -25,14 +25,14 @@ export const AdvertsPagination: FC = () => {
   }, [getAdverts.data]);
 
   useEffect(() => {
-    const cat = search.get('category');
+    const cat = search.get('category[in]');
     if (cat !== null && cat !== category) {
       setCategory(cat);
     } else {
       setCategory('');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search.get('category')]);
+  }, [search.get('category[in]')]);
 
   useEffect(() => window.scrollTo({ top: 0, behavior: 'smooth' }), [adverts]);
 

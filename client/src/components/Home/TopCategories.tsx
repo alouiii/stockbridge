@@ -22,7 +22,7 @@ export const TopCategories: FC = () => {
   const navigate = useNavigate();
 
   const handleItemClick = (el: string) => {
-    navigate(`/adverts?category=${el}`);
+    navigate(`/adverts?category[in]=${el}`);
   };
 
   return (
