@@ -28,22 +28,29 @@ export function Navbar() {
 
   const [search, setSearch] = useSearchParams();
 
-  const [searchInput, setSearchInput] = useState<string>('');
+  const [searchInput, setSearchInput] = useState<string>(search.get('q') ?? '');
 
   const handleSearchClick = () => {
-    //search.set('search', searchInput);
-    //setSearch(search); TODO
+    if (searchInput.length > 0) {
+      const currentUrl = window.location.pathname;
+      if (currentUrl === '/adverts') {
+        search.set('q', searchInput);
+        setSearch(search);
+      } else {
+        navigate(`/adverts?q=${searchInput}`);
+      }
+    }
+    return;
   };
 
   useEffect(() => {
     if (searchInput.length > 0) {
       return;
+    } else {
+      search.delete('search');
+      setSearch(search);
     }
-    else{
-      search.delete("search")
-      setSearch(search)
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchInput]);
 
   return (

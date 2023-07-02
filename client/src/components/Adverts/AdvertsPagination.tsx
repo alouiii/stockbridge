@@ -20,11 +20,16 @@ export const AdvertsPagination: FC = () => {
   const getAdverts = useAdverts();
 
   const adverts = useMemo(() => {
+    //UseMemo used to memorize the result of a function (similar to useState)
     return getAdverts.data?.results;
   }, [getAdverts.data]);
 
+  const totalNumberOfPages = useMemo(() => {
+    //UseMemo used to memorize the result of a function (similar to useState)
+    return getAdverts.data?.totalNumberOfPages ?? 1;
+  }, [getAdverts.data]);
+
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
     const cat = search.get('category');
     if (cat !== null && cat !== category) {
       setCategory(cat);
@@ -34,9 +39,7 @@ export const AdvertsPagination: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search.get('category')]);
 
-  const totalNumberOfPages = useMemo(() => {
-    return getAdverts.data?.totalNumberOfPages ?? 1;
-  }, [getAdverts.data]);
+  useEffect(() => window.scrollTo({ top: 0, behavior: 'smooth' }), [adverts]);
 
   const handlePageClick = (selectedItem: { selected: number }) => {
     search.set('page', (selectedItem.selected + 1).toString());
