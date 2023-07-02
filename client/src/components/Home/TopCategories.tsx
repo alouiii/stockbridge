@@ -3,6 +3,7 @@ import { BodyText } from '../Text/BodyText';
 import { Image } from 'react-bootstrap';
 import icon from '../../assets/howWorks1.svg'; // stupid icon just for testing
 import { getPopularCategories } from '../../api/collections/advert';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * This component displays the top categories, those with more adverts.
@@ -17,6 +18,12 @@ export const TopCategories: FC = () => {
       })
       .catch((err) => console.log(err));
   }, []);
+
+  const navigate = useNavigate();
+
+  const handleItemClick = (el: string) => {
+    navigate(`/adverts?category=${el}`);
+  };
 
   return (
     <div>
@@ -61,6 +68,7 @@ export const TopCategories: FC = () => {
                     e.currentTarget.style.boxShadow =
                       '0 0 0 rgba(0, 0, 0, 0.2)';
                   }}
+                  onClick={() => handleItemClick(cat)}
                 >
                   <Image src={icon} alt="icon" width={100} height={100} />
                   <span

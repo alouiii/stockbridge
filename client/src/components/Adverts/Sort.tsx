@@ -14,8 +14,9 @@ enum SortTypes {
 }
 
 export const Sort: FC = () => {
-  const [sortingType, setSortingType] = useState<SortTypes>(SortTypes.NONE);
   const [search, setSearch] = useSearchParams();
+
+  const [sortingType, setSortingType] = useState<string>(search.get("sort") ?? SortTypes.NONE);
 
   const handleClick = (type: SortTypes) => {
     setSortingType(type);
@@ -55,7 +56,7 @@ export const Sort: FC = () => {
         style={{ backgroundColor: palette.subSectionsBgAccent, border: 'none' }}
         id="dropdown-basic"
       >
-        Sort By: {beautifyType(sortingType)}
+        Sort By: {beautifyType(sortingType as SortTypes)}
       </Dropdown.Toggle>
       <Dropdown.Menu>
         {Object.values(SortTypes)
