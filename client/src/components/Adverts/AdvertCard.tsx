@@ -14,11 +14,20 @@ export interface AdvertCardProps {
   quantity: number | undefined;
   icon?: string;
   prioritized: boolean | undefined;
-  //purchasingDate: Date | undefined; errors because the DB is dirty
+  creationDate: Date | undefined;
 }
 
 export const AdvertCard: FC<AdvertCardProps> = (props) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
+  const creationDateFormatted = props.creationDate
+    ? new Date(props.creationDate.toString()).toLocaleDateString('it', {
+        day: '2-digit',
+        month: '2-digit',
+        year: '2-digit',
+      })
+    : null;
+
   return (
     <div
       style={{
@@ -94,7 +103,7 @@ export const AdvertCard: FC<AdvertCardProps> = (props) => {
           bottom: 0,
         }}
       >
-        10.05.23
+        {creationDateFormatted}
       </BodyText>
       {props.prioritized ? (
         <Image

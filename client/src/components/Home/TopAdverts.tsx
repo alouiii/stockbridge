@@ -72,6 +72,7 @@ export const TopAdverts: FC = () => {
                   icon={item.imageurl}
                   description={item.description}
                   prioritized={item.prioritized}
+                  creationDate={item.createdAt}
                 />
               );
             })}
