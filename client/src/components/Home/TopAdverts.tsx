@@ -9,6 +9,7 @@ import {
 } from '../../api/collections/advert';
 import { FadeLoader } from 'react-spinners';
 import { palette } from '../../utils/colors';
+import "./override.css"
 
 /**
  * This component displays the top adverts from different categories, those that have been prioritized.
@@ -60,7 +61,12 @@ export const TopAdverts: FC = () => {
         }}
       >
         {topAdverts ? (
-          <Carousel responsive={responsive} infinite={true} centerMode>
+          <Carousel
+            responsive={responsive}
+            infinite={true}
+            centerMode
+            containerClass="carousel-container"
+          >
             {topAdverts?.map((item, index) => {
               return (
                 <AdvertCard

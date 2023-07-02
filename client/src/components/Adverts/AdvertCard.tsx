@@ -35,10 +35,20 @@ export const AdvertCard: FC<AdvertCardProps> = (props) => {
         height: 425,
         borderRadius: 8,
         position: 'relative',
-        border: '2px solid black',
+        border: '1px solid black',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        transition: 'transform 0.3s, box-shadow 0.3s',
+        cursor: 'pointer',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = 'scale(1.05)';
+        e.currentTarget.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.3)';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = 'scale(1)';
+        e.currentTarget.style.boxShadow = 'none';
       }}
     >
       <Image
