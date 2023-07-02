@@ -58,7 +58,7 @@ export const AdvertsGrid: FC<AdvertGridProps> = (props) => {
             </div>
           ))
         ) : (
-          <BodyText style={{ color: 'red', fontSize: 30, textAlign: 'center' }}>
+          <BodyText style={{ color: 'red', fontSize: 30, textAlign: 'center', marginTop: -100 }}>
             No data found
           </BodyText>
         )
