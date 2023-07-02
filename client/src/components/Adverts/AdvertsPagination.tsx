@@ -11,6 +11,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useAdverts } from '../../hooks/useAdverts';
 import { FadeLoader } from 'react-spinners';
 import { palette } from '../../utils/colors';
+import { AdvertGrid } from './AdvertsGrid';
 
 export const AdvertsPagination: FC = () => {
   const [search, setSearch] = useSearchParams();
@@ -67,44 +68,7 @@ export const AdvertsPagination: FC = () => {
         }}
       >
         <Filters />
-        <div
-          className="row"
-          style={{
-            marginLeft: 'auto',
-            marginRight: 'auto',
-            display: 'flex',
-            justifyContent: 'center',
-            marginTop: 125,
-            paddingLeft: 55,
-          }}
-        >
-          {adverts ? (
-            adverts.length > 0 ? (
-              adverts.map((item, index) => (
-                <div className="col-md-4 mb-4" key={item._id}>
-                  <AdvertCard
-                    key={index}
-                    id={item._id}
-                    name={item.productname}
-                    price={item.price}
-                    quantity={item.quantity}
-                    icon={item.imageurl}
-                    description={item.description}
-                    prioritized={item.prioritized}
-                    creationDate={item.createdAt}
-                  />
-                </div>
-              ))
-            ) : (
-              <BodyText style={{ color: 'red', fontSize: 25 }}>
-                No data found
-              </BodyText>
-            )
-          ) : (
-            <FadeLoader color={palette.subSectionsBgAccent} />
-          )}
-        </div>
-
+        <AdvertGrid adverts={adverts}/>
         <div style={{ position: 'absolute', left: 400 }}>
           {category ? (
             <BodyText style={{ fontSize: 25, fontWeight: 500 }}>

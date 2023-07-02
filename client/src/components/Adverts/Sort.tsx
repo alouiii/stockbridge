@@ -14,7 +14,7 @@ enum SortTypes {
 }
 
 export const Sort: FC = () => {
-  const [sortingType, setSortingType] = useState<string>('none');
+  const [sortingType, setSortingType] = useState<SortTypes>(SortTypes.NONE);
   const [search, setSearch] = useSearchParams();
 
   const handleClick = (type: SortTypes) => {
@@ -29,14 +29,22 @@ export const Sort: FC = () => {
     }
   };
 
-  const beautifyType = (type: string) => {
-    if (type.includes('-')) {
-      return type.replace('-', 'descending ');
-    } else {
-      if (type !== 'none') {
-        return 'ascending ' + type;
+  const beautifyType = (type: SortTypes) => {
+    if (type === SortTypes.DATE_ASC || type === SortTypes.DATE_DESC) {
+      if (type.includes('-')) {
+        return type.replace(type, 'Most Recent');
       } else {
-        return type;
+        return type.replace(type, 'Least Recent');
+      }
+    } else { //all other cases I keep the same text
+      if (type.includes('-')) {
+        return type.replace('-', 'descending ');
+      } else {
+        if (type !== 'none') {
+          return 'ascending ' + type;
+        } else {
+          return type;
+        }
       }
     }
   };
