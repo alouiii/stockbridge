@@ -7,11 +7,12 @@ import {
   delAdvert,
   findAllAdverts,
   getAdvertsByCategory,
+  getPopularCategories as getPopularCategoriesService,
+  getPopularAdverts as getPopularAdvertsService,
+  getAdvertsByStore,
 } from '../services/advertServices';
 import { AuthenticatedRequest } from '../middlewares/authMiddleware';
-import { AppError } from '../utils/errorHandler';
 import { Advert, ProductCategory } from '../entities/advertEntity';
-import { ObjectId } from 'mongodb';
 
 /**
  * This method returns an advert by id   *
@@ -22,23 +23,64 @@ import { ObjectId } from 'mongodb';
 export const getAdvert = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const { id } = req.params;
-   
-    //verifyIfAuthorized(id, req);
     const advert = await findAdvertById(id);
     res.status(200).json(advert);
   },
 );
 
 /**
- * This method returns all adverts   *
+ * This method returns all adverts
  * @param req - The request object
  * @param res - The response object
  * @returns an array of advert objects.
  */
 export const getAdverts = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
-    const adverts = await findAllAdverts();
-    res.status(200).json(adverts);
+    const reqQuery = { ...req.query };
+
+    ['search', 'sort', 'page', 'limit', 'radius'].forEach(
+      (param) => delete reqQuery[param],
+    );
+
+    let queryStr = JSON.stringify(reqQuery);
+
+    queryStr = queryStr.replace(
+      /\b(gt|gte|lt|lte|in)\b/g,
+      (match) => `$${match}`,
+    );
+
+    let sortBy: string[] = [];
+    let page = 1;
+    let limit = 25;
+    let search;
+    let radius = 0;
+    if (req.query.sort) {
+      sortBy = (req.query.sort as string).split(',');
+    }
+    if (req.query.page) {
+      page = parseInt(req.query.page as string);
+    }
+    if (req.query.limit) {
+      limit = parseInt(req.query.limit as string);
+    }
+    if (req.query.search) {
+      search = req.query.search as string;
+    }
+    if (req.query.radius) {
+      radius = parseInt(req.query.radius as string);
+    }
+
+    const results = await findAllAdverts(
+      page,
+      limit,
+      search,
+      sortBy,
+      radius === 0 ? undefined : radius,
+      radius === 0 ? undefined : req.user?.location?.coordinates,
+      queryStr,
+    );
+
+    res.status(200).json(results);
   },
 );
 
@@ -66,18 +108,15 @@ export const putAdvert = asyncHandler(
     const { id } = req.params;
     const newAdvert = req.body;
     const existingAdvert = await findAdvertById(id);
-    
-    //TODO: These should be handled differently -- create the entity and the id is added here from there.
-    // if (newAdvert.reviews) {
-    //   newAdvert.reviews = (existingAdvert.reviews || []).concat(
-    //     newAdvert.reviews,
-    //   );
-    // }
+    if (newAdvert.reviews) {
+      newAdvert.reviews = (existingAdvert.reviews || []).concat(
+        newAdvert.reviews,
+      );
+    }
 
-    // if (newAdvert.offers) {
-    //   newAdvert.offers = (existingAdvert.offers || []).concat(newAdvert.offers);
-    // }
-    _checkUserCanEditOrDeleteAdvert(req);
+    if (newAdvert.offers) {
+      newAdvert.offers = (existingAdvert.offers || []).concat(newAdvert.offers);
+    }
     const advert = await updateAdvert(id, newAdvert);
     res.status(200).json(advert);
   },
@@ -112,21 +151,44 @@ export const getAllAdvertsByCategory = asyncHandler(
   },
 );
 
+/**
+ * This method gets all adverts of a specific store   *
+ * @param req - The request object
+ * @param res - The response object
+ * @returns deleted advert object.
+ */
+export const getAllAdvertsByStore = asyncHandler(
+  async (req: AuthenticatedRequest, res: Response) => {
+    const { store } = req.params;
+    const adverts = await getAdvertsByStore(store);
+    res.status(200).json(adverts);
+  },
+);
 
 /**
- * Checks if a user can edit or delete an advert with a given id.
- * @param req The request containing the to be checked ids.
+ * This method get the most popular categories (number specified as query param)
+ *
+ * @param req - The request object
+ * @param res - The response object
+ *
+ * @returns an array of strings containing the most popular categories
  */
-async function _checkUserCanEditOrDeleteAdvert(req: AuthenticatedRequest) {
-  let userId = new ObjectId(req.user?.id);
-  const { id } = req.params;
+export const getPopularCategories = asyncHandler(
+  async (req: AuthenticatedRequest, res: Response) => {
+    const limit = req.query.limit ? parseInt(req.query.limit as string) : 6;
+    const categories = await getPopularCategoriesService(limit);
+    res.status(200).json({ categories });
+  },
+);
 
-  // The user editing or deleting must be the one who created the advert.
-  if (!(await findAdvertById(id, false)).store.equals(userId)) {
-    throw new AppError(
-      'Not authorized to edit this route',
-      'Not authorized to edit this route',
-      401,
-    );
-  }
-}
+export const getPopularAdverts = asyncHandler(
+  async (req: AuthenticatedRequest, res: Response) => {
+    const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
+    const adverts = await getPopularAdvertsService(limit);
+    const results = [] as Advert[];
+    for (const advert of adverts) {
+      results.push(await findAdvertById(advert._id));
+    }
+    res.status(200).json({ results });
+  },
+);

@@ -6,18 +6,26 @@ import { SignUp } from './pages/SignUp';
 import { SignIn } from './pages/SignIn';
 import { LoginContextProvider } from './contexts/LoginContext';
 import ProductOverview from './pages/ProductOverview';
+import { SelectedTabContextProvider } from './contexts/SelectedTabContext';
+
+import { About } from './pages/About';
+import { ContactUs } from './pages/ContactUs';
 
 function App() {
   return (
+    <SelectedTabContextProvider>
     <LoginContextProvider>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/userInfo" element={<UserInfo />} />
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/signIn" element={<SignIn />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contactUs" element={<ContactUs />} />
         <Route path="/productoverview/:id" Component={ProductOverview}></Route>
       </Routes>
     </LoginContextProvider>
+    </SelectedTabContextProvider>
   );
 }
 

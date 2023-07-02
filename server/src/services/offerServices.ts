@@ -13,7 +13,7 @@ const serviceName = 'offerServices';
  */
 export const findOfferById = async (id: string, populate = true) => {
   logger.debug(`${serviceName}: Finding offer with id: ${id}`);
-  const offer = populateResult(await offerModel.findById(id), populate);
+  const offer = await populateResult(offerModel.findById(id), populate);
 
   if (!offer) {
     logger.error(`${serviceName}: Offer not found with id of ${id}`);
@@ -63,9 +63,9 @@ export const delOffer = async (id: string) => {
  * @param populate determines if the result should be populated
  * @returns Promise containing all offers
  */
-export const findAllOffers = async (populate = false) => {
+export const findAllOffers = async (populate = true) => {
   logger.debug(`${serviceName}: Finding all offers`);
-  return populateResult(await offerModel.find(), populate);
+  return await populateResult(offerModel.find(), populate);
 };
 
 /**
@@ -74,9 +74,12 @@ export const findAllOffers = async (populate = false) => {
  * @param populate determines if the result should be populated
  * @returns Promise containing the deleted advert.
  */
-export const findAllOffersByOfferor = async (offeror: string, populate = false) => {
+export const findAllOffersByOfferor = async (
+  offeror: string,
+  populate = true,
+) => {
   logger.debug(`${serviceName}: Requesting all offers of offeror: ${offeror}`);
-  return populateResult(offerModel.find({ offeror: offeror }), populate);
+  return await populateResult(offerModel.find({ offeror: offeror }), populate);
 };
 
 /**
@@ -85,9 +88,12 @@ export const findAllOffersByOfferor = async (offeror: string, populate = false) 
  * @param populate determines if the result should be populated
  * @returns Promise containing the deleted advert.
  */
-export const findAllOffersByOfferee = async (offeree: string, populate = false) => {
+export const findAllOffersByOfferee = async (
+  offeree: string,
+  populate = true,
+) => {
   logger.debug(`${serviceName}: Requesting all offers of offeree: ${offeree}`);
-  return populateResult(offerModel.find({ offeree: offeree }), populate);
+  return await populateResult(offerModel.find({ offeree: offeree }), populate);
 };
 
 /**
@@ -96,20 +102,24 @@ export const findAllOffersByOfferee = async (offeree: string, populate = false) 
  * @param populate determines if the result should be populated
  * @returns Promise containing the deleted advert.
  */
-export const findAllOffersByAdvert = async (advert: string, populate = false) => {
+export const findAllOffersByAdvert = async (
+  advert: string,
+  populate = true,
+) => {
   logger.debug(
     `${serviceName}: Requesting all offers related to advert: ${advert}`,
   );
-  return populateResult(offerModel.find({ advert: advert }), populate);
+  return await populateResult(offerModel.find({ advert: advert }), populate);
 };
 
 /**
  * Populates the referenced elements in a document
  * @param queryResult The document to be populated
  * @param populate Determines if the result should be populated
- * @returns 
+ * @returns
  */
-function populateResult(queryResult : any, populate : boolean)
-{
-  return populate ? queryResult.populate(['offeror', 'offeree', 'advert']) : queryResult;
+function populateResult(queryResult: any, populate: boolean) {
+  return populate
+    ? queryResult.populate(['offeror', 'offeree', 'advert'])
+    : queryResult;
 }
