@@ -1,11 +1,13 @@
-import React, { FC } from 'react';
-import { PopulatedAdvert } from '../../api/collections/advert';
+import React, { FC, useEffect, useState } from 'react';
+import { AdvertType, PopulatedAdvert } from '../../api/collections/advert';
 import { BodyText } from '../Text/BodyText';
 import { FadeLoader } from 'react-spinners';
 import { palette } from '../../utils/colors';
 import { AdvertCard } from './AdvertCard';
 import ReactPaginate from 'react-paginate';
 import { Title } from '../Text/Title';
+import { Button } from 'react-bootstrap';
+import { useSearchParams } from 'react-router-dom';
 
 interface AdvertGridProps {
   adverts: PopulatedAdvert[] | undefined;
@@ -15,6 +17,24 @@ interface AdvertGridProps {
 }
 
 export const AdvertsGrid: FC<AdvertGridProps> = (props) => {
+  const [search, setSearch] = useSearchParams();
+
+  const [advertType, setAdvertType] = useState<AdvertType>(
+    search.get('type') === 'Ask'
+      ? AdvertType.Ask
+      : AdvertType.Sell ?? AdvertType.Sell,
+  );
+
+  useEffect(() => {
+    if (advertType === AdvertType.Ask) {
+      search.set('type', 'Ask');
+    } else {
+      search.set('type', 'Sell');
+    }
+    setSearch(search);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [advertType]);
+
   return (
     <div
       className="row"
@@ -23,14 +43,54 @@ export const AdvertsGrid: FC<AdvertGridProps> = (props) => {
         marginRight: 'auto',
         display: 'flex',
         justifyContent: 'center',
-        marginTop: 100,
         flexWrap: 'wrap',
         gap: 50,
       }}
     >
-      <Title style={{ fontWeight: 500, textAlign: 'center', marginTop: -250 }}>
+      <Title style={{ fontWeight: 500, textAlign: 'center', marginTop: -125 }}>
         {!props.currentCategory ? 'All Active Adverts' : props.currentCategory}
       </Title>
+      {props.adverts && props.adverts.length > 0 ? (
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            gap: 50,
+          }}
+        >
+          <Button
+            style={{ border: 'none', backgroundColor: 'white' }}
+            onClick={() => setAdvertType(AdvertType.Sell)}
+          >
+            <BodyText
+              style={{
+                fontSize: 30,
+                fontWeight: 500,
+                color: palette.subSectionsBgAccent,
+                opacity: advertType === AdvertType.Sell ? 1 : 0.5,
+              }}
+            >
+              Selling
+            </BodyText>
+          </Button>
+          <Button
+            style={{ border: 'none', backgroundColor: 'white' }}
+            onClick={() => setAdvertType(AdvertType.Ask)}
+          >
+            <BodyText
+              style={{
+                fontSize: 30,
+                fontWeight: 500,
+                color: palette.subSectionsBgAccent,
+                opacity: advertType === AdvertType.Ask ? 1 : 0.5,
+              }}
+            >
+              Buying
+            </BodyText>
+          </Button>
+        </div>
+      ) : undefined}
       {props.adverts ? (
         props.adverts.length > 0 ? (
           props.adverts.map((item, index) => (
@@ -58,7 +118,14 @@ export const AdvertsGrid: FC<AdvertGridProps> = (props) => {
             </div>
           ))
         ) : (
-          <BodyText style={{ color: 'red', fontSize: 30, textAlign: 'center', marginTop: -100 }}>
+          <BodyText
+            style={{
+              color: 'red',
+              fontSize: 30,
+              textAlign: 'center',
+              marginTop: -100,
+            }}
+          >
             No data found
           </BodyText>
         )
