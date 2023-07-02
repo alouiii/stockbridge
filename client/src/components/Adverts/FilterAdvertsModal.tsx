@@ -28,8 +28,8 @@ interface FilterAdvertsModalProps {
       setValue: (newValue: Date | undefined) => void;
     };
     rangePosition: {
-      value: number[];
-      setValue: (newValue: number[]) => void;
+      value: number;
+      setValue: (newValue: number) => void;
     };
   };
 }
@@ -45,11 +45,11 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
     filters.rangeQuantity.value,
   );
   const [date, setDate] = useState<Date | undefined>(filters.date.value);
-  const [rangePosition, setRangePosition] = useState<number[]>(
+  const [rangePosition, setRangePosition] = useState<number>(
     filters.rangePosition.value,
   );
 
-  const [search,setSearch] = useSearchParams()
+  const [search, setSearch] = useSearchParams();
 
   const handleClose = () => {
     //set previous state
@@ -71,9 +71,9 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
   };
 
   const handleConfirm = () => {
-    saveResults()
+    saveResults();
     if (category) {
-      console.log(category)
+      console.log(category);
       search.set('category[in]', category);
       setSearch(search);
     }
@@ -100,7 +100,7 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
     }
 
     if (rangePosition) {
-      search.set('range', (rangePosition[1] - rangePosition[0]).toString()); //to check
+      search.set('range', rangePosition.toString()); //to check
       setSearch(search);
     }
   };
@@ -111,13 +111,13 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
     setRangePrice([0, 1000]);
     setRangeQuantity([0, 1000]);
     setDate(undefined);
-    setRangePosition([0, 1000]);
+    setRangePosition(0);
     //reset external state
     filters.category.setValue('');
     filters.rangePrice.setValue([0, 1000]);
     filters.rangeQuantity.setValue([0, 1000]);
     filters.date.setValue(undefined);
-    filters.rangePosition.setValue([0, 1000]);
+    filters.rangePosition.setValue(0);
   };
 
   return (
@@ -159,7 +159,7 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
         <div style={{ width: 200, marginTop: 20 }}>
           <BodyText style={{ textAlign: 'center' }}>Price:</BodyText>
           <Slider
-            style={{ color: 'black', marginTop: -20 }}
+            style={{ color: 'gray', marginTop: -20 }}
             size="small"
             value={rangePrice}
             onChange={(_, newRange) => setRangePrice(newRange as number[])}
@@ -171,7 +171,7 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
         <div style={{ width: 200 }}>
           <BodyText style={{ textAlign: 'center' }}>Quantity:</BodyText>
           <Slider
-            style={{ color: 'black', marginTop: -20 }}
+            style={{ color: 'gray', marginTop: -20 }}
             size="small"
             value={rangeQuantity}
             onChange={(_, newRange) => setRangeQuantity(newRange as number[])}
@@ -191,14 +191,16 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
         <div style={{ width: 200 }}>
           <BodyText style={{ textAlign: 'center' }}>Range(km):</BodyText>
           <Slider
-            style={{ color: 'black', marginTop: -20 }}
+            style={{ color: 'gray' }}
+            defaultValue={100}
             size="small"
             value={rangePosition}
-            onChange={(_, newRange) => setRangePosition(newRange as number[])}
+            onChange={(_, newRange) => setRangePosition(newRange as number)}
             valueLabelDisplay="auto"
+            step={10}
+            marks
             min={0}
-            max={1000}
-            step={20}
+            max={100}
           />
         </div>
       </Modal.Body>

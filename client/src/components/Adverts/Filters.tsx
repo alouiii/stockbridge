@@ -21,7 +21,7 @@ export const Filters: FC = () => {
   const [rangePrice, setRangePrice] = useState<number[]>([0, 1000]);
   const [rangeQuantity, setRangeQuantity] = useState<number[]>([0, 1000]);
   const [date, setDate] = useState<Date>();
-  const [rangePosition, setRangePosition] = useState<number[]>([0, 1000]);
+  const [rangePosition, setRangePosition] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const matches = useMediaQuery('(min-width: 768px)');
@@ -41,7 +41,7 @@ export const Filters: FC = () => {
     setRangePrice([0, 1000]);
     setRangeQuantity([0, 1000]);
     setDate(undefined);
-    setRangePosition([0, 1000]);
+    setRangePosition(0);
     search.delete('category[in]');
     search.delete('price[gte]');
     search.delete('quantity[gte]');
@@ -53,7 +53,7 @@ export const Filters: FC = () => {
 
   const handleConfirm = () => {
     if (category) {
-      console.log(category)
+      console.log(category);
       search.set('category[in]', category);
       setSearch(search);
     }
@@ -80,7 +80,7 @@ export const Filters: FC = () => {
     }
 
     if (rangePosition) {
-      search.set('range', (rangePosition[1] - rangePosition[0]).toString()); //to check
+      search.set('range', rangePosition.toString()); //to check
       setSearch(search);
     }
   };
@@ -176,7 +176,7 @@ export const Filters: FC = () => {
       <div style={{ width: 200, marginTop: 20 }}>
         <BodyText style={{ textAlign: 'center' }}>Price:</BodyText>
         <Slider
-          style={{ color: 'black', marginTop: -20 }}
+          style={{ color: 'gray', marginTop: -20 }}
           size="small"
           value={rangePrice}
           onChange={(_, newRange) => setRangePrice(newRange as number[])}
@@ -189,7 +189,7 @@ export const Filters: FC = () => {
       <div style={{ width: 200 }}>
         <BodyText style={{ textAlign: 'center' }}>Quantity:</BodyText>
         <Slider
-          style={{ color: 'black', marginTop: -20 }}
+          style={{ color: 'gray', marginTop: -20 }}
           size="small"
           value={rangeQuantity}
           onChange={(_, newRange) => setRangeQuantity(newRange as number[])}
@@ -210,14 +210,16 @@ export const Filters: FC = () => {
       <div style={{ width: 200 }}>
         <BodyText style={{ textAlign: 'center' }}>Range(km):</BodyText>
         <Slider
-          style={{ color: 'black', marginTop: -20 }}
+          style={{ color: 'gray' }}
           size="small"
+          defaultValue={100}
           value={rangePosition}
-          onChange={(_, newRange) => setRangePosition(newRange as number[])}
+          onChange={(_, newRange) => setRangePosition(newRange as number)}
           valueLabelDisplay="auto"
+          step={10}
+          marks
           min={0}
-          max={1000}
-          step={20}
+          max={100}
         />
       </div>
       <div style={{ marginTop: 30, display: 'flex', justifyContent: 'center' }}>
