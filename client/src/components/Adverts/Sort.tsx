@@ -9,8 +9,8 @@ enum SortTypes {
   PRICE_DESC = '-price',
   QUANTITY_ASC = 'quantity',
   QUANTITY_DESC = '-quantity',
-  DATE_ASC = 'creation_date', //check
-  DATE_DESC = '-creation_date', //check
+  DATE_ASC = 'createdAt',
+  DATE_DESC = '-createdAt',
 }
 
 export const Sort: FC = () => {

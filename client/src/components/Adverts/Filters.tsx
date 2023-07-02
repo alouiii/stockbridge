@@ -1,7 +1,7 @@
-import { ChangeEvent, FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Title } from '../Text/Title';
 import { palette } from '../../utils/colors';
-import { Button, Dropdown, Form, Image } from 'react-bootstrap';
+import { Button, Dropdown, Image } from 'react-bootstrap';
 import Slider from '@mui/material/Slider';
 import { BodyText } from '../Text/BodyText';
 import useMediaQuery from '../../hooks/useMediaQuery';
@@ -17,23 +17,31 @@ import { useSearchParams } from 'react-router-dom';
  */
 export const Filters: FC = () => {
   const [search, setSearch] = useSearchParams();
-  const [category, setCategory] = useState<string>(
-    search.get('category') ?? '',
-  );
+  const [category, setCategory] = useState<string>('');
   const [rangePrice, setRangePrice] = useState<number[]>([0, 1000]);
   const [rangeQuantity, setRangeQuantity] = useState<number[]>([0, 1000]);
   const [date, setDate] = useState<Date>();
-  const [postalCode, setPostalCode] = useState<string>('');
+  const [rangePosition, setRangePosition] = useState<number[]>([0, 1000]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const matches = useMediaQuery('(min-width: 768px)');
+
+  useEffect(() => {
+    const cat = search.get('category');
+    if (cat !== null) {
+      setCategory(cat);
+    } else {
+      setCategory('');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search.get('category')]);
 
   const handleReset = () => {
     setCategory('');
     setRangePrice([0, 1000]);
     setRangeQuantity([0, 1000]);
     setDate(undefined);
-    setPostalCode('');
+    setRangePosition([0, 1000]);
     search.delete('category');
     search.delete('price[gte]');
     search.delete('quantity[gte]');
@@ -69,9 +77,9 @@ export const Filters: FC = () => {
       setSearch(search);
     }
 
-    if (postalCode) {
-      search.set('postalCode', category); //to check
-      setSearch(search);
+    if (rangePosition) {
+      //search.set('postalCode', category); //to check
+      //setSearch(search);
     }
   };
 
@@ -113,9 +121,9 @@ export const Filters: FC = () => {
               value: date,
               setValue: setDate,
             },
-            postalCode: {
-              value: postalCode,
-              setValue: setPostalCode,
+            rangePosition: {
+              value: rangePosition,
+              setValue: setRangePosition,
             },
           }}
         />
@@ -172,6 +180,7 @@ export const Filters: FC = () => {
           valueLabelDisplay="auto"
           min={0}
           max={1000}
+          step={20}
         />
       </div>
       <div style={{ width: 200 }}>
@@ -184,6 +193,7 @@ export const Filters: FC = () => {
           valueLabelDisplay="auto"
           min={0}
           max={1000}
+          step={20}
         />
       </div>
       <div
@@ -194,25 +204,18 @@ export const Filters: FC = () => {
       >
         <DatePicker value={date} onDateChange={setDate} />
       </div>
-      <div style={{ width: 100, margin: '0 auto', marginTop: 10 }}>
-        <div className="row">
-          <div>
-            <Form.Group>
-              <BodyText style={{ textAlign: 'center', marginBottom: 10 }}>
-                Postal Code:
-              </BodyText>
-              <Form.Control
-                style={{ border: 'none', textAlign: 'center' }}
-                type="text"
-                placeholder="XXXXX"
-                value={postalCode ?? ''}
-                onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                  setPostalCode(e.target.value)
-                }
-              />
-            </Form.Group>
-          </div>
-        </div>
+      <div style={{ width: 200, marginTop: 20 }}>
+        <BodyText style={{ textAlign: 'center' }}>Range(km):</BodyText>
+        <Slider
+          style={{ color: 'black', marginTop: -20 }}
+          size="small"
+          value={rangePosition}
+          onChange={(_, newRange) => setRangePosition(newRange as number[])}
+          valueLabelDisplay="auto"
+          min={0}
+          max={1000}
+          step={20}
+        />
       </div>
       <div style={{ marginTop: 30, display: 'flex', justifyContent: 'center' }}>
         <Button variant="secondary" onClick={handleReset}>

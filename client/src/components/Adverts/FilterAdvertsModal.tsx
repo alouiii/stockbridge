@@ -1,5 +1,5 @@
-import React, { ChangeEvent, FC, useState } from 'react';
-import { Button, Dropdown, Form, Modal } from 'react-bootstrap';
+import React, { FC, useState } from 'react';
+import { Button, Dropdown, Modal } from 'react-bootstrap';
 import { palette } from '../../utils/colors';
 import { BodyText } from '../Text/BodyText';
 import Slider from '@mui/material/Slider';
@@ -26,9 +26,9 @@ interface FilterAdvertsModalProps {
       value: Date | undefined;
       setValue: (newValue: Date | undefined) => void;
     };
-    postalCode: {
-      value: string;
-      setValue: (newValue: string) => void;
+    rangePosition: {
+      value: number[];
+      setValue: (newValue: number[]) => void;
     };
   };
 }
@@ -44,8 +44,8 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
     filters.rangeQuantity.value,
   );
   const [date, setDate] = useState<Date | undefined>(filters.date.value);
-  const [postalCode, setPostalCode] = useState<string>(
-    filters.postalCode.value,
+  const [rangePosition, setRangePosition] = useState<number[]>(
+    filters.rangePosition.value,
   );
 
   const handleClose = () => {
@@ -54,7 +54,7 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
     setRangePrice(filters.rangePrice.value);
     setRangeQuantity(filters.rangeQuantity.value);
     setDate(filters.date.value);
-    setPostalCode(filters.postalCode.value);
+    setRangePosition(filters.rangePosition.value);
     props.setIsOpen(false);
   };
 
@@ -64,7 +64,7 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
     filters.rangePrice.setValue(rangePrice);
     filters.rangeQuantity.setValue(rangeQuantity);
     filters.date.setValue(date);
-    filters.postalCode.setValue(postalCode);
+    filters.rangePosition.setValue(rangePosition);
     props.setIsOpen(false);
   };
 
@@ -74,13 +74,13 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
     setRangePrice([0, 1000]);
     setRangeQuantity([0, 1000]);
     setDate(undefined);
-    setPostalCode('');
+    setRangePosition([0, 1000]);
     //reset external state
     filters.category.setValue('');
     filters.rangePrice.setValue([0, 1000]);
     filters.rangeQuantity.setValue([0, 1000]);
     filters.date.setValue(undefined);
-    filters.postalCode.setValue('');
+    filters.rangePosition.setValue([0, 1000]);
   };
 
   return (
@@ -151,25 +151,18 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
         >
           <DatePicker value={date} onDateChange={setDate} />
         </div>
-        <div style={{ width: 100, margin: '0 auto', marginTop: 10 }}>
-          <div className="row">
-            <div>
-              <Form.Group>
-                <BodyText style={{ textAlign: 'center', marginBottom: 10 }}>
-                  Postal Code:
-                </BodyText>
-                <Form.Control
-                  style={{ textAlign: 'center' }}
-                  type="text"
-                  placeholder="XXXXX"
-                  value={postalCode ?? ''}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                    setPostalCode(e.target.value)
-                  }
-                />
-              </Form.Group>
-            </div>
-          </div>
+        <div style={{ width: 200, marginTop: 20 }}>
+          <BodyText style={{ textAlign: 'center' }}>Range(km):</BodyText>
+          <Slider
+            style={{ color: 'black', marginTop: -20 }}
+            size="small"
+            value={rangePosition}
+            onChange={(_, newRange) => setRangePosition(newRange as number[])}
+            valueLabelDisplay="auto"
+            min={0}
+            max={1000}
+            step={20}
+          />
         </div>
       </Modal.Body>
       <Modal.Footer>

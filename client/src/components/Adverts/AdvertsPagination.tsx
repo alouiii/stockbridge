@@ -15,9 +15,7 @@ import { palette } from '../../utils/colors';
 export const AdvertsPagination: FC = () => {
   const [search, setSearch] = useSearchParams();
 
-  const [category, setCategory] = useState<string>(
-    search.get('category') ?? '',
-  );
+  const [category, setCategory] = useState<string>('');
 
   const getAdverts = useAdverts();
 
@@ -33,8 +31,8 @@ export const AdvertsPagination: FC = () => {
     } else {
       setCategory('');
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [adverts]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search.get('category')]);
 
   const totalNumberOfPages = useMemo(() => {
     return getAdverts.data?.totalNumberOfPages ?? 1;
@@ -130,6 +128,7 @@ export const AdvertsPagination: FC = () => {
         breakClassName="page-item"
         breakLinkClassName="page-link"
         activeClassName="active"
+        renderOnZeroPageCount={null}
       />
     </div>
   );
