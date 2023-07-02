@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
-import { Title } from '../Text/Title';
 import { Stack } from 'react-bootstrap';
 import { Filters } from './Filters';
 import useMediaQuery from '../../hooks/useMediaQuery';
@@ -59,20 +58,18 @@ export const AdvertsPagination: FC = () => {
         marginBottom: 25,
       }}
     >
-      <Title style={{ fontWeight: 500, marginTop: 80 }}>
-        {!category ? ' All Active Adverts' : category}
-      </Title>
       <Stack
         style={{
           display: 'flex',
           flexDirection: matches ? 'row' : 'column',
           marginBottom: 15,
-          marginTop: 100,
+          marginTop: 200,
         }}
       >
         <Filters />
         <AdvertsGrid
           adverts={adverts}
+          currentCategory={category}
           totalNumberOfPages={totalNumberOfPages}
           handlePageClick={handlePageClick}
         />

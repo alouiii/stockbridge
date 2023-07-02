@@ -136,6 +136,7 @@ export const Filters: FC = () => {
       style={{
         left: 0,
         padding: '50px',
+        paddingTop: '30px',
         borderRadius: 15,
         backgroundColor: palette.subSectionsBgLighter,
         display: 'flex',

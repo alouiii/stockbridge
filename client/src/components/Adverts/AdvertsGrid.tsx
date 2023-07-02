@@ -5,9 +5,11 @@ import { FadeLoader } from 'react-spinners';
 import { palette } from '../../utils/colors';
 import { AdvertCard } from './AdvertCard';
 import ReactPaginate from 'react-paginate';
+import { Title } from '../Text/Title';
 
 interface AdvertGridProps {
   adverts: PopulatedAdvert[] | undefined;
+  currentCategory: string;
   totalNumberOfPages: number;
   handlePageClick: (selectedItem: { selected: number }) => void;
 }
@@ -21,11 +23,14 @@ export const AdvertsGrid: FC<AdvertGridProps> = (props) => {
         marginRight: 'auto',
         display: 'flex',
         justifyContent: 'center',
-        marginTop: 125,
+        marginTop: 100,
         flexWrap: 'wrap',
         gap: 50,
       }}
     >
+      <Title style={{ fontWeight: 500, textAlign: 'center', marginTop: -250 }}>
+        {!props.currentCategory ? 'All Active Adverts' : props.currentCategory}
+      </Title>
       {props.adverts ? (
         props.adverts.length > 0 ? (
           props.adverts.map((item, index) => (
@@ -53,7 +58,7 @@ export const AdvertsGrid: FC<AdvertGridProps> = (props) => {
             </div>
           ))
         ) : (
-          <BodyText style={{ color: 'red', fontSize: 30 }}>
+          <BodyText style={{ color: 'red', fontSize: 30, textAlign: 'center' }}>
             No data found
           </BodyText>
         )
