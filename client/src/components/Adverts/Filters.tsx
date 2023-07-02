@@ -7,7 +7,7 @@ import { BodyText } from '../Text/BodyText';
 import useMediaQuery from '../../hooks/useMediaQuery';
 import { ProductCategory } from '../../api/collections/advert';
 import { ColoredLine } from '../ColoredLine';
-import { DatePicker } from '../DatePicker';
+//import { DatePicker } from '../DatePicker';
 import filtersIcon from '../../assets/filters.svg';
 import { FilterAdvertsModal } from './FilterAdvertsModal';
 import { useSearchParams } from 'react-router-dom';
@@ -53,6 +53,7 @@ export const Filters: FC = () => {
 
   const handleConfirm = () => {
     if (category) {
+      console.log(category)
       search.set('category[in]', category);
       setSearch(search);
     }
@@ -198,15 +199,15 @@ export const Filters: FC = () => {
           step={20}
         />
       </div>
-      <div
+      {/*<div
         style={{
           marginTop: 20,
           textAlign: 'center',
         }}
       >
         <DatePicker value={date} onDateChange={setDate} />
-      </div>
-      <div style={{ width: 200, marginTop: 20 }}>
+      </div>*/}
+      <div style={{ width: 200 }}>
         <BodyText style={{ textAlign: 'center' }}>Range(km):</BodyText>
         <Slider
           style={{ color: 'black', marginTop: -20 }}

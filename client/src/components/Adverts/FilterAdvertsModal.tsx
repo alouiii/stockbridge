@@ -4,7 +4,8 @@ import { palette } from '../../utils/colors';
 import { BodyText } from '../Text/BodyText';
 import Slider from '@mui/material/Slider';
 import { ProductCategory } from '../../api/collections/advert';
-import { DatePicker } from '../DatePicker';
+//import { DatePicker } from '../DatePicker';
+import { useSearchParams } from 'react-router-dom';
 
 interface FilterAdvertsModalProps {
   isOpen: boolean;
@@ -48,6 +49,8 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
     filters.rangePosition.value,
   );
 
+  const [search,setSearch] = useSearchParams()
+
   const handleClose = () => {
     //set previous state
     setCategory(filters.category.value);
@@ -59,13 +62,47 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
   };
 
   const saveResults = () => {
-    //call api : TODO
     filters.category.setValue(category);
     filters.rangePrice.setValue(rangePrice);
     filters.rangeQuantity.setValue(rangeQuantity);
     filters.date.setValue(date);
     filters.rangePosition.setValue(rangePosition);
     props.setIsOpen(false);
+  };
+
+  const handleConfirm = () => {
+    saveResults()
+    if (category) {
+      console.log(category)
+      search.set('category[in]', category);
+      setSearch(search);
+    }
+
+    if (rangePrice) {
+      const minPrice = rangePrice[0];
+      const maxPrice = rangePrice[1];
+      search.set('price[gte]', minPrice.toString());
+      search.set('price[lte]', maxPrice.toString());
+      setSearch(search);
+    }
+
+    if (rangeQuantity) {
+      const minQuantity = rangeQuantity[0];
+      const maxQuantity = rangeQuantity[1];
+      search.set('quantity[gte]', minQuantity.toString());
+      search.set('quantity[lte]', maxQuantity.toString());
+      setSearch(search);
+    }
+
+    if (date) {
+      search.set('date', category);
+      setSearch(search);
+    }
+
+    if (rangePosition) {
+      search.set('range', (rangePosition[1] - rangePosition[0]).toString()); //to check
+      setSearch(search);
+    }
   };
 
   const handleReset = () => {
@@ -143,15 +180,15 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
             max={1000}
           />
         </div>
-        <div
+        {/*<div
           style={{
             marginTop: 20,
             textAlign: 'center',
           }}
         >
           <DatePicker value={date} onDateChange={setDate} />
-        </div>
-        <div style={{ width: 200, marginTop: 20 }}>
+        </div>*/}
+        <div style={{ width: 200 }}>
           <BodyText style={{ textAlign: 'center' }}>Range(km):</BodyText>
           <Slider
             style={{ color: 'black', marginTop: -20 }}
@@ -174,7 +211,7 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
             backgroundColor: palette.subSectionsBgAccent,
             border: 'none',
           }}
-          onClick={saveResults}
+          onClick={handleConfirm}
         >
           Save Changes
         </Button>
