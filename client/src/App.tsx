@@ -10,7 +10,8 @@ import { SelectedTabContextProvider } from './contexts/SelectedTabContext';
 
 import { About } from './pages/About';
 import { ContactUs } from './pages/ContactUs';
-import { Map } from './components/Map/Map';
+import { CustomMap } from './components/Map/CustomMap';
+import mockAdverts from "../src/components/Map/mock.json"
 
 function App() {
   return (
@@ -23,7 +24,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/contactUs" element={<ContactUs />} />
         <Route path="/productoverview/:id" Component={ProductOverview}></Route>
-        <Route path='/map' element={<Map />}></Route>
+        <Route path='/map' element={<CustomMap adverts={[]}/>}></Route>
       </Routes>
     </LoginContextProvider>
   );
