@@ -10,7 +10,6 @@ import { ProfileProdcutAttribute } from '../../Profile/ProfileProdcutAttribute';
 import { PopulatedAdvert } from '../../../api/collections/advert';
 import { PopulatedOffer } from '../../../api/collections/offer';
 require('./OfferBarUserProfile.scss');
-//require('../../Offers/offerBarStyle.scss');
 
 type OfferBarUserProfileInfoProps = {
     picture: string | undefined
@@ -42,7 +41,7 @@ const OfferBarUserProfileInfo: React.FC<OfferBarUserProfileInfoProps> = (props) 
   }
   
   return (
-    <li className="product-bar row" onClick={props.onClick}>
+    <li className="product-bar offer row" style={{backgroundColor: 'white'}} onClick={props.onClick}>
       <div className="product-image col-2">
       <Image
           style={{
