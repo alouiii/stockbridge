@@ -4,8 +4,13 @@ import 'leaflet/dist/leaflet.css';
 import { Icon, LatLngExpression } from 'leaflet';
 import markerIcon from '../../assets/marker.svg';
 import MarkerClusterGroup from 'react-leaflet-cluster';
+import { PopulatedAdvert } from '../../api/collections/advert';
 
-export const CustomMap: FC = () => {
+interface CustomMapProps {
+  adverts: PopulatedAdvert[]
+}
+
+export const CustomMap: FC<CustomMapProps> = (props) => {
   const markers = [
     {
       coords: [51.505, -0.09],
