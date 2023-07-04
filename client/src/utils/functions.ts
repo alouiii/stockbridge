@@ -7,19 +7,27 @@ export function checkEmail(email: string) {
 
 /**
  * Checks if the given password and confirmation are identical with min lenght = 6 characters.
- * @param password1 
- * @param password2 
+ * @param password1
+ * @param password2
  * @returns A tuple containing if the password is acceptable and the corresponding error message.
  */
+/*
 export function checkPassword(password1: string, password2: string): [boolean,string] {
   if (password1.length < 6){
     return [false, "Password should contain at least 6 characters"];
   }
-  if (password1 !== password2)
-  {
+  if (password1 !== password2) {
     return [false, "Passwords don't match"];
   }
   return [true, ""];
+}*/
+
+export function checkPasswordLength(password: string) {
+  return password.length >= 6;
+}
+
+export function checkPasswordMatch(password1: string, password2: string) {
+  return password1 === password2;
 }
 
 export function autocompleteCardNumber(event: ChangeEvent<HTMLInputElement>) {
@@ -92,4 +100,20 @@ export function expDatePaymentToDate(date: string) {
 export function checkPhoneNumber(phoneNumber: string) {
   const regex = /^\+?[1-9]\d{1,3}-?[1-9]\d{1,14}$/;
   return regex.test(phoneNumber);
+}
+
+export function checkPurchaseDateAdvert(date: string) {
+  const inputDate = new Date(date);
+  if (inputDate <= new Date()) {
+    return true;
+  }
+  return false;
+}
+
+export function checkExpirationDateAvert(date: string) {
+  const inputDate = new Date(date);
+  if (inputDate >= new Date()) {
+    return true;
+  }
+  return false;
 }

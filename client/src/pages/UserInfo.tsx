@@ -1,11 +1,9 @@
-import React from 'react';
+import { useContext, useEffect, ReactElement } from 'react';
 import { Page } from '../components/Page';
 import { ProfileHeader } from '../components/Profile/ProfileHeader';
 import '../styles/userInfo.css';
 import { palette } from '../utils/colors';
-
 import useMediaQuery from './../hooks/useMediaQuery';
-import { useState, ReactElement } from 'react';
 
 import { ProfileSectionTab } from '../components/ContentTabs/ProfileSectionTab';
 import MyAdvertsContent from '../components/Profile/ProfileSectionsContent/MyAdvertsContent';
@@ -14,60 +12,91 @@ import BuyingContent from '../components/Profile/ProfileSectionsContent/BuyingCo
 import PremiumContent from '../components/Profile/ProfileSectionsContent/PremiumContent';
 import HelpQaContent from '../components/Profile/ProfileSectionsContent/HelpQaContent';
 import StoreDetailsForm from '../components/Profile/StoreDetails/StoreDetailsForm';
+import { LoginContext } from '../contexts/LoginContext';
+import { Spinner } from 'react-bootstrap';
+import SelectedTabContext from '../contexts/SelectedTabContext';
+import { createBrowserHistory } from "history";
 
 /**
  * Contains the tabs displayed on the sidebar of the profile page and their corresponding content
  */
 const leftTabs: {
   text: string;
+  link: string;
   icon: string;
   content: ReactElement;
   isSelected: boolean;
 }[] = [
-  {
-    text: 'My Adverts',
-    icon: 'bi-cash-stack',
-    content: <MyAdvertsContent children={[]} />,
-    isSelected: false,
-  },
-  {
-    text: 'Selling',
-    icon: 'bi-cash-coin',
-    content: <SellingContent children={[]} />,
-    isSelected: true,
-  },
-  {
-    text: 'Buying',
-    icon: 'bi-box-seam',
-    content: <BuyingContent children={[]} />,
-    isSelected: false,
-  },
-  {
-    text: 'Store Details',
-    icon: 'bi-shop',
-    content: <StoreDetailsForm />,
-    isSelected: false,
-  },
-  {
-    text: 'Premium',
-    icon: 'bi-bookmark-star',
-    content: <PremiumContent children={[]} />,
-    isSelected: false,
-  },
-  {
-    text: 'Help and FAQ',
-    icon: 'bi-question-circle',
-    content: <HelpQaContent children={[]} />,
-    isSelected: false,
-  },
-];
+    {
+      text: 'My Adverts',
+      link: 'MyAdverts',
+      icon: 'bi-cash-stack',
+      content: <MyAdvertsContent />,
+      isSelected: false,
+    },
+    {
+      text: 'Selling',
+      link: 'Selling',
+      icon: 'bi-cash-coin',
+      content: <SellingContent />,
+      isSelected: true,
+    },
+    {
+      text: 'Buying',
+      link: 'Buying',
+      icon: 'bi-box-seam',
+      content: <BuyingContent />,
+      isSelected: false,
+    },
+    {
+      text: 'Store Details',
+      link: 'StoreDetails',
+      icon: 'bi-shop',
+      content: <StoreDetailsForm />,
+      isSelected: false,
+    },
+    {
+      text: 'Premium',
+      link: 'Premium',
+      icon: 'bi-bookmark-star',
+      content: <PremiumContent />,
+      isSelected: false,
+    },
+    {
+      text: 'Help And FAQ',
+      link: 'HelpAndFAQ',
+      icon: 'bi-question-circle',
+      content: <HelpQaContent children={[]} />,
+      isSelected: false,
+    },
+  ];
 
 /**
  * The page containing the user information (profile): Ads, Offers, Subsriptions...
  */
 export function UserInfo() {
+  const history = createBrowserHistory();
+  const { isLoading } = useContext(LoginContext);
   const matches = useMediaQuery('(min-width: 768px)');
-  const [selectedProfileSection, setSelectedProfileSection] = useState(0);
+  const tabContext = useContext(SelectedTabContext);
+
+  /**
+   * Sets the active tab from the link history.
+   */
+  useEffect(() => {
+    const filterParams = history.location.search.substring(1);
+    if (filterParams) {
+      tabContext.selectedProfileSection = Number(leftTabs.findIndex(x => filterParams === x.link));
+    }
+  }, []);
+
+  /**
+   * Sets the link to the active tab.
+   */
+  useEffect(() => {
+    history.push(`?${leftTabs[tabContext.selectedProfileSection].link}`);
+  }, [tabContext.selectedProfileSection]);
+
 
   return (
     <Page>
@@ -100,17 +129,25 @@ export function UserInfo() {
                   title={section.text}
                   icon={section.icon}
                   index={sectionIndex}
-                  selectedTab={selectedProfileSection}
-                  setSelectedTab={setSelectedProfileSection}
+                  selectedTab={tabContext.selectedProfileSection}
+                  setSelectedTab={tabContext.setSelectedProfileSection}
                 />
               );
             })}
           </div>
         </div>
 
-        <div className="col-10" style={{ paddingTop: '5em' }}>
-          {leftTabs[selectedProfileSection].content}
+        {isLoading ? (
+          <Spinner
+            animation="grow"
+            role="status"
+            style={{ position: 'absolute', left: '50%', top: '50%' }}
+          />
+        ) : (
+          <div className="col-10" style={{ paddingTop: '5em' }}>
+          {leftTabs[tabContext.selectedProfileSection].content}
         </div>
+        )}
       </div>
     </Page>
   );

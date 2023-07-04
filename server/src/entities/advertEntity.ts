@@ -1,6 +1,6 @@
 import { Offer } from './offerEntity';
 import { Review } from './reviewEntity';
-import { User } from './userEntity';
+import { User, Location } from './userEntity';
 
 export enum AdvertType {
   Sell,
@@ -53,11 +53,12 @@ export interface Advert {
   purchaseDate: Date;
   quantity: number;
   price: number;
-  date: Date;
-  advertStatus: string;
+  createdAt: Date;
+  status: string;
   type: string;
   category: string;
   offers?: Offer[];
   reviews?: Review[];
   store: User;
+  location: Location;
 }

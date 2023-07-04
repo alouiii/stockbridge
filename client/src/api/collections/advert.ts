@@ -43,8 +43,45 @@ export enum ProductCategory {
   Flowers_And_Bouquets = 'Flowers And Bouquets',
 }
 
+export interface AdvertDto {
+  results?: PopulatedAdvert[];
+  totalNumberOfPages?: number;
+  pagination?: Pagination;
+}
+
+interface Pagination {
+  next?: {
+    page: number;
+    limit: number;
+  };
+  prev?: {
+    page: number;
+    limit: number;
+  };
+}
+
 export interface Advert {
-  id?: string;
+  _id?: string;
+  productname?: string;
+  prioritized?: boolean;
+  quantity?: number;
+  description?: string;
+  price?: number;
+  expirationDate?: Date;
+  purchaseDate?: Date;
+  status?: string;
+  type?: string;
+  category?: string;
+  offers?: string[];
+  store?: string;
+  reviews?: string[];
+  imageurl?: string;
+  color?: string;
+  createdAt?: Date;
+}
+
+export interface PopulatedAdvert {
+  _id?: string;
   productname?: string;
   prioritized?: boolean;
   quantity?: number;
@@ -60,17 +97,20 @@ export interface Advert {
   reviews?: Review[];
   imageurl?: string;
   color?: string;
+  createdAt?: Date;
 }
 
 const apiClient = new ApiClient();
 
-export async function getAdvert(id: string): Promise<Advert> {
-  return await apiClient.get<Advert>(`/adverts/${id}`);
+export async function getAdvert(id: string): Promise<PopulatedAdvert> {
+  return await apiClient.get<PopulatedAdvert>(`/adverts/${id}`, {
+    withCredentials: true,
+  });
 }
 
 export async function createAdvert(advert: Advert): Promise<Advert> {
   return await apiClient.post<Advert>(`/adverts/`, advert, {
-    withCredentials: false,
+    withCredentials: true,
   });
 }
 
@@ -78,12 +118,25 @@ export async function updateAdvert(
   id: string,
   advert: Advert,
 ): Promise<Advert> {
-  console.log('UPDATING ADVERT: ', id);
   return await apiClient.put<Advert>(`/adverts/${id}`, advert, {
-    withCredentials: false,
+    withCredentials: true,
   });
 }
 
 export async function deleteAdvert(id: string): Promise<void> {
-  return await apiClient.delete<void>(`/adverts/${id}`);
+  return await apiClient.delete<void>(`/adverts/${id}`, {
+    withCredentials: true,
+  });
+}
+
+export async function getAllAdverts(): Promise<AdvertDto> {
+  return await apiClient.get<AdvertDto>('/adverts/', {
+    withCredentials: true,
+  });
+}
+
+export async function getAdvertsByUser(store: string | undefined): Promise<Advert[]> {
+  return await apiClient.get<Advert[]>(`/adverts/getAdvertsByStore/${store}`, {
+    withCredentials: true,
+  });
 }

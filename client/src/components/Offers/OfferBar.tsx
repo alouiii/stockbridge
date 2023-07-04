@@ -1,24 +1,25 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ProductAttribute } from '../ProductOverview/ProductAttribute';
-import { Offer } from '../../api/collections/offer';
-import { Advert } from '../../api/collections/advert';
+import { PopulatedOffer } from '../../api/collections/offer';
+import { PopulatedAdvert } from '../../api/collections/advert';
 import { BodyText } from '../Text/BodyText';
 import { OfferModal } from './OfferModal';
 import { Ratings } from '../Ratings';
+import { InfoBar } from '../ProductOverview/InfoBar';
+import { User } from '../../api/collections/user';
 require('./offerBarStyle.scss');
 
-type OfferBarProps = React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLDivElement>,
-  HTMLDivElement
-> &
-  Partial<{
-    offer: Offer;
-    advert: Advert;
-  }>;
+type OfferBarProps = {
+  offer: PopulatedOffer;
+  advert: PopulatedAdvert;
+};
 
 const OfferBar: React.FC<OfferBarProps> = (props) => {
   const [showModal, setShowModal] = useState(false);
   const closeModal = () => {
+    setShowModal(false);
+  };
+  const closeModalOnSave = () => {
     setShowModal(false);
     //change to set Advert
     window.location.reload();
@@ -26,80 +27,81 @@ const OfferBar: React.FC<OfferBarProps> = (props) => {
   const openModal = () => {
     setShowModal(true);
   };
+  const [offerer, setOfferer] = useState({} as User);
+  const [offeree, setOfferee] = useState({} as User);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setOfferer(props.offer.offeror!);
+        setOfferee(props.offer.offeree!);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
   return (
-    <div
-      style={{
-        border: 'solid',
-        borderColor: 'lightgray',
-        borderRadius: '15px',
-        justifyContent: 'start',
-        width: '100%',
-        cursor: 'pointer',
-      }}
-      onClick={openModal}
-    >
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          width: '100%',
-          paddingLeft: '30px',
-          paddingTop: '30px',
-          gap: '80%',
-        }}
-      >
-        <BodyText
-          style={{
-            font: 'light',
-            fontFamily: 'Poppins',
-            color: 'black',
-            width: 'full',
-          }}
-        >
-          {props?.offer?.offeror ? props.offer.offeror?.name : 'No Name given'}
-          {Ratings(
-            props?.offer?.offeror?.rating ? props.offer.offeror.rating : 0,
-          )}
-        </BodyText>
-        <BodyText
-          style={{
-            font: 'light',
-            fontFamily: 'Poppins',
-            color: 'black',
-            width: 'full',
-          }}
-        >
-          {props?.offer?.createdAt?.toLocaleDateString()}
-        </BodyText>
-      </div>
-      <div
-        style={{
-          width: 'auto',
-          display: 'flex',
-          flexDirection: 'row',
-          gap: '5%',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '10px',
-          marginLeft: '20%',
-        }}
-      >
-        <ProductAttribute
-          name="Quantity"
-          value={props?.offer?.quantity}
-          unit="pcs"
-        />
-        <ProductAttribute name="Price" value={props?.offer?.price} unit="€" />
-      </div>
+    <>
+      <InfoBar
+        onClick={openModal}
+        contentLine1={
+          <>
+            <BodyText
+              style={{
+                font: 'light',
+                fontFamily: 'Poppins',
+                color: 'black',
+              }}
+            >
+              {offerer.name ?? 'No Name given'}
+              {Ratings(offerer.rating ?? 0)}
+            </BodyText>
+            <BodyText
+              style={{
+                font: 'light',
+                fontFamily: 'Poppins',
+                color: 'black',
+              }}
+            >
+              {props?.offer?.createdAt?.toString().slice(0, 10)}
+            </BodyText>
+          </>
+        }
+        contentLine2={
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginLeft: '10%',
+            }}
+          >
+            <ProductAttribute
+              name="Quantity"
+              value={props?.offer?.quantity}
+              unit="pcs"
+            />
+            <ProductAttribute
+              name="Price"
+              value={props?.offer?.price}
+              unit="€"
+            />
+          </div>
+        }
+      />
       {showModal && (
         <OfferModal
           isShowing={showModal}
           onClose={closeModal}
+          onSave={closeModalOnSave}
           advert={props.advert}
           offer={props.offer}
+          storeName={offeree.name!}
+          rating={offeree.rating!}
         />
       )}
-    </div>
+    </>
   );
 };
 

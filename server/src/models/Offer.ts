@@ -13,31 +13,33 @@ export const offerSchema = new mongoose.Schema<Offer>({
     required: [true, 'Please add a quantity'],
   },
   status: {
+    type: Types.String,
     enum: Object.values(OfferStatus),
-    required: [true, 'Please add a status'],
+    required: [false, 'Please add a status'],
   },
   message: {
     type: Types.String,
   },
   createdAt: {
     type: Types.Date,
-    required: [false, 'Please add a date'],
+    required: [true, 'Please add a date'],
   },
   offeror: {
     type: Types.ObjectId,
     ref: 'User',
-    required: true,
+    required: false,
   },
   offeree: {
     type: Types.ObjectId,
     ref: 'User',
-    required: true,
+    required: false,
   },
   advert: {
     type: Types.ObjectId,
     ref: 'Advert',
-    required: true,
+    required: false,
   },
 });
 
 export const offerModel = mongoose.model('Offer', offerSchema, 'offers');
+export default offerModel;

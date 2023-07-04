@@ -1,4 +1,3 @@
-import { ObjectId } from 'mongodb';
 import mongoose from 'mongoose';
 import {
   AdvertStatus,
@@ -7,6 +6,8 @@ import {
   ProductCategory,
   Colors,
 } from '../entities/advertEntity';
+import userModel from './User';
+import { User } from '../entities/userEntity';
 
 const Types = mongoose.Schema.Types;
 
@@ -24,7 +25,7 @@ const advertSchema = new mongoose.Schema<Advert>({
     required: [true, 'Please add a quantity'],
   },
   description: {
-    type: String,
+    type: Types.String,
     required: [false, 'Please add a description'],
   },
   price: {
@@ -43,29 +44,31 @@ const advertSchema = new mongoose.Schema<Advert>({
     type: Types.Date,
     required: [false, 'Please add an exipration date'],
   },
-  date: {
+  createdAt: {
     type: Types.Date,
     required: [true, 'Please add a creation date'],
+    default: Date.now,
   },
   color: {
-    type: String,
+    type: Types.String,
     enum: Object.values(Colors),
     required: [false, 'You could enter a color for the product'],
   },
-  advertStatus: {
-    type: String,
+  status: {
+    type: Types.String,
     enum: Object.values(AdvertStatus),
-    required: [false, 'You could enter the status of the advert'],
+    required: [true, 'You could enter the status of the advert'],
+    default: 'Ongoing',
   },
   type: {
-    type: String,
+    type: Types.String,
     enum: Object.values(AdvertType),
     required: [false, 'Please add an advert type'],
   },
   category: {
-    type: String,
+    type: Types.String,
     enum: Object.values(ProductCategory),
-    required: [false, 'Please add a product category'],
+    required: [true, 'Please add a product category'],
   },
   offers: [
     {
@@ -84,8 +87,33 @@ const advertSchema = new mongoose.Schema<Advert>({
   store: {
     type: Types.ObjectId,
     ref: 'User',
-    required: [false, 'Please add a store'],
+    required: [true, 'Please add a store'],
   },
+  location: {
+    type: {
+      type: Types.String,
+      enum: ['Point'],
+    },
+    coordinates: {
+      type: [Types.Number],
+      index: '2dsphere',
+    },
+  },
+});
+
+advertSchema.pre('save', async function (next) {
+  const store = await userModel.findById(this.store);
+
+  if (store) {
+    this.location = store.location;
+  }
+  next();
+});
+
+advertSchema.index({
+  productname: 'text',
+  description: 'text',
+  category: 'text',
 });
 
 const advertModel = mongoose.model('Advert', advertSchema, 'adverts');

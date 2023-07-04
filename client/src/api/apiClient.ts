@@ -16,8 +16,14 @@ export class ApiClient {
     }
   }
 
-  public async get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    return await this.request<T>({ url, method: 'GET', ...config });
+  public async get<T>(
+    url: string,
+    config?: AxiosRequestConfig,
+    queryParams?: any,
+  ): Promise<T> {
+    return (await queryParams)
+      ? this.request<T>({ url, method: 'GET', params: queryParams , ...config })
+      : this.request<T>({ url, method: 'GET', ...config });
   }
 
   public async post<T>(

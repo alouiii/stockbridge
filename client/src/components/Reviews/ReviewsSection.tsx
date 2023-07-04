@@ -1,59 +1,28 @@
-import { Review } from '../../api/collections/review';
-import { BodyText } from '../Text/BodyText';
+import { FC } from 'react';
+import { Advert, PopulatedAdvert } from '../../api/collections/advert';
+import { ReviewOfferSection } from '../ProductOverview/ReviewOfferSection';
 import { Reviewbar } from './Reviewbar';
 
-const ReviewsSection = (reviews: Review[]) => {
-  if (reviews.length == 0) {
-    reviews = [
-      {
-        id: '',
-        rating: 4,
-        description: 'New review 2',
-        createdAt: new Date('07.06.2023'),
-        reviewer: {
-          _id: '6470e8a153c3e3e95e30176b',
-          name: 'Reviewer Name',
-          rating: 3,
-        },
-        reviewedAdvert: {
-          id: '647ddfb46d74b615e34256bc',
-        },
-      },
-    ];
-  }
+type ReviewsSectionProps = {
+  advert: PopulatedAdvert;
+};
+const ReviewsSection: FC<ReviewsSectionProps> = (props) => {
   return (
-    <div
-      style={{
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '60px',
-        width: 'full',
-      }}
-    >
-      <BodyText
-        style={{
-          fontFamily: 'poppins',
-          color: 'black',
-          width: '100%',
-          fontSize: '36px',
-          fontWeight: 600,
-          paddingLeft: '10px',
-        }}
-      >
-        REVIEWS
-      </BodyText>
+    <ReviewOfferSection section="REVIEWS">
       <div
         style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '30px',
+          padding: '30px',
         }}
       >
-        {reviews.map((review) => (
-          <Reviewbar review={review} />
-        ))}
+        {props.advert.reviews &&
+          props.advert.reviews.map((review, i) => (
+            <Reviewbar reviewID={review._id} />
+          ))}
       </div>
-    </div>
+    </ReviewOfferSection>
   );
 };
 
