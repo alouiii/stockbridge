@@ -24,7 +24,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/contactUs" element={<ContactUs />} />
         <Route path="/productoverview/:id" Component={ProductOverview}></Route>
-        <Route path='/map' element={<CustomMap adverts={[]}/>}></Route>
+        <Route path='/map' element={<CustomMap />}></Route>
       </Routes>
     </LoginContextProvider>
   );
