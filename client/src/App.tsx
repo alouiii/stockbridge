@@ -8,10 +8,8 @@ import { LoginContextProvider } from './contexts/LoginContext';
 import ProductOverview from './pages/ProductOverview';
 import {Adverts} from "./pages/Adverts"
 import { SelectedTabContextProvider } from './contexts/SelectedTabContext';
-
 import { About } from './pages/About';
 import { ContactUs } from './pages/ContactUs';
-import { CustomMap } from './components/Map/CustomMap';
 
 
 function App() {
@@ -24,8 +22,7 @@ function App() {
         <Route path="/signIn" element={<SignIn />} />
         <Route path="/about" element={<About />} />
         <Route path="/contactUs" element={<ContactUs />} />
-        <Route path="/productoverview/:id" Component={ProductOverview}></Route>
-        <Route path='/map' element={<CustomMap adverts={[]}/>}></Route>
+        <Route path="/productoverview/:id" element={<ProductOverview />}/>
         <Route path="/adverts" element={<Adverts />}/>
       </Routes>
     </LoginContextProvider>
