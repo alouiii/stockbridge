@@ -3,7 +3,7 @@ import Tabs from '../../ContentTabs/Tabs';
 import ContentTab from '../../ContentTabs/ContentTab';
 import ProductInfoBar from '../ProductInfoBar';
 import { Advert, PopulatedAdvert, getAdvertsByUser } from '../../../api/collections/advert';
-import NoResultsMessage from '../NoResultsMessage';
+import NoResultsMessage from '../NoResultMessage';
 import { LoginContext } from '../../../contexts/LoginContext';
 
 
