@@ -43,6 +43,7 @@ export const AdvertsPagination: FC = () => {
 
   useEffect(() => {
     search.set("page","1")
+    search.set("type","Sell")
     setSearch(search)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
