@@ -47,7 +47,7 @@ export const Filters: FC = () => {
     search.delete('quantity[gte]');
     search.delete('price[lte]');
     search.delete('quantity[lte]');
-    search.delete('range');
+    search.delete('radius');
     setSearch(search, { replace: true });
   };
 
@@ -80,7 +80,7 @@ export const Filters: FC = () => {
     }
 
     if (rangePosition) {
-      search.set('range', rangePosition.toString()); //to check
+      search.set('radius', rangePosition.toString());
       setSearch(search);
     }
   };
