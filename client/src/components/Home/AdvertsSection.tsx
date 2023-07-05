@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { Stack } from 'react-bootstrap';
 import { PopulatedAdvert, getAllAdverts } from '../../api/collections/advert';
 import { Title } from '../Text/Title';
-import { Filters } from './Filters';
+import { Filters } from '../Adverts/Filters';
 import Tabs from '../ContentTabs/Tabs';
 import ContentTab from '../ContentTabs/ContentTab';
 import { AdvertsTabContent } from './AdvertsTabContent';
@@ -10,7 +10,7 @@ const AdvertsSection: FC = () => {
   const [adverts, setAdverts] = useState([] as PopulatedAdvert[]);
   useEffect(() => {
     const fetchData = async () => {
-      const fetchedAdverts = await getAllAdverts();
+      const fetchedAdverts = await getAllAdverts(1);
       if (fetchedAdverts.results) {
         setAdverts(fetchedAdverts.results);
       }
@@ -38,7 +38,7 @@ const AdvertsSection: FC = () => {
           marginTop: '30px',
         }}
       >
-        <Filters />
+        <Filters/>
         <div
           style={{
             width: '100%',

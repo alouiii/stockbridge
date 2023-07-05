@@ -115,6 +115,12 @@ export const findAllAdverts = async (
     };
   }
 
+  //filter the adverts that are not closed
+  queryFilter = {
+    ...queryFilter,
+    status: { $ne: 'Closed' },
+  };
+
   logger.debug(`${serviceName}: Query filter: ${JSON.stringify(queryFilter)}`);
 
   let query = advertModel.find(queryFilter);
@@ -132,6 +138,7 @@ export const findAllAdverts = async (
         isCreatedAtIncluded = key === 'createdAt';
         data = [key, -1];
       } else {
+        isCreatedAtIncluded = sortParam === 'createdAt';
         data = [sortParam, 1];
       }
       sortParams.push(data);
@@ -193,20 +200,20 @@ export const getAdvertsByCategory = async (
   logger.debug(
     `${serviceName}: Requesting all adverts with category: ${category}`,
   );
-  return await populateResult(advertModel.find({ category: category }),
-    populate)
+  return await populateResult(
+    advertModel.find({ category: category }),
+    populate,
+  );
 };
 
 /**
  * Returns all adverts of the requested store
  * @param category
- * @param populate 
+ * @param populate
  * @returns Promise containing the related adverts.
  */
 export const getAdvertsByStore = async (store: string, populate = true) => {
-  logger.debug(
-    `${serviceName}: Requesting all adverts of store: ${store}`,
-  );
+  logger.debug(`${serviceName}: Requesting all adverts of store: ${store}`);
   return await populateResult(advertModel.find({ store: store }), populate);
 };
 
