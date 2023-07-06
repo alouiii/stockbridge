@@ -83,6 +83,7 @@ export const CategoriesDropdown: FC = () => {
               maxHeight: 300,
               minWidth: 300,
             }}
+            className='hide-scrollbar'
           >
             {DropdownList}
           </div>

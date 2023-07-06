@@ -11,6 +11,7 @@ import { ColoredLine } from '../ColoredLine';
 import filtersIcon from '../../assets/filters.svg';
 import { FilterAdvertsModal } from './FilterAdvertsModal';
 import { useSearchParams } from 'react-router-dom';
+import "../../components/override.css"
 
 /**
  * This components represents the filters section in the home page.
@@ -137,7 +138,7 @@ export const Filters: FC = () => {
     <div
       style={{
         left: 0,
-        padding: '50px',
+        padding: 40,
         paddingTop: '30px',
         borderRadius: 15,
         backgroundColor: palette.subSectionsBgLighter,
@@ -145,10 +146,10 @@ export const Filters: FC = () => {
         flexDirection: 'column',
       }}
     >
-      <Title style={{ textAlign: 'center', fontSize: 30, marginTop: 30 }}>
+      <Title style={{ fontSize: 30, marginTop: 30, fontWeight: 600 }}>
         Filters
       </Title>
-      <ColoredLine height={2} width={100} color="black" />
+      <ColoredLine height={1} width={100} color="black" />
       <Dropdown style={{ marginTop: 30 }}>
         <Dropdown.Toggle
           style={{
@@ -157,13 +158,22 @@ export const Filters: FC = () => {
             color: 'black',
             width: 200,
             fontFamily: 'Poppins',
+            textAlign: 'left',
+            fontWeight: 500,
+            paddingLeft: 0,
           }}
           id="dropdown-basic"
           defaultValue={'Categories'}
         >
           {category || 'Categories'}
         </Dropdown.Toggle>
-        <Dropdown.Menu style={{ maxHeight: 200, overflowY: 'scroll' }}>
+        <Dropdown.Menu
+          style={{
+            maxHeight: 200,
+            overflowY: 'scroll',
+          }}
+          className='hide-scrollbar'
+        >
           {Object.values(ProductCategory)
             .filter((key) => isNaN(Number(key)))
             .map((c, index) => (
@@ -174,9 +184,9 @@ export const Filters: FC = () => {
         </Dropdown.Menu>
       </Dropdown>
       <div style={{ width: 200, marginTop: 20 }}>
-        <BodyText style={{ textAlign: 'center' }}>Price:</BodyText>
+        <BodyText style={{ fontWeight: 500 }}>Price:</BodyText>
         <Slider
-          style={{ color: 'gray', marginTop: -20 }}
+          style={{ color: '#918383', marginTop: -20, marginLeft: 5 }}
           size="small"
           value={rangePrice}
           onChange={(_, newRange) => setRangePrice(newRange as number[])}
@@ -187,9 +197,9 @@ export const Filters: FC = () => {
         />
       </div>
       <div style={{ width: 200 }}>
-        <BodyText style={{ textAlign: 'center' }}>Quantity:</BodyText>
+        <BodyText style={{ fontWeight: 500 }}>Quantity:</BodyText>
         <Slider
-          style={{ color: 'gray', marginTop: -20 }}
+          style={{ color: '#918383', marginTop: -20, marginLeft: 5 }}
           size="small"
           value={rangeQuantity}
           onChange={(_, newRange) => setRangeQuantity(newRange as number[])}
@@ -199,18 +209,10 @@ export const Filters: FC = () => {
           step={20}
         />
       </div>
-      {/*<div
-        style={{
-          marginTop: 20,
-          textAlign: 'center',
-        }}
-      >
-        <DatePicker value={date} onDateChange={setDate} />
-      </div>*/}
       <div style={{ width: 200 }}>
-        <BodyText style={{ textAlign: 'center' }}>Range(km):</BodyText>
+        <BodyText style={{ fontWeight: 500 }}>Range(km):</BodyText>
         <Slider
-          style={{ color: 'gray' }}
+          style={{ color: '#918383', marginLeft: 5, marginTop: -20 }}
           size="small"
           defaultValue={100}
           value={rangePosition}

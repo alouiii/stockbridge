@@ -1,4 +1,7 @@
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
 .carousel-container {
     height: 500px; 
     padding: 20px;
-  }
+}
