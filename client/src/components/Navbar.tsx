@@ -11,7 +11,6 @@ import logo from '../assets/logo.svg';
 import { useContext, useEffect, useState } from 'react';
 import { LoginContext } from '../contexts/LoginContext';
 import { palette } from '../utils/colors';
-import { logout } from '../api/collections/user';
 import { UserIconDropdown } from './UserIconDropdown';
 import { CategoriesDropdown } from './CategoriesDropdown';
 import useMediaQuery from '../hooks/useMediaQuery';
@@ -104,6 +103,12 @@ export function Navbar() {
                 style={{ borderRadius: 8, padding: 8 }}
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault()
+                    handleSearchClick();
+                  }
+                }}
               />
               <Button
                 className="font-link"
