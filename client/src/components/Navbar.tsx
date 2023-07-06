@@ -40,14 +40,14 @@ export function Navbar() {
         navigate(`/adverts?q=${searchInput}`);
       }
     }
-    return;
   };
 
   useEffect(() => {
     if (searchInput.length > 0) {
       return;
     } else {
-      search.delete('search');
+      console.log("ciao")
+      search.delete('q');
       setSearch(search);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
