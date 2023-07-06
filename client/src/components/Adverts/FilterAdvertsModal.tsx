@@ -1,5 +1,5 @@
-import React, { FC, useState } from 'react';
-import { Button, Dropdown, Modal } from 'react-bootstrap';
+import React, { ChangeEvent, FC, useState } from 'react';
+import { Button, Dropdown, Form, Modal } from 'react-bootstrap';
 import { palette } from '../../utils/colors';
 import { BodyText } from '../Text/BodyText';
 import Slider from '@mui/material/Slider';
@@ -27,7 +27,7 @@ interface FilterAdvertsModalProps {
       value: Date | undefined;
       setValue: (newValue: Date | undefined) => void;
     };
-    rangePosition: {
+    radius: {
       value: number;
       setValue: (newValue: number) => void;
     };
@@ -45,8 +45,8 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
     filters.rangeQuantity.value,
   );
   const [date, setDate] = useState<Date | undefined>(filters.date.value);
-  const [rangePosition, setRangePosition] = useState<number>(
-    filters.rangePosition.value,
+  const [radius, setRadius] = useState<number>(
+    filters.radius.value,
   );
 
   const [search, setSearch] = useSearchParams();
@@ -57,7 +57,7 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
     setRangePrice(filters.rangePrice.value);
     setRangeQuantity(filters.rangeQuantity.value);
     setDate(filters.date.value);
-    setRangePosition(filters.rangePosition.value);
+    setRadius(filters.radius.value);
     props.setIsOpen(false);
   };
 
@@ -66,7 +66,7 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
     filters.rangePrice.setValue(rangePrice);
     filters.rangeQuantity.setValue(rangeQuantity);
     filters.date.setValue(date);
-    filters.rangePosition.setValue(rangePosition);
+    filters.radius.setValue(radius);
     props.setIsOpen(false);
   };
 
@@ -99,8 +99,8 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
       setSearch(search);
     }
 
-    if (rangePosition) {
-      search.set('range', rangePosition.toString()); //to check
+    if (radius) {
+      search.set('radius', radius.toString()); //to check
       setSearch(search);
     }
   };
@@ -111,13 +111,13 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
     setRangePrice([0, 1000]);
     setRangeQuantity([0, 1000]);
     setDate(undefined);
-    setRangePosition(0);
+    setRadius(0);
     //reset external state
     filters.category.setValue('');
     filters.rangePrice.setValue([0, 1000]);
     filters.rangeQuantity.setValue([0, 1000]);
     filters.date.setValue(undefined);
-    filters.rangePosition.setValue(0);
+    filters.radius.setValue(0);
   };
 
   return (
@@ -180,28 +180,24 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
             max={1000}
           />
         </div>
-        {/*<div
-          style={{
-            marginTop: 20,
-            textAlign: 'center',
-          }}
-        >
-          <DatePicker value={date} onDateChange={setDate} />
-        </div>*/}
         <div style={{ width: 200 }}>
           <BodyText style={{ textAlign: 'center' }}>Range(km):</BodyText>
-          <Slider
-            style={{ color: 'gray' }}
+          <Form.Control
+            style={{ color: '#918383' }}
+            type="number"
             defaultValue={100}
-            size="small"
-            value={rangePosition}
-            onChange={(_, newRange) => setRangePosition(newRange as number)}
-            valueLabelDisplay="auto"
-            step={10}
-            marks
+            value={radius}
+            onChange={(event: ChangeEvent<HTMLInputElement>) =>
+              setRadius(Number(event.target.value))
+            }
             min={0}
-            max={100}
+            max={10000}
+            step={10}
+            isInvalid={radius < 0 || radius > 10000}
           />
+          <Form.Control.Feedback type="invalid">
+            Must be between 0 and 10000
+          </Form.Control.Feedback>
         </div>
       </Modal.Body>
       <Modal.Footer>

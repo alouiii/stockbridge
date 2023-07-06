@@ -1,7 +1,7 @@
-import { FC, useEffect, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
 import { Title } from '../Text/Title';
 import { palette } from '../../utils/colors';
-import { Button, Dropdown, Image } from 'react-bootstrap';
+import { Button, Dropdown, Form, Image } from 'react-bootstrap';
 import Slider from '@mui/material/Slider';
 import { BodyText } from '../Text/BodyText';
 import useMediaQuery from '../../hooks/useMediaQuery';
@@ -11,7 +11,7 @@ import { ColoredLine } from '../ColoredLine';
 import filtersIcon from '../../assets/filters.svg';
 import { FilterAdvertsModal } from './FilterAdvertsModal';
 import { useSearchParams } from 'react-router-dom';
-import "../../components/override.css"
+import '../../components/override.css';
 
 /**
  * This components represents the filters section in the home page.
@@ -22,7 +22,7 @@ export const Filters: FC = () => {
   const [rangePrice, setRangePrice] = useState<number[]>([0, 1000]);
   const [rangeQuantity, setRangeQuantity] = useState<number[]>([0, 1000]);
   const [date, setDate] = useState<Date>();
-  const [rangePosition, setRangePosition] = useState<number>(0);
+  const [radius, setRadius] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const matches = useMediaQuery('(min-width: 768px)');
@@ -42,7 +42,7 @@ export const Filters: FC = () => {
     setRangePrice([0, 1000]);
     setRangeQuantity([0, 1000]);
     setDate(undefined);
-    setRangePosition(0);
+    setRadius(0);
     search.delete('category[in]');
     search.delete('price[gte]');
     search.delete('quantity[gte]');
@@ -80,8 +80,8 @@ export const Filters: FC = () => {
       setSearch(search);
     }
 
-    if (rangePosition) {
-      search.set('radius', rangePosition.toString());
+    if (radius) {
+      search.set('radius', radius.toString());
       setSearch(search);
     }
   };
@@ -124,9 +124,9 @@ export const Filters: FC = () => {
               value: date,
               setValue: setDate,
             },
-            rangePosition: {
-              value: rangePosition,
-              setValue: setRangePosition,
+            radius: {
+              value: radius,
+              setValue: setRadius,
             },
           }}
         />
@@ -172,7 +172,7 @@ export const Filters: FC = () => {
             maxHeight: 200,
             overflowY: 'scroll',
           }}
-          className='hide-scrollbar'
+          className="hide-scrollbar"
         >
           {Object.values(ProductCategory)
             .filter((key) => isNaN(Number(key)))
@@ -211,18 +211,22 @@ export const Filters: FC = () => {
       </div>
       <div style={{ width: 200 }}>
         <BodyText style={{ fontWeight: 500 }}>Range(km):</BodyText>
-        <Slider
-          style={{ color: '#918383', marginLeft: 5, marginTop: -20 }}
-          size="small"
+        <Form.Control
+          style={{ color: '#918383' }}
+          type="number"
           defaultValue={100}
-          value={rangePosition}
-          onChange={(_, newRange) => setRangePosition(newRange as number)}
-          valueLabelDisplay="auto"
-          step={10}
-          marks
+          value={radius}
+          onChange={(event: ChangeEvent<HTMLInputElement>) =>
+            setRadius(Number(event.target.value))
+          }
           min={0}
-          max={100}
+          max={10000}
+          step={10}
+          isInvalid={radius < 0 || radius > 10000}
         />
+        <Form.Control.Feedback type='invalid'>
+          Must be between 0 and 10000
+        </Form.Control.Feedback>
       </div>
       <div style={{ marginTop: 30, display: 'flex', justifyContent: 'center' }}>
         <Button variant="secondary" onClick={handleReset}>
