@@ -4,7 +4,6 @@ import { palette } from '../../utils/colors';
 import { BodyText } from '../Text/BodyText';
 import Slider from '@mui/material/Slider';
 import { ProductCategory } from '../../api/collections/advert';
-//import { DatePicker } from '../DatePicker';
 import { useSearchParams } from 'react-router-dom';
 
 interface FilterAdvertsModalProps {
@@ -23,10 +22,6 @@ interface FilterAdvertsModalProps {
       value: number[];
       setValue: (newValue: number[]) => void;
     };
-    date: {
-      value: Date | undefined;
-      setValue: (newValue: Date | undefined) => void;
-    };
     radius: {
       value: number;
       setValue: (newValue: number) => void;
@@ -44,7 +39,6 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
   const [rangeQuantity, setRangeQuantity] = useState<number[]>(
     filters.rangeQuantity.value,
   );
-  const [date, setDate] = useState<Date | undefined>(filters.date.value);
   const [radius, setRadius] = useState<number>(
     filters.radius.value,
   );
@@ -56,7 +50,6 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
     setCategory(filters.category.value);
     setRangePrice(filters.rangePrice.value);
     setRangeQuantity(filters.rangeQuantity.value);
-    setDate(filters.date.value);
     setRadius(filters.radius.value);
     props.setIsOpen(false);
   };
@@ -65,7 +58,6 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
     filters.category.setValue(category);
     filters.rangePrice.setValue(rangePrice);
     filters.rangeQuantity.setValue(rangeQuantity);
-    filters.date.setValue(date);
     filters.radius.setValue(radius);
     props.setIsOpen(false);
   };
@@ -94,11 +86,6 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
       setSearch(search,{replace: true});
     }
 
-    if (date) {
-      search.set('date', category);
-      setSearch(search,{replace: true});
-    }
-
     if (radius) {
       search.set('radius', radius.toString()); //to check
       setSearch(search,{replace: true});
@@ -110,13 +97,11 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
     setCategory('');
     setRangePrice([0, 1000]);
     setRangeQuantity([0, 1000]);
-    setDate(undefined);
     setRadius(0);
     //reset external state
     filters.category.setValue('');
     filters.rangePrice.setValue([0, 1000]);
     filters.rangeQuantity.setValue([0, 1000]);
-    filters.date.setValue(undefined);
     filters.radius.setValue(0);
   };
 

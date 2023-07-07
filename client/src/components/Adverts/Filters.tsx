@@ -21,7 +21,6 @@ export const Filters: FC = () => {
   const [category, setCategory] = useState<string>('');
   const [rangePrice, setRangePrice] = useState<number[]>([0, 1000]);
   const [rangeQuantity, setRangeQuantity] = useState<number[]>([0, 1000]);
-  const [date, setDate] = useState<Date>();
   const [radius, setRadius] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -41,7 +40,6 @@ export const Filters: FC = () => {
     setCategory('');
     setRangePrice([0, 1000]);
     setRangeQuantity([0, 1000]);
-    setDate(undefined);
     setRadius(0);
     search.delete('category[in]');
     search.delete('price[gte]');
@@ -72,11 +70,6 @@ export const Filters: FC = () => {
       const maxQuantity = rangeQuantity[1];
       search.set('quantity[gte]', minQuantity.toString());
       search.set('quantity[lte]', maxQuantity.toString());
-      setSearch(search,{replace: true});
-    }
-
-    if (date) {
-      search.set('date', category);
       setSearch(search,{replace: true});
     }
 
@@ -119,10 +112,6 @@ export const Filters: FC = () => {
             rangeQuantity: {
               value: rangeQuantity,
               setValue: setRangeQuantity,
-            },
-            date: {
-              value: date,
-              setValue: setDate,
             },
             radius: {
               value: radius,
