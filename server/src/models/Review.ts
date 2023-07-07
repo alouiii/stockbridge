@@ -96,13 +96,9 @@ reviewSchema.static(
   },
 );
 
-// Call getAverageCost after save
+// Call getAverageCost before save
 reviewSchema.pre('save', async function () {
-  logger.debug('post save');
   const advert = (await advertModel.findById(this.reviewedAdvert)) as Advert;
-  logger.debug('reviewedAdvert: ' + this.reviewedAdvert);
-  logger.debug('store: ' + advert.store);
-  logger.debug('store.id: ' + advert.store);
   const prevRating = await reviewModel.getAverageRating(
     advert.store as unknown as string,
   );
@@ -113,32 +109,37 @@ reviewSchema.pre('save', async function () {
   });
 });
 
+reviewSchema.post('save', async function () {
+  await advertModel.findByIdAndUpdate(this.reviewedAdvert, {
+    $push: { reviews: this._id },
+  });
+});
+
 // Call getAverageCost before remove
 reviewSchema.pre('findOneAndDelete', async function () {
-  const update = this.getUpdate() as Review;
+  const query = this.getQuery();
 
-  try {
-    if (update.rating) {
-      const advert = (await advertModel.findById(
-        update.reviewedAdvert,
-      )) as Advert;
-      logger.debug('post findOneAndDelete');
-      logger.debug('reviewedAdvert: ' + update.reviewedAdvert);
-      logger.debug('store: ' + update.reviewedAdvert.store);
-      logger.debug('store.id: ' + advert.store.id);
-      const prevRating = await reviewModel.getAverageRating(
-        advert.store as unknown as string,
-      );
-      const newRating =
-        (prevRating[0] * prevRating[1] + update.rating) / (prevRating[1] + 1);
-      await userModel.findByIdAndUpdate(advert.store, {
-        rating: newRating,
-      });
-    }
-  } catch (err) {
-    logger.error('Reverting update because of error: ' + err);
-    this.setUpdate({});
-  }
+  const review = (await reviewModel.findById(query._id)) as Review;
+
+  const advert = (await advertModel.findById(review.reviewedAdvert)) as Advert;
+  const rating = await reviewModel.getAverageRating(
+    advert.store as unknown as string,
+  );
+
+  const newRating = (rating[0] * rating[1] - review.rating) / (rating[1] - 1);
+  await userModel.findByIdAndUpdate(advert.store, {
+    rating: newRating,
+  });
+});
+
+reviewSchema.pre('findOneAndDelete', async function () {
+  const query = this.getQuery();
+
+  const review = (await reviewModel.findById(query._id)) as Review;
+
+  await advertModel.findByIdAndUpdate(review.reviewedAdvert, {
+    $pull: { reviews: review.id },
+  });
 });
 
 const reviewModel = mongoose.model<Review, ReviewModel>(

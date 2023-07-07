@@ -42,7 +42,7 @@ export const createAdvert = async (advert: Advert) => {
  */
 export const updateAdvert = async (id: string, advert: Advert) => {
   logger.debug(`${serviceName}: Updating advert with id: ${id} with ${advert}`);
-  return await advertModel.findByIdAndUpdate(id, advert, {
+  return advertModel.findByIdAndUpdate(id, advert, {
     new: true,
     runValidators: true,
   });
@@ -55,8 +55,19 @@ export const updateAdvert = async (id: string, advert: Advert) => {
  */
 export const delAdvert = async (id: string) => {
   logger.debug(`${serviceName}: Deleting advert with id: ${id}`);
-  return await advertModel.findByIdAndDelete(id);
+  return advertModel.findByIdAndDelete(id);
 };
+
+// export const deleteReviewFromAdvert = async (id: string, reviewId: string) => {
+//   logger.debug(
+//     `${serviceName}: Deleting review with id: ${reviewId} from advert with id: ${id}`,
+//   );
+//   return advertModel.findByIdAndUpdate(
+//     id,
+//     { $pull: { reviews: reviewId } },
+//     { new: true },
+//   );
+// };
 
 /**
  * Find all adverts
@@ -193,20 +204,20 @@ export const getAdvertsByCategory = async (
   logger.debug(
     `${serviceName}: Requesting all adverts with category: ${category}`,
   );
-  return await populateResult(advertModel.find({ category: category }),
-    populate)
+  return await populateResult(
+    advertModel.find({ category: category }),
+    populate,
+  );
 };
 
 /**
  * Returns all adverts of the requested store
- * @param category
- * @param populate 
+ * @param store
+ * @param populate
  * @returns Promise containing the related adverts.
  */
 export const getAdvertsByStore = async (store: string, populate = true) => {
-  logger.debug(
-    `${serviceName}: Requesting all adverts of store: ${store}`,
-  );
+  logger.debug(`${serviceName}: Requesting all adverts of store: ${store}`);
   return await populateResult(advertModel.find({ store: store }), populate);
 };
 
