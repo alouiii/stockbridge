@@ -122,7 +122,7 @@ export const AdvertCard: FC<AdvertCardProps> = (props) => {
           alt="prioritizedIcon"
           width={40}
           height={40}
-          style={{ position: 'absolute', right: 5 }}
+          style={{ position: 'absolute', right: 5, top: 5 }}
         />
       ) : undefined}
     </div>

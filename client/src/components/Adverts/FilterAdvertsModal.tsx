@@ -5,6 +5,7 @@ import { BodyText } from '../Text/BodyText';
 import Slider from '@mui/material/Slider';
 import { ProductCategory } from '../../api/collections/advert';
 import { useSearchParams } from 'react-router-dom';
+import "../override.css"
 
 interface FilterAdvertsModalProps {
   isOpen: boolean;
@@ -39,9 +40,7 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
   const [rangeQuantity, setRangeQuantity] = useState<number[]>(
     filters.rangeQuantity.value,
   );
-  const [radius, setRadius] = useState<number>(
-    filters.radius.value,
-  );
+  const [radius, setRadius] = useState<number>(filters.radius.value);
 
   const [search, setSearch] = useSearchParams();
 
@@ -67,7 +66,7 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
     if (category) {
       console.log(category);
       search.set('category[in]', category);
-      setSearch(search,{replace: true});
+      setSearch(search, { replace: true });
     }
 
     if (rangePrice) {
@@ -75,7 +74,7 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
       const maxPrice = rangePrice[1];
       search.set('price[gte]', minPrice.toString());
       search.set('price[lte]', maxPrice.toString());
-      setSearch(search,{replace: true});
+      setSearch(search, { replace: true });
     }
 
     if (rangeQuantity) {
@@ -83,12 +82,12 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
       const maxQuantity = rangeQuantity[1];
       search.set('quantity[gte]', minQuantity.toString());
       search.set('quantity[lte]', maxQuantity.toString());
-      setSearch(search,{replace: true});
+      setSearch(search, { replace: true });
     }
 
     if (radius) {
       search.set('radius', radius.toString()); //to check
-      setSearch(search,{replace: true});
+      setSearch(search, { replace: true });
     }
   };
 
@@ -125,13 +124,17 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
               color: 'black',
               width: 200,
               fontFamily: 'Poppins',
+              fontWeight: 500,
             }}
             id="dropdown-basic"
             defaultValue={'Categories'}
           >
             {category || 'Categories'}
           </Dropdown.Toggle>
-          <Dropdown.Menu style={{ maxHeight: 200, overflowY: 'scroll' }}>
+          <Dropdown.Menu
+            style={{ maxHeight: 200, overflowY: 'scroll' }}
+            className="hide-scrollbar"
+          >
             {Object.values(ProductCategory)
               .filter((key) => isNaN(Number(key)))
               .map((c, index) => (
@@ -141,8 +144,10 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
               ))}
           </Dropdown.Menu>
         </Dropdown>
-        <div style={{ width: 200, marginTop: 20 }}>
-          <BodyText style={{ textAlign: 'center' }}>Price:</BodyText>
+        <div style={{ width: 190, marginTop: 20 }}>
+          <BodyText style={{ textAlign: 'center', fontWeight: 500 }}>
+            Price:
+          </BodyText>
           <Slider
             style={{ color: 'gray', marginTop: -20 }}
             size="small"
@@ -153,8 +158,10 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
             max={1000}
           />
         </div>
-        <div style={{ width: 200 }}>
-          <BodyText style={{ textAlign: 'center' }}>Quantity:</BodyText>
+        <div style={{ width: 190 }}>
+          <BodyText style={{ textAlign: 'center', fontWeight: 500 }}>
+            Quantity:
+          </BodyText>
           <Slider
             style={{ color: 'gray', marginTop: -20 }}
             size="small"
@@ -166,12 +173,13 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
           />
         </div>
         <div style={{ width: 200 }}>
-          <BodyText style={{ textAlign: 'center' }}>Range(km):</BodyText>
+          <BodyText style={{ textAlign: 'center', fontWeight: 500 }}>
+            Range(km):
+          </BodyText>
           <Form.Control
             style={{ color: '#918383' }}
             type="number"
-            defaultValue={100}
-            value={radius}
+            value={radius ?? 0}
             onChange={(event: ChangeEvent<HTMLInputElement>) =>
               setRadius(Number(event.target.value))
             }

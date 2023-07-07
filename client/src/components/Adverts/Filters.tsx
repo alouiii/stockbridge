@@ -54,7 +54,7 @@ export const Filters: FC = () => {
     if (category) {
       console.log(category);
       search.set('category[in]', category);
-      setSearch(search,{replace: true});
+      setSearch(search, { replace: true });
     }
 
     if (rangePrice) {
@@ -62,7 +62,7 @@ export const Filters: FC = () => {
       const maxPrice = rangePrice[1];
       search.set('price[gte]', minPrice.toString());
       search.set('price[lte]', maxPrice.toString());
-      setSearch(search,{replace: true});
+      setSearch(search, { replace: true });
     }
 
     if (rangeQuantity) {
@@ -70,12 +70,12 @@ export const Filters: FC = () => {
       const maxQuantity = rangeQuantity[1];
       search.set('quantity[gte]', minQuantity.toString());
       search.set('quantity[lte]', maxQuantity.toString());
-      setSearch(search,{replace: true});
+      setSearch(search, { replace: true });
     }
 
     if (radius) {
       search.set('radius', radius.toString());
-      setSearch(search,{replace: true});
+      setSearch(search, { replace: true });
     }
   };
 
@@ -172,7 +172,7 @@ export const Filters: FC = () => {
             ))}
         </Dropdown.Menu>
       </Dropdown>
-      <div style={{ width: 200, marginTop: 20 }}>
+      <div style={{ width: 190, marginTop: 20 }}>
         <BodyText style={{ fontWeight: 500 }}>Price:</BodyText>
         <Slider
           style={{ color: '#918383', marginTop: -20, marginLeft: 5 }}
@@ -185,7 +185,7 @@ export const Filters: FC = () => {
           step={20}
         />
       </div>
-      <div style={{ width: 200 }}>
+      <div style={{ width: 190 }}>
         <BodyText style={{ fontWeight: 500 }}>Quantity:</BodyText>
         <Slider
           style={{ color: '#918383', marginTop: -20, marginLeft: 5 }}
@@ -212,7 +212,7 @@ export const Filters: FC = () => {
           step={10}
           isInvalid={radius < 0 || radius > 10000}
         />
-        <Form.Control.Feedback type='invalid'>
+        <Form.Control.Feedback type="invalid">
           Must be between 0 and 10000
         </Form.Control.Feedback>
       </div>
