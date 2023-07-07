@@ -203,8 +203,7 @@ export const Filters: FC = () => {
         <Form.Control
           style={{ color: '#918383' }}
           type="number"
-          defaultValue={100}
-          value={radius}
+          value={radius ?? 0}
           onChange={(event: ChangeEvent<HTMLInputElement>) =>
             setRadius(Number(event.target.value))
           }
