@@ -35,7 +35,7 @@ export function Navbar() {
       const currentUrl = window.location.pathname;
       if (currentUrl === '/adverts') {
         search.set('q', searchInput);
-        setSearch(search);
+        setSearch(search,{replace: true});
       } else {
         navigate(`/adverts?q=${searchInput}`);
       }
@@ -46,9 +46,8 @@ export function Navbar() {
     if (searchInput.length > 0) {
       return;
     } else {
-      console.log("ciao")
       search.delete('q');
-      setSearch(search);
+      setSearch(search,{replace: true});
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchInput]);

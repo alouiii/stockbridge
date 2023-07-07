@@ -56,7 +56,7 @@ export const Filters: FC = () => {
     if (category) {
       console.log(category);
       search.set('category[in]', category);
-      setSearch(search);
+      setSearch(search,{replace: true});
     }
 
     if (rangePrice) {
@@ -64,7 +64,7 @@ export const Filters: FC = () => {
       const maxPrice = rangePrice[1];
       search.set('price[gte]', minPrice.toString());
       search.set('price[lte]', maxPrice.toString());
-      setSearch(search);
+      setSearch(search,{replace: true});
     }
 
     if (rangeQuantity) {
@@ -72,17 +72,17 @@ export const Filters: FC = () => {
       const maxQuantity = rangeQuantity[1];
       search.set('quantity[gte]', minQuantity.toString());
       search.set('quantity[lte]', maxQuantity.toString());
-      setSearch(search);
+      setSearch(search,{replace: true});
     }
 
     if (date) {
       search.set('date', category);
-      setSearch(search);
+      setSearch(search,{replace: true});
     }
 
     if (radius) {
       search.set('radius', radius.toString());
-      setSearch(search);
+      setSearch(search,{replace: true});
     }
   };
 

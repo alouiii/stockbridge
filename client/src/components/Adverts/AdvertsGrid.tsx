@@ -31,9 +31,9 @@ export const AdvertsGrid: FC<AdvertGridProps> = (props) => {
     } else {
       search.set('type', 'Sell');
     }
-    setSearch(search);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [advertType]);
+    setSearch(search,{replace: true});
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [advertType, search ]);
 
   return (
     <div

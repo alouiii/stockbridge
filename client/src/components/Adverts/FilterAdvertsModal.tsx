@@ -75,7 +75,7 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
     if (category) {
       console.log(category);
       search.set('category[in]', category);
-      setSearch(search);
+      setSearch(search,{replace: true});
     }
 
     if (rangePrice) {
@@ -83,7 +83,7 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
       const maxPrice = rangePrice[1];
       search.set('price[gte]', minPrice.toString());
       search.set('price[lte]', maxPrice.toString());
-      setSearch(search);
+      setSearch(search,{replace: true});
     }
 
     if (rangeQuantity) {
@@ -91,17 +91,17 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
       const maxQuantity = rangeQuantity[1];
       search.set('quantity[gte]', minQuantity.toString());
       search.set('quantity[lte]', maxQuantity.toString());
-      setSearch(search);
+      setSearch(search,{replace: true});
     }
 
     if (date) {
       search.set('date', category);
-      setSearch(search);
+      setSearch(search,{replace: true});
     }
 
     if (radius) {
       search.set('radius', radius.toString()); //to check
-      setSearch(search);
+      setSearch(search,{replace: true});
     }
   };
 
