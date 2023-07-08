@@ -1,16 +1,14 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { palette } from '../../../utils/colors';
 import AccountInformationForm from './AccountInformationForm';
 import ShipmentDetailsForm from './ShipmentDetailsForm';
-import PaymentDetailsForm from './PaymentDetailsForm';
 import StoreDetailsHeader from './StoreDetailsHeader';
 import {
   Address,
   PaymentMethod,
   PopulatedUser,
   updateUser,
-  User,
 } from '../../../api/collections/user';
 import { LoginContext } from '../../../contexts/LoginContext';
 import {
@@ -18,6 +16,9 @@ import {
   autocompleteExpirationDate,
   expDatePaymentToDate,
 } from '../../../utils/functions';
+import PaymentElement, { PaymentType } from '../../Payment/PaymentElement';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export interface InputProps {
   value: string;
@@ -64,7 +65,9 @@ const StoreDetailsForm: React.FC = () => {
   const [error, setError] = useState<boolean>(false);
 
   const [name, setName] = useState<string>(user?.name as string);
-  const [image, setImage] = useState<string>('');
+  const [image, setImage] = useState<string>(user?.imageUrl as string);
+
+  const [showPaymentModal, setShowPaymentModal] = useState<boolean>(false);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -137,6 +140,8 @@ const StoreDetailsForm: React.FC = () => {
     setExpiration(autocompleteExpirationDate(e) ?? '');
   };
 
+  let notify: () => void;
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (error) {
@@ -163,6 +168,7 @@ const StoreDetailsForm: React.FC = () => {
         email: email || undefined,
         password: password || undefined,
         phoneNumber: phone || undefined,
+        imageUrl: image || undefined,
         ...(Object.values(address).some((value) => value !== undefined) && {
           address,
         }),
@@ -172,10 +178,39 @@ const StoreDetailsForm: React.FC = () => {
           paymentMethod,
         }),
       };
-
-      await updateUser(user?._id!, updatedUser);
+      try {
+        await updateUser(user?._id!, updatedUser);
+        console.log('####################################');
+        notify = () =>
+          toast.success('Changes Saved!', {
+            position: 'bottom-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'colored',
+          });
+        notify();
+      } catch (error) {
+        notify = () =>
+          toast.error('Error Saving Changes!', {
+            position: 'bottom-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'colored',
+          });
+        notify();
+      }
     }
   };
+
+  useEffect(() => {});
 
   return (
     <>
@@ -224,26 +259,40 @@ const StoreDetailsForm: React.FC = () => {
           }}
           onChangeError={(error) => setError(error)}
         />
-        <PaymentDetailsForm
-          cardHolder={{
-            value: cardHolder,
-            onChange: handleCardHolderChange,
-          }}
-          cardNumber={{
-            value: cardNumber,
-            onChange: handleCardNumberChange,
-          }}
-          ccv={{
-            value: cvv,
-            onChange: handleCcvChange,
-          }}
-          expiration={{
-            value: expiration,
-            onChange: handleExpirationChange,
-          }}
-          onChangeError={(error) => setError(error)}
-        />
+        {/*<PaymentDetailsForm*/}
+        {/*  cardHolder={{*/}
+        {/*    value: cardHolder,*/}
+        {/*    onChange: handleCardHolderChange,*/}
+        {/*  }}*/}
+        {/*  cardNumber={{*/}
+        {/*    value: cardNumber,*/}
+        {/*    onChange: handleCardNumberChange,*/}
+        {/*  }}*/}
+        {/*  ccv={{*/}
+        {/*    value: cvv,*/}
+        {/*    onChange: handleCcvChange,*/}
+        {/*  }}*/}
+        {/*  expiration={{*/}
+        {/*    value: expiration,*/}
+        {/*    onChange: handleExpirationChange,*/}
+        {/*  }}*/}
+        {/*  onChangeError={(error) => setError(error)}*/}
+        {/*/>*/}
         <Row className={'mb-2 justify-content-end '}>
+          <Col xs={3}>
+            <Button
+              onClick={() => setShowPaymentModal(true)}
+              className={'mb-2'}
+              style={{
+                width: '100%',
+                border: 'none',
+                backgroundColor: palette.subSectionsBgAccent,
+                borderRadius: 30,
+              }}
+            >
+              Edit Payment Details
+            </Button>
+          </Col>
           <Col xs={1}>
             <Button
               type="submit"
@@ -260,6 +309,14 @@ const StoreDetailsForm: React.FC = () => {
           </Col>
         </Row>
       </Form>
+      {showPaymentModal ? (
+        <PaymentElement
+          show={showPaymentModal}
+          onHide={() => setShowPaymentModal(false)}
+          type={PaymentType.SETUP_INTENT}
+        />
+      ) : undefined}
+      <ToastContainer />
     </>
   );
 };

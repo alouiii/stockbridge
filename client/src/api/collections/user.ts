@@ -22,6 +22,10 @@ export interface Address {
   postalCode?: string;
   country?: string;
 }
+export interface Location {
+  type: string;
+  coordinates: number[];
+}
 
 export interface Subscription {
   from: Date;
@@ -49,6 +53,10 @@ export interface User {
   address?: string;
   subscription?: string;
   paymentMethod?: PaymentMethod;
+  location?: Location;
+  stripeCustomerId?: string;
+  registrationCompleted?: boolean;
+  imageUrl?: string;
 }
 export interface PopulatedUser {
   _id?: string;
@@ -62,8 +70,10 @@ export interface PopulatedUser {
   address?: Address;
   subscription?: Subscription;
   paymentMethod?: PaymentMethod;
+  location?: Location;
   stripeCustomerId?: string;
   registrationCompleted?: boolean;
+  imageUrl?: string;
 }
 
 export interface UserResponse {
