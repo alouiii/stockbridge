@@ -1,7 +1,6 @@
 import mongoose, { Model } from 'mongoose';
 import { Review } from '../entities/reviewEntity';
 import userModel from './User';
-import logger from '../config/logger';
 import { User } from '../entities/userEntity';
 import advertModel from './Advert';
 import { Advert } from '../entities/advertEntity';
@@ -40,10 +39,6 @@ const reviewSchema = new mongoose.Schema<Review>({
   },
 });
 
-// Prevent user from submitting more than one review per bootcamp
-reviewSchema.index({ reviewedAdvert: 1, reviewer: 1 }, { unique: true });
-
-
 // reviewSchema.pre<Review>('save', async function (next) {
 //   try {
 //     await advertModel
@@ -64,8 +59,6 @@ reviewSchema.index({ reviewedAdvert: 1, reviewer: 1 }, { unique: true });
 reviewSchema.static(
   'getAverageRating',
   async function (revieweeId: string): Promise<[number, number]> {
-    logger.debug('getAverageRating');
-
     const obj = await this.aggregate([
       {
         $lookup: {
@@ -113,19 +106,19 @@ reviewSchema.static(
 );
 
 // Call getAverageCost before save
-reviewSchema.pre('save', async function () {
+reviewSchema.post('save', async function () {
   const advert = (await advertModel.findById(this.reviewedAdvert)) as Advert;
-  const prevRating = await reviewModel.getAverageRating(
+  const rating = await reviewModel.getAverageRating(
     advert.store as unknown as string,
   );
-  const newRating =
-    (prevRating[0] * prevRating[1] + this.rating) / (prevRating[1] + 1);
+  // const newRating =
+  //   (prevRating[0] * prevRating[1] + this.rating) / (prevRating[1] + 1);
   await userModel.findByIdAndUpdate(advert.store, {
-    rating: newRating,
+    rating: rating[0],
   });
 });
 
-reviewSchema.post('save', async function () {
+reviewSchema.pre('save', async function () {
   await advertModel.findByIdAndUpdate(this.reviewedAdvert, {
     $push: { reviews: this._id },
   });
@@ -158,9 +151,13 @@ reviewSchema.pre('findOneAndDelete', async function () {
   });
 });
 
+// Prevent user from submitting more than one review per bootcamp
+reviewSchema.index({ reviewedAdvert: 1, reviewer: 1 }, { unique: true });
+
 const reviewModel = mongoose.model<Review, ReviewModel>(
   'Review',
   reviewSchema,
   'reviews',
 );
+
 export default reviewModel;
