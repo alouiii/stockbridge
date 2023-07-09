@@ -2,14 +2,18 @@ import React, { ReactElement, useContext, useEffect, useState } from 'react';
 import Tabs, { AdvertSortCriteria, OfferSortCriteria } from '../../ContentTabs/Tabs';
 import ContentTab from '../../ContentTabs/ContentTab';
 import ProductInfoBar from '../ProductInfoBar';
-import { Advert, PopulatedAdvert, getAdvertsByUser } from '../../../api/collections/advert';
+import {
+  Advert,
+  PopulatedAdvert,
+  getAdvertsByUser,
+} from '../../../api/collections/advert';
 import NoResultsMessage from '../NoResultsMessage';
 import { LoginContext } from '../../../contexts/LoginContext';
 
 /**
  * Component that displays the content of MyAdverts section.
  */
-const MyAdvertsContent: React.FC = ({  }) => {
+const MyAdvertsContent: React.FC = ({}) => {
   const [buyingAdverts, setBuyingAdverts] = useState([] as PopulatedAdvert[]);
   const [sellingAdverts, setSellingAdverts] = useState([] as PopulatedAdvert[]);
   const { user, loggedIn } = useContext(LoginContext);
@@ -24,9 +28,9 @@ const MyAdvertsContent: React.FC = ({  }) => {
     const fetchData = async () => {
       try {
         const fetchedAdverts = await getAdvertsByUser(user?._id);
-        let sellingAds = fetchedAdverts.filter(x => x.type === 'Sell');
+        let sellingAds = fetchedAdverts.filter((x) => x.type === 'Sell');
         setSellingAdverts(sellingAds as PopulatedAdvert[]);
-        let buyingAds = fetchedAdverts.filter(x => x.type === 'Ask');
+        let buyingAds = fetchedAdverts.filter((x) => x.type === 'Ask');
         setBuyingAdverts(buyingAds as PopulatedAdvert[]);
       } catch (error) {
         console.error(error);

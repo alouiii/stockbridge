@@ -2,7 +2,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import Tabs, { AdvertSortCriteria, ExtraCriteria, OfferSortCriteria } from '../../ContentTabs/Tabs';
 import ContentTab from '../../ContentTabs/ContentTab';
 import { LoginContext } from '../../../contexts/LoginContext';
-import { PopulatedOffer, getUserSpecificOffers } from '../../../api/collections/offer';
+import {
+  PopulatedOffer,
+  getUserSpecificOffers,
+} from '../../../api/collections/offer';
 import { PopulatedAdvert } from '../../../api/collections/advert';
 import NoResultsMessage from '../NoResultsMessage';
 import { OfferBarUserProfile } from '../../Offers/OfferBarProfile/OfferBarUserProfile';
@@ -11,7 +14,7 @@ import { OfferBarUserProfile } from '../../Offers/OfferBarProfile/OfferBarUserPr
  * Component that displays the content of Selling section.
  */
 const SellingContent: React.FC = () => {
-  const { user, loggedIn } = useContext(LoginContext);
+  const { user } = useContext(LoginContext);
   const [outgoingOffers, setOutgoingOffers] = useState([] as PopulatedOffer[]);
   const [incomingOffers, setIncomingOffers] = useState([] as PopulatedOffer[]);
 
@@ -24,15 +27,22 @@ const SellingContent: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log('user id is ocming')
+        console.log('user id is ocming');
         console.log(user?._id);
 
-        const outgoingSell = await getUserSpecificOffers(user?._id as string, 'Sell', 'outgoing');
-        const incomingSell = await getUserSpecificOffers(user?._id as string, 'Sell', 'incoming');
-        
+        const outgoingSell = await getUserSpecificOffers(
+          user?._id as string,
+          'Sell',
+          'outgoing',
+        );
+        const incomingSell = await getUserSpecificOffers(
+          user?._id as string,
+          'Sell',
+          'incoming',
+        );
+
         setOutgoingOffers(outgoingSell as PopulatedOffer[]);
         setIncomingOffers(incomingSell as PopulatedOffer[]);
-
       } catch (error) {
         console.error(error);
       }
