@@ -30,6 +30,10 @@ interface FilterAdvertsModalProps {
   };
 }
 
+/**
+ * Component that manages the filters in case the screen is small. It's a modal
+ * @returns 
+ */
 export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
   const { filters } = props;
 
@@ -105,7 +109,7 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
   };
 
   return (
-    <Modal show={props.isOpen} onHide={handleClose}>
+    <Modal show={props.isOpen} onHide={handleClose} className='no-padding-right'>
       <Modal.Header closeButton>
         <Modal.Title>Filters</Modal.Title>
       </Modal.Header>

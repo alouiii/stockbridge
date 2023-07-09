@@ -16,6 +16,10 @@ interface AdvertGridProps {
   handlePageClick: (selectedItem: { selected: number }) => void;
 }
 
+/**
+ * Component to display the grid with all the adverts.
+ * @returns 
+ */
 export const AdvertsGrid: FC<AdvertGridProps> = (props) => {
   const [search, setSearch] = useSearchParams();
 

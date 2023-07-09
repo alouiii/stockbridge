@@ -14,6 +14,7 @@ import { palette } from '../utils/colors';
 import { UserIconDropdown } from './UserIconDropdown';
 import { CategoriesDropdown } from './CategoriesDropdown';
 import useMediaQuery from '../hooks/useMediaQuery';
+import "./override.css"
 
 /**
  * This component represents the navbarBS of our website.
@@ -58,6 +59,7 @@ export function Navbar() {
         expand="lg"
         sticky="top"
         style={{ backgroundColor: palette.pageBG }}
+        className='no-padding-right'
       >
         <Container fluid>
           <NavbarBS.Brand>

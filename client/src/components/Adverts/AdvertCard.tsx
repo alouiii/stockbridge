@@ -18,6 +18,10 @@ export interface AdvertCardProps {
   creationDate: Date | undefined;
 }
 
+/**
+ * Component to display an advert with its main features.
+ * @returns 
+ */
 export const AdvertCard: FC<AdvertCardProps> = (props) => {
   const navigate = useNavigate();
 

@@ -7,6 +7,9 @@ import { useSearchParams } from 'react-router-dom';
 import { useAdverts } from '../../hooks/useAdverts';
 import { AdvertsGrid } from './AdvertsGrid';
 
+/**
+ * Component that gets the advert and manage advert displaying, filters, sorting and pagination.
+ */
 export const AdvertsPagination: FC = () => {
   const [search, setSearch] = useSearchParams();
 
