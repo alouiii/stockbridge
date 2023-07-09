@@ -43,6 +43,22 @@ const reviewSchema = new mongoose.Schema<Review>({
 // Prevent user from submitting more than one review per bootcamp
 reviewSchema.index({ reviewedAdvert: 1, reviewer: 1 }, { unique: true });
 
+
+// reviewSchema.pre<Review>('save', async function (next) {
+//   try {
+//     await advertModel
+//       .findOneAndUpdate(
+//         { _id: this.reviewedAdvert.id },
+//         { $push: { reviews: this } },
+//         { new: true, useFindAndModify: false },
+//       )
+//       .exec();
+//     next();
+//   } catch (error) {
+//     logger.error(`Failed updating advert corresponding to review ${this.id}`);
+//   }
+//   next();
+// });
 // Static method to get avg rating and save
 
 reviewSchema.static(

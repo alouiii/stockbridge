@@ -58,17 +58,6 @@ export const delAdvert = async (id: string) => {
   return advertModel.findByIdAndDelete(id);
 };
 
-// export const deleteReviewFromAdvert = async (id: string, reviewId: string) => {
-//   logger.debug(
-//     `${serviceName}: Deleting review with id: ${reviewId} from advert with id: ${id}`,
-//   );
-//   return advertModel.findByIdAndUpdate(
-//     id,
-//     { $pull: { reviews: reviewId } },
-//     { new: true },
-//   );
-// };
-
 /**
  * Find all adverts
  * @param page page number
@@ -108,12 +97,24 @@ export const findAllAdverts = async (
     };
   }
 
-  if (search) {
+  /*if (search) {
     queryFilter = {
       ...queryFilter,
       $text: { $search: search },
     };
+  }*/
+
+  if (search) {
+    const regex = new RegExp(search, "i"); //The "i" stands for case-insensitive matching.
+    queryFilter = {
+      ...queryFilter,
+      $or: [
+        { description: { $regex: regex } },
+        { productname: { $regex: regex } },
+      ]
+    };
   }
+
 
   if (radius) {
     queryFilter = {
@@ -125,6 +126,12 @@ export const findAllAdverts = async (
       },
     };
   }
+
+  //filter the adverts that are not closed
+  queryFilter = {
+    ...queryFilter,
+    status: { $ne: 'Closed' },
+  };
 
   logger.debug(`${serviceName}: Query filter: ${JSON.stringify(queryFilter)}`);
 
@@ -143,6 +150,7 @@ export const findAllAdverts = async (
         isCreatedAtIncluded = key === 'createdAt';
         data = [key, -1];
       } else {
+        isCreatedAtIncluded = sortParam === 'createdAt';
         data = [sortParam, 1];
       }
       sortParams.push(data);
