@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
-import { Button, Stack } from 'react-bootstrap';
+import { Stack } from 'react-bootstrap';
 import { Filters } from './Filters';
 import useMediaQuery from '../../hooks/useMediaQuery';
 import { Sort } from './Sort';
@@ -7,9 +7,11 @@ import { useSearchParams } from 'react-router-dom';
 import { useAdverts } from '../../hooks/useAdverts';
 import { AdvertsGrid } from './AdvertsGrid';
 import { CustomMap } from '../Map/CustomMap';
-import { palette } from '../../utils/colors';
-import { Page } from '../Page';
 
+
+/**
+ * Component that gets the advert and manage advert displaying, filters, sorting and pagination.
+ */
 export const AdvertsPagination: FC = () => {
   const [search, setSearch] = useSearchParams();
 
@@ -46,14 +48,11 @@ export const AdvertsPagination: FC = () => {
     setSearch(search, { replace: true });
   };
 
-  const handleMapClick = () => {
-    setMapMode(true);
-  };
-
   useEffect(() => {
-    search.set('page', '1');
-    setSearch(search);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    search.set("page","1")
+    setSearch(search,{replace: true})
+    console.log("ciao")
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const matches = useMediaQuery('(min-width: 768px)');
@@ -66,53 +65,33 @@ export const AdvertsPagination: FC = () => {
 
   //I am using component <Page> here because I want to display the map full screen.
   return (
-    <Page>
-      <div
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'column',
+        marginBottom: 25,
+      }}
+    >
+      <Stack
         style={{
           display: 'flex',
-          alignItems: 'center',
-          flexDirection: 'column',
-          marginBottom: 25,
+          flexDirection: matches ? 'row' : 'column',
+          marginBottom: 15,
+          marginTop: 200,
         }}
       >
-        <Stack
-          style={{
-            display: 'flex',
-            flexDirection: matches ? 'row' : 'column',
-            marginBottom: 15,
-            marginTop: 200,
-          }}
-        >
-          <Filters />
-          <AdvertsGrid
-            adverts={adverts}
-            currentCategory={category}
-            totalNumberOfPages={totalNumberOfPages}
-            handlePageClick={handlePageClick}
-          />
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              position: 'absolute',
-              gap: 30,
-              right: 20,
-            }}
-          >
-            <Button
-              style={{
-                backgroundColor: palette.subSectionsBgAccent,
-                border: 'none',
-                zIndex: 1000
-              }}
-              onClick={handleMapClick}
-            >
-              View on Map
-            </Button>
-            <Sort />
-          </div>
-        </Stack>
-      </div>
-    </Page>
+        <Filters />
+        <AdvertsGrid
+          adverts={adverts}
+          currentCategory={category}
+          totalNumberOfPages={totalNumberOfPages}
+          handlePageClick={handlePageClick}
+        />
+        <div style={{ position: 'absolute', right: 20 }}>
+          <Sort />
+        </div>
+      </Stack>
+    </div>
   );
 };

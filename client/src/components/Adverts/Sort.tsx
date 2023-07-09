@@ -13,6 +13,9 @@ enum SortTypes {
   DATE_DESC = '-createdAt',
 }
 
+/**
+ * Component that manages the sorting.
+ */
 export const Sort: FC = () => {
   const [search, setSearch] = useSearchParams();
 

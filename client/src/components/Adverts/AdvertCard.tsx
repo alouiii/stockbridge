@@ -3,7 +3,8 @@ import { Button, Image } from 'react-bootstrap';
 import { BodyText } from '../Text/BodyText';
 import { ColoredLine } from '../ColoredLine';
 import prioritizedIcon from '../../assets/prioritized.svg';
-import noImageAvailable from '../../assets/NoImageAvailable.jpg';
+//import noImageAvailable from '../../assets/NoImageAvailable.jpg';
+import emptyIcon from "../../assets/product-placeholder.png"
 import { useNavigate } from 'react-router-dom';
 
 export interface AdvertCardProps {
@@ -53,7 +54,7 @@ export const AdvertCard: FC<AdvertCardProps> = (props) => {
       } : undefined}
     >
       <Image
-        src={props.icon || noImageAvailable}
+        src={props.icon || emptyIcon}
         alt="image"
         width={props.icon ? 200 : 230}
         height={props.icon ? 200 : 150}
@@ -122,7 +123,7 @@ export const AdvertCard: FC<AdvertCardProps> = (props) => {
           alt="prioritizedIcon"
           width={40}
           height={40}
-          style={{ position: 'absolute', right: 5 }}
+          style={{ position: 'absolute', right: 5, top: 5 }}
         />
       ) : undefined}
     </div>

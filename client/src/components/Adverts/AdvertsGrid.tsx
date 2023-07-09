@@ -16,6 +16,10 @@ interface AdvertGridProps {
   handlePageClick: (selectedItem: { selected: number }) => void;
 }
 
+/**
+ * Component to display the grid with all the adverts.
+ * @returns 
+ */
 export const AdvertsGrid: FC<AdvertGridProps> = (props) => {
   const [search, setSearch] = useSearchParams();
 
@@ -31,9 +35,9 @@ export const AdvertsGrid: FC<AdvertGridProps> = (props) => {
     } else {
       search.set('type', 'Sell');
     }
-    setSearch(search);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [advertType]);
+    setSearch(search,{replace: true});
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [advertType, search ]);
 
   return (
     <div
@@ -50,7 +54,7 @@ export const AdvertsGrid: FC<AdvertGridProps> = (props) => {
       <Title style={{ fontWeight: 500, textAlign: 'center', marginTop: -125 }}>
         {!props.currentCategory ? 'All Active Adverts' : props.currentCategory}
       </Title>
-      {props.adverts && props.adverts.length > 0 ? (
+      {props.adverts ? (
         <div
           style={{
             display: 'flex',
@@ -119,16 +123,24 @@ export const AdvertsGrid: FC<AdvertGridProps> = (props) => {
             </div>
           ))
         ) : (
-          <BodyText
+          <div
             style={{
-              color: 'red',
-              fontSize: 30,
-              textAlign: 'center',
-              marginTop: -100,
+              display: 'flex',
+              justifyContent: 'center',
+              width: '100%',
+              height: '100vh',
             }}
           >
-            No data found
-          </BodyText>
+            <BodyText
+              style={{
+                color: 'red',
+                fontSize: 30,
+                textAlign: 'center',
+              }}
+            >
+              No data found
+            </BodyText>
+          </div>
         )
       ) : (
         <FadeLoader color={palette.subSectionsBgAccent} />

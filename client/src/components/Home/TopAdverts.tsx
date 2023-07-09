@@ -9,7 +9,7 @@ import {
 } from '../../api/collections/advert';
 import { FadeLoader } from 'react-spinners';
 import { palette } from '../../utils/colors';
-import "./override.css"
+import "../../components/override.css"
 
 /**
  * This component displays the top adverts from different categories, those that have been prioritized.

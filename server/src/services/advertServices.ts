@@ -20,7 +20,7 @@ export const findAdvertById = async (id: string, populate = true) => {
     throw new AppError('Advert not found', 'Advert not found', 404);
   }
 
-  logger.debug(`${serviceName}: Returning advert ${advert}`);
+  //logger.debug(`${serviceName}: Returning advert ${advert}`);
   return advert;
 };
 
@@ -97,12 +97,24 @@ export const findAllAdverts = async (
     };
   }
 
-  if (search) {
+  /*if (search) {
     queryFilter = {
       ...queryFilter,
       $text: { $search: search },
     };
+  }*/
+
+  if (search) {
+    const regex = new RegExp(search, "i"); //The "i" stands for case-insensitive matching. 
+    queryFilter = {
+      ...queryFilter,
+      $or: [
+        { description: { $regex: regex } },
+        { productname: { $regex: regex } },
+      ]
+    };
   }
+  
 
   if (radius) {
     queryFilter = {

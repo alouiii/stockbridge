@@ -1,7 +1,7 @@
-import { FC, useEffect, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
 import { Title } from '../Text/Title';
 import { palette } from '../../utils/colors';
-import { Button, Dropdown, Image } from 'react-bootstrap';
+import { Button, Dropdown, Form, Image } from 'react-bootstrap';
 import Slider from '@mui/material/Slider';
 import { BodyText } from '../Text/BodyText';
 import useMediaQuery from '../../hooks/useMediaQuery';
@@ -11,6 +11,7 @@ import { ColoredLine } from '../ColoredLine';
 import filtersIcon from '../../assets/filters.svg';
 import { FilterAdvertsModal } from './FilterAdvertsModal';
 import { useSearchParams } from 'react-router-dom';
+import '../../components/override.css';
 
 /**
  * This components represents the filters section in the home page.
@@ -20,8 +21,7 @@ export const Filters: FC = () => {
   const [category, setCategory] = useState<string>('');
   const [rangePrice, setRangePrice] = useState<number[]>([0, 1000]);
   const [rangeQuantity, setRangeQuantity] = useState<number[]>([0, 1000]);
-  const [date, setDate] = useState<Date>();
-  const [rangePosition, setRangePosition] = useState<number>(0);
+  const [radius, setRadius] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const matches = useMediaQuery('(min-width: 768px)');
@@ -40,14 +40,13 @@ export const Filters: FC = () => {
     setCategory('');
     setRangePrice([0, 1000]);
     setRangeQuantity([0, 1000]);
-    setDate(undefined);
-    setRangePosition(0);
+    setRadius(0);
     search.delete('category[in]');
     search.delete('price[gte]');
     search.delete('quantity[gte]');
     search.delete('price[lte]');
     search.delete('quantity[lte]');
-    search.delete('range');
+    search.delete('radius');
     setSearch(search, { replace: true });
   };
 
@@ -55,7 +54,7 @@ export const Filters: FC = () => {
     if (category) {
       console.log(category);
       search.set('category[in]', category);
-      setSearch(search);
+      setSearch(search, { replace: true });
     }
 
     if (rangePrice) {
@@ -63,7 +62,7 @@ export const Filters: FC = () => {
       const maxPrice = rangePrice[1];
       search.set('price[gte]', minPrice.toString());
       search.set('price[lte]', maxPrice.toString());
-      setSearch(search);
+      setSearch(search, { replace: true });
     }
 
     if (rangeQuantity) {
@@ -71,17 +70,12 @@ export const Filters: FC = () => {
       const maxQuantity = rangeQuantity[1];
       search.set('quantity[gte]', minQuantity.toString());
       search.set('quantity[lte]', maxQuantity.toString());
-      setSearch(search);
+      setSearch(search, { replace: true });
     }
 
-    if (date) {
-      search.set('date', category);
-      setSearch(search);
-    }
-
-    if (rangePosition) {
-      search.set('range', rangePosition.toString()); //to check
-      setSearch(search);
+    if (radius) {
+      search.set('radius', radius.toString());
+      setSearch(search, { replace: true });
     }
   };
 
@@ -119,13 +113,9 @@ export const Filters: FC = () => {
               value: rangeQuantity,
               setValue: setRangeQuantity,
             },
-            date: {
-              value: date,
-              setValue: setDate,
-            },
-            rangePosition: {
-              value: rangePosition,
-              setValue: setRangePosition,
+            radius: {
+              value: radius,
+              setValue: setRadius,
             },
           }}
         />
@@ -137,7 +127,7 @@ export const Filters: FC = () => {
     <div
       style={{
         left: 0,
-        padding: '50px',
+        padding: 40,
         paddingTop: '30px',
         borderRadius: 15,
         backgroundColor: palette.subSectionsBgLighter,
@@ -145,10 +135,10 @@ export const Filters: FC = () => {
         flexDirection: 'column',
       }}
     >
-      <Title style={{ textAlign: 'center', fontSize: 30, marginTop: 30 }}>
+      <Title style={{ fontSize: 30, marginTop: 30, fontWeight: 600 }}>
         Filters
       </Title>
-      <ColoredLine height={2} width={100} color="black" />
+      <ColoredLine height={1} width={100} color="black" />
       <Dropdown style={{ marginTop: 30 }}>
         <Dropdown.Toggle
           style={{
@@ -157,13 +147,22 @@ export const Filters: FC = () => {
             color: 'black',
             width: 200,
             fontFamily: 'Poppins',
+            textAlign: 'left',
+            fontWeight: 500,
+            paddingLeft: 0,
           }}
           id="dropdown-basic"
           defaultValue={'Categories'}
         >
           {category || 'Categories'}
         </Dropdown.Toggle>
-        <Dropdown.Menu style={{ maxHeight: 200, overflowY: 'scroll' }}>
+        <Dropdown.Menu
+          style={{
+            maxHeight: 200,
+            overflowY: 'scroll',
+          }}
+          className="hide-scrollbar"
+        >
           {Object.values(ProductCategory)
             .filter((key) => isNaN(Number(key)))
             .map((c, index) => (
@@ -173,54 +172,49 @@ export const Filters: FC = () => {
             ))}
         </Dropdown.Menu>
       </Dropdown>
-      <div style={{ width: 200, marginTop: 20 }}>
-        <BodyText style={{ textAlign: 'center' }}>Price:</BodyText>
+      <div style={{ width: 190, marginTop: 20 }}>
+        <BodyText style={{ fontWeight: 500 }}>Price:</BodyText>
         <Slider
-          style={{ color: 'gray', marginTop: -20 }}
+          style={{ color: '#918383', marginTop: -20, marginLeft: 5 }}
           size="small"
           value={rangePrice}
           onChange={(_, newRange) => setRangePrice(newRange as number[])}
           valueLabelDisplay="auto"
           min={0}
           max={1000}
-          step={20}
+          step={1}
         />
       </div>
-      <div style={{ width: 200 }}>
-        <BodyText style={{ textAlign: 'center' }}>Quantity:</BodyText>
+      <div style={{ width: 190 }}>
+        <BodyText style={{ fontWeight: 500 }}>Quantity:</BodyText>
         <Slider
-          style={{ color: 'gray', marginTop: -20 }}
+          style={{ color: '#918383', marginTop: -20, marginLeft: 5 }}
           size="small"
           value={rangeQuantity}
           onChange={(_, newRange) => setRangeQuantity(newRange as number[])}
           valueLabelDisplay="auto"
           min={0}
           max={1000}
-          step={20}
+          step={1}
         />
       </div>
-      {/*<div
-        style={{
-          marginTop: 20,
-          textAlign: 'center',
-        }}
-      >
-        <DatePicker value={date} onDateChange={setDate} />
-      </div>*/}
       <div style={{ width: 200 }}>
-        <BodyText style={{ textAlign: 'center' }}>Range(km):</BodyText>
-        <Slider
-          style={{ color: 'gray' }}
-          size="small"
-          defaultValue={100}
-          value={rangePosition}
-          onChange={(_, newRange) => setRangePosition(newRange as number)}
-          valueLabelDisplay="auto"
-          step={10}
-          marks
+        <BodyText style={{ fontWeight: 500 }}>Range(km):</BodyText>
+        <Form.Control
+          style={{ color: '#918383' }}
+          type="number"
+          value={radius ?? 0}
+          onChange={(event: ChangeEvent<HTMLInputElement>) =>
+            setRadius(Number(event.target.value))
+          }
           min={0}
-          max={100}
+          max={10000}
+          step={10}
+          isInvalid={radius < 0 || radius > 10000}
         />
+        <Form.Control.Feedback type="invalid">
+          Must be between 0 and 10000
+        </Form.Control.Feedback>
       </div>
       <div style={{ marginTop: 30, display: 'flex', justifyContent: 'center' }}>
         <Button variant="secondary" onClick={handleReset}>

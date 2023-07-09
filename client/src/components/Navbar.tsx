@@ -11,10 +11,10 @@ import logo from '../assets/logo.svg';
 import { useContext, useEffect, useState } from 'react';
 import { LoginContext } from '../contexts/LoginContext';
 import { palette } from '../utils/colors';
-import { logout } from '../api/collections/user';
 import { UserIconDropdown } from './UserIconDropdown';
 import { CategoriesDropdown } from './CategoriesDropdown';
 import useMediaQuery from '../hooks/useMediaQuery';
+import "./override.css"
 
 /**
  * This component represents the navbarBS of our website.
@@ -36,20 +36,19 @@ export function Navbar() {
       const currentUrl = window.location.pathname;
       if (currentUrl === '/adverts') {
         search.set('q', searchInput);
-        setSearch(search);
+        setSearch(search,{replace: true});
       } else {
         navigate(`/adverts?q=${searchInput}`);
       }
     }
-    return;
   };
 
   useEffect(() => {
     if (searchInput.length > 0) {
       return;
     } else {
-      search.delete('search');
-      setSearch(search);
+      search.delete('q');
+      setSearch(search,{replace: true});
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchInput]);
@@ -60,6 +59,7 @@ export function Navbar() {
         expand="lg"
         sticky="top"
         style={{ backgroundColor: palette.pageBG }}
+        className='no-padding-right'
       >
         <Container fluid>
           <NavbarBS.Brand>
@@ -104,6 +104,12 @@ export function Navbar() {
                 style={{ borderRadius: 8, padding: 8 }}
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault()
+                    handleSearchClick();
+                  }
+                }}
               />
               <Button
                 className="font-link"

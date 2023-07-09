@@ -22,7 +22,7 @@ function App() {
         <Route path="/signIn" element={<SignIn />} />
         <Route path="/about" element={<About />} />
         <Route path="/contactUs" element={<ContactUs />} />
-        <Route path="/productoverview/:id" element={<ProductOverview />}/>
+        <Route path="/productoverview/:id" Component={ProductOverview}></Route>
         <Route path="/adverts" element={<Adverts />}/>
       </Routes>
     </LoginContextProvider>
