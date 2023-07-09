@@ -81,13 +81,13 @@ export const deleteReview = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const { id } = req.params;
 
-    // if (id !== req.user?.id) {
-    //   throw new AppError(
-    //     'Not authorized to access this route',
-    //     'Not authorized to access this route',
-    //     401,
-    //   );
-    // }
+    if (id !== req.user?.id) {
+      throw new AppError(
+        'Not authorized to access this route',
+        'Not authorized to access this route',
+        401,
+      );
+    }
 
     const review = await delReview(id);
     res.status(204).json(review);
