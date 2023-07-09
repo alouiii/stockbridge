@@ -160,6 +160,7 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
             valueLabelDisplay="auto"
             min={0}
             max={1000}
+            step={1}
           />
         </div>
         <div style={{ width: 190 }}>
@@ -174,6 +175,7 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
             valueLabelDisplay="auto"
             min={0}
             max={1000}
+            step={1}
           />
         </div>
         <div style={{ width: 200 }}>

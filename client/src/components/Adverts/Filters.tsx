@@ -182,7 +182,7 @@ export const Filters: FC = () => {
           valueLabelDisplay="auto"
           min={0}
           max={1000}
-          step={20}
+          step={1}
         />
       </div>
       <div style={{ width: 190 }}>
@@ -195,7 +195,7 @@ export const Filters: FC = () => {
           valueLabelDisplay="auto"
           min={0}
           max={1000}
-          step={20}
+          step={1}
         />
       </div>
       <div style={{ width: 200 }}>
