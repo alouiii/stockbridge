@@ -9,9 +9,9 @@ export enum AdvertType {
 }
 
 export enum AdvertStatus {
-  Ongoing,
-  Closed,
-  Deleted,
+  Ongoing = 'Ongoing',
+  Closed = 'Closed',
+  Deleted = 'Deleted',
 }
 export enum Colors {
   Blue = 'Blue',
@@ -136,20 +136,6 @@ export async function deleteAdvert(id: string): Promise<void> {
   });
 }
 
-/*export async function getAllAdverts(): Promise<AdvertDto> {
-  return await apiClient.get<AdvertDto>('/adverts/', {
-    withCredentials: true,
-  });
-}*/
-
-export async function getAdvertsByUser(
-  store: string | undefined,
-): Promise<Advert[]> {
-  return await apiClient.get<Advert[]>(`/adverts/getAdvertsByStore/${store}`, {
-    withCredentials: true,
-  });
-}
-
 export async function getAllAdverts(queryParams: any): Promise<AdvertDto> {
   return await apiClient.get<AdvertDto>(
     `/adverts`,
@@ -168,6 +154,13 @@ export async function getPopularCategories(): Promise<CategoryDto> {
 
 export async function getPopularAdverts(): Promise<AdvertDto> {
   return await apiClient.get<AdvertDto>(`/adverts/getPopularAdverts`, {
+    withCredentials: true,
+  });
+}
+export async function getAdvertsByUser(
+  store: string | undefined,
+): Promise<Advert[]> {
+  return await apiClient.get<Advert[]>(`/adverts/getAdvertsByStore/${store}`, {
     withCredentials: true,
   });
 }

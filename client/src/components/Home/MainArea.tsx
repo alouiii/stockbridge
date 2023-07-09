@@ -6,7 +6,6 @@ import { useState } from 'react';
 import { EditAdvertModal } from '../ProductOverview/EditAdvertModal';
 import { useNavigate } from 'react-router-dom';
 
-
 export function MainArea() {
   const [showModal, setShowModal] = useState(false);
 

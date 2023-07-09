@@ -20,7 +20,7 @@ export const findAdvertById = async (id: string, populate = true) => {
     throw new AppError('Advert not found', 'Advert not found', 404);
   }
 
-  logger.debug(`${serviceName}: Returning advert ${advert}`);
+  //logger.debug(`${serviceName}: Returning advert ${advert}`);
   return advert;
 };
 
