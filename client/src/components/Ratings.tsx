@@ -1,4 +1,3 @@
-import { useState } from 'react';
 
 const Ratings = (rating: number, onClick?: (rating: number) => void) => {
   return (
@@ -7,7 +6,7 @@ const Ratings = (rating: number, onClick?: (rating: number) => void) => {
         <span
           key={star}
           onClick={onClick ? () => onClick(star) : () => {}}
-          style={{ cursor: 'pointer', color: star <= rating ? 'red' : 'gray' }}
+          style={{ cursor: 'pointer', color: star <= rating ? 'white' : 'gray' }}
         >
           &#9733;
         </span>

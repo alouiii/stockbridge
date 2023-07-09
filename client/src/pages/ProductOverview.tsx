@@ -11,7 +11,7 @@ import { LoginContext } from '../contexts/LoginContext';
 
 const ProductOverview = () => {
   const { id } = useParams();
-  let [advert, setAdvert] = useState({
+  const [advert, setAdvert] = useState({
     id: '',
     productname: '',
     prioritized: false,
@@ -32,6 +32,9 @@ const ProductOverview = () => {
   } as PopulatedAdvert);
   const [store, setStore] = useState({} as User);
 
+  const { user } = useContext(LoginContext);
+  const owner = store._id === user?._id;
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -41,7 +44,6 @@ const ProductOverview = () => {
             setStore(fetchedAdvert.store);
           }
           setAdvert(fetchedAdvert as PopulatedAdvert);
-          console.log(fetchedAdvert);
         }
       } catch (error) {
         console.error(error);
@@ -50,8 +52,6 @@ const ProductOverview = () => {
     fetchData();
   }, [id]);
 
-  const { user } = useContext(LoginContext);
-  const owner = store._id === user?._id;
   return (
     <Page>
       {advert ? (
