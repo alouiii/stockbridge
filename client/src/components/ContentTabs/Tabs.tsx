@@ -4,6 +4,7 @@ import { Button, Form } from 'react-bootstrap';
 import { PopulatedAdvert } from '../../api/collections/advert';
 import { PopulatedOffer } from '../../api/collections/offer';
 //import styles from "./styles.css";
+require('./tabStyles.scss');
 
 type Props = {
   children: ReactElement[];
@@ -70,22 +71,22 @@ const Tabs: React.FC<Props> = ({ children, isOffer, searchText, setSearchText, s
           />
         ))}
       </ul>
-      <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
-      ></link>
-      <div style={{ float: "right", marginTop: "-3em", marginRight: "4em" }}>
-        <input type="search" value={searchText} onChange={handleSearchChange} placeholder="Search..." />
 
-        <text> Sort by </text>
-        <select onChange={handleSortChange}>
+      <div style={{ float: "right", marginTop: "-4em", marginRight: "4em", fontFamily: "poppins" }}>
+        <input type="search" value={searchText} onChange={handleSearchChange} placeholder="Search..." 
+        style={{padding: 6 , borderRadius: 8 , border: "solid #f86c6c", borderWidth: 0.05}}/>
+        <text style={{color: "#f86c6c", fontWeight: "500", fontSize: "1.2em" }}> Sort by </text>
+        <select onChange={handleSortChange} style={{padding: 6  , borderRadius: 8 , borderColor: "#f86c6c", color: "grey"}}>
           {isOffer ? offerValues.map((item, _) => (<option value={item}>{item}</option>)) : advertValues.map((item, _) => (<option value={item}>{item}</option>))}
         </select>
         <Button
-          style={{ alignSelf: 'center', marginTop: '-6px' }}
+          style={{ alignSelf: 'center',  background: 'none', border: "none", fontSize: "2em" }}
           onClick={handleToggleSortOrder}
         >
-          <i className= { sortOrder ? "bi bi-sort-down-alt" : "bi bi-sort-up-alt"}></i>
+          <i className= { sortOrder ? "bi bi-sort-down-alt" : "bi bi-sort-up-alt"} 
+          style={{
+            color: "#f76c6c", 
+           }}></i>
         </Button>
       </div>
       {children[selectedTab]}

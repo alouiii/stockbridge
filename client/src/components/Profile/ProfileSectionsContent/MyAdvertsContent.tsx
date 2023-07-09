@@ -79,6 +79,7 @@ const MyAdvertsContent: React.FC = ({  }) => {
                 date={product.purchaseDate?.toString().substring(0, 10)}
                 quantity={product.quantity}
                 price={product.price}
+                highlight={searchText}
               />
             );
           }) : <NoResultsMessage />}
@@ -93,6 +94,7 @@ const MyAdvertsContent: React.FC = ({  }) => {
                 date={product.purchaseDate?.toString().substring(0, 10)}
                 quantity={product.quantity}
                 price={product.price}
+                highlight={searchText}
               />
             );
           }) : <NoResultsMessage />}

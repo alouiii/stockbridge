@@ -12,6 +12,7 @@ type ProductProps = {
   date: string | undefined;
   quantity: number | undefined;
   price: number | undefined;
+  highlight: string
 };
 
 const ProductInfoBar: React.FC<ProductProps> = ({
@@ -21,6 +22,7 @@ const ProductInfoBar: React.FC<ProductProps> = ({
   date,
   quantity,
   price,
+  highlight
 }) => {
   const navigate = useNavigate();
   return (
@@ -43,6 +45,7 @@ const ProductInfoBar: React.FC<ProductProps> = ({
           <div className="div1">  <ProfileProdcutAttribute
             name="Product"
             value={name}
+            highlight= {highlight}
           ></ProfileProdcutAttribute> </div>
           
           <div className="div2">  <ProfileProdcutAttribute

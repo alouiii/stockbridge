@@ -80,16 +80,16 @@ const SellingContent: React.FC = () => {
           Ciao bella, this is the container for the Orders
         </ContentTab>
         <ContentTab title="Incoming Offers">
-        {incomingOffers.length > 0 ? sortedAndFilteredItems(incomingOffers).map((offer, _) => {
+        {sortedAndFilteredItems(incomingOffers).length > 0 ? sortedAndFilteredItems(incomingOffers).map((offer, _) => {
             return (
-              <OfferBarUserProfile offer={offer} advert={offer.advert as PopulatedAdvert} outgoing= {false}/>
+              <OfferBarUserProfile offer={offer} advert={offer.advert as PopulatedAdvert} outgoing= {false} highlight={searchText}/>
             );
           }) : <NoResultsMessage />}
         </ContentTab>
         <ContentTab title="Outgoing Offers">
-        {outgoingOffers.length > 0 ? sortedAndFilteredItems(outgoingOffers).map((offer, _) => {
+        {sortedAndFilteredItems(outgoingOffers).length > 0 ? sortedAndFilteredItems(outgoingOffers).map((offer, _) => {
             return (
-              <OfferBarUserProfile offer={offer} advert={offer.advert as PopulatedAdvert} outgoing= {true} />
+              <OfferBarUserProfile offer={offer} advert={offer.advert as PopulatedAdvert} outgoing= {true} highlight={searchText}/>
             );
           }) : <NoResultsMessage />}
         </ContentTab>
