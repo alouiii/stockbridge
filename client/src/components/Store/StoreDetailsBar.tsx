@@ -35,17 +35,17 @@ const StoreDetailsBar: React.FC<StoreDetailsBarProps> = (props) => {
         }}
       >
         <StoreDetailsElement label="Category">
-          <BodyText style={{ color: 'white', fontSize: 24 }}>
+          <BodyText style={{ color: 'white', fontSize: 24, margin: '0 5px' }}>
             {props.category}
           </BodyText>
         </StoreDetailsElement>
         <StoreDetailsElement label="Name">
-          <BodyText style={{ color: 'white', fontSize: 24 }}>
+          <BodyText style={{ color: 'white', fontSize: 24, margin: '0 5px' }}>
             {props.store?.name}
           </BodyText>
         </StoreDetailsElement>
         <StoreDetailsElement label="Rating">
-          <BodyText style={{ color: 'white', fontSize: 24 }}>
+          <BodyText style={{ color: 'white', fontSize: 24, margin: '0 5px' }}>
             {Ratings(props.store?.rating ? props.store.rating : 0)}
           </BodyText>
         </StoreDetailsElement>
