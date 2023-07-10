@@ -1,7 +1,8 @@
 import { FC } from 'react';
-import { Advert, PopulatedAdvert } from '../../api/collections/advert';
+import { PopulatedAdvert } from '../../api/collections/advert';
 import { ReviewOfferSection } from '../ProductOverview/ReviewOfferSection';
 import { Reviewbar } from './Reviewbar';
+import { ReviewsGrid } from '../ProductOverview/Reviews/ReviewsGrid';
 
 type ReviewsSectionProps = {
   advert: PopulatedAdvert;
@@ -13,14 +14,15 @@ const ReviewsSection: FC<ReviewsSectionProps> = (props) => {
         style={{
           display: 'flex',
           flexDirection: 'column',
-          gap: '30px',
-          padding: '30px',
+          gap: 30,
+          padding: '0 30px 30px',
         }}
       >
-        {props.advert.reviews &&
+        {/*props.advert.reviews &&
           props.advert.reviews.map((review, i) => (
-            <Reviewbar reviewID={review._id} />
-          ))}
+            <Reviewbar key={review._id} reviewID={review._id} />
+          ))*/}
+          <ReviewsGrid reviews={props.advert.reviews}/>
       </div>
     </ReviewOfferSection>
   );

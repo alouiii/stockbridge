@@ -1,10 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import {
-  getReview,
-  PopulatedReview,
-  Review,
-} from '../../api/collections/review';
-import { getStore, User } from '../../api/collections/user';
+import { getReview, PopulatedReview } from '../../api/collections/review';
 import { InfoBar } from '../ProductOverview/InfoBar';
 import { Ratings } from '../Ratings';
 import { StoreDetailsModal } from '../Store/StoreDetailsModal';
