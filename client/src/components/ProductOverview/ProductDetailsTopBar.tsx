@@ -39,9 +39,8 @@ const ProductDetailsTopBar: React.FC<ProductDetailsTopBarProps> = (props) => {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor: '#FDDFE3',
+        paddingTop: 15,
         paddingLeft: 15,
-        height: 100,
       }}
     >
       <BodyText

@@ -1,28 +1,38 @@
-import { Advert, PopulatedAdvert } from '../../api/collections/advert';
+import { PopulatedAdvert } from '../../api/collections/advert';
 import { BodyText } from '../Text/BodyText';
 import { ProductAttribute } from './ProductAttribute';
 import { Image } from 'react-bootstrap';
 import imagePlaceholder from '../../assets/product-placeholder.png';
+import { FC } from 'react';
+import useMediaQuery from '../../hooks/useMediaQuery';
 
-const ProductDetails = (advert: PopulatedAdvert) => {
-  console.log(advert);
+interface ProductDetailsProps {
+  advert: PopulatedAdvert;
+}
+
+export const ProductDetails: FC<ProductDetailsProps> = (props) => {
+  const { advert } = props;
+
+  const matches1 = useMediaQuery('(min-width: 1040px)');
+  const matches2 = useMediaQuery('(min-width: 800px)');
+
   return (
     <div
       style={{
         display: 'flex',
-        flexDirection: 'row',
+        flexDirection: matches2 ? 'row' : 'column',
         alignItems: 'center',
-        justifyContent: 'start',
-        width: 'auto',
+        justifyContent: matches2 ? undefined : 'center',
+        gap: 50,
       }}
     >
       <Image
         style={{
-          width: '20em',
-          height: '20em',
-          borderRadius: '60px',
+          width: matches2 ? 350 : 200,
+          height: matches2 ? 350 : 200,
+          borderRadius: 30,
           borderColor: 'transparent',
-          objectFit: 'fill',
+          objectFit: 'cover',
         }}
         src={advert?.imageurl ? advert?.imageurl : imagePlaceholder}
       />
@@ -31,16 +41,12 @@ const ProductDetails = (advert: PopulatedAdvert) => {
         style={{
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'start',
-          marginLeft: '10%',
-          marginRight: '10%',
+          gap: 10,
         }}
       >
         <BodyText
           style={{
-            fontFamily: 'Poppins',
-            color: 'black',
-            fontSize: '24px',
+            fontSize: 28,
             fontWeight: 600,
           }}
         >
@@ -48,44 +54,37 @@ const ProductDetails = (advert: PopulatedAdvert) => {
         </BodyText>
         <BodyText
           style={{
-            fontFamily: 'Poppins',
             color: 'gray',
-            fontSize: '16px',
+            fontSize: 16,
             fontWeight: 300,
-            marginLeft: '10px',
+            marginTop: -16,
             wordBreak: 'break-all',
           }}
         >
           {advert?.description ? advert.description : ''}
         </BodyText>
-        {advert?.color && (
-          <ProductAttribute
-            margin=""
-            name="Color"
-            value={advert?.color}
-          ></ProductAttribute>
-        )}
-        {advert?.purchaseDate && (
-          <ProductAttribute
-            name="Purchased On"
-            value={advert.purchaseDate.toString().substring(0, 10)}
-          ></ProductAttribute>
-        )}
-        {advert?.expirationDate && (
-          <ProductAttribute
-            name="Expires On"
-            value={`${advert.expirationDate.toString().substring(0, 10)}`}
-          ></ProductAttribute>
-        )}
+        <ProductAttribute name="Color" value={advert?.color ?? 'N.A'} />
+        <ProductAttribute
+          name="Purchased On"
+          value={
+            advert.purchaseDate
+              ? advert.purchaseDate.toString().substring(0, 10)
+              : 'N.A'
+          }
+        />
+        <ProductAttribute
+          name="Expires On"
+          value={
+            advert.expirationDate
+              ? advert.expirationDate.toString().substring(0, 10)
+              : 'N.A'
+          }
+        />
         <div
           style={{
             display: 'flex',
-            flexDirection: 'row',
-            gap: '20%',
-            alignItems: 'start',
-            justifyContent: 'start',
-            marginTop: '5%',
-            width: 'auto',
+            flexDirection: matches1 ? 'row' : 'column',
+            gap: matches1 ? 95 : 0,
           }}
         >
           <ProductAttribute
@@ -93,17 +92,15 @@ const ProductDetails = (advert: PopulatedAdvert) => {
             value={advert?.quantity}
             unit="pcs"
             border={true}
-          ></ProductAttribute>
+          />
           <ProductAttribute
             name="Price"
             value={advert?.price}
             unit="€"
             border={true}
-          ></ProductAttribute>
+          />
         </div>
       </div>
     </div>
   );
 };
-
-export { ProductDetails };

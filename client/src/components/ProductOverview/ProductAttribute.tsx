@@ -1,5 +1,4 @@
-import { fontSize } from '@mui/system';
-import React from 'react';
+import React, { FC } from 'react';
 import { BodyText } from '../Text/BodyText';
 
 type ProductAttributeProps = {
@@ -10,7 +9,7 @@ type ProductAttributeProps = {
   margin?: string;
   fontSize?: string;
 };
-const ProductAttribute: React.FC<ProductAttributeProps> = (props) => {
+const ProductAttribute: FC<ProductAttributeProps> = (props) => {
   return (
     <div
       style={{
@@ -19,33 +18,26 @@ const ProductAttribute: React.FC<ProductAttributeProps> = (props) => {
         flexDirection: 'row',
         textAlign: 'start',
         alignItems: 'center',
-        justifyContent: 'center',
-
-        gap: '30px',
-        color: 'black',
+        gap: 30,
       }}
     >
       <BodyText
         style={{
-          fontWeight: 'bold',
-          fontFamily: 'Poppins',
-          width: '150px',
-          fontSize: props.fontSize ? props.fontSize : '20px',
+          fontWeight: 600,
+          fontSize: props.fontSize ? props.fontSize : 20,
         }}
       >
         {props.name}:
       </BodyText>
       <BodyText
         style={{
-          width: '150px',
-          height: props.border ? '40px' : '',
-          borderRadius: '10px',
-          border: props?.border ? '3px solid black' : '',
+          width: 150,
+          borderRadius: 10,
+          border: props?.border ? '2px solid black' : '',
           textAlign: props.border ? 'center' : 'start',
-          justifyContent: 'start',
-          fontFamily: 'Poppins',
-          font: 'light',
-          fontSize: props.fontSize ? props.fontSize : '20px',
+          fontSize: props.fontSize ? props.fontSize : 20,
+          padding: 3
+
         }}
       >
         {`${props?.value} ${props?.unit ? props?.unit : ''}`}
