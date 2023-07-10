@@ -67,7 +67,7 @@ const Reviewbar: FC<ReviewBarProps> = (props) => {
                 }}
               >
                 {review.createdAt.toString().substring(0, 10)}
-                {Ratings(review.rating ? review.rating : 0)}
+                {Ratings(review.rating ? review.rating : 0, 'red')}
               </BodyText>
             </>
           }

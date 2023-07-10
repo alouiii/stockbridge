@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import edit from '../../assets/edit-pencil.svg';
 import review from '../../assets/carbon_review.svg';
 import { Button, Image } from 'react-bootstrap';
-import { Advert, PopulatedAdvert } from '../../api/collections/advert';
+import { PopulatedAdvert } from '../../api/collections/advert';
 import { EditAdvertModal } from './EditAdvertModal';
 import { BodyText } from '../Text/BodyText';
 import { EditReviewModal } from './EditReviewModal';
@@ -15,13 +15,13 @@ type ProductDetailsTopBarProps = {
 const ProductDetailsTopBar: React.FC<ProductDetailsTopBarProps> = (props) => {
   const [showAdvertModal, setShowAdvertModal] = useState(false);
   const [showReviewModal, setShowReviewModal] = useState(false);
+
   const closeModal = () => {
     if (props.owner) {
       setShowAdvertModal(false);
     } else {
       setShowReviewModal(false);
     }
-    window.location.reload();
   };
   const openModal = () => {
     if (props.owner) {
@@ -30,36 +30,37 @@ const ProductDetailsTopBar: React.FC<ProductDetailsTopBarProps> = (props) => {
       setShowReviewModal(true);
     }
   };
+
   return (
     <div
       style={{
+        width: '100%',
         display: 'flex',
         flexDirection: 'row',
-        width: '100%',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: '#FDDFE3',
+        paddingLeft: 15,
+        height: 100,
       }}
     >
       <BodyText
         style={{
-          fontFamily: 'poppins',
-          color: 'black',
-          width: '100%',
-          fontSize: '36px',
+          fontSize: 30,
           fontWeight: 600,
-          paddingLeft: '10px',
+          marginBottom: 0,
         }}
       >
         PRODUCT DETAILS
       </BodyText>
       <Button
         style={{
-          width: 'full',
-          marginRight: '20px',
           backgroundColor: 'transparent',
-          borderColor: 'transparent',
+          border: 'none',
         }}
         onClick={openModal}
       >
-        <Image src={props.owner ? edit : review}></Image>
+        <Image src={props.owner ? edit : review} width={40} height={40} />
       </Button>
       {showAdvertModal && (
         <EditAdvertModal

@@ -49,14 +49,9 @@ const ProductOverviewSection: React.FC<ProductOverviewSectionProps> = (
         alignItems: 'start',
         gap: '30px',
         width: 'auto',
-        marginTop: '10%',
-        marginBottom: '5%',
       }}
     >
-      <ProductDetailsTopBar
-        owner={owner}
-        advert={props.advert}
-      ></ProductDetailsTopBar>
+      <ProductDetailsTopBar owner={owner} advert={props.advert} />
       <div
         style={{
           background: '#FDDFE3',

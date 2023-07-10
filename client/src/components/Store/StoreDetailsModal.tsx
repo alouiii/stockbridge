@@ -188,7 +188,7 @@ const StoreDetailsModal: FC<StoreDetailsProps> = (props) => {
               <Form.Label>
                 {props.advert?.type === 'Sell' ? 'Seller' : 'Buyer'}:{' '}
                 {props.storeName}
-                {Ratings(props.rating ? props.rating : 0)}
+                {Ratings(props.rating ? props.rating : 0, 'red')}
               </Form.Label>
             </Row>
             <Row>

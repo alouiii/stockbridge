@@ -18,7 +18,7 @@ const StoreDetailsBar: React.FC<StoreDetailsBarProps> = (props) => {
         flexDirection: 'column',
         paddingTop: 15,
         paddingLeft: 15,
-        paddingRight: 15,
+        paddingRight: 5,
       }}
     >
       <div>
@@ -46,7 +46,7 @@ const StoreDetailsBar: React.FC<StoreDetailsBarProps> = (props) => {
         </StoreDetailsElement>
         <StoreDetailsElement label="Rating">
           <BodyText style={{ color: 'white', fontSize: 24, margin: '0 5px' }}>
-            {Ratings(props.store?.rating ? props.store.rating : 0)}
+            {Ratings(props.store?.rating ? props.store.rating : 0, 'white')}
           </BodyText>
         </StoreDetailsElement>
       </div>

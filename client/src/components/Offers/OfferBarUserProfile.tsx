@@ -68,7 +68,7 @@ const OfferBarUserProfile: React.FC<OfferBarUserProfileProps> = (props) => {
               >
                 {/* The state does not work properly, this is a workaround that issue */}
                 {props.offer.offeror?.name ?? 'No Name given'}
-                {Ratings(props.offer.offeror?.rating ?? 0)}
+                {Ratings(props.offer.offeror?.rating ?? 0, 'red')}
               </BodyText>
               <BodyText
                 style={{
