@@ -35,6 +35,8 @@ const ProductOverview = () => {
   const { user } = useContext(LoginContext);
   const owner = store._id === user?._id;
 
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -44,6 +46,7 @@ const ProductOverview = () => {
             setStore(fetchedAdvert.store);
           }
           setAdvert(fetchedAdvert as PopulatedAdvert);
+          setIsLoading(false);
         }
       } catch (error) {
         console.error(error);
@@ -54,7 +57,7 @@ const ProductOverview = () => {
 
   return (
     <Page>
-      {advert ? (
+      {!isLoading ? (
         <div
           style={{
             width: '100%',
@@ -74,9 +77,7 @@ const ProductOverview = () => {
             <ReviewsSection advert={advert} />
           )}
         </div>
-      ) : (
-        <p>Loading ...</p>
-      )}
+      ) : undefined}
     </Page>
   );
 };
