@@ -1,19 +1,17 @@
 import React, { FC } from 'react';
-import { BodyText } from '../../Text/BodyText';
 import { FadeLoader } from 'react-spinners';
 import { palette } from '../../../utils/colors';
-import { ReviewCard } from './ReviewCard';
+import { BodyText } from '../../Text/BodyText';
 import { ReviewDisplay } from '../../Reviews/ReviewsSection';
+import { ReviewCard } from './ReviewCard';
 
-
-export const ReviewsGrid: FC<ReviewDisplay> = (props) => {
+export const ReviewList: FC<ReviewDisplay> = (props) => {
   return (
     <div
-      className="row"
       style={{
         display: 'flex',
+        flexDirection: 'column',
         justifyContent: 'center',
-        flexWrap: 'wrap',
         gap: 50,
         alignItems: 'center',
       }}
@@ -21,26 +19,14 @@ export const ReviewsGrid: FC<ReviewDisplay> = (props) => {
       {props.reviews ? (
         props.reviews.length > 0 ? (
           props.reviews.map((item, index) => (
-            <div
-              className="col-md-4 mb-4"
-              key={item._id}
-              style={{
-                flex: '1 0 300px',
-                maxWidth: '300px',
-                marginRight: '20px',
-                marginBottom: '20px',
-                display: 'flex',
-                justifyContent: 'center',
-              }}
-            >
-              <ReviewCard
-                key={index}
-                name={item.reviewer.name ?? ''}
-                date={new Date(item.createdAt)}
-                description={item.description}
-                rating={item.rating}
-              />
-            </div>
+            <ReviewCard
+              key={index}
+              name={item.reviewer.name ?? ''}
+              date={new Date(item.createdAt)}
+              description={item.description}
+              rating={item.rating}
+              style={{width: "100%"}}
+            />
           ))
         ) : (
           <div

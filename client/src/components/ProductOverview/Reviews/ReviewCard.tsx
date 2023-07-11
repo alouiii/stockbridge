@@ -1,26 +1,30 @@
-import React, { FC } from 'react';
+import React, { CSSProperties, FC } from 'react';
+import { Ratings } from '../../Ratings';
 
 interface ReviewCardProps {
   name: string;
   description: string;
   date: Date;
   rating: number;
+  style?: CSSProperties
 }
 
 export const ReviewCard: FC<ReviewCardProps> = (props) => {
   return (
     <div
       style={{
-        minHeight: 100,
-        border: '1px solid gray',
-        borderRadius: 12,
+        minWidth: 300,
+        minHeight: 150,
+        border: '1.5px solid lightgray',
+        borderRadius: 15,
         display: 'flex',
         flexDirection: 'column',
         padding: 16,
+        ...props.style
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <div>{'Orchids'}</div>
+        <div>{props.name}</div>
         <div
           style={{
             display: 'flex',
@@ -28,17 +32,25 @@ export const ReviewCard: FC<ReviewCardProps> = (props) => {
             alignItems: 'flex-end',
           }}
         >
-          <div>10.05.23</div>
-          <div>{"5"}</div>
+          <div>
+            {props.date.toLocaleDateString('it', {
+              day: '2-digit',
+              month: '2-digit',
+              year: '2-digit',
+            })}
+          </div>
+          <div>{Ratings(props.rating ? props.rating : 0, 'red')}</div>
         </div>
       </div>
       <div
         style={{
           flexGrow: 1,
           wordBreak: 'break-all',
+          display: 'flex',
+          alignItems: 'flex-end',
         }}
       >
-        {'kksjfksjfkdjfksdjfksdkfjskjfksjfksjkfjsdkjdkdksjdksakdjaskjdkasjdkajskdaskdjkfksdjfkskfskf'}
+        {props.description}
       </div>
     </div>
   );

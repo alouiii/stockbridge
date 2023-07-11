@@ -73,7 +73,7 @@ const ProductOverview = () => {
               rating={store.rating || 0}
             />
           )}
-          {advert.reviews && advert.reviews.length > 0 && advert._id && (
+          {advert.reviews && advert._id && (
             <ReviewsSection advert={advert} />
           )}
         </div>
