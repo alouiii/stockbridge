@@ -71,17 +71,18 @@ export const OffersSection: FC<OffersSectionProps> = (props) => {
     return (
       <>
         {offers.length > 0 ? (
-          <>
+          <div style={{ padding: '0 30px 30px', width: '100%' }}>
             <BodyText
               style={{
                 fontSize: '24px',
                 fontWeight: 600,
                 color: colorMap(status),
+                textAlign: "center"
               }}
             >
               {status}
             </BodyText>
-            <div style={{ width: '100%' }}>
+            <div>
               {offers.map((offer, index) => (
                 <OfferCard
                   key={index}
@@ -98,7 +99,7 @@ export const OffersSection: FC<OffersSectionProps> = (props) => {
                 />
               ))}
             </div>
-          </>
+          </div>
         ) : undefined}
       </>
     );
@@ -114,7 +115,6 @@ export const OffersSection: FC<OffersSectionProps> = (props) => {
               display: 'flex',
               alignItems: 'center',
               flexDirection: 'column',
-              padding: '0 30px 30px',
             }}
           >
             {renderOffersForStatus(status)}
