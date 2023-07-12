@@ -59,7 +59,11 @@ const ProductDetailsTopBar: React.FC<ProductDetailsTopBarProps> = (props) => {
         }}
         onClick={openModal}
       >
-        <Image src={props.owner ? edit : review} width={40} height={40} />
+        <Image
+          src={props.owner ? edit : review}
+          width={props.owner ? 25 : 40}
+          height={props.owner ? 25 : 40}
+        />
       </Button>
       {showAdvertModal && (
         <EditAdvertModal
