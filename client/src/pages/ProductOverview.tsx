@@ -2,12 +2,12 @@ import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Colors, getAdvert, PopulatedAdvert } from '../api/collections/advert';
 import { User } from '../api/collections/user';
-import { OffersSection } from '../components/Offers/OffersSection';
 import { Page } from '../components/Page';
 import { ProductOverviewSection } from '../components/ProductOverview/ProductOverviewSection';
 import { ReviewsSection } from '../components/Reviews/ReviewsSection';
 import { StoreDetailsBar } from '../components/Store/StoreDetailsBar';
 import { LoginContext } from '../contexts/LoginContext';
+import { OffersSection } from '../components/ProductOverview/Offers/OffersSection';
 
 const ProductOverview = () => {
   const { id } = useParams();
@@ -66,16 +66,14 @@ const ProductOverview = () => {
         >
           <StoreDetailsBar category={advert.category} store={store} />
           <ProductOverviewSection advert={advert} store={store} />
-          {owner && advert.offers && advert.offers.length > 0 && (
+          {owner && advert.offers && (
             <OffersSection
               advert={advert}
-              storeName={store.name || ''}
-              rating={store.rating || 0}
+              storeName={store.name ?? ''}
+              rating={store.rating ?? 0}
             />
           )}
-          {advert.reviews && advert._id && (
-            <ReviewsSection advert={advert} />
-          )}
+          {advert.reviews && advert._id && <ReviewsSection advert={advert} />}
         </div>
       ) : undefined}
     </Page>

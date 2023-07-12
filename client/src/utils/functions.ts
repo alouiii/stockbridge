@@ -1,5 +1,6 @@
 // in this file we put the main functions we need
 import { ChangeEvent } from 'react';
+import { OfferStatus } from '../api/collections/offer';
 
 export function checkEmail(email: string) {
   return /^\w+([.-]?\w+)*@\w+(.-]?\w+)*(\.\w{2,3})+$/.test(email);
@@ -116,4 +117,19 @@ export function checkExpirationDateAvert(date: string) {
     return true;
   }
   return false;
+}
+
+export function colorMap(status: OfferStatus): string {
+  switch (status) {
+    case OfferStatus.OPEN:
+      return '#4285F4';
+    case OfferStatus.ACCEPTED:
+      return '#4ECBA9';
+    case OfferStatus.REJECTED:
+      return 'red';
+    case OfferStatus.CANCELED:
+      return '#ffc071';
+    default:
+      return '#4285F4';
+  }
 }

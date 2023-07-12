@@ -15,7 +15,7 @@ type ReviewsSectionProps = {
   advert: PopulatedAdvert;
 };
 
-enum DisplayModality {
+export enum DisplayModality {
   LIST,
   GRID,
 }

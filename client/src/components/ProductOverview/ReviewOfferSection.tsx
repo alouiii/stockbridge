@@ -12,7 +12,6 @@ const ReviewOfferSection: FC<ReviewOfferSectionProps> = (props) => {
       style={{
         alignItems: 'center',
         justifyContent: 'center',
-        paddingLeft: 15,
         paddingTop: 15,
       }}
     >
@@ -20,6 +19,7 @@ const ReviewOfferSection: FC<ReviewOfferSectionProps> = (props) => {
         style={{
           fontSize: 30,
           fontWeight: 600,
+          paddingLeft: 15,
         }}
       >
         {props.section}
