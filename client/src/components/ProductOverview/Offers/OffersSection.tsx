@@ -9,6 +9,8 @@ import {
 import { OfferCard } from './OfferCard';
 import { BodyText } from '../../Text/BodyText';
 import { colorMap } from '../../../utils/functions';
+import { Button, Image } from 'react-bootstrap';
+import filtersIcon from '../../../assets/filters.svg';
 
 interface OffersSectionProps {
   advert: PopulatedAdvert;
@@ -77,7 +79,7 @@ export const OffersSection: FC<OffersSectionProps> = (props) => {
                 fontSize: '24px',
                 fontWeight: 600,
                 color: colorMap(status),
-                textAlign: "center"
+                textAlign: 'center',
               }}
             >
               {status}
@@ -107,6 +109,25 @@ export const OffersSection: FC<OffersSectionProps> = (props) => {
 
   return (
     <ReviewOfferSection section="OFFERS">
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+          gap: 10,
+          marginTop: -16,
+        }}
+      >
+        <Button
+          style={{
+            background: 'transparent',
+            border: 'transparent',
+          }}
+        >
+          <Image src={filtersIcon} width={40} height={40} />
+        </Button>
+      </div>
       {offers.length > 0 ? (
         Object.values(OfferStatus).map((status) => (
           <div
