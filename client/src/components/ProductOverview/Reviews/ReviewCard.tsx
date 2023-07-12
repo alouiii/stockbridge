@@ -15,7 +15,7 @@ export const ReviewCard: FC<ReviewCardProps> = (props) => {
       style={{
         minWidth: 300,
         minHeight: 150,
-        border: '1.5px solid lightgray',
+        border: '3px solid lightgray',
         borderRadius: 15,
         display: 'flex',
         flexDirection: 'column',
