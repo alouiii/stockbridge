@@ -9,8 +9,6 @@ import {
 import { OfferCard } from './OfferCard';
 import { BodyText } from '../../Text/BodyText';
 import { colorMap } from '../../../utils/functions';
-import { Button, Image } from 'react-bootstrap';
-import filtersIcon from '../../../assets/filters.svg';
 
 interface OffersSectionProps {
   advert: PopulatedAdvert;
