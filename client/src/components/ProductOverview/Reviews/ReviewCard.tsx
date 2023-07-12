@@ -1,12 +1,13 @@
 import React, { CSSProperties, FC } from 'react';
 import { Ratings } from '../../Ratings';
+import { BodyText } from '../../Text/BodyText';
 
 interface ReviewCardProps {
   name: string;
   description: string;
   date: Date;
   rating: number;
-  style?: CSSProperties
+  style?: CSSProperties;
 }
 
 export const ReviewCard: FC<ReviewCardProps> = (props) => {
@@ -20,11 +21,13 @@ export const ReviewCard: FC<ReviewCardProps> = (props) => {
         display: 'flex',
         flexDirection: 'column',
         padding: 16,
-        ...props.style
+        ...props.style,
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <div>{props.name}</div>
+        <BodyText style={{ fontSize: 18, marginBottom: 0 }}>
+          {props.name}
+        </BodyText>
         <div
           style={{
             display: 'flex',
@@ -32,13 +35,13 @@ export const ReviewCard: FC<ReviewCardProps> = (props) => {
             alignItems: 'flex-end',
           }}
         >
-          <div>
+          <BodyText style={{ fontSize: 18, marginBottom: 0 }}>
             {props.date.toLocaleDateString('it', {
               day: '2-digit',
               month: '2-digit',
               year: '2-digit',
             })}
-          </div>
+          </BodyText>
           <div>{Ratings(props.rating ? props.rating : 0, 'red')}</div>
         </div>
       </div>
