@@ -4,7 +4,7 @@ import { ProductDetailsTopBar } from './ProductDetailsTopBar';
 import { ProductDetails } from './ProductDetails';
 
 import { Button } from 'react-bootstrap';
-import { PopulatedAdvert } from '../../api/collections/advert';
+import { AdvertStatus, PopulatedAdvert } from '../../api/collections/advert';
 import { OfferModal } from '../Offers/OfferModal';
 import { User } from '../../api/collections/user';
 import { LoginContext } from '../../contexts/LoginContext';
@@ -76,10 +76,12 @@ const ProductOverviewSection: React.FC<ProductOverviewSectionProps> = (
           storeName={props.store.name}
           rating={props.store.rating}
         />
+       
         <PriorizationModal
           isShowing={showPriorizationModal}
           onClose={closePriorizationModal}
         />
+         {props.advert.status !== AdvertStatus.Closed &&
         <Button
           style={{
             cursor: 'pointer',
@@ -101,6 +103,7 @@ const ProductOverviewSection: React.FC<ProductOverviewSectionProps> = (
         >
           {button_text}
         </Button>
+        }
       </div>
     </div>
   );

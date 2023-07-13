@@ -71,7 +71,7 @@ const ProductOverview = () => {
             />
           )}
           {advert.reviews && advert.reviews.length > 0 && advert._id && (
-            <ReviewsSection advert={advert} />
+            <ReviewsSection advert={advert}/>
           )}
         </div>
       ) : (

@@ -3,7 +3,6 @@ import { BodyText } from '../Text/BodyText';
 import { ProductAttribute } from './ProductAttribute';
 import { Image } from 'react-bootstrap';
 import imagePlaceholder from '../../assets/product-placeholder.png';
-
 const ProductDetails = (advert: PopulatedAdvert) => {
   console.log(advert);
   return (
@@ -26,7 +25,6 @@ const ProductDetails = (advert: PopulatedAdvert) => {
         }}
         src={advert?.imageurl ? advert?.imageurl : imagePlaceholder}
       />
-
       <div
         style={{
           display: 'flex',

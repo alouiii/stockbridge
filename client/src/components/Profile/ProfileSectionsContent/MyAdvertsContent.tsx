@@ -5,6 +5,7 @@ import ProductInfoBar from '../ProductInfoBar';
 import {
   PopulatedAdvert,
   getAdvertsByUser,
+  AdvertStatus,
 } from '../../../api/collections/advert';
 import NoResultsMessage from '../NoResultsMessage';
 import { LoginContext } from '../../../contexts/LoginContext';
@@ -27,7 +28,17 @@ const MyAdvertsContent: React.FC = () => {
     const fetchData = async () => {
       try {
         const fetchedAdverts = await getAdvertsByUser(user?._id);
-        let sellingAds = fetchedAdverts.filter((x) => x.type === 'Sell');
+        let sellingAds = fetchedAdverts.filter((x) => x.type === 'Sell').sort((a,b) => {
+          if (a.status === AdvertStatus.Closed && b.status !== AdvertStatus.Closed) {
+            return 1
+          } else {
+            if (b.status === AdvertStatus.Closed && a.status !== AdvertStatus.Closed) {
+              return 0
+            } else {
+              return 1
+            }
+          }
+        });
         setSellingAdverts(sellingAds as PopulatedAdvert[]);
         let buyingAds = fetchedAdverts.filter((x) => x.type === 'Ask');
         setBuyingAdverts(buyingAds as PopulatedAdvert[]);
@@ -83,9 +94,10 @@ const MyAdvertsContent: React.FC = () => {
                 quantity={product.quantity}
                 price={product.price}
                 highlight={searchText}
+                status={product.status}
               />
             );
-          }) : <NoResultsMessage />}
+          }) : <NoResultsMessage/>}
         </ContentTab>
         <ContentTab title="Buying Ads">
           {buyingAdverts.length > 0 ? sortedAndFilteredItems(buyingAdverts).map((product, _) => {
@@ -98,9 +110,10 @@ const MyAdvertsContent: React.FC = () => {
                 quantity={product.quantity}
                 price={product.price}
                 highlight={searchText}
+                status={product.status ? product.status : undefined}
               />
             );
-          }) : <NoResultsMessage />}
+          }) : <NoResultsMessage/>}
         </ContentTab>
         
       </Tabs>

@@ -12,9 +12,10 @@ import {
   getAdvertsByStore,
 } from '../services/advertServices';
 import { AuthenticatedRequest } from '../middlewares/authMiddleware';
-import { Advert, ProductCategory } from '../entities/advertEntity';
+import { Advert, AdvertStatus, ProductCategory } from '../entities/advertEntity';
 import { ObjectId } from 'mongodb';
 import { AppError } from '../utils/errorHandler';
+import logger from '../config/logger';
 
 /**
  * This method returns an advert by id   *
@@ -192,13 +193,20 @@ export const getPopularAdverts = asyncHandler(
 async function _checkUserCanEditOrDeleteAdvert(req: AuthenticatedRequest) {
   let userId = new ObjectId(req.user?.id);
   const { id } = req.params;
-
+  const advert = await findAdvertById(id, false)
   // The user editing or deleting must be the one who created the advert.
-  if (!(await findAdvertById(id, false)).store.equals(userId)) {
+  if (!advert.store.equals(userId)) {
     throw new AppError(
       'Not authorized to edit this route',
       'Not authorized to edit this route',
       401,
+    );
+  }
+  if (advert.status !== AdvertStatus.Ongoing) {
+    throw new AppError(
+      'Not authorized to edit this advert',
+      'Not authorized to edit this advert',
+      600,
     );
   }
 }

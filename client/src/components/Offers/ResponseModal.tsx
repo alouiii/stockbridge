@@ -4,8 +4,8 @@ import { BodyText } from '../Text/BodyText';
 import success from '../../assets/success.svg';
 import fail from '../../assets/fail.svg';
 import { Image } from 'react-bootstrap';
-import { PopulatedOffer } from '../../api/collections/offer';
 import { useNavigate } from 'react-router-dom';
+import { Offer } from '../../api/collections/offer';
 
 export enum ResponseType {
   SUCCESSFUL_OFFER_CREATION,
@@ -19,7 +19,7 @@ export enum ResponseType {
 type OfferCreationModalProps = {
   responseType: ResponseType;
   isShowing: boolean;
-  offer: PopulatedOffer;
+  offer: Offer;
   onClose: (responseType: ResponseType) => void;
 };
 
@@ -111,19 +111,7 @@ const ResponseModal: FC<OfferCreationModalProps> = (props) => {
                 left: '30%',
               }}
             >
-              Offer {creation ? `to` : `from`}{' '}
-              <p
-                style={{
-                  fontWeight: 600,
-                  marginLeft: 4,
-                  marginRight: 4,
-                }}
-              >
-                {creation
-                  ? props.offer.offeree?.name
-                  : props.offer.offeror?.name}
-              </p>{' '}
-              was {successfull ? 'successfully' : 'not successfully'}{' '}
+              Offer was {successfull ? 'successfully' : 'not successfully'}{' '}
               {creation ? 'created' : acceptance ? 'accepted' : 'rejected'}!
             </BodyText>
             <BodyText
