@@ -1,4 +1,4 @@
-import { Advert, PopulatedAdvert } from '../../api/collections/advert';
+import { PopulatedAdvert } from '../../api/collections/advert';
 import { BodyText } from '../Text/BodyText';
 import { ProductAttribute } from './ProductAttribute';
 import { Image } from 'react-bootstrap';

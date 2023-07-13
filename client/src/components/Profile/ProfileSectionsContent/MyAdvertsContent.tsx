@@ -1,9 +1,8 @@
-import React, { ReactElement, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Tabs, { AdvertSortCriteria, OfferSortCriteria } from '../../ContentTabs/Tabs';
 import ContentTab from '../../ContentTabs/ContentTab';
 import ProductInfoBar from '../ProductInfoBar';
 import {
-  Advert,
   PopulatedAdvert,
   getAdvertsByUser,
 } from '../../../api/collections/advert';
@@ -13,10 +12,10 @@ import { LoginContext } from '../../../contexts/LoginContext';
 /**
  * Component that displays the content of MyAdverts section.
  */
-const MyAdvertsContent: React.FC = ({}) => {
+const MyAdvertsContent: React.FC = () => {
   const [buyingAdverts, setBuyingAdverts] = useState([] as PopulatedAdvert[]);
   const [sellingAdverts, setSellingAdverts] = useState([] as PopulatedAdvert[]);
-  const { user, loggedIn } = useContext(LoginContext);
+  const { user } = useContext(LoginContext);
 
   const [searchText, setSearchText] = useState("");
   const [sortCriteria, setSortCriteria] = useState<AdvertSortCriteria | OfferSortCriteria>(AdvertSortCriteria.NONE);
@@ -37,7 +36,7 @@ const MyAdvertsContent: React.FC = ({}) => {
       }
     };
     fetchData();
-  }, []);
+  }, [user?._id]);
 
 
 

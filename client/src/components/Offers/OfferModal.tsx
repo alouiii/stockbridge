@@ -37,7 +37,7 @@ function colorMap(status: OfferStatus): string {
   }
 }
 const OfferModal: FC<OfferContentProps> = (props) => {
-  const { user, loggedIn } = useContext(LoginContext);
+  const { user } = useContext(LoginContext);
 
   const [formData, setFormData] = useState({
     quantity: props.offer?.quantity ? props.offer?.quantity : 0,

@@ -1,9 +1,7 @@
 import React, { FC, useContext, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import {
-  Advert,
   PopulatedAdvert,
-  updateAdvert,
 } from '../../api/collections/advert';
 import { Review, createReview } from '../../api/collections/review';
 import { LoginContext } from '../../contexts/LoginContext';
@@ -30,28 +28,15 @@ const EditReviewModal: FC<EditReviewContentProps> = (props) => {
   };
   const handleDescriptionChange = (event: any) => {
     event.preventDefault();
-    const { _, value } = event.target;
+    const { value } = event.target;
     setDescription(value);
-  };
-
-  // todo: check file format (only picture formats allowed)
-  const handleFileInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
-    if (event.target.files) {
-      const file = event.target.files[0];
-      if (file != undefined) {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onloadend = () => {};
-      }
-    }
   };
 
   const validationErrors = {
     description: false,
     rating: false,
   };
-  const { user, loggedIn } = useContext(LoginContext);
+  const { user } = useContext(LoginContext);
   const handleSubmit = async () => {
     if (!description) {
       validationErrors.description = true;
@@ -65,7 +50,7 @@ const EditReviewModal: FC<EditReviewContentProps> = (props) => {
     } else {
       try {
         if (props.advert) {
-          const createdReview = await createReview({
+           await createReview({
             description: description,
             rating: rating,
             reviewer: user!._id,

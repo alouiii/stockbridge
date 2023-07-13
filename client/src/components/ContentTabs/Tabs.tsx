@@ -1,8 +1,6 @@
 import React, { ReactElement, useState } from 'react';
 import ContentTabTitle from './ContentTabTitle';
-import { Button, Form } from 'react-bootstrap';
-import { PopulatedAdvert } from '../../api/collections/advert';
-import { PopulatedOffer } from '../../api/collections/offer';
+import { Button } from 'react-bootstrap';
 //import styles from "./styles.css";
 require('./tabStyles.scss');
 
