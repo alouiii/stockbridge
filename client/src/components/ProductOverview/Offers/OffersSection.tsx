@@ -9,6 +9,14 @@ import {
 import { OfferCard } from './OfferCard';
 import { BodyText } from '../../Text/BodyText';
 import { colorMap } from '../../../utils/functions';
+import { Button, Image } from 'react-bootstrap';
+import sortingUpIcon from '../../../assets/sortUpAlt.svg';
+import sortingDownIcon from '../../../assets/sortDownAlt.svg';
+import {
+  AdvertSortCriteria,
+  ExtraCriteria,
+  OfferSortCriteria,
+} from '../../ContentTabs/Tabs';
 
 interface OffersSectionProps {
   advert: PopulatedAdvert;
@@ -25,6 +33,18 @@ export interface OfferDisplay {
 
 export const OffersSection: FC<OffersSectionProps> = (props) => {
   const [offers, setOffers] = useState<PopulatedOffer[]>([]);
+
+  const [sortCriteria, setSortCriteria] = useState<
+    AdvertSortCriteria | OfferSortCriteria
+  >(AdvertSortCriteria.NONE);
+  // False == order asc , True == order desc
+  const [sortOrder, setSortOrder] = useState(false);
+
+  const advertValues = Object.values(AdvertSortCriteria);
+  const offerValues = [
+    ...Object.values(AdvertSortCriteria),
+    ...Object.values(ExtraCriteria),
+  ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,6 +87,44 @@ export const OffersSection: FC<OffersSectionProps> = (props) => {
     }
   };
 
+  function sortedAndFilteredItems(list: PopulatedOffer[]): PopulatedOffer[] {
+    let result = list.sort((a, b) => {
+      switch (sortCriteria) {
+        case AdvertSortCriteria.NONE:
+          return 0;
+        case AdvertSortCriteria.NAME:
+          return (a.advert?.productname ?? '').localeCompare(
+            b.advert?.productname ?? '',
+          );
+        case AdvertSortCriteria.DATE:
+          return (a.createdAt ?? '') > (b.createdAt ?? '')
+            ? 1
+            : (a.createdAt ?? '') < (b.createdAt ?? '')
+            ? -1
+            : 0;
+        case AdvertSortCriteria.PRICE:
+          return (a.price ?? 0) - (b.price ?? 0);
+        case AdvertSortCriteria.Quantity:
+          return (a.quantity ?? 0) - (b.quantity ?? 0);
+        case ExtraCriteria.STATUS: // ????
+          return (a.status ?? '').localeCompare(b.status ?? '');
+        case ExtraCriteria.STORE: // ????
+          return (a?.advert?.store ?? '').localeCompare(b?.advert?.store ?? '');
+        default:
+          return 0;
+      }
+    });
+    return sortOrder ? result : result.reverse();
+  }
+
+  const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSortCriteria(event.target.value as AdvertSortCriteria);
+  };
+
+  const handleToggleSortOrder = () => {
+    setSortOrder(!sortOrder);
+  };
+
   const renderOffers = (status: OfferStatus, offers: PopulatedOffer[]) => {
     return (
       <>
@@ -107,7 +165,58 @@ export const OffersSection: FC<OffersSectionProps> = (props) => {
 
   return (
     <ReviewOfferSection section="OFFERS">
-      {offers.length > 0 ? (
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+          marginTop: -16,
+          marginRight: 12,
+        }}
+      >
+        <BodyText
+          style={{
+            color: '#f86c6c',
+            fontWeight: '500',
+            fontSize: 23,
+            marginBottom: 0,
+            marginRight: 10,
+          }}
+        >
+          Sort by
+        </BodyText>
+        <select
+          onChange={handleSortChange}
+          style={{
+            padding: 6,
+            borderRadius: 8,
+            borderColor: '#f86c6c',
+            color: 'grey',
+            height: 33,
+          }}
+        >
+          {offerValues.map((item, _) => (
+            <option value={item}>{item}</option>
+          ))}
+        </select>
+        <Button
+          style={{
+            alignSelf: 'center',
+            background: 'none',
+            border: 'none',
+          }}
+          onClick={handleToggleSortOrder}
+        >
+          <Image
+            src={!sortOrder ? sortingUpIcon : sortingDownIcon}
+            width={33}
+            height={33}
+          />
+        </Button>
+      </div>
+
+      {sortedAndFilteredItems(offers).length > 0 ? (
         Object.values(OfferStatus).map((status) => (
           <div
             key={status}
