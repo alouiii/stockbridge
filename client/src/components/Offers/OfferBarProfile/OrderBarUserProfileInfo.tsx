@@ -34,7 +34,7 @@ const OrderBarUserProfileInfo: React.FC<OrderBarUserProfileInfoProps> = (props) 
       case OfferStatus.OPEN:
         return ["bi-clock-history", "#4285F4"];
 
-      case OfferStatus.CANCELED:
+      case OfferStatus.CANCELED_USER:
         return ["bi-dash-circle", "#ffc071"]
       default:
         return ["bi-dash-circle", "#ffc071"]
