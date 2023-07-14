@@ -89,7 +89,7 @@ export const OfferCard: FC<OfferCardProps> = (props) => {
             <BodyText
               style={{ fontWeight: 400, display: 'inline', marginLeft: 10 }}
             >
-              {props.offer.quantity + '€'}
+              {props.offer.quantity + ' pcs'}
             </BodyText>
           </BodyText>
           <BodyText style={{ fontWeight: 600, fontSize: 20, marginBottom: 0 }}>
@@ -97,7 +97,7 @@ export const OfferCard: FC<OfferCardProps> = (props) => {
             <BodyText
               style={{ fontWeight: 400, display: 'inline', marginLeft: 10 }}
             >
-              {props.offer.price + '€'}
+              {props.offer.price + ' €'}
             </BodyText>
           </BodyText>
         </div>
