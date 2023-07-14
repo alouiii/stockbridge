@@ -160,6 +160,7 @@ const ReviewsSection: FC<ReviewsSectionProps> = (props) => {
             borderColor: '#f86c6c',
             color: 'grey',
             height: 33,
+            width: 100,
           }}
         >
           {reviewValues.map((item, _) => (

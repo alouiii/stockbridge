@@ -33,12 +33,11 @@ export interface OfferDisplay {
 
 export const OffersSection: FC<OffersSectionProps> = (props) => {
   const [offers, setOffers] = useState<PopulatedOffer[]>([]);
-
   const [sortCriteria, setSortCriteria] = useState<
     AdvertSortCriteria | OfferSortCriteria
   >(AdvertSortCriteria.NONE);
-  // False == order asc , True == order desc
   const [sortOrder, setSortOrder] = useState(false);
+  const [expandedSections, setExpandedSections] = useState<OfferStatus[]>([]);
 
   const offerValues = [
     ...Object.values(AdvertSortCriteria),
@@ -68,22 +67,98 @@ export const OffersSection: FC<OffersSectionProps> = (props) => {
     (o) => o.status === OfferStatus.REJECTED,
   );
   const canceledOffers = offers.filter(
-    (o) => o.status === OfferStatus.CANCELED_USER || OfferStatus.CANCELED_OUT_OF_STOCK,
+    (o) =>
+      o.status === OfferStatus.CANCELED_USER ||
+      o.status === OfferStatus.CANCELED_OUT_OF_STOCK,
   );
 
   const renderOffersForStatus = (status: OfferStatus) => {
+    const isExpanded = expandedSections.includes(status);
+
+    const toggleSection = () => {
+      if (isExpanded) {
+        setExpandedSections(expandedSections.filter((s) => s !== status));
+      } else {
+        setExpandedSections([...expandedSections, status]);
+      }
+    };
+
+    let statusOffers: PopulatedOffer[] = [];
+
     switch (status) {
       case OfferStatus.OPEN:
-        return renderOffers(status, openOffers);
+        statusOffers = openOffers;
+        break;
       case OfferStatus.ACCEPTED:
-        return renderOffers(status, acceptedOffers);
+        statusOffers = acceptedOffers;
+        break;
       case OfferStatus.REJECTED:
-        return renderOffers(status, rejectedOffers);
+        statusOffers = rejectedOffers;
+        break;
       case OfferStatus.CANCELED_USER || OfferStatus.CANCELED_OUT_OF_STOCK:
-        return renderOffers(status, canceledOffers);
+        statusOffers = canceledOffers;
+        break;
       default:
         return null;
     }
+
+    if (statusOffers.length === 0) {
+      return null;
+    }
+
+    return (
+      <div key={status} style={{ width: '100%' }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            cursor: 'pointer',
+            padding: '0 10px',
+          }}
+          onClick={toggleSection}
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <BodyText
+              style={{
+                fontSize: '24px',
+                fontWeight: 600,
+                color: colorMap(status),
+                textAlign: 'center',
+                marginRight: 10,
+              }}
+            >
+              {status}
+            </BodyText>
+          </div>
+          <div style={{ fontSize: '24px', fontWeight: 600, color: '#000' }}>
+            {isExpanded ? '-' : '+'}
+          </div>
+        </div>
+        {isExpanded && (
+          <div>
+            {statusOffers.map((offer, index) => (
+              <OfferCard
+                key={index}
+                status={status}
+                offer={offer}
+                advert={offer.advert as PopulatedAdvert}
+                style={{
+                  borderColor: colorMap(status),
+                  marginBottom: 50,
+                }}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    );
   };
 
   function sortedAndFilteredItems(list: PopulatedOffer[]): PopulatedOffer[] {
@@ -124,46 +199,11 @@ export const OffersSection: FC<OffersSectionProps> = (props) => {
     setSortOrder(!sortOrder);
   };
 
-  const renderOffers = (status: OfferStatus, offers: PopulatedOffer[]) => {
-    return (
-      <>
-        {offers.length > 0 ? (
-          <div style={{ padding: '0 30px 0', width: '100%' }}>
-            <BodyText
-              style={{
-                fontSize: '24px',
-                fontWeight: 600,
-                color: colorMap(status),
-                textAlign: 'center',
-              }}
-            >
-              {status}
-            </BodyText>
-            <div>
-              {offers.map((offer, index) => (
-                <OfferCard
-                  key={index}
-                  status={status}
-                  offer={offer}
-                  advert={offer.advert as PopulatedAdvert}
-                  style={{
-                    borderColor: colorMap(status),
-                    marginBottom: 50,
-                  }}
-                />
-              ))}
-            </div>
-          </div>
-        ) : undefined}
-      </>
-    );
-  };
-
   return (
     <ReviewOfferSection section="OFFERS">
       <div
         style={{
-          display: 'flex',
+          display: expandedSections.length > 0 ? 'flex' : 'none',
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'flex-end',
@@ -189,10 +229,13 @@ export const OffersSection: FC<OffersSectionProps> = (props) => {
             borderColor: '#f86c6c',
             color: 'grey',
             height: 33,
+            width: 100,
           }}
         >
-          {offerValues.map((item, _) => (
-            <option value={item}>{item}</option>
+          {offerValues.map((item, index) => (
+            <option key={index} value={item}>
+              {item}
+            </option>
           ))}
         </select>
         <Button
@@ -212,18 +255,29 @@ export const OffersSection: FC<OffersSectionProps> = (props) => {
       </div>
 
       {sortedAndFilteredItems(offers).length > 0 ? (
-        Object.values(OfferStatus).map((status) => (
-          <div
-            key={status}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              flexDirection: 'column',
-            }}
-          >
-            {renderOffersForStatus(status)}
-          </div>
-        ))
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            flexDirection: 'column',
+          }}
+        >
+          {Object.values(OfferStatus).map((status) => (
+            <div
+              key={status}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                flexDirection: 'column',
+                width: '100%',
+                paddingLeft: 30,
+                paddingRight: 30,
+              }}
+            >
+              {renderOffersForStatus(status)}
+            </div>
+          ))}
+        </div>
       ) : (
         <div
           style={{
