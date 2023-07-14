@@ -46,15 +46,11 @@ export const createStripePaymentIntent = async (
     amount,
     currency: 'eur',
     customer: user.stripeCustomerId,
-    automatic_payment_methods: {
-      enabled: true,
-    },
     // payment_method: customer.default_source,
     metadata: {
       userId: user.id,
       product: product,
     },
-    setup_future_usage: 'off_session',
     ...config,
   });
 };

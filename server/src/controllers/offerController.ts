@@ -86,7 +86,7 @@ export const postOffer = asyncHandler(
 export const putOffer = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const { id } = req.params;
-    _checkUserCanEditOrDeleteOffer(req);
+    await _checkUserCanEditOrDeleteOffer(req);
 
     const offer = await updateOffer(id, req.body);
     res.status(200).json(offer);
@@ -102,7 +102,7 @@ export const putOffer = asyncHandler(
 export const deleteOffer = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const { id } = req.params;
-    _checkUserCanEditOrDeleteOffer(req);
+    await _checkUserCanEditOrDeleteOffer(req);
 
     const offer = await delOffer(id);
     res.status(204).json(offer);
@@ -224,8 +224,8 @@ async function _checkUserCanEditOrDeleteOffer(req: AuthenticatedRequest) {
   const { id } = req.params;
 
   // The user editing or deleting must be the offeror or offeree.
-  let offer = await findOfferById(id, false);
-  if (!offer.offeror.equals(userId) && !offer.offeror.equals(userId)) {
+  let offer: Offer = await findOfferById(id, false);
+  if (!offer.offeror.equals(userId) && !offer.offeree.equals(userId)) {
     throw new AppError(
       'Not authorized to edit this route',
       'Not authorized to edit this route',

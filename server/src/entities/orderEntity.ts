@@ -13,4 +13,5 @@ export interface Order {
   status: OrderStatus;
   offer: Offer;
   createdAt: Date;
+  paymentId: string;
 }

@@ -19,8 +19,6 @@ export const findAdvertById = async (id: string, populate = true) => {
     logger.error(`${serviceName}: Advert not found with id of ${id}`);
     throw new AppError('Advert not found', 'Advert not found', 404);
   }
-
-  logger.debug(`${serviceName}: Returning advert ${advert}`);
   return advert;
 };
 
@@ -41,7 +39,7 @@ export const createAdvert = async (advert: Advert) => {
  * @returns Promise containing the updated advert
  */
 export const updateAdvert = async (id: string, advert: Advert) => {
-  logger.debug(`${serviceName}: Updating advert with id: ${id} with ${advert}`);
+  logger.debug(`${serviceName}: Updating advert with id: ${id}`);
   return advertModel.findByIdAndUpdate(id, advert, {
     new: true,
     runValidators: true,
@@ -105,16 +103,15 @@ export const findAllAdverts = async (
   }*/
 
   if (search) {
-    const regex = new RegExp(search, "i"); //The "i" stands for case-insensitive matching.
+    const regex = new RegExp(search, 'i'); //The "i" stands for case-insensitive matching.
     queryFilter = {
       ...queryFilter,
       $or: [
         { description: { $regex: regex } },
         { productname: { $regex: regex } },
-      ]
+      ],
     };
   }
-
 
   if (radius) {
     queryFilter = {
