@@ -1,87 +1,118 @@
-import React, { CSSProperties, FC } from 'react';
+import React, { CSSProperties, FC, useState } from 'react';
 import { BodyText } from '../../Text/BodyText';
 import { Ratings } from '../../Ratings';
-import { OfferStatus } from '../../../api/collections/offer';
+import { OfferStatus, PopulatedOffer } from '../../../api/collections/offer';
+import { OfferModal } from '../../Offers/OfferModal';
+import { PopulatedAdvert } from '../../../api/collections/advert';
 
 interface OfferCardProps {
-  storeName: string;
-  quantity: number;
-  price: number;
-  date: Date | undefined;
-  rating: number;
   status: OfferStatus;
+  offer: PopulatedOffer;
+  advert: PopulatedAdvert
   style?: CSSProperties;
 }
 
 export const OfferCard: FC<OfferCardProps> = (props) => {
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const closeModal = () => {
+    setShowModal(false);
+  };
+  const closeModalOnSave = () => {
+    setShowModal(false);
+    //change to set Advert
+    window.location.reload();
+  };
+  const openModal = () => {
+    setShowModal(true);
+  };
+
   return (
-    <div
-      style={{
-        minWidth: 300,
-        minHeight: 150,
-        border: '3px solid lightgray',
-        borderRadius: 15,
-        display: 'flex',
-        flexDirection: 'column',
-        padding: 16,
-        ...props.style,
-      }}
-    >
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-          }}
-        >
-          <BodyText style={{ fontSize: 18, marginBottom: 0 }}>
-            {props.storeName}
-          </BodyText>
-          <div>{Ratings(props.rating ? props.rating : 0, 'red')}</div>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-end',
-          }}
-        >
-          <BodyText style={{ fontSize: 18, marginBottom: 0 }}>
-            {props.date
-              ? props.date.toLocaleDateString('it', {
-                  day: '2-digit',
-                  month: '2-digit',
-                  year: '2-digit',
-                })
-              : ''}
-          </BodyText>
-        </div>
-      </div>
+    <>
       <div
         style={{
-          flexGrow: 1,
-          wordBreak: 'break-all',
+          minWidth: 300,
+          minHeight: 150,
+          border: '3px solid lightgray',
+          borderRadius: 15,
           display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: 50,
+          flexDirection: 'column',
+          padding: 16,
+          ...props.style,
+          cursor: "pointer"
         }}
+        onClick={openModal}
       >
-        <BodyText style={{ fontWeight: 600, fontSize: 20, marginBottom: 0 }}>
-          Quantity:{' '}
-          <BodyText style={{ fontWeight: 400, display: 'inline',marginLeft: 10 }}>
-            {props.quantity + '€'}
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+            }}
+          >
+            <BodyText style={{ fontSize: 18, marginBottom: 0 }}>
+              {props.offer.advert?.productname}
+            </BodyText>
+            <div>{Ratings(props.offer.offeror?.rating ? props.offer.offeror.rating : 0, 'red')}</div>
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-end',
+            }}
+          >
+            <BodyText style={{ fontSize: 18, marginBottom: 0 }}>
+              {props.offer.createdAt
+                ? new Date(props.offer.createdAt).toLocaleDateString('it', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: '2-digit',
+                  })
+                : ''}
+            </BodyText>
+          </div>
+        </div>
+        <div
+          style={{
+            flexGrow: 1,
+            wordBreak: 'break-all',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 50,
+          }}
+        >
+          <BodyText style={{ fontWeight: 600, fontSize: 20, marginBottom: 0 }}>
+            Quantity:{' '}
+            <BodyText
+              style={{ fontWeight: 400, display: 'inline', marginLeft: 10 }}
+            >
+              {props.offer.quantity + '€'}
+            </BodyText>
           </BodyText>
-        </BodyText>
-        <BodyText style={{ fontWeight: 600, fontSize: 20, marginBottom: 0 }}>
-          Price:{' '}
-          <BodyText style={{ fontWeight: 400, display: 'inline', marginLeft: 10 }}>
-            {props.price + '€'}
+          <BodyText style={{ fontWeight: 600, fontSize: 20, marginBottom: 0 }}>
+            Price:{' '}
+            <BodyText
+              style={{ fontWeight: 400, display: 'inline', marginLeft: 10 }}
+            >
+              {props.offer.price + '€'}
+            </BodyText>
           </BodyText>
-        </BodyText>
+        </div>
       </div>
-    </div>
+      {showModal && (
+        <OfferModal
+          isShowing={showModal}
+          onClose={closeModal}
+          onSave={closeModalOnSave}
+          advert={props.advert}
+          offer={props.offer}
+          storeName={props.offer.offeree?.name}
+          rating={props.offer.offeree?.rating}
+        />
+      )}
+    </>
   );
 };

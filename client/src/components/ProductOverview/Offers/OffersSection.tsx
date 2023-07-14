@@ -144,11 +144,8 @@ export const OffersSection: FC<OffersSectionProps> = (props) => {
                 <OfferCard
                   key={index}
                   status={status}
-                  storeName={props.storeName}
-                  rating={props.rating}
-                  quantity={offer.quantity ?? 0}
-                  price={offer.price ?? 0}
-                  date={offer.createdAt ? new Date(offer.createdAt) : undefined}
+                  offer={offer}
+                  advert={offer.advert as PopulatedAdvert}
                   style={{
                     borderColor: colorMap(status),
                     marginBottom: 50,
