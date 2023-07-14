@@ -128,7 +128,7 @@ export const OffersSection: FC<OffersSectionProps> = (props) => {
     return (
       <>
         {offers.length > 0 ? (
-          <div style={{ padding: '0 30px 30px', width: '100%' }}>
+          <div style={{ padding: '0 30px 0', width: '100%' }}>
             <BodyText
               style={{
                 fontSize: '24px',
