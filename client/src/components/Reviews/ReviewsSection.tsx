@@ -8,8 +8,10 @@ import { ReviewList } from '../ProductOverview/Reviews/ReviewList';
 import { Button, Image } from 'react-bootstrap';
 import gridIcon from '../../assets/grid.svg';
 import listIcon from '../../assets/list.svg';
-import { Sort, SortTypes } from '../ProductOverview/Reviews/Sort';
 import useMediaQuery from '../../hooks/useMediaQuery';
+import { BodyText } from '../Text/BodyText';
+import sortingUpIcon from '../../assets/sortUpAlt.svg';
+import sortingDownIcon from '../../assets/sortDownAlt.svg';
 
 type ReviewsSectionProps = {
   advert: PopulatedAdvert;
@@ -24,6 +26,13 @@ export interface ReviewDisplay {
   reviews: PopulatedReview[] | undefined;
 }
 
+export enum ReviewSortCriteria {
+  NONE = 'Default',
+  NAME = 'Name',
+  DATE = 'Date',
+  RATING = 'Rating',
+}
+
 const ReviewsSection: FC<ReviewsSectionProps> = (props) => {
   const matches = useMediaQuery('(min-width: 740px)');
 
@@ -32,7 +41,14 @@ const ReviewsSection: FC<ReviewsSectionProps> = (props) => {
   );
 
   const [populatedReviews, setPopulatedReviews] = useState<PopulatedReview[]>();
-  const [originalData, setOriginalData] = useState<PopulatedReview[]>([]); //to have a reference
+
+  const [sortCriteria, setSortCriteria] = useState<ReviewSortCriteria>(
+    ReviewSortCriteria.NONE,
+  );
+  // False == order asc , True == order desc
+  const [sortOrder, setSortOrder] = useState(false);
+
+  const reviewValues = Object.values(ReviewSortCriteria);
 
   useEffect(() => {
     if (props.advert.reviews) {
@@ -41,37 +57,41 @@ const ReviewsSection: FC<ReviewsSectionProps> = (props) => {
       ).then(
         //extract the populatedReviews
         (popReviews) => {
-          setPopulatedReviews(popReviews)
-          setOriginalData(popReviews)
+          setPopulatedReviews(popReviews);
         },
       );
     }
   }, [props.advert.reviews]);
 
-  const handleSorting = (modality: SortTypes) => {
-    if (modality !== SortTypes.NONE && populatedReviews) {
-      let sortedData = [...populatedReviews];
-
-      if (modality === SortTypes.RATING_ASC) {
-        sortedData = sortedData.sort((a, b) => a.rating - b.rating);
-      } else if (modality === SortTypes.RATING_DESC) {
-        sortedData = sortedData.sort((a, b) => b.rating - a.rating);
-      } else if (modality === SortTypes.DATE_ASC) {
-        sortedData = sortedData.sort(
-          (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-        );
-      } else if (modality === SortTypes.DATE_DESC) {
-        sortedData = sortedData.sort(
-          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-        );
-      }
-      // Update the state with the sorted data
-      setPopulatedReviews(sortedData);
-    }
-    else{
-      setPopulatedReviews(originalData)
-    }
+  const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSortCriteria(event.target.value as ReviewSortCriteria);
   };
+
+  const handleToggleSortOrder = () => {
+    setSortOrder(!sortOrder);
+  };
+
+  function sortedAndFilteredItems(list: PopulatedReview[]): PopulatedReview[] {
+    let result = list.sort((a, b) => {
+      switch (sortCriteria) {
+        case ReviewSortCriteria.NONE:
+          return 0;
+        case ReviewSortCriteria.NAME:
+          return (a.reviewer.name ?? '').localeCompare(b.reviewer.name ?? '');
+        case ReviewSortCriteria.DATE:
+          return (a.createdAt ?? '') > (b.createdAt ?? '')
+            ? 1
+            : (a.createdAt ?? '') < (b.createdAt ?? '')
+            ? -1
+            : 0;
+        case ReviewSortCriteria.RATING:
+          return (a.rating ?? 0) - (b.rating ?? 0);
+        default:
+          return 0;
+      }
+    });
+    return sortOrder ? result : result.reverse();
+  }
 
   return (
     <ReviewOfferSection section="REVIEWS">
@@ -81,8 +101,6 @@ const ReviewsSection: FC<ReviewsSectionProps> = (props) => {
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'flex-end',
-          gap: 10,
-          marginRight: 12,
           marginTop: -16,
         }}
       >
@@ -102,11 +120,49 @@ const ReviewsSection: FC<ReviewsSectionProps> = (props) => {
         >
           <Image
             src={displayMod === DisplayModality.LIST ? gridIcon : listIcon}
-            width={40}
-            height={40}
+            width={35}
+            height={35}
           />
         </Button>
-        <Sort onModalitySelected={handleSorting} />
+        <BodyText
+          style={{
+            color: '#f86c6c',
+            fontWeight: '500',
+            fontSize: 23,
+            marginBottom: 0,
+            marginRight: 10,
+          }}
+        >
+          Sort by
+        </BodyText>
+        <select
+          onChange={handleSortChange}
+          style={{
+            padding: 6,
+            borderRadius: 8,
+            borderColor: '#f86c6c',
+            color: 'grey',
+            height: 33,
+          }}
+        >
+          {reviewValues.map((item, _) => (
+            <option value={item}>{item}</option>
+          ))}
+        </select>
+        <Button
+          style={{
+            alignSelf: 'center',
+            background: 'none',
+            border: 'none',
+          }}
+          onClick={handleToggleSortOrder}
+        >
+          <Image
+            src={!sortOrder ? sortingUpIcon : sortingDownIcon}
+            width={33}
+            height={33}
+          />
+        </Button>
       </div>
       <div
         style={{
@@ -117,14 +173,10 @@ const ReviewsSection: FC<ReviewsSectionProps> = (props) => {
           marginTop: 30,
         }}
       >
-        {/*props.advert.reviews &&
-          props.advert.reviews.map((review, i) => (
-            <Reviewbar key={review._id} reviewID={review._id} />
-          ))*/}
         {displayMod === DisplayModality.LIST ? (
-          <ReviewList reviews={populatedReviews} />
+          <ReviewList reviews={sortedAndFilteredItems(populatedReviews ?? [])} />
         ) : (
-          <ReviewsGrid reviews={populatedReviews} />
+          <ReviewsGrid reviews={sortedAndFilteredItems(populatedReviews ?? [])} />
         )}
       </div>
     </ReviewOfferSection>

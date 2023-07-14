@@ -40,7 +40,6 @@ export const OffersSection: FC<OffersSectionProps> = (props) => {
   // False == order asc , True == order desc
   const [sortOrder, setSortOrder] = useState(false);
 
-  const advertValues = Object.values(AdvertSortCriteria);
   const offerValues = [
     ...Object.values(AdvertSortCriteria),
     ...Object.values(ExtraCriteria),
@@ -106,9 +105,9 @@ export const OffersSection: FC<OffersSectionProps> = (props) => {
           return (a.price ?? 0) - (b.price ?? 0);
         case AdvertSortCriteria.Quantity:
           return (a.quantity ?? 0) - (b.quantity ?? 0);
-        case ExtraCriteria.STATUS: // ????
+        case ExtraCriteria.STATUS:
           return (a.status ?? '').localeCompare(b.status ?? '');
-        case ExtraCriteria.STORE: // ????
+        case ExtraCriteria.STORE:
           return (a?.advert?.store ?? '').localeCompare(b?.advert?.store ?? '');
         default:
           return 0;
@@ -172,7 +171,6 @@ export const OffersSection: FC<OffersSectionProps> = (props) => {
           alignItems: 'center',
           justifyContent: 'flex-end',
           marginTop: -16,
-          marginRight: 12,
         }}
       >
         <BodyText
