@@ -1,15 +1,18 @@
-import React from 'react';
-import { User } from '../../api/collections/user';
+import React, { useState } from 'react';
+import { PopulatedUser } from '../../api/collections/user';
 import { Ratings } from '../Ratings';
 import { BodyText } from '../Text/BodyText';
 import { StoreDetailsElement } from './StoreDetailsElement';
+import { StoreDetailsModal } from './StoreDetailsModal';
 
 type StoreDetailsBarProps = {
-  category?: string;
-  store?: User;
+  category: string;
+  store: PopulatedUser;
 };
 
 const StoreDetailsBar: React.FC<StoreDetailsBarProps> = (props) => {
+  const [showModal, setShowModal] = useState(false);
+
   return (
     <div
       style={{
@@ -40,7 +43,10 @@ const StoreDetailsBar: React.FC<StoreDetailsBarProps> = (props) => {
           </BodyText>
         </StoreDetailsElement>
         <StoreDetailsElement label="Name">
-          <BodyText style={{ color: 'white', fontSize: 24, margin: '0 5px' }}>
+          <BodyText
+            style={{ color: 'white', fontSize: 24, margin: '0 5px' }}
+            onClick={() => setShowModal(true)}
+          >
             {props.store?.name}
           </BodyText>
         </StoreDetailsElement>
@@ -50,6 +56,13 @@ const StoreDetailsBar: React.FC<StoreDetailsBarProps> = (props) => {
           </BodyText>
         </StoreDetailsElement>
       </div>
+      {showModal && (
+        <StoreDetailsModal
+          isShowing={showModal}
+          store={props.store._id!}
+          onClose={() => setShowModal(false)}
+        />
+      )}
     </div>
   );
 };

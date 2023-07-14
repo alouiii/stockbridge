@@ -1,13 +1,11 @@
 import { FC, useEffect, useState } from 'react';
-import { Advert, PopulatedAdvert } from '../../api/collections/advert';
+import { PopulatedAdvert } from '../../api/collections/advert';
 import {
   getOffersByAdvert,
-  Offer,
   OfferStatus,
   PopulatedOffer,
 } from '../../api/collections/offer';
 import { ReviewOfferSection } from '../ProductOverview/ReviewOfferSection';
-import { BodyText } from '../Text/BodyText';
 import { OfferSection } from './OfferSection';
 
 type OffersSectionProps = {
@@ -28,12 +26,12 @@ const OffersSection: FC<OffersSectionProps> = (props) => {
       }
     };
     fetchData();
-  }, []);
+  }, [props.advert._id]);
 
   const openOffers = offers.filter((o) => o.status === 'Open');
   const acceptedOffers = offers.filter((o) => o.status === 'Accepted');
   const rejectedOffers = offers.filter((o) => o.status === 'Rejected');
-  const canceledOffers = offers.filter((o) => o.status === 'Canceled');
+  const canceledOffers = offers.filter((o) => o.status === 'Canceled' || o.status === 'Canceled - Out of Stock');
   return (
     <ReviewOfferSection section="OFFERS">
       {openOffers.length > 0 && (
@@ -65,7 +63,7 @@ const OffersSection: FC<OffersSectionProps> = (props) => {
       )}
       {canceledOffers.length > 0 && (
         <OfferSection
-          status={OfferStatus.CANCELED}
+          status={OfferStatus.CANCELED_USER}
           offers={canceledOffers}
           advert={props.advert}
           storeName={props.storeName}
