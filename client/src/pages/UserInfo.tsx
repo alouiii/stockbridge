@@ -16,7 +16,6 @@ import { LoginContext } from '../contexts/LoginContext';
 import { Spinner } from 'react-bootstrap';
 import SelectedTabContext from '../contexts/SelectedTabContext';
 import { createBrowserHistory } from 'history';
-import { useNavigate } from 'react-router-dom';
 
 /**
  * Contains the tabs displayed on the sidebar of the profile page and their corresponding content
@@ -80,7 +79,6 @@ export function UserInfo() {
   const { isLoading } = useContext(LoginContext);
   const matches = useMediaQuery('(min-width: 768px)');
   const tabContext = useContext(SelectedTabContext);
-  const navigate = useNavigate();
 
   /**
    * Sets the active tab from the link history.
