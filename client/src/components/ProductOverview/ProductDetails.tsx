@@ -14,8 +14,8 @@ interface ProductDetailsProps {
 export const ProductDetails: FC<ProductDetailsProps> = (props) => {
   const { advert } = props;
 
-  const matches1 = useMediaQuery('(min-width: 1040px)');
-  const matches2 = useMediaQuery('(min-width: 800px)');
+  const matches1 = useMediaQuery('(min-width: 1000px)');
+  const matches2 = useMediaQuery('(min-width: 850px)');
 
   return (
     <div
@@ -45,7 +45,14 @@ export const ProductDetails: FC<ProductDetailsProps> = (props) => {
           gap: 10,
         }}
       >
-        <div style={{ display: 'flex', flexDirection: 'row', gap: 50, alignItems: "center" }}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            gap: 50,
+            alignItems: 'center',
+          }}
+        >
           <BodyText
             style={{
               fontSize: 28,
@@ -77,6 +84,32 @@ export const ProductDetails: FC<ProductDetailsProps> = (props) => {
               {advert.type ? advert.type : 'N.A'}
             </BodyText>
           </div>
+          {advert.prioritized ? (
+            <div
+              style={{
+                backgroundColor: palette.subSectionsBgAccent,
+                borderRadius: 15,
+                display: 'flex',
+                alignItems: 'center',
+                paddingLeft: 25,
+                paddingRight: 25,
+                height: 30,
+                marginBottom: 16,
+                marginLeft: -30
+              }}
+            >
+              <BodyText
+                style={{
+                  fontSize: 20,
+                  fontWeight: 600,
+                  color: 'white',
+                  marginBottom: 0,
+                }}
+              >
+                Prioritized
+              </BodyText>
+            </div>
+          ) : undefined}
         </div>
         <BodyText
           style={{
@@ -110,7 +143,7 @@ export const ProductDetails: FC<ProductDetailsProps> = (props) => {
           style={{
             display: 'flex',
             flexDirection: matches1 ? 'row' : 'column',
-            gap: matches1 ? 95 : 0,
+            gap: matches1 ? 50 : 0,
           }}
         >
           <ProductAttribute

@@ -127,7 +127,7 @@ export function colorMap(status: OfferStatus): string {
       return '#4ECBA9';
     case OfferStatus.REJECTED:
       return 'red';
-    case OfferStatus.CANCELED:
+    case OfferStatus.CANCELED_USER:
       return '#ffc071';
     default:
       return '#4285F4';

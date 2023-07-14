@@ -68,7 +68,7 @@ export const OffersSection: FC<OffersSectionProps> = (props) => {
     (o) => o.status === OfferStatus.REJECTED,
   );
   const canceledOffers = offers.filter(
-    (o) => o.status === OfferStatus.CANCELED,
+    (o) => o.status === OfferStatus.CANCELED_USER || OfferStatus.CANCELED_OUT_OF_STOCK,
   );
 
   const renderOffersForStatus = (status: OfferStatus) => {
@@ -79,7 +79,7 @@ export const OffersSection: FC<OffersSectionProps> = (props) => {
         return renderOffers(status, acceptedOffers);
       case OfferStatus.REJECTED:
         return renderOffers(status, rejectedOffers);
-      case OfferStatus.CANCELED:
+      case OfferStatus.CANCELED_USER || OfferStatus.CANCELED_OUT_OF_STOCK:
         return renderOffers(status, canceledOffers);
       default:
         return null;

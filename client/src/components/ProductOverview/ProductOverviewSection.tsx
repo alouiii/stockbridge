@@ -20,9 +20,7 @@ const ProductOverviewSection: React.FC<ProductOverviewSectionProps> = (
   const { user } = useContext(LoginContext);
   const owner = user?._id === props.advert?.store?._id;
   const button_text = !owner
-    ? props.advert?.type === 'Sell'
-      ? 'Buy'
-      : 'Sell'
+    ? 'Make offer'
     : props.advert?.prioritized
     ? ''
     : 'Prioritize';
@@ -59,33 +57,35 @@ const ProductOverviewSection: React.FC<ProductOverviewSectionProps> = (
             paddingTop: 30,
             paddingBottom: 100,
             paddingLeft: 15,
-            position: "relative"
+            position: 'relative',
           }}
         >
           {props.advert ? <ProductDetails advert={props.advert} /> : undefined}
-          <div>
-            <Button
-              style={{
-                cursor: 'pointer',
-                position: "absolute",
-                right: 12,
-                bottom: 30,
-                width: 150,
-                fontWeight: 600,
-                fontSize: 24,
-                padding: 7,
-                textAlign: 'center',
-                color: 'white',
-                textDecoration: 'none',
-                border: 'rounded-md',
-                backgroundColor: 'black',
-                borderColor: 'black',
-              }}
-              onClick={owner ? openPriorizationModal : openOfferModal}
-            >
-              {button_text}
-            </Button>
-          </div>
+          {!props.advert.prioritized || !owner ? (
+            <div>
+              <Button
+                style={{
+                  cursor: 'pointer',
+                  position: 'absolute',
+                  right: 12,
+                  bottom: 30,
+                  width: 150,
+                  fontWeight: 600,
+                  fontSize: 24,
+                  padding: 7,
+                  textAlign: 'center',
+                  color: 'white',
+                  textDecoration: 'none',
+                  border: 'rounded-md',
+                  backgroundColor: 'black',
+                  borderColor: 'black',
+                }}
+                onClick={owner ? openPriorizationModal : openOfferModal}
+              >
+                {button_text}
+              </Button>
+            </div>
+          ) : undefined}
         </div>
       </div>
       <OfferModal
