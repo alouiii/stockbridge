@@ -51,7 +51,7 @@ export const OfferCard: FC<OfferCardProps> = (props) => {
             }}
           >
             <BodyText style={{ fontSize: 18, marginBottom: 0 }}>
-              {props.offer.advert?.productname}
+              {props.offer.offeror?.name}
             </BodyText>
             <div>{Ratings(props.offer.offeror?.rating ? props.offer.offeror.rating : 0, 'red')}</div>
           </div>
