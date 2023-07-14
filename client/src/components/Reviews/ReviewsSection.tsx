@@ -12,6 +12,7 @@ import useMediaQuery from '../../hooks/useMediaQuery';
 import { BodyText } from '../Text/BodyText';
 import sortingUpIcon from '../../assets/sortUpAlt.svg';
 import sortingDownIcon from '../../assets/sortDownAlt.svg';
+import ReactPaginate from 'react-paginate';
 
 type ReviewsSectionProps = {
   advert: PopulatedAdvert;
@@ -50,6 +51,9 @@ const ReviewsSection: FC<ReviewsSectionProps> = (props) => {
 
   const reviewValues = Object.values(ReviewSortCriteria);
 
+  const [currentPage, setCurrentPage] = useState(0); // track num pages
+  const reviewsPerPage = 4;
+
   useEffect(() => {
     if (props.advert.reviews) {
       Promise.all(
@@ -72,26 +76,39 @@ const ReviewsSection: FC<ReviewsSectionProps> = (props) => {
   };
 
   function sortedAndFilteredItems(list: PopulatedReview[]): PopulatedReview[] {
-    let result = list.sort((a, b) => {
+    let result = [...list];
+
+    result = result.sort((a, b) => {
       switch (sortCriteria) {
         case ReviewSortCriteria.NONE:
           return 0;
         case ReviewSortCriteria.NAME:
-          return (a.reviewer.name ?? '').localeCompare(b.reviewer.name ?? '');
+          return (a.reviewer?.name ?? '').localeCompare(b.reviewer?.name ?? '');
         case ReviewSortCriteria.DATE:
-          return (a.createdAt ?? '') > (b.createdAt ?? '')
-            ? 1
-            : (a.createdAt ?? '') < (b.createdAt ?? '')
-            ? -1
-            : 0;
+          return (
+            new Date(a.createdAt ?? '').getTime() -
+            new Date(b.createdAt ?? '').getTime()
+          );
         case ReviewSortCriteria.RATING:
           return (a.rating ?? 0) - (b.rating ?? 0);
         default:
           return 0;
       }
     });
-    return sortOrder ? result : result.reverse();
+
+    result = sortOrder ? result : result.reverse();
+
+    // Apply pagination
+    const startIndex = currentPage * reviewsPerPage;
+    const endIndex = startIndex + reviewsPerPage;
+    result = result.slice(startIndex, endIndex);
+
+    return result;
   }
+
+  const handlePageClick = (selectedPage: { selected: number }) => {
+    setCurrentPage(selectedPage.selected);
+  };
 
   return (
     <ReviewOfferSection section="REVIEWS">
@@ -174,10 +191,34 @@ const ReviewsSection: FC<ReviewsSectionProps> = (props) => {
         }}
       >
         {displayMod === DisplayModality.LIST ? (
-          <ReviewList reviews={sortedAndFilteredItems(populatedReviews ?? [])} />
+          <ReviewList
+            reviews={sortedAndFilteredItems(populatedReviews ?? [])}
+          />
         ) : (
-          <ReviewsGrid reviews={sortedAndFilteredItems(populatedReviews ?? [])} />
+          <ReviewsGrid
+            reviews={sortedAndFilteredItems(populatedReviews ?? [])}
+          />
         )}
+        <ReactPaginate
+          previousLabel="<"
+          breakLabel="..."
+          nextLabel=">"
+          onPageChange={handlePageClick}
+          pageCount={Math.ceil(
+            (populatedReviews?.length || 0) / reviewsPerPage,
+          )}
+          containerClassName="pagination justify-content-center"
+          pageClassName="page-item"
+          pageLinkClassName="page-link"
+          previousClassName="page-item"
+          previousLinkClassName="page-link"
+          nextClassName="page-item"
+          nextLinkClassName="page-link"
+          breakClassName="page-item"
+          breakLinkClassName="page-link"
+          activeClassName="active"
+          renderOnZeroPageCount={null}
+        />
       </div>
     </ReviewOfferSection>
   );
