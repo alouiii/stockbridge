@@ -22,7 +22,6 @@ const ProductDetailsTopBar: React.FC<ProductDetailsTopBarProps> = (props) => {
     } else {
       setShowReviewModal(false);
     }
-    window.location.reload()
   };
   const openModal = () => {
     if (props.owner) {

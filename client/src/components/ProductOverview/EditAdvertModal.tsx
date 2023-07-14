@@ -160,6 +160,7 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
       } catch (error) {
         console.error(error);
       } finally {
+        window.location.reload()
         if (props.onClose) props?.onClose();
       }
     } else {
