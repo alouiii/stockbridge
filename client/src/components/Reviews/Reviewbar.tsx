@@ -1,10 +1,7 @@
 import { FC, useEffect, useState } from 'react';
-import {
-  getReview,
-  PopulatedReview,
-  Review,
-} from '../../api/collections/review';
-import { getStore, User } from '../../api/collections/user';
+import { getReview, PopulatedReview } from '../../api/collections/review';
+import { getStore, PopulatedUser } from '../../api/collections/user';
+
 import { InfoBar } from '../ProductOverview/InfoBar';
 import { Ratings } from '../Ratings';
 import { StoreDetailsModal } from '../Store/StoreDetailsModal';
@@ -27,10 +24,11 @@ const Reviewbar: FC<ReviewBarProps> = (props) => {
 
   useEffect(() => {
     const fetchReview = async () => {
-      setReview(await getReview(props.reviewID!));
+      const fetchedReview = await getReview(props.reviewID!);
+      setReview(fetchedReview);
     };
     fetchReview();
-  }, []);
+  }, [props.reviewID, review.reviewer?._id]);
 
   return (
     <>
@@ -47,6 +45,8 @@ const Reviewbar: FC<ReviewBarProps> = (props) => {
                   color: 'black',
                   textDecoration: 'underline',
                   cursor: 'pointer',
+                  width: '50%',
+                  textAlign: 'start',
                 }}
                 onClick={openModal}
               >
@@ -56,14 +56,16 @@ const Reviewbar: FC<ReviewBarProps> = (props) => {
                 <StoreDetailsModal
                   isShowing={showModal}
                   onClose={closeModal}
+                  store={review.reviewer._id!}
                 ></StoreDetailsModal>
               )}
-
               <BodyText
                 style={{
                   font: 'light',
                   fontFamily: 'Poppins',
                   color: 'black',
+                  width: '50%',
+                  textAlign: 'end',
                 }}
               >
                 {review.createdAt.toString().substring(0, 10)}

@@ -7,31 +7,33 @@ import {
 
 import React from 'react';
 import { ProfileProdcutAttribute } from '../../Profile/ProfileProdcutAttribute';
-import { PopulatedAdvert } from '../../../api/collections/advert';
+import { Advert, PopulatedAdvert } from '../../../api/collections/advert';
 import { PopulatedOffer } from '../../../api/collections/offer';
 require('./OfferBarUserProfile.scss');
 
-type OfferBarUserProfileInfoProps = {
+type OrderBarUserProfileInfoProps = {
     picture: string | undefined
-    advert: PopulatedAdvert;
+    advert: PopulatedAdvert | Advert;
     offer: PopulatedOffer;
     outgoing: boolean;
     highlight: string;
     onClick: () => void;
 };
 
-const OfferBarUserProfileInfo: React.FC<OfferBarUserProfileInfoProps> = (props) => {
+const OrderBarUserProfileInfo: React.FC<OrderBarUserProfileInfoProps> = (props) => {
   const getOfferIcon = function() : [string,string]
   {
+    return ["bi-check-circle", "#4ECBA9"];
     switch (props.offer.status) {
       case OfferStatus.ACCEPTED:
         return ["bi-check-circle", "#4ECBA9"]
+
       case OfferStatus.REJECTED:
         return ["bi-x-circle", "red"]
+
       case OfferStatus.OPEN:
         return ["bi-clock-history", "#4285F4"];
-      case OfferStatus.CANCELED_OUT_OF_STOCK:
-        return ["bi-dash-circle", "#ffc071"]
+
       case OfferStatus.CANCELED_USER:
         return ["bi-dash-circle", "#ffc071"]
       default:
@@ -64,22 +66,22 @@ const OfferBarUserProfileInfo: React.FC<OfferBarUserProfileInfoProps> = (props) 
           
           <div className="div2">  <ProfileProdcutAttribute
             name="Store"
-            value={props.outgoing ? props.offer.offeree?.name : props.offer.offeror?.name}
+            value={"story"} //props.outgoing ? props.offer.offeree?.name : props.offer.offeror?.name}
           ></ProfileProdcutAttribute></div>
 
           <div className="div2">  <ProfileProdcutAttribute
             name="Date"
-            value={props.offer.createdAt?.toString().substring(0, 10)}
+            value={"21.03.2023"}//props.offer.createdAt?.toString().substring(0, 10)}
           ></ProfileProdcutAttribute></div>
          
           <div className="div3">  <ProfileProdcutAttribute
             name="Quantity"
-            value={props.offer.quantity}
+            value={5}//props.offer.quantity}
           ></ProfileProdcutAttribute></div>
 
           <div className="div4">  <ProfileProdcutAttribute
             name="Price"
-            value={props.offer.price}
+            value={4}//props.offer.price}
             unit='€'
           ></ProfileProdcutAttribute></div>
         </div>
@@ -99,4 +101,4 @@ const OfferBarUserProfileInfo: React.FC<OfferBarUserProfileInfoProps> = (props) 
 };
 
 
-export { OfferBarUserProfileInfo };
+export { OrderBarUserProfileInfo };

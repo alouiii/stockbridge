@@ -115,6 +115,17 @@ export async function getAdvert(id: string): Promise<PopulatedAdvert> {
   });
 }
 
+export async function getCategoriesByStore(
+  store: string,
+): Promise<ProductCategory[]> {
+  return await apiClient.get<ProductCategory[]>(
+    `/adverts/getCategoriesByStore/${store}`,
+    {
+      withCredentials: true,
+    },
+  );
+}
+
 export async function createAdvert(advert: Advert): Promise<Advert> {
   return await apiClient.post<Advert>(`/adverts/`, advert, {
     withCredentials: true,
@@ -144,6 +155,7 @@ export async function getAdvertsByUser(
   });
 }
 
+
 export async function getAllAdverts(queryParams: any): Promise<AdvertDto> {
   return await apiClient.get<AdvertDto>(`/adverts`, {}, queryParams);
 }
@@ -154,4 +166,10 @@ export async function getPopularCategories(): Promise<CategoryDto> {
 
 export async function getPopularAdverts(): Promise<AdvertDto> {
   return await apiClient.get<AdvertDto>(`/adverts/getPopularAdverts`);
+}
+
+export async function prioritizeAdvert(advert: string): Promise<Advert> {
+  return await apiClient.get<Advert>(`/adverts/prioritizeAdvert/${advert}`, {
+    withCredentials: true
+  })
 }
