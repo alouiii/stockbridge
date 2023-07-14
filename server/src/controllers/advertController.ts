@@ -15,6 +15,7 @@ import { AuthenticatedRequest } from '../middlewares/authMiddleware';
 import { Advert, ProductCategory } from '../entities/advertEntity';
 import { ObjectId } from 'mongodb';
 import { AppError } from '../utils/errorHandler';
+import { findUserById, updateUser } from '../services/userServices';
 
 /**
  * This method returns an advert by id   *
@@ -143,6 +144,24 @@ export const getAllAdvertsByCategory = asyncHandler(
   },
 );
 
+export const getCategoriesByStore = asyncHandler(
+  async (req: AuthenticatedRequest, res: Response) => {
+    const { store } = req.params;
+    const adverts: Advert[] = await getAdvertsByStore(store);
+    const categories = adverts.map((advert) => advert.category);
+    res.status(200).json(categories);
+  },
+);
+
+export const prioritizeAdvert = asyncHandler(
+  async (req: AuthenticatedRequest, res: Response) => {
+    const { advert } = req.params;
+    const fetchedAdvert = await findAdvertById(advert, false);
+    fetchedAdvert.prioritized = true;
+    const updatedAdvert = await updateAdvert(advert, fetchedAdvert);
+    res.status(200).json(updatedAdvert);
+  },
+);
 /**
  * This method gets all adverts of a specific store   *
  * @param req - The request object
@@ -185,6 +204,8 @@ export const getPopularAdverts = asyncHandler(
   },
 );
 
+
+
 /**
  * Checks if a user can edit or delete an advert with a given id.
  * @param req The request containing the to be checked ids.
@@ -192,9 +213,9 @@ export const getPopularAdverts = asyncHandler(
 async function _checkUserCanEditOrDeleteAdvert(req: AuthenticatedRequest) {
   let userId = new ObjectId(req.user?.id);
   const { id } = req.params;
-
+  const advert = await findAdvertById(id, false)
   // The user editing or deleting must be the one who created the advert.
-  if (!(await findAdvertById(id, false)).store.equals(userId)) {
+  if (!(advert.store.equals(userId))) {
     throw new AppError(
       'Not authorized to edit this route',
       'Not authorized to edit this route',
