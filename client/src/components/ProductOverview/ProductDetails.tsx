@@ -5,6 +5,7 @@ import { Image } from 'react-bootstrap';
 import imagePlaceholder from '../../assets/product-placeholder.png';
 import { FC } from 'react';
 import useMediaQuery from '../../hooks/useMediaQuery';
+import { palette } from '../../utils/colors';
 
 interface ProductDetailsProps {
   advert: PopulatedAdvert;
@@ -44,14 +45,39 @@ export const ProductDetails: FC<ProductDetailsProps> = (props) => {
           gap: 10,
         }}
       >
-        <BodyText
-          style={{
-            fontSize: 28,
-            fontWeight: 600,
-          }}
-        >
-          {advert.productname ? advert.productname : 'Fake Product Name'}
-        </BodyText>
+        <div style={{ display: 'flex', flexDirection: 'row', gap: 50, alignItems: "center" }}>
+          <BodyText
+            style={{
+              fontSize: 28,
+              fontWeight: 600,
+            }}
+          >
+            {advert.productname ? advert.productname : 'N.A'}
+          </BodyText>
+          <div
+            style={{
+              backgroundColor: palette.subSectionsBgAccent,
+              borderRadius: 15,
+              display: 'flex',
+              alignItems: 'center',
+              paddingLeft: 25,
+              paddingRight: 25,
+              height: 30,
+              marginBottom: 16,
+            }}
+          >
+            <BodyText
+              style={{
+                fontSize: 20,
+                fontWeight: 600,
+                color: 'white',
+                marginBottom: 0,
+              }}
+            >
+              {advert.type ? advert.type : 'N.A'}
+            </BodyText>
+          </div>
+        </div>
         <BodyText
           style={{
             color: 'gray',
