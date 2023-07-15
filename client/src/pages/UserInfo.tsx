@@ -103,7 +103,7 @@ export function UserInfo() {
     <Page>
       <ProfileHeader />
 
-      <div className="row">
+      <div className="row" style={{maxWidth: "100%"}}>
         <div
           className="col-2 profile-section-container"
           style={{
