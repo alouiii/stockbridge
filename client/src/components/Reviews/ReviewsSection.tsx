@@ -159,7 +159,7 @@ const ReviewsSection: FC<ReviewsSectionProps> = (props) => {
             borderRadius: 8,
             borderColor: '#f86c6c',
             color: 'grey',
-            height: 33,
+            height: 34,
             width: 100,
           }}
         >
