@@ -161,6 +161,10 @@ export const UserIconDropdown: FC = () => {
     setDropdownOpen(false);
   };
 
+  const handleUserIconClick = () => {
+    navigate('/userinfo?MyAdverts');
+  };
+
   return (
     <div
       style={{ position: 'relative', height: 40 }}
@@ -177,7 +181,8 @@ export const UserIconDropdown: FC = () => {
           position: matches ? undefined : 'absolute',
           right: matches ? undefined : 0,
         }}
-        onClick={toggleDropDown}
+        onClick={handleUserIconClick}
+        onMouseOver={toggleDropDown}
       />
       {isDropdownOpen && (
         <div

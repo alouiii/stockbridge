@@ -1,3 +1,4 @@
+import useMediaQuery from '../../hooks/useMediaQuery';
 import { BodyText } from '../Text/BodyText';
 
 type LeftTabProps = {
@@ -11,6 +12,7 @@ type LeftTabProps = {
  * Component that displays the step number, the icon and the relative message.
  */
 export function LeftTab(props: LeftTabProps) {
+  const matches = useMediaQuery('(min-width: 1527px)');
   return (
     <div
       style={{
@@ -32,8 +34,6 @@ export function LeftTab(props: LeftTabProps) {
         style={{
           color: props.isSelected ? '#6464c5' : 'white',
           textAlign: 'center',
-          fontSize: 21,
-          //color: "black",
           marginRight: 10,
           fontWeight: 350,
         }}
