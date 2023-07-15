@@ -107,42 +107,47 @@ export const OffersSection: FC<OffersSectionProps> = (props) => {
     }
 
     return (
-      <div key={status} style={{ width: '100%' }}>
+      <div
+        key={status}
+        style={{
+          width: '100%',
+          border: '3px solid #F5F5F5',
+          borderRadius: 10,
+          marginBottom: '10px',
+          background: '#F5F5F5',
+        }}
+      >
         <div
           style={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-between',
+            justifyContent: 'center',
             cursor: 'pointer',
             padding: '0 10px',
           }}
           onClick={toggleSection}
         >
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
+          <div style={{ flex: 1, textAlign: 'center' }}>
             <BodyText
               style={{
                 fontSize: '24px',
                 fontWeight: 600,
                 color: colorMap(status),
-                textAlign: 'center',
-                marginRight: 10,
+                marginBottom: 0,
               }}
             >
               {status}
             </BodyText>
           </div>
-          <div style={{ fontSize: '24px', fontWeight: 600, color: '#000' }}>
-            {isExpanded ? '-' : '+'}
+          <div>
+            <i
+              className={isExpanded ? 'bi bi-chevron-up' : 'bi bi-chevron-down'}
+              style={{ color: colorMap(status), fontSize: 24 }}
+            />
           </div>
         </div>
         {isExpanded && (
-          <div>
+          <div style={{ paddingLeft: 30, paddingRight: 30, paddingTop: 20 }}>
             {statusOffers.map((offer, index) => (
               <OfferCard
                 key={index}
@@ -203,11 +208,12 @@ export const OffersSection: FC<OffersSectionProps> = (props) => {
     <ReviewOfferSection section="OFFERS">
       <div
         style={{
-          display: expandedSections.length > 0 ? 'flex' : 'none',
+          display: 'flex',
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'flex-end',
           marginTop: -16,
+          marginBottom: 20,
         }}
       >
         <BodyText

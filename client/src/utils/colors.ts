@@ -11,4 +11,9 @@ export const palette = {
 
   placeholderTextBootstrap: '#808080',
   borderBoostrap: '#cccccc',
+
+  openOffer: '#6097f0',
+  rejectedOffer: '#db403d',
+  acceptedOffer: '#52b399',
+  canceledOffer: '#e8ad64',
 };
