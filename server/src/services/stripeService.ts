@@ -35,6 +35,7 @@ export const createStripePaymentIntent = async (
   amount: number,
   product: string,
   config?: any,
+  automaticPaymentMethods?: boolean,
 ) => {
   logger.debug(
     `${serviceName}: Creating stripe payment intent for ${user.email}`,
@@ -42,8 +43,13 @@ export const createStripePaymentIntent = async (
   const customer = (await stripe.customers.retrieve(
     user.stripeCustomerId,
   )) as Stripe.Customer;
+  const paymentMethod = automaticPaymentMethods
+    ? {
+        payment_method: customer.invoice_settings.default_payment_method,
+      }
+    : {};
   return await stripe.paymentIntents.create({
-    amount,
+    amount: amount * 100,
     currency: 'eur',
     customer: user.stripeCustomerId,
     // payment_method: customer.default_source,
@@ -52,6 +58,7 @@ export const createStripePaymentIntent = async (
       product: product,
     },
     ...config,
+    ...paymentMethod,
   });
 };
 

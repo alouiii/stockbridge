@@ -6,7 +6,7 @@ import {
   type SubscriptionStatus,
   SubscriptionType,
 } from '../entities/userEntity';
-import * as _ from 'lodash'; 
+import * as _ from 'lodash';
 const serviceName = 'userServices';
 
 /**
@@ -103,7 +103,9 @@ export const handleSuccessfulPaymentIntent = async (
     case 'Premium Subscription':
       break;
     default:
-      throw new AppError('Product not found', 'Product not found', 404);
+      if (!product.startsWith('offerId_')) {
+        throw new AppError('Product not found', 'Product not found', 404);
+      }
   }
   await userModel.findByIdAndUpdate(user.id, user);
 };
@@ -132,13 +134,15 @@ export const handleSubscription = async (
 export async function deductTicket(userId: string): Promise<User | undefined> {
   const existingUser = await findUserById(userId);
   if (existingUser) {
-    if (existingUser?.prioritisationTickets && existingUser?.prioritisationTickets! >= 1) {
-      existingUser!.prioritisationTickets = existingUser.prioritisationTickets - 1
+    if (
+      existingUser?.prioritisationTickets &&
+      existingUser?.prioritisationTickets! >= 1
+    ) {
+      existingUser!.prioritisationTickets =
+        existingUser.prioritisationTickets - 1;
     } else {
-      logger.error(
-        'Insufficient number of tickets',
-      );
+      logger.error('Insufficient number of tickets');
     }
     return existingUser;
-  }   
+  }
 }

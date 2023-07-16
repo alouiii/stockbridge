@@ -1,11 +1,10 @@
 import mongoose from 'mongoose';
 import logger from '../config/logger';
-import { AdvertStatus } from '../entities/advertEntity';
+import { Advert, AdvertStatus } from '../entities/advertEntity';
 import { OfferStatus } from '../entities/offerEntity';
 import { OrderStatus, Order } from '../entities/orderEntity';
 import { findAdvertById } from '../services/advertServices';
 import { findAllOffersByAdvert } from '../services/offerServices';
-import advertModel from './Advert';
 import offerModel from './Offer';
 import { createStripePaymentIntent } from '../services/stripeService';
 import userModel from './User';
@@ -50,16 +49,18 @@ orderSchema.pre<Order>('save', async function (next) {
         if (advert.quantity <= 0) {
           advert.status = AdvertStatus.Closed;
         }
-        const offers = await findAllOffersByAdvert(advert.id)
-        offers.forEach(async fetchedOffer => {
-          if (fetchedOffer.status === OfferStatus.OPEN &&
-            fetchedOffer.quantity > advert.quantity) {
-            logger.warn(fetchedOffer)
+        const offers = await findAllOffersByAdvert(advert.id);
+        offers.forEach(async (fetchedOffer) => {
+          if (
+            fetchedOffer.status === OfferStatus.OPEN &&
+            fetchedOffer.quantity > advert.quantity
+          ) {
+            logger.warn(fetchedOffer);
             fetchedOffer.status = OfferStatus.CANCELED_OUT_OF_STOCK;
-            await offerModel.findByIdAndUpdate(fetchedOffer.id, fetchedOffer)
+            await offerModel.findByIdAndUpdate(fetchedOffer.id, fetchedOffer);
           }
-        })
-       await advertModel.findByIdAndUpdate(advert.id, advert)
+        });
+        await advertModel.findByIdAndUpdate(advert.id, advert);
       }
       next();
     }
@@ -80,14 +81,17 @@ orderSchema.pre<Order>('save', async function (next) {
   } else {
     payer = offeree as User;
   }
+  logger.error(this.totalPrice);
+  logger.error(advert!._id.toString());
   const paymentIntent = await createStripePaymentIntent(
     payer as User,
     this.totalPrice,
-    advert!._id.toString(),
+    'offerId_' + advert!._id.toString(),
     {
       off_session: true,
       confirm: true,
     },
+    true,
   );
   this.paymentId = paymentIntent.id;
 });
