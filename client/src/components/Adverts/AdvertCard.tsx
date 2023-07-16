@@ -32,6 +32,14 @@ export const AdvertCard: FC<AdvertCardProps> = (props) => {
       })
     : null;
 
+  const handleAdvertClick = () => {
+    if (loggedIn) {
+      navigate(`/productoverview/${props.id}`);
+    } else {
+      navigate('/signIn');
+    }
+  };
+
   return (
     <div
       style={{
@@ -64,6 +72,7 @@ export const AdvertCard: FC<AdvertCardProps> = (props) => {
             }
           : undefined
       }
+      onClick={handleAdvertClick}
     >
       <Image
         src={props.icon || emptyIcon}
@@ -113,14 +122,7 @@ export const AdvertCard: FC<AdvertCardProps> = (props) => {
       </div>
       <Button
         style={{ position: 'absolute', left: 10, bottom: 10 }}
-        onClick={() => {
-          if(loggedIn){
-            navigate(`/productoverview/${props.id}`)
-          }
-          else{
-            navigate("/signIn")
-          }
-        }}
+        onClick={handleAdvertClick}
       >
         View Advert
       </Button>
