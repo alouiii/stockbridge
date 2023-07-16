@@ -40,14 +40,24 @@ export const AdvertCard: FC<AdvertCardProps> = (props) => {
     }
   };
 
+  const truncatedName =
+    props.name && props.name.length > 10
+      ? `${props.name.slice(0, 10)}...`
+      : props.name;
+
+  const truncatedDesc =
+    props.description && props.description.length > 50
+      ? `${props.description.slice(0, 50)}...`
+      : props.description;
+
   return (
     <div
       style={{
-        width: 300,
-        height: 425,
+        width: props.fancyEffect ? 325 : 300,
+        height: props.fancyEffect ? 380 : 425,
         borderRadius: 8,
         position: 'relative',
-        border: props.fancyEffect ? '1px solid black' : undefined,
+        border: props.fancyEffect ? '0.5px solid black' : undefined,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -55,6 +65,7 @@ export const AdvertCard: FC<AdvertCardProps> = (props) => {
           ? 'transform 0.3s, box-shadow 0.3s'
           : undefined,
         cursor: 'pointer',
+        backgroundColor: props.fancyEffect ? '#FFF5F8' : 'white',
       }}
       onMouseEnter={
         props.fancyEffect
@@ -72,12 +83,12 @@ export const AdvertCard: FC<AdvertCardProps> = (props) => {
             }
           : undefined
       }
-      onClick={handleAdvertClick}
+      onClick={props.fancyEffect ? handleAdvertClick : undefined}
     >
       <Image
         src={props.icon || emptyIcon}
         alt="image"
-        width={props.icon ? 200 : 180}
+        width={props.icon ? 200 : 160}
         height={props.icon ? 200 : 150}
         style={{ marginTop: 30 }}
       />
@@ -85,24 +96,34 @@ export const AdvertCard: FC<AdvertCardProps> = (props) => {
         style={{
           display: 'flex',
           flexDirection: 'row',
-          gap: props.name && props.name?.length <= 25 ? 50 : 10,
-          paddingLeft: 5,
-          paddingRight: 5,
-          marginTop: 10,
+          justifyContent: 'space-between',
+          paddingLeft: 10,
+          paddingRight: 10,
+          marginTop: 20,
+          width: '100%',
         }}
       >
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <BodyText style={{ fontSize: 20, fontWeight: 600 }}>
-            {props.name}
+        <div
+          style={{ display: 'flex', flexDirection: 'column', padding: '0 5px' }}
+        >
+          <BodyText style={{ fontSize: 21, fontWeight: 600 }}>
+            {truncatedName}
           </BodyText>
           <ColoredLine width={30} height={3} color="#4ECBA9" marginTop={-10} />
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            textAlign: 'left',
+            paddingTop: 2,
+          }}
+        >
           <BodyText style={{ fontSize: 18, fontWeight: 500 }}>
-            Quantity: {props.quantity}
+            Quantity: {props.quantity} pcs
           </BodyText>
           <BodyText style={{ fontSize: 18, fontWeight: 500, marginTop: -10 }}>
-            Price: {props.price}$
+            Price: {props.price} €
           </BodyText>
         </div>
       </div>
@@ -117,11 +138,18 @@ export const AdvertCard: FC<AdvertCardProps> = (props) => {
         <BodyText
           style={{ fontSize: 15, fontWeight: 400, textAlign: 'center' }}
         >
-          {props.description}
+          {truncatedDesc}
         </BodyText>
       </div>
       <Button
-        style={{ position: 'absolute', left: 10, bottom: 10 }}
+        style={{
+          position: 'absolute',
+          left: 10,
+          bottom: 10,
+          backgroundColor: '#233EC9',
+          border: 'none',
+          borderRadius: 0,
+        }}
         onClick={handleAdvertClick}
       >
         View Advert
