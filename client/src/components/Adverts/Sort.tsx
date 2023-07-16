@@ -94,6 +94,7 @@ export const Sort: FC = () => {
         flexDirection: 'row',
         alignItems: 'center',
         height: 34,
+        zIndex: 1000,
       }}
     >
       <BodyText
