@@ -111,7 +111,7 @@ export function UserInfo() {
           style={{
             left: 0,
             paddingRight: 0,
-            minHeight: matches ? '90em' : '',
+            minHeight: matches ? '70em' : '',
             backgroundColor: palette.subSectionsBgLighter,
             alignItems: 'center',
             display: 'flex',

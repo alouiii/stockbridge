@@ -162,7 +162,12 @@ export const UserIconDropdown: FC = () => {
   };
 
   const handleUserIconClick = () => {
-    navigate('/userinfo?MyAdverts');
+    handleItemClick({
+      index: 0,
+      link: "MyAdverts",
+      type: DropdownItemType.ADVERTS,
+      icon: ""
+    });
   };
 
   return (

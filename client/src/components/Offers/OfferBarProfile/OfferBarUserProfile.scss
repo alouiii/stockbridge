@@ -38,8 +38,6 @@
   
   .product-bar {
     background-color: white;
-    border-radius: 15px;
-    //margin-top: 1em;
     margin-bottom: 2em;
     max-width: 99%;
     padding: 0.5em;
@@ -48,10 +46,11 @@
   }
   
   .no-results-message {
-    position: absolute;
-    top: 70%;
-    left: 55%;
-    transform: translate(-50%, -50%);
+    position: relative;
+    top: 100%;
+    left: 50%;
+    min-height: 10em;
+    transform: translate(-15%, 20%);
     font-size: 2em;
     color: #727272;
   }
