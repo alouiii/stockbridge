@@ -49,7 +49,7 @@ const OfferBarUserProfileInfo: React.FC<OfferBarUserProfileInfoProps> = (props) 
             borderRadius: '3em',
             borderColor: 'transparent',
             objectFit: 'fill',
-            marginLeft: '3%'
+            marginRight: '1em',
           }}
           src={props.picture ? props.picture : imagePlaceholder}
         />

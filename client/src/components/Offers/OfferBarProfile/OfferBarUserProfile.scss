@@ -34,6 +34,7 @@
   .product-info {
     display: flex;
     flex: fill;
+    padding-left: 2em;
   }
   
   .product-bar {
@@ -68,8 +69,9 @@
 
   .offer-status-icon {
     align-self: center;
-    margin-top: 40%;
-    margin-left: 50%;
+    vertical-align: auto;
+    padding-top: 3em;
+    padding-left: 1em;
     opacity: 50%;
   }
 
