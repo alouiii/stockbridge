@@ -2,6 +2,7 @@ import reviewModel from '../models/Review';
 import type { Review } from '../entities/reviewEntity';
 import logger from '../config/logger';
 import { AppError } from '../utils/errorHandler';
+// import { deleteReviewFromAdvert } from './advertServices';
 
 const serviceName = 'reviewServices';
 
@@ -19,8 +20,6 @@ export const findReviewById = async (id: string, populate = true) => {
     logger.error(`${serviceName}: Review not found with id of ${id}`);
     throw new AppError('Review not found', 'Review not found', 404);
   }
-
-  logger.debug(`${serviceName}: Returning review ${review}`);
   return review;
 };
 
@@ -42,7 +41,7 @@ export const createReview = async (review: Review) => {
  */
 export const updateReview = async (id: string, review: Review) => {
   logger.debug(`${serviceName}: Updating review with id: ${id} with ${review}`);
-  return await reviewModel.findByIdAndUpdate(id, review, {
+  return reviewModel.findByIdAndUpdate(id, review, {
     new: true,
     runValidators: true,
   });
@@ -55,7 +54,9 @@ export const updateReview = async (id: string, review: Review) => {
  */
 export const delReview = async (id: string) => {
   logger.debug(`${serviceName}: Deleting review with id: ${id}`);
-  return await reviewModel.findByIdAndDelete(id);
+  // const review = (await findReviewById(id, false)) as Review;
+  // await deleteReviewFromAdvert(review.reviewer as unknown as string, id);
+  return reviewModel.findByIdAndDelete(id);
 };
 
 /**
@@ -75,6 +76,16 @@ export const getReviewsByAdvert = async (advertId: string, populate = true) => {
 };
 
 /**
+ * Returns all reviews of the requested user
+ * @param store
+ * @returns Promise containing the list of reviews
+ */
+export const getReviewsByReviewee = async (store: string, populate = true) => {
+  logger.debug(`${serviceName}: Requesting all reviews for user: ${store}`);
+  return await populateResult(reviewModel.find({ reviewee: store }), populate);
+};
+
+/**
  * Populates the referenced elements in a document
  * @param queryResult The document to be populated
  * @param populate Determines if the result should be populated
@@ -82,6 +93,6 @@ export const getReviewsByAdvert = async (advertId: string, populate = true) => {
  */
 function populateResult(queryResult: any, populate: boolean) {
   return populate
-    ? queryResult.populate(['reviewer', 'reviewedAdvert'])
+    ? queryResult.populate(['reviewer', 'reviewedAdvert', 'reviewee'])
     : queryResult;
 }

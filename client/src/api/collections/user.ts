@@ -22,10 +22,6 @@ export interface Address {
   postalCode?: string;
   country?: string;
 }
-export interface Location {
-  type: string;
-  coordinates: number[];
-}
 
 export interface Subscription {
   from: Date;
@@ -80,6 +76,11 @@ export interface UserResponse {
   message: string;
   user: PopulatedUser;
   jwtToken: string;
+}
+
+export interface Location {
+  type: string;
+  coordinates: [number, number];
 }
 
 const apiClient = new ApiClient();

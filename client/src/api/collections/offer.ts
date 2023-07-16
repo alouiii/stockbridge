@@ -6,7 +6,8 @@ export enum OfferStatus {
   OPEN = 'Open',
   ACCEPTED = 'Accepted',
   REJECTED = 'Rejected',
-  CANCELED = 'Canceled',
+  CANCELED_OUT_OF_STOCK = 'Canceled - Out of Stock',
+  CANCELED_USER = 'Canceled'
 }
 
 export interface Offer {
@@ -75,13 +76,17 @@ export async function getOffersByAdvert(
  * @param user the user Id
  * @param advertType 'Ask' or 'Sell'
  * @param offerType 'outgoing' or 'incoming'
- * @returns 
+ * @returns
  */
-export async function getUserSpecificOffers(user: string, advertType: string, offerType: string): Promise<PopulatedOffer[]> {
-  console.debug(user,advertType,offerType);
+export async function getUserSpecificOffers(
+  user: string,
+  advertType: string,
+  offerType: string,
+): Promise<PopulatedOffer[]> {
+  console.debug(user, advertType, offerType);
   return await apiClient.get<PopulatedOffer[]>(
-    `/offers/getUserSpecificOffers`, 
-    {withCredentials: true},
-    {"user": user, "advertType": advertType, "offerType": offerType}
-    );
+    `/offers/getUserSpecificOffers`,
+    { withCredentials: true },
+    { user: user, advertType: advertType, offerType: offerType },
+  );
 }

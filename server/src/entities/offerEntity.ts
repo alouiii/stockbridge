@@ -1,11 +1,11 @@
 import { Types } from 'mongoose';
 
-
 export enum OfferStatus {
   OPEN = 'Open',
   ACCEPTED = 'Accepted',
-  REJECTED = 'REJECTED',
-  CANCELED = 'Canceled',
+  REJECTED = 'Rejected',
+  CANCELED_OUT_OF_STOCK = 'Canceled - Out of Stock',
+  CANCELED_USER = 'Canceled'
 }
 
 export interface Offer {

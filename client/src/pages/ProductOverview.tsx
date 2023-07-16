@@ -1,12 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
+import { Spinner } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-import {
-  Advert,
-  Colors,
-  getAdvert,
-  PopulatedAdvert,
-} from '../api/collections/advert';
-import { getStore, PopulatedUser, User } from '../api/collections/user';
+import { Colors, getAdvert, PopulatedAdvert } from '../api/collections/advert';
+import { getStore, PopulatedUser } from '../api/collections/user';
 import { OffersSection } from '../components/Offers/OffersSection';
 import { Page } from '../components/Page';
 import { ProductOverviewSection } from '../components/ProductOverview/ProductOverviewSection';
@@ -35,27 +31,26 @@ const ProductOverview = () => {
     color: Colors.Blue,
     createdAt: new Date(),
   } as PopulatedAdvert);
-  const [store, setStore] = useState({} as User);
+  const [store, setStore] = useState({} as PopulatedUser);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         if (id) {
           const fetchedAdvert = await getAdvert(id);
-          if (fetchedAdvert.store) {
-            setStore(fetchedAdvert.store);
-          }
           setAdvert(fetchedAdvert as PopulatedAdvert);
-          console.log(fetchedAdvert);
+          if (fetchedAdvert.store) {
+            setStore(await getStore(fetchedAdvert.store._id!));
+          }
         }
       } catch (error) {
         console.error(error);
       }
     };
     fetchData();
-  }, []);
+  }, [id]);
 
-  const { user, loggedIn } = useContext(LoginContext);
+  const { user } = useContext(LoginContext);
   const owner = store._id === user?._id;
   return (
     <Page>
@@ -66,7 +61,7 @@ const ProductOverview = () => {
             maxWidth: '100vw', // Set the maximum width to the viewport width
           }}
         >
-          <StoreDetailsBar category={advert.category} store={store} />
+          <StoreDetailsBar category={advert.category!} store={store} />
           <ProductOverviewSection advert={advert} store={store} />
           {owner && advert.offers && advert.offers.length > 0 && (
             <OffersSection
@@ -80,7 +75,7 @@ const ProductOverview = () => {
           )}
         </div>
       ) : (
-        <p>Loading ...</p>
+        <Spinner role="status" />
       )}
     </Page>
   );
