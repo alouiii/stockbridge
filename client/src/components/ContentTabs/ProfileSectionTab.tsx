@@ -16,10 +16,11 @@ type LeftTabProps = {
  */
 export function ProfileSectionTab(props: LeftTabProps) {
   const matches = useMediaQuery('(min-width: 1527px)');
+  const tooSmall = useMediaQuery('(min-width: 1070px)');
   return (
     <li
       className="profile-section-tab"
-      style={{ display: 'inline', width: '100%', alignSelf: 'left', fontSize: matches ? "25px" : "21px" }}
+      style={{ display: 'inline', width: '100%',  fontSize: matches ? "25px" : "21px" }}
     >
       <link
         rel="stylesheet"
