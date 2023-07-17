@@ -9,17 +9,17 @@ import {
   getAllAdvertsByStore,
   postAdvert,
   putAdvert,
+  getCategoriesByStore,
+  prioritizeAdvert,
 } from '../controllers/advertController';
 import { protect } from '../middlewares/authMiddleware';
 
 export const advertRouter = Router();
 
-advertRouter.route('/').post(protect, postAdvert).get(protect, getAdverts);
-advertRouter
-  .route('/getAdvertsByCategory/:cat')
-  .get(protect, getAllAdvertsByCategory);
-advertRouter.route('/getPopularCategories').get(protect, getPopularCategories);
-advertRouter.route('/getPopularAdverts').get(protect, getPopularAdverts);
+advertRouter.route('/').post(protect, postAdvert).get(getAdverts);
+advertRouter.route('/getAdvertsByCategory/:cat').get(getAllAdvertsByCategory);
+advertRouter.route('/getPopularCategories').get(getPopularCategories);
+advertRouter.route('/getPopularAdverts').get(getPopularAdverts);
 
 advertRouter
   .route('/:id')
@@ -28,7 +28,16 @@ advertRouter
   .delete(protect, deleteAdvert);
 
 advertRouter
-  .route('/getAdvertsByCategory/:category')
-  .get(protect, getAllAdvertsByCategory);
+  .route('/getAdvertsByStore/:store')
+  .get(protect, getAllAdvertsByStore);
 
-advertRouter.route('/getAdvertsByStore/:store').get(protect,getAllAdvertsByStore);
+advertRouter
+  .route('/getCategoriesByStore/:store')
+  .get(protect, getCategoriesByStore);
+advertRouter
+  .route('/getAdvertsByStore/:store')
+  .get(protect, getAllAdvertsByStore);
+
+advertRouter
+  .route('/prioritizeAdvert/:advert')
+  .get(protect, prioritizeAdvert);

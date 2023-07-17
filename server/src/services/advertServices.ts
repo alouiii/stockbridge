@@ -2,6 +2,7 @@ import advertModel from '../models/Advert';
 import type { Advert, ProductCategory } from '../entities/advertEntity';
 import logger from '../config/logger';
 import { AppError } from '../utils/errorHandler';
+import { ObjectId } from 'mongodb';
 
 const serviceName = 'advertServices';
 
@@ -11,7 +12,7 @@ const serviceName = 'advertServices';
  * @param populate determines if the result should be populated
  * @returns Promise containing the advert
  */
-export const findAdvertById = async (id: string, populate = true) => {
+export const findAdvertById = async (id: string, populate = true): Promise<Advert> => {
   logger.debug(`${serviceName}: Finding advert with id: ${id}`);
   const advert = await populateResult(advertModel.findById(id), populate);
 
@@ -20,7 +21,7 @@ export const findAdvertById = async (id: string, populate = true) => {
     throw new AppError('Advert not found', 'Advert not found', 404);
   }
 
-  logger.debug(`${serviceName}: Returning advert ${advert}`);
+  logger.debug(`${serviceName}: Returning advert with id ${advert._id}`);
   return advert;
 };
 
@@ -42,7 +43,7 @@ export const createAdvert = async (advert: Advert) => {
  */
 export const updateAdvert = async (id: string, advert: Advert) => {
   logger.debug(`${serviceName}: Updating advert with id: ${id} with ${advert}`);
-  return await advertModel.findByIdAndUpdate(id, advert, {
+  return await advertModel.findOneAndUpdate({_id: id}, advert, {
     new: true,
     runValidators: true,
   });
@@ -55,7 +56,7 @@ export const updateAdvert = async (id: string, advert: Advert) => {
  */
 export const delAdvert = async (id: string) => {
   logger.debug(`${serviceName}: Deleting advert with id: ${id}`);
-  return await advertModel.findByIdAndDelete(id);
+  return advertModel.findByIdAndDelete(id);
 };
 
 /**
@@ -97,12 +98,24 @@ export const findAllAdverts = async (
     };
   }
 
-  if (search) {
+  /*if (search) {
     queryFilter = {
       ...queryFilter,
       $text: { $search: search },
     };
+  }*/
+
+  if (search) {
+    const regex = new RegExp(search, "i"); //The "i" stands for case-insensitive matching.
+    queryFilter = {
+      ...queryFilter,
+      $or: [
+        { description: { $regex: regex } },
+        { productname: { $regex: regex } },
+      ]
+    };
   }
+
 
   if (radius) {
     queryFilter = {
@@ -114,6 +127,12 @@ export const findAllAdverts = async (
       },
     };
   }
+
+  //filter the adverts that are not closed
+  queryFilter = {
+    ...queryFilter,
+    status: { $ne: 'Closed' },
+  };
 
   logger.debug(`${serviceName}: Query filter: ${JSON.stringify(queryFilter)}`);
 
@@ -132,6 +151,7 @@ export const findAllAdverts = async (
         isCreatedAtIncluded = key === 'createdAt';
         data = [key, -1];
       } else {
+        isCreatedAtIncluded = sortParam === 'createdAt';
         data = [sortParam, 1];
       }
       sortParams.push(data);
@@ -193,20 +213,20 @@ export const getAdvertsByCategory = async (
   logger.debug(
     `${serviceName}: Requesting all adverts with category: ${category}`,
   );
-  return await populateResult(advertModel.find({ category: category }),
-    populate)
+  return await populateResult(
+    advertModel.find({ category: category }),
+    populate,
+  );
 };
 
 /**
  * Returns all adverts of the requested store
- * @param category
- * @param populate 
+ * @param store
+ * @param populate
  * @returns Promise containing the related adverts.
  */
 export const getAdvertsByStore = async (store: string, populate = true) => {
-  logger.debug(
-    `${serviceName}: Requesting all adverts of store: ${store}`,
-  );
+  logger.debug(`${serviceName}: Requesting all adverts of store: ${store}`);
   return await populateResult(advertModel.find({ store: store }), populate);
 };
 
@@ -248,6 +268,7 @@ export const getPopularAdverts = async (limit: number) => {
     { $limit: limit },
   ]);
 };
+
 
 /**
  * Populates the referenced elements in a document

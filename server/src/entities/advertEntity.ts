@@ -1,3 +1,5 @@
+import { ObjectId } from 'mongodb';
+import { Types } from 'mongoose';
 import { Offer } from './offerEntity';
 import { Review } from './reviewEntity';
 import { User, Location } from './userEntity';
@@ -8,9 +10,9 @@ export enum AdvertType {
 }
 
 export enum AdvertStatus {
-  Ongoing,
-  Closed,
-  Deleted,
+  Ongoing = 'Ongoing',
+  Closed = 'Closed',
+  Deleted = 'Deleted',
 }
 export enum Colors {
   Blue = 'Blue',
@@ -57,8 +59,8 @@ export interface Advert {
   status: string;
   type: string;
   category: string;
-  offers?: Offer[];
-  reviews?: Review[];
-  store: User;
+  offers?: ObjectId[];
+  reviews?: ObjectId[];
+  store: ObjectId;
   location: Location;
 }

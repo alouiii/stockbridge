@@ -10,7 +10,6 @@ import {
   PaymentMethod,
   PopulatedUser,
   updateUser,
-  User,
 } from '../../../api/collections/user';
 import { LoginContext } from '../../../contexts/LoginContext';
 import {
@@ -244,7 +243,7 @@ const StoreDetailsForm: React.FC = () => {
           onChangeError={(error) => setError(error)}
         />
         <Row className={'mb-2 justify-content-end '}>
-          <Col xs={1}>
+          <Col xs={2}>
             <Button
               type="submit"
               className={'mb-2'}

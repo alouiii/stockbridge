@@ -9,9 +9,9 @@ export enum AdvertType {
 }
 
 export enum AdvertStatus {
-  Ongoing,
-  Closed,
-  Deleted,
+  Ongoing = 'Ongoing',
+  Closed = 'Closed',
+  Deleted = 'Deleted',
 }
 export enum Colors {
   Blue = 'Blue',
@@ -47,6 +47,13 @@ export interface AdvertDto {
   results?: PopulatedAdvert[];
   totalNumberOfPages?: number;
   pagination?: Pagination;
+}
+
+export interface CategoryDto {
+  categories: {
+    _id: string;
+    count: number;
+  }[];
 }
 
 interface Pagination {
@@ -108,6 +115,17 @@ export async function getAdvert(id: string): Promise<PopulatedAdvert> {
   });
 }
 
+export async function getCategoriesByStore(
+  store: string,
+): Promise<ProductCategory[]> {
+  return await apiClient.get<ProductCategory[]>(
+    `/adverts/getCategoriesByStore/${store}`,
+    {
+      withCredentials: true,
+    },
+  );
+}
+
 export async function createAdvert(advert: Advert): Promise<Advert> {
   return await apiClient.post<Advert>(`/adverts/`, advert, {
     withCredentials: true,
@@ -129,14 +147,29 @@ export async function deleteAdvert(id: string): Promise<void> {
   });
 }
 
-export async function getAllAdverts(): Promise<AdvertDto> {
-  return await apiClient.get<AdvertDto>('/adverts/', {
+export async function getAdvertsByUser(
+  store: string | undefined,
+): Promise<Advert[]> {
+  return await apiClient.get<Advert[]>(`/adverts/getAdvertsByStore/${store}`, {
     withCredentials: true,
   });
 }
 
-export async function getAdvertsByUser(store: string | undefined): Promise<Advert[]> {
-  return await apiClient.get<Advert[]>(`/adverts/getAdvertsByStore/${store}`, {
-    withCredentials: true,
-  });
+
+export async function getAllAdverts(queryParams: any): Promise<AdvertDto> {
+  return await apiClient.get<AdvertDto>(`/adverts`, {}, queryParams);
+}
+
+export async function getPopularCategories(): Promise<CategoryDto> {
+  return await apiClient.get<CategoryDto>(`/adverts/getPopularCategories`);
+}
+
+export async function getPopularAdverts(): Promise<AdvertDto> {
+  return await apiClient.get<AdvertDto>(`/adverts/getPopularAdverts`);
+}
+
+export async function prioritizeAdvert(advert: string): Promise<Advert> {
+  return await apiClient.get<Advert>(`/adverts/prioritizeAdvert/${advert}`, {
+    withCredentials: true
+  })
 }

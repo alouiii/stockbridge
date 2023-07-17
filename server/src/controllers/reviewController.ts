@@ -6,8 +6,11 @@ import {
   updateReview,
   delReview,
   getReviewsByAdvert,
+  getReviewsByReviewee,
 } from '../services/reviewServices';
 import { AuthenticatedRequest } from '../middlewares/authMiddleware';
+import { AppError } from '../utils/errorHandler';
+import { Review } from '../entities/reviewEntity';
 
 /**
  * This method returns a review by id   *
@@ -31,6 +34,16 @@ export const getReview = asyncHandler(
  */
 export const postReview = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
+    const newReview: Review = req.body;
+
+    if ((newReview.reviewer as unknown as string) !== req.user?.id) {
+      throw new AppError(
+        'Not authorized to access this route',
+        'Not authorized to access this route',
+        403,
+      );
+    }
+
     const review = await createReview(req.body);
     res.status(201).json(review);
   },
@@ -46,9 +59,13 @@ export const putReview = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const { id } = req.params;
 
-    /* if (id !== req.user?.id) {
-        throw new AppError('Not authorized to access this route', 'Not authorized to access this route',401)
-    } */
+    if (id !== req.user?.id) {
+      throw new AppError(
+        'Not authorized to access this route',
+        'Not authorized to access this route',
+        401,
+      );
+    }
 
     const review = await updateReview(id, req.body);
     res.status(200).json(review);
@@ -65,6 +82,16 @@ export const deleteReview = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const { id } = req.params;
 
+    const reviewToDelete: Review = await findReviewById(id);
+
+    if (reviewToDelete.reviewer.id !== req.user?.id) {
+      throw new AppError(
+        'Not authorized to access this route',
+        'Not authorized to access this route',
+        401,
+      );
+    }
+
     const review = await delReview(id);
     res.status(204).json(review);
   },
@@ -80,6 +107,20 @@ export const getAllReviewsByAdvert = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const { advertId } = req.params;
     const reviews = await getReviewsByAdvert(advertId, true);
+    res.status(200).json(reviews);
+  },
+);
+
+/**
+ * This method gets all reviews of a specific advert   *
+ * @param req - The request object
+ * @param res - The response object
+ * @returns list of reviews.
+ */
+export const getAllReviewsByReviewee = asyncHandler(
+  async (req: AuthenticatedRequest, res: Response) => {
+    const { store } = req.params;
+    const reviews = await getReviewsByReviewee(store);
     res.status(200).json(reviews);
   },
 );

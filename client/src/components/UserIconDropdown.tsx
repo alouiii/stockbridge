@@ -85,11 +85,13 @@ export const UserIconDropdown: FC = () => {
   const toggleDropDown = () => setDropdownOpen(!isDropdownOpen);
 
   /** Autoclicks the selected tab section instead of renavigating.
-  */ 
-  const autoClickTab = (index : number) => {
-    const tabButton = document.getElementsByClassName("profile-section-tab-button")[index] as HTMLElement;
+   */
+  const autoClickTab = (index: number) => {
+    const tabButton = document.getElementsByClassName(
+      'profile-section-tab-button',
+    )[index] as HTMLElement;
     tabButton.click();
-  }
+  };
 
   const handleItemClick = (item: DropdownItem) => {
     if (item.type === DropdownItemType.LOGOUT) {
@@ -159,6 +161,15 @@ export const UserIconDropdown: FC = () => {
     setDropdownOpen(false);
   };
 
+  const handleUserIconClick = () => {
+    handleItemClick({
+      index: 0,
+      link: "MyAdverts",
+      type: DropdownItemType.ADVERTS,
+      icon: ""
+    });
+  };
+
   return (
     <div
       style={{ position: 'relative', height: 40 }}
@@ -175,7 +186,8 @@ export const UserIconDropdown: FC = () => {
           position: matches ? undefined : 'absolute',
           right: matches ? undefined : 0,
         }}
-        onClick={toggleDropDown}
+        onClick={handleUserIconClick}
+        onMouseOver={toggleDropDown}
       />
       {isDropdownOpen && (
         <div
