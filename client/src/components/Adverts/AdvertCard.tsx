@@ -54,7 +54,7 @@ export const AdvertCard: FC<AdvertCardProps> = (props) => {
   return (
     <div
       style={{
-        width: props.fancyEffect ? 325 : 300,
+        width: 300,
         height: props.fancyEffect ? 380 : 425,
         borderRadius: 8,
         position: 'relative',
