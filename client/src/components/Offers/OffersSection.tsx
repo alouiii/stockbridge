@@ -1,6 +1,7 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { PopulatedAdvert } from '../../api/collections/advert';
-import { 
+import {
+  getOffersByAdvert,
   OfferStatus,
 } from '../../api/collections/offer';
 import { ReviewOfferSection } from '../ProductOverview/ReviewOfferSection';
@@ -49,7 +50,7 @@ const OffersSection: FC<OffersSectionProps> = (props) => {
       )}
       {canceledOffers.length > 0 && (
         <OfferSection
-          status={OfferStatus.CANCELED}
+          status={OfferStatus.CANCELED_USER}
           offers={canceledOffers}
           advert={props.advert}
           storeName={props.storeName}

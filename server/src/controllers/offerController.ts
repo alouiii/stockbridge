@@ -64,7 +64,7 @@ export const postOffer = asyncHandler(
     const { offeror, offeree, advert } = req.body;
     const relatedAdvert = await findAdvertById(advert);
     // Type conversion for comparaison
-    let offerorId = new ObjectId(offeror),
+    let offerorId = new ObjectId(offeror._id),
       userId = new ObjectId(relatedAdvert.store.id);
     if (offeror == offeree || offerorId.equals(userId)) {
       throw new AppError(
@@ -224,6 +224,7 @@ async function _checkUserCanEditOrDeleteOffer(req: AuthenticatedRequest) {
   const { id } = req.params;
   // The user editing or deleting must be the offeror or offeree.
   let offer = await findOfferById(id, false);
+  
   if (!offer.offeror.equals(userId) && !offer.offeree.equals(userId)) {
     throw new AppError(
       'Not authorized to edit this route',
@@ -234,7 +235,7 @@ async function _checkUserCanEditOrDeleteOffer(req: AuthenticatedRequest) {
 }
 
 async function _checkAuthorizedUser(userId: ObjectId, advertId: string) {
-  const advert = await findAdvertById(advertId);
+  const advert = await findAdvertById(advertId, false);
   return advert.store === userId;
 }
 

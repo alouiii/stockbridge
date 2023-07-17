@@ -2,6 +2,7 @@ import advertModel from '../models/Advert';
 import type { Advert, ProductCategory } from '../entities/advertEntity';
 import logger from '../config/logger';
 import { AppError } from '../utils/errorHandler';
+import { ObjectId } from 'mongodb';
 
 const serviceName = 'advertServices';
 
@@ -11,7 +12,7 @@ const serviceName = 'advertServices';
  * @param populate determines if the result should be populated
  * @returns Promise containing the advert
  */
-export const findAdvertById = async (id: string, populate = true) => {
+export const findAdvertById = async (id: string, populate = true): Promise<Advert> => {
   logger.debug(`${serviceName}: Finding advert with id: ${id}`);
   const advert = await populateResult(advertModel.findById(id), populate);
 
@@ -20,7 +21,7 @@ export const findAdvertById = async (id: string, populate = true) => {
     throw new AppError('Advert not found', 'Advert not found', 404);
   }
 
-  logger.debug(`${serviceName}: Returning advert ${advert}`);
+  logger.debug(`${serviceName}: Returning advert with id ${advert._id}`);
   return advert;
 };
 
@@ -42,7 +43,7 @@ export const createAdvert = async (advert: Advert) => {
  */
 export const updateAdvert = async (id: string, advert: Advert) => {
   logger.debug(`${serviceName}: Updating advert with id: ${id} with ${advert}`);
-  return advertModel.findByIdAndUpdate(id, advert, {
+  return await advertModel.findOneAndUpdate({_id: id}, advert, {
     new: true,
     runValidators: true,
   });
@@ -267,6 +268,7 @@ export const getPopularAdverts = async (limit: number) => {
     { $limit: limit },
   ]);
 };
+
 
 /**
  * Populates the referenced elements in a document

@@ -3,8 +3,9 @@ import { BodyText } from '../Text/BodyText';
 import { ProductAttribute } from './ProductAttribute';
 import { Image } from 'react-bootstrap';
 import imagePlaceholder from '../../assets/product-placeholder.png';
+import { palette } from '../../utils/colors';
+
 const ProductDetails = (advert: PopulatedAdvert) => {
-  console.log(advert);
   return (
     <div
       style={{
@@ -12,7 +13,6 @@ const ProductDetails = (advert: PopulatedAdvert) => {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'start',
-        width: 'auto',
       }}
     >
       <Image
@@ -34,16 +34,45 @@ const ProductDetails = (advert: PopulatedAdvert) => {
           marginRight: '10%',
         }}
       >
-        <BodyText
+        <div
           style={{
-            fontFamily: 'Poppins',
-            color: 'black',
-            fontSize: '24px',
-            fontWeight: 600,
+            display: 'flex',
+            gap: 10,
+            width: '100%',
+
+            alignItems: 'center',
           }}
         >
-          {advert.productname ? advert.productname : 'Fake Product Name'}
-        </BodyText>
+          <BodyText
+            style={{
+              fontFamily: 'Poppins',
+              color: 'black',
+              fontSize: '24px',
+              fontWeight: 600,
+            }}
+          >
+            {advert.productname ?? 'Fake Product Name'}
+          </BodyText>
+          {advert.prioritized && (
+            <BodyText
+              style={{
+                border: '1px solid',
+                fontFamily: 'Poppins',
+                borderRadius: '20px',
+                fontSize: '12px',
+                borderColor: palette.subSectionsBgAccent,
+                color: palette.subSectionsBgAccent,
+                paddingLeft: '20px',
+                paddingRight: '20px',
+                height: '20px',
+                textAlign: 'center',
+                font: 'light',
+              }}
+            >
+              prioritized
+            </BodyText>
+          )}
+        </div>
         <BodyText
           style={{
             fontFamily: 'Poppins',

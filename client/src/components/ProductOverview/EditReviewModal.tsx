@@ -1,8 +1,6 @@
-import React, { FC, useContext, useState } from 'react';
+import { FC, useContext, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import {
-  PopulatedAdvert,
-} from '../../api/collections/advert';
+import { PopulatedAdvert } from '../../api/collections/advert';
 import { Review, createReview } from '../../api/collections/review';
 import { LoginContext } from '../../contexts/LoginContext';
 import { palette } from '../../utils/colors';
@@ -54,6 +52,7 @@ const EditReviewModal: FC<EditReviewContentProps> = (props) => {
             description: description,
             rating: rating,
             reviewer: user!._id,
+            reviewee: props.advert.store,
             reviewedAdvert: props.advert,
             createdAt: new Date(),
           } as Review);
