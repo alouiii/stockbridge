@@ -6,7 +6,15 @@ import image404 from '../../src/assets/404.jpg';
 export const NotFound: FC = () => {
   return (
     <Page>
-      <Image src={image404} fluid/>
+      <Image src={image404} fluid style={{
+        height: '40%',
+        width: '40%',
+        position: 'relative',
+        left: '30%',
+        paddingTop: '7em',
+        paddingBottom: '7em'
+
+      }}/>
     </Page>
   );
 };
