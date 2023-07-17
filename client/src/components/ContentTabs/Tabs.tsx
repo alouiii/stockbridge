@@ -1,6 +1,7 @@
 import React, { ReactElement, useState } from 'react';
 import ContentTabTitle from './ContentTabTitle';
 import { Button } from 'react-bootstrap';
+import useMediaQuery from '../../hooks/useMediaQuery';
 //import styles from "./styles.css";
 require('./tabStyles.scss');
 
@@ -49,6 +50,7 @@ const Tabs: React.FC<Props> = ({ children, isOffer, searchText, setSearchText, s
   };
 
   const [selectedTab, setSelectedTab] = useState(0);
+  const matches = useMediaQuery('(min-width: 1400px)');
   return (
     <div>
       <ul
@@ -70,12 +72,12 @@ const Tabs: React.FC<Props> = ({ children, isOffer, searchText, setSearchText, s
         ))}
       </ul>
 
-      <div style={{ float: "right", marginTop: "-4em", marginRight: "4em", fontFamily: "poppins" }}>
+      <div style={{ float: "right", marginTop: matches ? "-4em" : "", marginRight: "4em", fontFamily: "poppins" }}>
         <input type="search" value={searchText} onChange={handleSearchChange} placeholder="Search..." 
         style={{padding: 6 , borderRadius: 8 , border: "solid #f86c6c", borderWidth: 0.05}}/>
-        <text style={{color: "#f86c6c", fontWeight: "500", fontSize: "1.2em" }}> Sort by </text>
+        <span style={{color: "#f86c6c", fontWeight: "500", fontSize: "1.2em" }}> Sort by </span>
         <select onChange={handleSortChange} style={{padding: 6  , borderRadius: 8 , borderColor: "#f86c6c", color: "grey"}}>
-          {isOffer ? offerValues.map((item, _) => (<option value={item}>{item}</option>)) : advertValues.map((item, _) => (<option value={item}>{item}</option>))}
+          {isOffer ? offerValues.map((item, index) => (<option key={index} value={item}>{item}</option>)) : advertValues.map((item, _) => (<option value={item}>{item}</option>))}
         </select>
         <Button
           style={{ alignSelf: 'center',  background: 'none', border: "none", fontSize: "2em" }}

@@ -91,9 +91,10 @@ const MyAdvertsContent: React.FC = () => {
     <div>
       <Tabs isOffer = {false} searchText={searchText} setSearchText={setSearchText} sortCriteria={sortCriteria} setSortCriteria={setSortCriteria} sortOrder= {sortOrder} setSortOrder={setSortOrder}>
         <ContentTab title="Selling Ads">
-          {sellingAdverts.length > 0 ? sortedAndFilteredItems(sellingAdverts).map((product, _) => {
+          {sellingAdverts.length > 0 ? sortedAndFilteredItems(sellingAdverts).map((product, index) => {
             return (
               <ProductInfoBar
+                key={index}
                 productId={product._id}
                 imageUrl={product.imageurl}
                 name={product.productname}
@@ -107,9 +108,10 @@ const MyAdvertsContent: React.FC = () => {
           }) : <NoResultsMessage/>}
         </ContentTab>
         <ContentTab title="Buying Ads">
-          {buyingAdverts.length > 0 ? sortedAndFilteredItems(buyingAdverts).map((product, _) => {
+          {buyingAdverts.length > 0 ? sortedAndFilteredItems(buyingAdverts).map((product, index) => {
             return (
               <ProductInfoBar
+                key={index}
                 productId={product._id}
                 imageUrl={product.imageurl}
                 name={product.productname}
