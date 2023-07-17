@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { Spinner } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Colors, getAdvert, PopulatedAdvert } from '../api/collections/advert';
 import { getStore, PopulatedUser } from '../api/collections/user';
 import { OffersSection } from '../components/Offers/OffersSection';
@@ -35,6 +35,8 @@ const ProductOverview = () => {
   const [store, setStore] = useState({} as PopulatedUser);
   const [isLoading, setIsLoading] = useState(true);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -42,14 +44,15 @@ const ProductOverview = () => {
           const fetchedAdvert = await getAdvert(id);
           if (fetchedAdvert) {
             setAdvert(fetchedAdvert as PopulatedAdvert);
-            setIsLoading(false)
-          if (fetchedAdvert.store) {
-            setStore(await getStore(fetchedAdvert.store._id!));
+            setIsLoading(false);
+            if (fetchedAdvert.store) {
+              setStore(await getStore(fetchedAdvert.store._id!));
+            }
           }
         }
-      }
       } catch (error) {
         console.error(error);
+        navigate("*") //not found page
       }
     };
     fetchData();
@@ -57,14 +60,7 @@ const ProductOverview = () => {
 
   const { user } = useContext(LoginContext);
   const owner = store._id === user?._id;
-  return (
-    isLoading ? <FadeLoader color={palette.subSectionsBgAccent} style={{
-      position: 'absolute',
-      left: '45%',
-      right: '45%',
-      top: '45%',
-      bottom: '45%'
-    }} /> :
+  return isLoading ? null : (
     <Page>
       {advert ? (
         <div
@@ -90,7 +86,6 @@ const ProductOverview = () => {
         <Spinner role="status" />
       )}
     </Page>
-    
   );
 };
 
