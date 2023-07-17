@@ -6,19 +6,14 @@ import ShipmentDetailsForm from './ShipmentDetailsForm';
 import StoreDetailsHeader from './StoreDetailsHeader';
 import {
   Address,
-  PaymentMethod,
   PopulatedUser,
   updateUser,
 } from '../../../api/collections/user';
 import { LoginContext } from '../../../contexts/LoginContext';
-import {
-  autocompleteCardNumber,
-  autocompleteExpirationDate,
-  expDatePaymentToDate,
-} from '../../../utils/functions';
 import PaymentElement, { PaymentType } from '../../Payment/PaymentElement';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import userDefaultImage from '../../../assets/defaultUser.png';
 
 export interface InputProps {
   value: string;
@@ -65,7 +60,9 @@ const StoreDetailsForm: React.FC = () => {
   const [error, setError] = useState<boolean>(false);
 
   const [name, setName] = useState<string>(user?.name as string);
-  const [image, setImage] = useState<string>(user?.imageUrl as string);
+  const [image, setImage] = useState<string>(
+    (user?.imageUrl as string) ?? userDefaultImage,
+  );
 
   const [showPaymentModal, setShowPaymentModal] = useState<boolean>(false);
 
@@ -117,28 +114,28 @@ const StoreDetailsForm: React.FC = () => {
     setCountry(e.target.value);
   };
 
-  const [cardHolder, setCardHolder] = useState(user?.paymentMethod!.name || '');
-  const [cardNumber, setCardNumber] = useState(
-    user?.paymentMethod!.cardNumber || '',
-  );
-  const [cvv, setCvv] = useState(user?.paymentMethod!.cvv || '');
-  const [expiration, setExpiration] = useState('');
-
-  const handleCardHolderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCardHolder(e.target.value);
-  };
-
-  const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCardNumber(autocompleteCardNumber(e) ?? '');
-  };
-
-  const handleCcvChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCvv(e.target.value);
-  };
-
-  const handleExpirationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setExpiration(autocompleteExpirationDate(e) ?? '');
-  };
+  // const [cardHolder, setCardHolder] = useState(user?.paymentMethod!.name || '');
+  // const [cardNumber, setCardNumber] = useState(
+  //   user?.paymentMethod!.cardNumber || '',
+  // );
+  // const [cvv, setCvv] = useState(user?.paymentMethod!.cvv || '');
+  // const [expiration, setExpiration] = useState('');
+  //
+  // const handleCardHolderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setCardHolder(e.target.value);
+  // };
+  //
+  // const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setCardNumber(autocompleteCardNumber(e) ?? '');
+  // };
+  //
+  // const handleCcvChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setCvv(e.target.value);
+  // };
+  //
+  // const handleExpirationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setExpiration(autocompleteExpirationDate(e) ?? '');
+  // };
 
   let notify: () => void;
 
@@ -155,14 +152,14 @@ const StoreDetailsForm: React.FC = () => {
         postalCode: postalCode || undefined,
         country: country || undefined,
       };
-      const paymentMethod: PaymentMethod = {
-        name: cardHolder || undefined,
-        cardNumber: cardNumber || undefined,
-        cvv: cvv || undefined,
-        expirationDate: expiration
-          ? expDatePaymentToDate(expiration)
-          : undefined,
-      };
+      // const paymentMethod: PaymentMethod = {
+      //   name: cardHolder || undefined,
+      //   cardNumber: cardNumber || undefined,
+      //   cvv: cvv || undefined,
+      //   expirationDate: expiration
+      //     ? expDatePaymentToDate(expiration)
+      //     : undefined,
+      // };
       const updatedUser: PopulatedUser = {
         name: name || undefined,
         email: email || undefined,
@@ -172,11 +169,11 @@ const StoreDetailsForm: React.FC = () => {
         ...(Object.values(address).some((value) => value !== undefined) && {
           address,
         }),
-        ...(Object.values(paymentMethod).some(
-          (value) => value !== undefined,
-        ) && {
-          paymentMethod,
-        }),
+        // ...(Object.values(paymentMethod).some(
+        //   (value) => value !== undefined,
+        // ) && {
+        //   paymentMethod,
+        // }),
       };
       try {
         await updateUser(user?._id!, updatedUser);
