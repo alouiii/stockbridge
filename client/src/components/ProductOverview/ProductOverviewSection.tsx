@@ -5,13 +5,13 @@ import { ProductDetails } from './ProductDetails';
 import { Button } from 'react-bootstrap';
 import { AdvertStatus, PopulatedAdvert } from '../../api/collections/advert';
 import { OfferModal } from '../Offers/OfferModal';
-import { PopulatedUser } from '../../api/collections/user';
+import { User } from '../../api/collections/user';
 import { LoginContext } from '../../contexts/LoginContext';
 import { PriorizationModal } from '../Priorization/PriorizationModal';
 
 type ProductOverviewSectionProps = {
   advert: PopulatedAdvert;
-  store: PopulatedUser;
+  store: User;
 };
 
 const ProductOverviewSection: React.FC<ProductOverviewSectionProps> = (
@@ -20,12 +20,12 @@ const ProductOverviewSection: React.FC<ProductOverviewSectionProps> = (
   const { user } = useContext(LoginContext);
   const owner = user?._id === props.advert?.store?._id;
   const button_text = !owner
-    ? props.advert?.type === 'Sell'
+    ? (props.advert?.type === 'Sell'
       ? 'Buy'
-      : 'Sell'
-    : props.advert?.prioritized
+      : 'Sell')
+    : (props.advert?.prioritized
     ? ''
-    : 'Prioritize';
+    : 'Prioritize');
 
   const [showOfferModal, setShowOfferModal] = useState(false);
   const [showPriorizationModal, setShowPriorizationModal] = useState(false);
@@ -84,7 +84,7 @@ const ProductOverviewSection: React.FC<ProductOverviewSectionProps> = (
           onClose={closePriorizationModal}
           advertID={props.advert._id!}
         />
-         {props.advert.status !== AdvertStatus.Closed &&
+         {props.advert.status !== AdvertStatus.Closed && !props.advert.prioritized &&
         <Button
           style={{
             cursor: 'pointer',

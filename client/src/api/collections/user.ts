@@ -129,6 +129,6 @@ export async function logout(): Promise<string> {
   );
 }
 
-export async function getStore(id: String): Promise<User> {
-  return await apiClient.get<User>(`/stores/${id}`);
+export async function getStore(id: String): Promise<PopulatedUser> {
+  return await apiClient.get<PopulatedUser>(`/stores/${id}`);
 }

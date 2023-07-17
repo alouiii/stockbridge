@@ -6,7 +6,7 @@ import { BodyText } from '../Text/BodyText';
 import { OfferModal } from './OfferModal';
 import { Ratings } from '../Ratings';
 import { InfoBar } from '../ProductOverview/InfoBar';
-import { getStore, User } from '../../api/collections/user';
+import { getStore, PopulatedUser } from '../../api/collections/user';
 require('./offerBarStyle.scss');
 
 type OfferBarUserProfileProps = {
@@ -34,8 +34,8 @@ const OfferBarUserProfile: React.FC<OfferBarUserProfileProps> = (props) => {
   const openModal = () => {
     setShowModal(true);
   };
-  const [offerer, setOfferer] = useState({} as User);
-  const [offeree, setOfferee] = useState({} as User);
+  const [offerer, setOfferer] = useState({} as PopulatedUser);
+  const [offeree, setOfferee] = useState({} as PopulatedUser);
   useEffect(() => {
     const fetchData = async () => {
       try {

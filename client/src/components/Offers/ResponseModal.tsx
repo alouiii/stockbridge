@@ -5,9 +5,9 @@ import success from '../../assets/success.svg';
 import fail from '../../assets/fail.svg';
 import outofstock from '../../assets/out-of-stock.svg';
 import { Image } from 'react-bootstrap';
-import { Offer, PopulatedOffer } from '../../api/collections/offer';
-import { useNavigate } from 'react-router-dom';
 import { Offer } from '../../api/collections/offer';
+import { useNavigate } from 'react-router-dom';
+
 
 export enum ResponseType {
   SUCCESSFUL_OFFER_CREATION,
