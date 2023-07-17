@@ -18,7 +18,8 @@ type OrderBarUserProfileInfoProps = {
 };
 
 const OrderBarUserProfileInfo: React.FC<OrderBarUserProfileInfoProps> = (props) => {
-  const getOfferIcon = function() : [string,string]
+  // Returns the icon and the corresponding color that should be displayed for the order status
+  const getOrderIcon = function() : [string,string]
   {
     switch (props.order.status) {
       case OrderStatus.RECEIVED:
@@ -27,6 +28,19 @@ const OrderBarUserProfileInfo: React.FC<OrderBarUserProfileInfoProps> = (props) 
         return ["bi-credit-card", "#4285F4"];
       default:
         return ["bi-credit-card", "#4285F4"]
+    }
+  }
+
+  // Returns the text on hover that should be displayed for the order status
+  const getOrderStatusText = function() : string
+  {
+    switch (props.order?.status) {
+      case OrderStatus.RECEIVED:
+        return "Received";
+      case OrderStatus.PAYMENT_PENDING:
+        return "Payment pending";
+      default:
+        return "Default";
     }
   }
 
@@ -89,12 +103,12 @@ const OrderBarUserProfileInfo: React.FC<OrderBarUserProfileInfoProps> = (props) 
       <div className='offer-status-icon'         
         onMouseOver={handleMouseOver}
         onMouseOut={handleMouseOut}>
-        <i className={`bi ${getOfferIcon()[0]}`} 
-        style={{ color: getOfferIcon()[1] , fontSize: "3em"}}></i>
+        <i className={`bi ${getOrderIcon()[0]}`} 
+        style={{ color: getOrderIcon()[1] , fontSize: "3em"}}></i>
       </div>
       {isHovered && 
         <div className = {'hover-text'}>
-          {"order status"}
+          {props.order && getOrderStatusText()}  
         </div>
       }
       </div>

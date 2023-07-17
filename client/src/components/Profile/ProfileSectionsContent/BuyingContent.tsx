@@ -13,8 +13,6 @@ import { OfferBarUserProfile } from '../../Offers/OfferBarProfile/OfferBarUserPr
 import { sortedAndFilteredOffers, sortedAndFilteredOrders } from '../../../utils/functions';
 import { OrderBarUserProfile } from '../../Offers/OfferBarProfile/OrderBarUserProfile';
 import { NestedPopulatedOrder, getUserSpecificOrders } from '../../../api/collections/order';
-import { palette } from '../../../utils/colors';
-import { FadeLoader } from 'react-spinners';
 import LoadingElementsContent from './LoadingElementsContent';
 
 /**

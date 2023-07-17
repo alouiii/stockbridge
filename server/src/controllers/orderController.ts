@@ -18,6 +18,7 @@ import {
   findAllOffersByOfferor,
 } from '../services/offerServices';
 import { Advert } from '../entities/advertEntity';
+import logger from '../config/logger';
 
 /**
  * This method returns a order by id
@@ -158,6 +159,7 @@ export const getUserSpecificOrders = asyncHandler(
     // Get the orders corresponding to the offers.
     // Using the index 0 in the map is because the findOrderByOffer returns a list of orders
     let orders = (await Promise.all(offers.flatMap(async x => (await findOrderByOffer(x.id))[0]))).filter(x => x != null);
+    console.log(orders);
     res.status(200).json(orders);
   },
 );
