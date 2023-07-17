@@ -23,6 +23,7 @@ export const orderSchema = new mongoose.Schema<Order>({
     required: [true, 'Please add a quantity'],
   },
   status: {
+    type: Types.String,
     enum: Object.values(OrderStatus),
     required: [false, 'Please add an order status'],
   },
@@ -81,12 +82,10 @@ orderSchema.pre<Order>('save', async function (next) {
   } else {
     payer = offeree as User;
   }
-  logger.error(this.totalPrice);
-  logger.error(advert!._id.toString());
   const paymentIntent = await createStripePaymentIntent(
     payer as User,
     this.totalPrice,
-    'offerId_' + advert!._id.toString(),
+    'offerId_' + (offer as unknown as Advert).id.toString(),
     {
       off_session: true,
       confirm: true,

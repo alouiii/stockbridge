@@ -13,7 +13,10 @@ import { ObjectId } from 'mongodb';
 import { Order } from '../entities/orderEntity';
 import { AppError } from '../utils/errorHandler';
 import { Offer } from '../entities/offerEntity';
-import { findAllOffersByOfferee, findAllOffersByOfferor } from '../services/offerServices';
+import {
+  findAllOffersByOfferee,
+  findAllOffersByOfferor,
+} from '../services/offerServices';
 import { Advert } from '../entities/advertEntity';
 
 /**
@@ -28,7 +31,7 @@ export const getOrder = asyncHandler(
     const userId = String(req.user?.id);
 
     let order = await findOrderById(id);
-    order = _findAndCheckRelatedOrders(userId, [order])[0];
+    await _checkUserCanEditOrDeleteOrder(req);
     res.status(200).json(order);
   },
 );
@@ -71,7 +74,7 @@ export const postOrder = asyncHandler(
 export const putOrder = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const { id } = req.params;
-    _checkUserCanEditOrDeleteOrder(req);
+    await _checkUserCanEditOrDeleteOrder(req);
     const order = await updateOrder(id, req.body);
     res.status(200).json(order);
   },
@@ -86,7 +89,7 @@ export const putOrder = asyncHandler(
 export const deleteOrder = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const { id } = req.params;
-    _checkUserCanEditOrDeleteOrder(req);
+    await _checkUserCanEditOrDeleteOrder(req);
     const order = await delOrder(id);
     res.status(200).json(order);
   },
@@ -108,7 +111,6 @@ export const getOrdersOfOffer = asyncHandler(
     res.status(200).json(order);
   },
 );
-
 
 /**
  * This method gets all orders that match the request body parameters  *
@@ -132,19 +134,35 @@ export const getUserSpecificOrders = asyncHandler(
     switch (orderType) {
       // Gets the related offers in case the order is of type Ask / Buying
       case 'Ask': {
-        var offersByOfferor = await findAllOffersByOfferor(user as string) as Offer[];
-        offersByOfferor = offersByOfferor.filter((x) => x.advert && (x.advert as unknown as Advert).type === 'Sell');
-        var offersByOfferee = await findAllOffersByOfferee(user as string) as Offer[];
-        offersByOfferee = offersByOfferee.filter((x) => x.advert && (x.advert as unknown as Advert).type === 'Ask');
+        var offersByOfferor = (await findAllOffersByOfferor(
+          user as string,
+        )) as Offer[];
+        offersByOfferor = offersByOfferor.filter(
+          (x) => x.advert && (x.advert as unknown as Advert).type === 'Sell',
+        );
+        var offersByOfferee = (await findAllOffersByOfferee(
+          user as string,
+        )) as Offer[];
+        offersByOfferee = offersByOfferee.filter(
+          (x) => x.advert && (x.advert as unknown as Advert).type === 'Ask',
+        );
         offers = offersByOfferor.concat(offersByOfferee);
         break;
       }
       // Gets the related offers in case the order is of type Sell
       case 'Sell': {
-        var offersByOfferor = await findAllOffersByOfferor(user as string) as Offer[];
-        offersByOfferor = offersByOfferor.filter((x) => x.advert && (x.advert as unknown as Advert).type === 'Ask');
-        var offersByOfferee = await findAllOffersByOfferee(user as string) as Offer[];
-        offersByOfferee = offersByOfferee.filter((x) => x.advert && (x.advert as unknown as Advert).type === 'Sell');
+        var offersByOfferor = (await findAllOffersByOfferor(
+          user as string,
+        )) as Offer[];
+        offersByOfferor = offersByOfferor.filter(
+          (x) => x.advert && (x.advert as unknown as Advert).type === 'Ask',
+        );
+        var offersByOfferee = (await findAllOffersByOfferee(
+          user as string,
+        )) as Offer[];
+        offersByOfferee = offersByOfferee.filter(
+          (x) => x.advert && (x.advert as unknown as Advert).type === 'Sell',
+        );
         offers = offersByOfferor.concat(offersByOfferee);
         break;
       }
@@ -155,7 +173,11 @@ export const getUserSpecificOrders = asyncHandler(
 
     // Get the orders corresponding to the offers.
     // Using the index 0 in the map is because the findOrderByOffer returns a list of orders
-    var orders = (await Promise.all(offers.flatMap(async x => (await findOrderByOffer(x.id))[0]))).filter(x => x != null);
+    var orders = (
+      await Promise.all(
+        offers.flatMap(async (x) => (await findOrderByOffer(x.id))[0]),
+      )
+    ).filter((x) => x != null);
     res.status(200).json(orders);
   },
 );

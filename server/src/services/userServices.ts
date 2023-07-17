@@ -7,6 +7,8 @@ import {
   SubscriptionType,
 } from '../entities/userEntity';
 import * as _ from 'lodash';
+import orderModel from '../models/Order';
+import { OrderStatus } from '../entities/orderEntity';
 const serviceName = 'userServices';
 
 /**
@@ -88,19 +90,28 @@ export const handleSuccessfulPaymentIntent = async (
     `${serviceName}: Handling successful payment intent for ${userId}`,
   );
   const user = (await userModel.findById(userId)) as User;
-  switch (product) {
-    case 'Basic Pack':
+  switch (true) {
+    case product === 'Basic Pack':
       user.prioritisationTickets += 5;
       break;
-    case 'Advanced Pack':
+    case product === 'Advanced Pack':
       user.prioritisationTickets += 10;
       break;
-    case 'Premium Pack':
+    case product === 'Premium Pack':
       user.prioritisationTickets += 20;
       break;
-    case 'Basic Subscription':
-    case 'Advanced Subscription':
-    case 'Premium Subscription':
+    case product === 'Basic Subscription':
+    case product === 'Advanced Subscription':
+    case product === 'Premium Subscription':
+      break;
+    case product.startsWith('offerId_'):
+      const offerId = product.split('_')[1];
+      orderModel.findOneAndUpdate(
+        { offer: offerId },
+        {
+          status: OrderStatus.RECEIVED,
+        },
+      );
       break;
     default:
       if (!product.startsWith('offerId_')) {
