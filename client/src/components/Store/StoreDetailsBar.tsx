@@ -7,7 +7,7 @@ import { StoreDetailsModal } from './StoreDetailsModal';
 
 type StoreDetailsBarProps = {
   category: string;
-  store: PopulatedUser;
+  store: User;
 };
 
 const StoreDetailsBar: React.FC<StoreDetailsBarProps> = (props) => {

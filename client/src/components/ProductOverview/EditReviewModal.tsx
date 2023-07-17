@@ -1,4 +1,4 @@
-import React, { FC, useContext, useState } from 'react';
+import { FC, useContext, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { PopulatedAdvert } from '../../api/collections/advert';
 import { Review, createReview } from '../../api/collections/review';

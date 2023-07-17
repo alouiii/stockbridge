@@ -37,7 +37,6 @@ export const ProductDetails: FC<ProductDetailsProps> = (props) => {
         }}
         src={advert?.imageurl ? advert?.imageurl : imagePlaceholder}
       />
-
       <div
         style={{
           display: 'flex',

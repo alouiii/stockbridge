@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Colors, getAdvert, PopulatedAdvert } from '../api/collections/advert';
 import { getStore, PopulatedUser } from '../api/collections/user';
 import { Page } from '../components/Page';
@@ -38,6 +38,8 @@ const ProductOverview = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -55,9 +57,11 @@ const ProductOverview = () => {
         }
       } catch (error) {
         console.error(error);
+        navigate("*") //not found page
       }
     };
     fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   return (
