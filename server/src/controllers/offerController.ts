@@ -192,7 +192,7 @@ export const getUserSpecificOffers = asyncHandler(
       );
     }
 
-    var offers: Offer[];
+    let offers: Offer[];
     switch (offerType) {
       case 'incoming': {
         offers = await findAllOffersByOfferee(user as string);
@@ -209,7 +209,7 @@ export const getUserSpecificOffers = asyncHandler(
 
     // Forced casting for the type Advert
     offers = offers.filter(
-      (x) => (x.advert as unknown as Advert).type === advertType,
+      (x) => x.advert && (x.advert as unknown as Advert).type === advertType,
     );
 
     res.status(200).json(offers);
