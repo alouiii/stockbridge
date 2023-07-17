@@ -177,7 +177,6 @@ const StoreDetailsForm: React.FC = () => {
       };
       try {
         await updateUser(user?._id!, updatedUser);
-        console.log('####################################');
         notify = () =>
           toast.success('Changes Saved!', {
             position: 'bottom-right',
