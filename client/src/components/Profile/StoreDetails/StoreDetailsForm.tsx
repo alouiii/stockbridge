@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { palette } from '../../../utils/colors';
 import AccountInformationForm from './AccountInformationForm';
@@ -206,7 +206,6 @@ const StoreDetailsForm: React.FC = () => {
     }
   };
 
-  useEffect(() => {});
 
   return (
     <>
@@ -289,7 +288,7 @@ const StoreDetailsForm: React.FC = () => {
               Edit Payment Details
             </Button>
           </Col>
-          <Col xs={1}>
+          <Col xs={2}>
             <Button
               type="submit"
               className={'mb-2'}
