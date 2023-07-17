@@ -12,6 +12,70 @@ type StoreDetailsBarProps = {
 
 const StoreDetailsBar: React.FC<StoreDetailsBarProps> = (props) => {
   const [showModal, setShowModal] = useState(false);
+  
+  const fieldContainer = (message: string, value: string, rating = false) => {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          gap: '4%',
+          alignItems: 'start',
+          justifyContent: 'start',
+          width: '50%',
+        }}
+      >
+        <BodyText
+          style={{
+            color: '#7881D7',
+            fontWeight: 600,
+            fontSize: '24px',
+          }}
+        >
+          {message}
+        </BodyText>
+        <div
+          style={
+            rating
+              ? {
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'start',
+                  justifyContent: 'start',
+                }
+              : {}
+          }
+        >
+          <div
+            style={{
+              width: 'auto',
+              fontWeight: 300,
+              fontSize: '24px',
+              fontFamily: 'Poppins',
+              color: '#ffffff',
+              display: 'flex',
+              flexDirection: 'column',
+              textDecorationColor: rating ? '#ffffff' : '',
+            }}
+          >
+            <BodyText
+              style={{
+                textDecoration: rating ? 'underline' : '',
+                cursor: rating ? 'pointer' : '',
+              }}
+              onClick={rating ? () => setShowModal(true) : () => {}}
+            >
+              {' '}
+              {value}
+            </BodyText>
+            {rating &&
+              Ratings(props.store?.rating ? props.store.rating : 0, 'red')}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
 
   return (
     <div

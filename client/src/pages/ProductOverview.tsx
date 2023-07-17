@@ -9,6 +9,7 @@ import { StoreDetailsBar } from '../components/Store/StoreDetailsBar';
 import { LoginContext } from '../contexts/LoginContext';
 import { OffersSection } from '../components/ProductOverview/Offers/OffersSection';
 
+
 const ProductOverview = () => {
   const { id } = useParams();
   const [advert, setAdvert] = useState({
@@ -42,12 +43,14 @@ const ProductOverview = () => {
       try {
         if (id) {
           const fetchedAdvert = await getAdvert(id);
-          setAdvert(fetchedAdvert as PopulatedAdvert);
-          setIsLoading(false);
-          if (fetchedAdvert.store) {
-            await getStore(fetchedAdvert.store._id!).then((response) =>
-              setStore(response),
-            );
+          if (fetchedAdvert) {
+            setAdvert(fetchedAdvert as PopulatedAdvert);
+            setIsLoading(false);
+            if (fetchedAdvert.store) {
+              await getStore(fetchedAdvert.store._id!).then((response) =>
+                setStore(response),
+              );
+            }
           }
         }
       } catch (error) {
