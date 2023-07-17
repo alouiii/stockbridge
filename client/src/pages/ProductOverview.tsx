@@ -8,7 +8,8 @@ import { ProductOverviewSection } from '../components/ProductOverview/ProductOve
 import { ReviewsSection } from '../components/Reviews/ReviewsSection';
 import { StoreDetailsBar } from '../components/Store/StoreDetailsBar';
 import { LoginContext } from '../contexts/LoginContext';
-
+import { FadeLoader } from 'react-spinners';
+import { palette } from '../utils/colors';
 const ProductOverview = () => {
   const { id } = useParams();
   let [advert, setAdvert] = useState({
@@ -30,13 +31,17 @@ const ProductOverview = () => {
     color: Colors.Blue,
     createdAt: new Date(),
   } as PopulatedAdvert);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         if (id) {
           const fetchedAdvert = await getAdvert(id);
-          setAdvert(fetchedAdvert as PopulatedAdvert);
+          if (fetchedAdvert) {
+            setAdvert(fetchedAdvert as PopulatedAdvert);
+            setIsLoading(false)
+          }
         }
       } catch (error) {
         console.error(error);
@@ -48,6 +53,13 @@ const ProductOverview = () => {
   const { user } = useContext(LoginContext);
   const owner = advert.store?._id === user?._id;
   return (
+    isLoading ? <FadeLoader color={palette.subSectionsBgAccent} style={{
+      position: 'absolute',
+      left: '45%',
+      right: '45%',
+      top: '45%',
+      bottom: '45%'
+    }} /> :
     <Page>
       {advert ? (
         <div
@@ -73,6 +85,7 @@ const ProductOverview = () => {
         <Spinner role="status" />
       )}
     </Page>
+    
   );
 };
 
