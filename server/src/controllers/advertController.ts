@@ -15,7 +15,6 @@ import { AuthenticatedRequest } from '../middlewares/authMiddleware';
 import { Advert, ProductCategory } from '../entities/advertEntity';
 import { ObjectId } from 'mongodb';
 import { AppError } from '../utils/errorHandler';
-import { findUserById, updateUser } from '../services/userServices';
 
 /**
  * This method returns an advert by id   *

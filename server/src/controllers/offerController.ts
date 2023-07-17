@@ -208,7 +208,7 @@ export const getUserSpecificOffers = asyncHandler(
 
     // Forced casting for the type Advert
     offers = offers.filter(
-      (x) => (x.advert as unknown as Advert).type === advertType,
+      (x) => x.advert && (x.advert as unknown as Advert).type === advertType,
     );
 
     res.status(200).json(offers);
