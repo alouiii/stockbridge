@@ -6,6 +6,7 @@ import prioritizedIcon from '../../assets/prioritized.svg';
 import emptyIcon from '../../assets/product-placeholder.png';
 import { useNavigate } from 'react-router-dom';
 import { LoginContext } from '../../contexts/LoginContext';
+import { palette } from '../../utils/colors';
 
 export interface AdvertCardProps {
   id: string | undefined;
@@ -65,7 +66,7 @@ export const AdvertCard: FC<AdvertCardProps> = (props) => {
           ? 'transform 0.3s, box-shadow 0.3s'
           : undefined,
         cursor: 'pointer',
-        backgroundColor: props.fancyEffect ? '#FFF5F8' : 'white',
+        backgroundColor: props.fancyEffect ? palette.advertCardBg : 'white',
       }}
       onMouseEnter={
         props.fancyEffect
@@ -109,7 +110,7 @@ export const AdvertCard: FC<AdvertCardProps> = (props) => {
           <BodyText style={{ fontSize: 21, fontWeight: 600 }}>
             {truncatedName}
           </BodyText>
-          <ColoredLine width={30} height={3} color="#4ECBA9" marginTop={-10} />
+          <ColoredLine width={30} height={3} color={palette.advertCardLine} marginTop={-10} />
         </div>
         <div
           style={{
@@ -146,7 +147,7 @@ export const AdvertCard: FC<AdvertCardProps> = (props) => {
           position: 'absolute',
           left: 10,
           bottom: 10,
-          backgroundColor: '#233EC9',
+          backgroundColor: palette.advertCardButton,
           border: 'none',
           borderRadius: 0,
         }}
