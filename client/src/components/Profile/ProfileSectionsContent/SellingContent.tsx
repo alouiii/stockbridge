@@ -13,6 +13,8 @@ import { OfferBarUserProfile } from '../../Offers/OfferBarProfile/OfferBarUserPr
 import { NestedPopulatedOrder, getUserSpecificOrders } from '../../../api/collections/order';
 import { OrderBarUserProfile } from '../../Offers/OfferBarProfile/OrderBarUserProfile';
 import {sortedAndFilteredOffers, sortedAndFilteredOrders} from '../../../utils/functions'
+import { FadeLoader } from 'react-spinners';
+import { palette } from '../../../utils/colors';
 
 /**
  * Component that displays the content of Selling section.
@@ -27,7 +29,7 @@ const SellingContent: React.FC = () => {
   const [sortCriteria, setSortCriteria] = useState<AdvertSortCriteria | OfferSortCriteria>(AdvertSortCriteria.NONE);
   // False == order asc , True == order desc
   const [sortOrder, setSortOrder] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -59,6 +61,7 @@ const SellingContent: React.FC = () => {
         setOutgoingOffers(outgoingAsk as PopulatedOffer[]);
         setIncomingOffers(incomingSell as PopulatedOffer[]);
         setOrders(nestedOrders as unknown as NestedPopulatedOrder[]);
+        setIsLoading(false);
       } catch (error) {
         console.error(error);
       }
@@ -71,7 +74,18 @@ const SellingContent: React.FC = () => {
     <div>
       <Tabs isOffer = {true} searchText={searchText} setSearchText={setSearchText} sortCriteria={sortCriteria} setSortCriteria={setSortCriteria} sortOrder= {sortOrder} setSortOrder={setSortOrder}>
         <ContentTab title="Orders">
-        {sortedAndFilteredOrders(orders, sortCriteria, searchText, sortOrder).length > 0 ? sortedAndFilteredOrders(orders, sortCriteria, searchText, sortOrder).map((order, _) => {
+        {isLoading ? (
+          <FadeLoader 
+            color={palette.subSectionsBgAccent}
+            role="status"
+              style={{
+                position: 'relative',
+                marginTop: '50%',
+                marginLeft: '40%',
+                height: '5em'
+            }} />
+        ) :
+        sortedAndFilteredOrders(orders, sortCriteria, searchText, sortOrder).length > 0 ? sortedAndFilteredOrders(orders, sortCriteria, searchText, sortOrder).map((order, _) => {
             return (
               <OrderBarUserProfile key= {order._id} order={order} outgoing={false} highlight={searchText} advert={order.offer?.advert!}/>
             );

@@ -191,7 +191,7 @@ export const getUserSpecificOffers = asyncHandler(
       );
     }
 
-    var offers: Offer[];
+    let offers: Offer[];
     switch (offerType) {
       case 'incoming': {
         offers = await findAllOffersByOfferee(user as string);

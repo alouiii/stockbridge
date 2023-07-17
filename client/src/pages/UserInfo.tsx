@@ -79,18 +79,6 @@ export function UserInfo() {
   const tabContext = useContext(SelectedTabContext);
 
   /**
-   * Sets the active tab from the link history.
-   */
-  useEffect(() => {
-    const filterParams = history.location.search.substring(1);
-    if (filterParams) {
-      tabContext.selectedProfileSection = Number(
-        leftTabs.findIndex((x) => filterParams === x.link),
-      );
-    }
-  }, []);
-
-  /**
    * Sets the link to the active tab.
    */
   useEffect(() => {
