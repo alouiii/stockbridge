@@ -193,6 +193,9 @@ const OfferModal: FC<OfferContentProps> = (props) => {
     }
   };
 
+  const handleConsentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsConsentChecked(event.target.checked);
+    };
   const handleAccept = async () => {
     setIsLoading(true);
     try {
@@ -523,7 +526,7 @@ const OfferModal: FC<OfferContentProps> = (props) => {
             )) && (
             <Modal.Footer
               style={{
-                justifyContent: offeree ? 'center' : 'end',
+                justifyContent: offeree ? 'center' : 'space-between'
               }}
             >
               {offeree && props.offer?.status === 'Open' && (
@@ -553,7 +556,8 @@ const OfferModal: FC<OfferContentProps> = (props) => {
               {!props.offer && (
                 <>
                   <div>
-                    <input type="checkbox" id="consent-checkbox" />
+                    <input type="checkbox" id="consent-checkbox" checked={isConsentChecked}
+                      onChange={handleConsentChange} style={{marginRight: '5px'}}/>
                     <label htmlFor="consent-checkbox">
                       I agree to the terms and conditions
                     </label>
