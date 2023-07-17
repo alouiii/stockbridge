@@ -15,6 +15,7 @@ import { OrderBarUserProfile } from '../../Offers/OfferBarProfile/OrderBarUserPr
 import {sortedAndFilteredOffers, sortedAndFilteredOrders} from '../../../utils/functions'
 import { FadeLoader } from 'react-spinners';
 import { palette } from '../../../utils/colors';
+import LoadingElementsContent from './LoadingElementsContent';
 
 /**
  * Component that displays the content of Selling section.
@@ -72,18 +73,10 @@ const SellingContent: React.FC = () => {
   
   return (
     <div>
-      <Tabs isOffer = {true} searchText={searchText} setSearchText={setSearchText} sortCriteria={sortCriteria} setSortCriteria={setSortCriteria} sortOrder= {sortOrder} setSortOrder={setSortOrder}>
+      <Tabs isOffer={true} searchText={searchText} setSearchText={setSearchText} sortCriteria={sortCriteria} setSortCriteria={setSortCriteria} sortOrder={sortOrder} setSortOrder={setSortOrder}>
         <ContentTab title="Orders">
-        {isLoading ? (
-          <FadeLoader 
-            color={palette.subSectionsBgAccent}
-            role="status"
-              style={{
-                position: 'relative',
-                marginTop: '50%',
-                marginLeft: '40%',
-                height: '5em'
-            }} />
+          {isLoading ? (
+            <LoadingElementsContent />
         ) :
         sortedAndFilteredOrders(orders, sortCriteria, searchText, sortOrder).length > 0 ? sortedAndFilteredOrders(orders, sortCriteria, searchText, sortOrder).map((order, _) => {
             return (
@@ -92,14 +85,18 @@ const SellingContent: React.FC = () => {
           }) : <NoResultsMessage />}
         </ContentTab>
         <ContentTab title="Incoming Offers">
-        {sortedAndFilteredOffers(incomingOffers, sortCriteria, searchText, sortOrder).length > 0 ? sortedAndFilteredOffers(incomingOffers, sortCriteria, searchText, sortOrder).map((offer, _) => {
+        {isLoading ? (
+            <LoadingElementsContent />
+        ) : sortedAndFilteredOffers(incomingOffers, sortCriteria, searchText, sortOrder).length > 0 ? sortedAndFilteredOffers(incomingOffers, sortCriteria, searchText, sortOrder).map((offer, _) => {
             return (
               <OfferBarUserProfile key= {offer._id} offer={offer} advert={offer.advert as PopulatedAdvert} outgoing= {false} highlight={searchText}/>
             );
           }) : <NoResultsMessage />}
         </ContentTab>
         <ContentTab title="Outgoing Offers">
-        {sortedAndFilteredOffers(outgoingOffers, sortCriteria, searchText, sortOrder).length > 0 ? sortedAndFilteredOffers(outgoingOffers, sortCriteria, searchText, sortOrder).map((offer, _) => {
+        {isLoading ? (
+            <LoadingElementsContent />
+        ) : sortedAndFilteredOffers(outgoingOffers, sortCriteria, searchText, sortOrder).length > 0 ? sortedAndFilteredOffers(outgoingOffers, sortCriteria, searchText, sortOrder).map((offer, _) => {
             return (
               <OfferBarUserProfile key= {offer._id} offer={offer} advert={offer.advert as PopulatedAdvert} outgoing= {true} highlight={searchText}/>
             );
