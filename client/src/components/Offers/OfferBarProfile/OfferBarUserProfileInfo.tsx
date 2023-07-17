@@ -5,7 +5,7 @@ import {
   OfferStatus
 } from '../../../api/collections/offer';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { ProfileProdcutAttribute } from '../../Profile/ProfileProdcutAttribute';
 import { PopulatedAdvert } from '../../../api/collections/advert';
 import { PopulatedOffer } from '../../../api/collections/offer';
@@ -21,6 +21,16 @@ type OfferBarUserProfileInfoProps = {
 };
 
 const OfferBarUserProfileInfo: React.FC<OfferBarUserProfileInfoProps> = (props) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const handleMouseOver = () => {
+    setIsHovered(true);
+  }
+
+  const handleMouseOut = () => {
+    setIsHovered(false);
+  }
+
+  
   const getOfferIcon = function() : [string,string]
   {
     switch (props.offer.status) {
@@ -46,10 +56,10 @@ const OfferBarUserProfileInfo: React.FC<OfferBarUserProfileInfoProps> = (props) 
           style={{
             width: '10em',
             height: '10em',
-            borderRadius: '60px',
+            borderRadius: '3em',
             borderColor: 'transparent',
             objectFit: 'fill',
-            marginLeft: '3em'
+            marginRight: '1em',
           }}
           src={props.picture ? props.picture : imagePlaceholder}
         />
@@ -85,14 +95,17 @@ const OfferBarUserProfileInfo: React.FC<OfferBarUserProfileInfoProps> = (props) 
         </div>
       </div>
       <div className="status col-1">
-      <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
-      ></link>
-      <div className='offer-status-icon'>
+        <div className='offer-status-icon'
+          onMouseOver={handleMouseOver}
+          onMouseOut={handleMouseOut}>
         <i className={`bi ${getOfferIcon()[0]}`} 
         style={{ color: getOfferIcon()[1] , fontSize: "3em"}}></i>
       </div>
+      {isHovered && 
+        <div className = {'hover-text'} style={{marginLeft: '0.5em'}}>
+        {props.offer.status}
+      </div>
+      }
       </div>
     </li>
   );
