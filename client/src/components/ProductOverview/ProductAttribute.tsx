@@ -10,9 +10,9 @@ type ProductAttributeProps = {
   border?: boolean;
   margin?: string;
   fontSize?: string;
-  width?: number
+  width?: number;
 };
-    
+
 function mapAttributeName(name: string): string {
   switch (name) {
     case 'color':
@@ -37,23 +37,23 @@ function mapAttributeName(name: string): string {
       return 'Height';
     case 'weight':
       return 'Weight';
-      case 'pages':
-        return 'Pages';
-        case 'volume':
-        return 'Volume';
-        case 'material':
-          return 'Material';
-          case 'sustainable':
-          return 'Sustainable';
-          case 'crueltyFree':
-          return 'Cruelty Free';
-          case 'recyclable':
-          return 'Recyclable';
-          case 'energyClass':
-          return 'Energy Class';
+    case 'pages':
+      return 'Pages';
+    case 'volume':
+      return 'Volume';
+    case 'material':
+      return 'Material';
+    case 'sustainable':
+      return 'Sustainable';
+    case 'crueltyFree':
+      return 'Cruelty Free';
+    case 'recyclable':
+      return 'Recyclable';
+    case 'energyClass':
+      return 'Energy Class';
     case 'category':
-      return 'Category'
-    default: 
+      return 'Category';
+    default:
       return '';
   }
 }

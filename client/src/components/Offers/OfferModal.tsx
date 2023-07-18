@@ -46,7 +46,9 @@ const OfferModal: FC<OfferContentProps> = (props) => {
     price: props.offer?.price ? props.offer?.price : 0,
     createdAt: new Date(),
   } as Offer);
-  const offeree = props.offer?.offeree && user?._id === (props.offer as PopulatedOffer).offeree?._id;
+  const offeree =
+    props.offer?.offeree &&
+    user?._id === (props.offer as PopulatedOffer).offeree?._id;
   const handleChange = (event: any) => {
     event.preventDefault();
     const { name, value } = event.target;
@@ -510,9 +512,12 @@ const OfferModal: FC<OfferContentProps> = (props) => {
             </Row>
           </Modal.Body>
           {(!props.offer ||
-            !['Rejected','Accepted', 'Canceled', 'Canceled - Out of Stock'].includes(
-              props.offer.status!,
-            )) && (
+            ![
+              'Rejected',
+              'Accepted',
+              'Canceled',
+              'Canceled - Out of Stock',
+            ].includes(props.offer.status!)) && (
             <Modal.Footer
               style={{
                 justifyContent: offeree ? 'center' : 'space-between',
