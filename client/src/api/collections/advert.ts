@@ -20,6 +20,28 @@ export enum Colors {
   Green = 'Green',
 }
 
+export enum Sizes {
+  XS = 'XS',
+  S = 'S',
+  M = 'M',
+  L = 'L',
+  XL = 'XL'
+}
+
+export enum Options {
+  YES = 'Yes',
+  NO = 'No',
+  UNKNOWN = 'Unknown' 
+}
+
+export enum EnergyClass {
+  A =  'A',
+  B = 'B',
+  C = 'C',
+  D = 'D',
+  E = 'E',
+  F = 'F'
+}
 export enum ProductCategory {
   Apparel_And_Accessories = 'Apparel And Accessories',
   Electronics_And_Gadgets = 'Electronics And Gadgets',
@@ -88,6 +110,19 @@ export interface Advert {
   imageurl?: string;
   color?: Color ;
   createdAt?: Date;
+  size?: string;
+  fabric?: string;
+  sustainable?: string;
+  crueltyFree?: string;
+  recyclable?: string;
+  energyClass?: string;
+  volume?: number;
+  width?: number;
+  height?: number;
+  length?: number;
+  weight?: number;
+  pages?: number;
+  material?: string;
 }
 
 export interface PopulatedAdvert {
@@ -107,7 +142,20 @@ export interface PopulatedAdvert {
   reviews?: Review[];
   imageurl?: string;
   color?: Color;
+  size?: string;
   createdAt?: Date;
+  fabric?: string;
+  sustainable?: string;
+  crueltyFree?: string;
+  recyclable?: string;
+  energyClass?: string;
+  width?: number;
+  height?: number;
+  length?: number;
+  weight?: number;
+  pages?: number;
+  volume?: number;
+  material?: string;
 }
 
 const apiClient = new ApiClient();
