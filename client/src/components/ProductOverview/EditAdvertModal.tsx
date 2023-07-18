@@ -128,6 +128,15 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
   const handleType = (event: any) => {
     setAdvertType(event.target.value);
   };
+
+  
+
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (colorPickerRef.current && !colorPickerRef.current.contains(event.target as Node)) {
+      setShowPicker(false);
+    }
+  };
   const [attributeList, setAttributeList] = useState<string[]>();
   useEffect(() => {
     if (props.advert) {
@@ -170,6 +179,7 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
     Quantity: '',
   });
 
+  
   function attributes(name: string, formData: any) {
   switch (name) {
     case 'purchaseDate': 
@@ -461,7 +471,17 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
     }
   };
   const [showPicker, setShowPicker ] = useState(false);
-  
+  useEffect(() => {
+    if (showPicker) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showPicker]);
   const handleColorChange = (selectedColor: any) => {
     setFormData({
       ...formData, 
