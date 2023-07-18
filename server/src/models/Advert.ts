@@ -168,19 +168,19 @@ advertSchema.pre('save', async function (next) {
   next();
 });
 
-advertSchema.pre('findOneAndUpdate',  async function (next) { 
+advertSchema.pre('findOneAndUpdate', async function (next) {
+  
   const thisAdvert = this.getUpdate() as Advert;
-  const existingAdvert = await advertModel.findById(thisAdvert.id)
-  if (!existingAdvert?.prioritized && thisAdvert.prioritized) {
-    const concernedUser = await userModel.findById(existingAdvert?.store);
-    if (concernedUser) {
-      concernedUser.prioritisationTickets = concernedUser.prioritisationTickets - 1
-      concernedUser.save()
-    }
+
+  if (!Object.getOwnPropertyNames(thisAdvert).some(property => (property != 'prioritized') && (property != 'id') )) {
+    const fetchedAdvert = await advertModel.findById(thisAdvert.id);
+
+    const concernedUser = await userModel.findOneAndUpdate({_id: fetchedAdvert?.store}, {
+      $inc: {prioritisationTickets: -1}
+    });
   }
   next();
 });
-
 
 advertSchema.index({
   productname: 'text',
