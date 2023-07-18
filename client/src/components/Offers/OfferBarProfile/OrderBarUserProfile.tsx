@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { PopulatedOffer } from '../../../api/collections/offer';
-import { Advert, AdvertType } from '../../../api/collections/advert';
+import { Advert } from '../../../api/collections/advert';
 import { User } from '../../../api/collections/user';
 import {
   cancelOrder as cancelOrderAPI,
@@ -53,18 +53,13 @@ const OrderBarUserProfile: React.FC<OrderBarUserProfileProps> = (props) => {
     setShowModal(false);
   };
 
-  const closeModalOnSave = () => {
-    setShowModal(false);
-    //change to set Advert
-    window.location.reload();
-  };
-
   const openModal = () => {
     setShowModal(true);
   };
 
   const cancelOrder = async () => {
     await cancelOrderAPI(props.order._id);
+    closeModal();
   };
 
   // Show payment modal.
