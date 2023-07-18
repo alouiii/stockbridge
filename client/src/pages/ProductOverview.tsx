@@ -8,7 +8,8 @@ import { ReviewsSection } from '../components/Reviews/ReviewsSection';
 import { StoreDetailsBar } from '../components/Store/StoreDetailsBar';
 import { LoginContext } from '../contexts/LoginContext';
 import { OffersSection } from '../components/ProductOverview/Offers/OffersSection';
-
+import { FadeLoader } from 'react-spinners';
+import { palette } from '../utils/colors';
 
 const ProductOverview = () => {
   const { id } = useParams();
@@ -56,11 +57,11 @@ const ProductOverview = () => {
           }
         }
       } catch (error) {
-        navigate("*") //not found page
+        navigate('*'); //not found page
       }
     };
     fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   return (
@@ -83,7 +84,18 @@ const ProductOverview = () => {
           )}
           {advert.reviews && advert._id && <ReviewsSection advert={advert} />}
         </div>
-      ) : undefined}
+      ) : (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: 100,
+          }}
+        >
+          <FadeLoader color={palette.subSectionsBgAccent} />
+        </div>
+      )}
     </Page>
   );
 };
