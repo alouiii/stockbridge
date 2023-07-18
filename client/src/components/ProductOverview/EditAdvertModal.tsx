@@ -23,6 +23,7 @@ import {
 import { BodyText } from '../Text/BodyText';
 import { useNavigate } from 'react-router-dom';
 import { FormAttribute } from './FormAttribute';
+import { ResponseModal, ResponseType } from '../Offers/ResponseModal';
 
 type EditAdvertContentProps = {
   isShowing: boolean;
@@ -236,6 +237,9 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
   } 
 }
 
+  const [showResponseModal, setShowResponseModal] = useState(false);
+  const [responseType, setResponseType] = useState(ResponseType.SUCCESSFUL_ADVERT_CREATION);
+
   const handleChange = (event: any) => {
     const { name, value, type } = event.target;
     setFormData({
@@ -253,6 +257,8 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
         : `${name} is missing`,
     });
   };
+
+  const [advertID, setAdvertID] = useState('')
 
   const handleImageClick = () => {
     if (fileInputRef.current != null) {
@@ -286,7 +292,6 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
   };
 
   const navigate = useNavigate();
-
   const handleSubmit = async () => {
     if (!loggedIn) {
       navigate('/signIn');
@@ -317,7 +322,18 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
             pages: formData.pages ?? undefined,
             volume: formData.volume ?? undefined,
             material: formData.material ?? undefined
-          } as Advert);
+          } as Advert).then(updatedAdvert => {
+            if (updatedAdvert) {
+              setResponseType(ResponseType.SUCCESSFUL_ADVERT_UPDATE);
+              setShowResponseModal(true);
+            } else {
+              setResponseType(ResponseType.UNSUCCESSFUL_ADVERT_UPDATE);
+              setShowResponseModal(true);
+            }
+          }).catch((error) => {
+            setResponseType(ResponseType.UNSUCCESSFUL_ADVERT_UPDATE);
+            setShowResponseModal(true);
+          });
         } else {
           await createAdvert({
             productname: formData.productname,
@@ -347,12 +363,27 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
             pages: formData.pages ?? undefined,
             volume: formData.volume ?? undefined,
             material: formData.material ?? undefined
+          }).then(createdAdvert => {
+            if (createdAdvert) {
+              setAdvertID(createdAdvert._id!)
+              setResponseType(ResponseType.SUCCESSFUL_ADVERT_CREATION);
+              setShowResponseModal(true);
+            } else {
+              setResponseType(ResponseType.UNSUCCESSFUL_ADVERT_CREATION);
+              setShowResponseModal(true);
+            }
+          }).catch((error) => {
+          if (error.response.status === 403) {
+            setResponseType(ResponseType.OUT_OF_ADVERTS);
+          }
+           else {
+            setResponseType(ResponseType.UNSUCCESSFUL_ADVERT_CREATION);
+           } 
+            setShowResponseModal(true);
           });
         }
       } catch (error) {
         console.error(error);
-      } finally {
-        if (props.onClose) props?.onClose();
       }
     } else {
       setErrors({
@@ -372,6 +403,15 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
     }
   };
   return (
+      showResponseModal ? <ResponseModal responseType={responseType} isShowing={showResponseModal} advertID={props.advert ? props.advert._id! : advertID} onClose={function (responseType: ResponseType): void {
+      if (responseType === ResponseType.SUCCESSFUL_ADVERT_CREATION) {
+        props.onClose()
+        window.location.reload()
+      } else {
+        props.onClose()
+      } 
+    } }/>:
+    
     <Modal size="lg" show={props.isShowing} onHide={props.onClose}>
       <Modal.Header closeButton>
         <Modal.Title>Advert Details</Modal.Title>
