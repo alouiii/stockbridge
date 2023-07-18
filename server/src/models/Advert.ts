@@ -104,26 +104,26 @@ const advertSchema = new mongoose.Schema<Advert>({
 });
 
 advertSchema.pre('save', async function (next) {
-  const store = await userModel.findById(this.store.id);
+  const store = await userModel.findById(this.store);
   if (store) {
     this.location = store.location;
   }
   next();
 });
 
-advertSchema.pre('findOneAndUpdate',  async function (next) { 
+advertSchema.pre('findOneAndUpdate', async function (next) {
   const thisAdvert = this.getUpdate() as Advert;
-  const existingAdvert = await advertModel.findById(thisAdvert.id)
+  const existingAdvert = await advertModel.findById(thisAdvert.id);
   if (!existingAdvert?.prioritized && thisAdvert.prioritized) {
     const concernedUser = await userModel.findById(existingAdvert?.store);
     if (concernedUser) {
-      concernedUser.prioritisationTickets = concernedUser.prioritisationTickets - 1
-      concernedUser.save()
+      concernedUser.prioritisationTickets =
+        concernedUser.prioritisationTickets - 1;
+      concernedUser.save();
     }
   }
   next();
 });
-
 
 advertSchema.index({
   productname: 'text',
