@@ -69,7 +69,7 @@ const StoreDetailsModal: FC<StoreDetailsProps> = (props) => {
               >
                 {populatedStore.name}
               </FormLabel>
-              {Ratings(populatedStore.rating ?? 0)}
+              {Ratings(populatedStore.rating ?? 0, 'red')}
             </Row>
             <Row
               style={{
@@ -219,7 +219,7 @@ const StoreDetailsModal: FC<StoreDetailsProps> = (props) => {
                           }}
                         >
                           {r.createdAt.toString().slice(0, 10)}
-                          {Ratings(r.rating ?? 0)}
+                          {Ratings(r.rating ?? 0, 'red')}
                         </BodyText>
                       </span>
                       <BodyText

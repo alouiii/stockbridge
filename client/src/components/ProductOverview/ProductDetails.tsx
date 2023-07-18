@@ -3,129 +3,168 @@ import { BodyText } from '../Text/BodyText';
 import { ProductAttribute } from './ProductAttribute';
 import { Image } from 'react-bootstrap';
 import imagePlaceholder from '../../assets/product-placeholder.png';
+import { FC } from 'react';
+import useMediaQuery from '../../hooks/useMediaQuery';
 import { palette } from '../../utils/colors';
 import { categoryToAttributes, groupList } from './EditAdvertModal';
 
-const ProductDetails = (advert: PopulatedAdvert) => {
+
+
+interface ProductDetailsProps {
+  advert: PopulatedAdvert;
+}
+
+export const ProductDetails: FC<ProductDetailsProps> = (props) => {
+  const { advert } = props;
+  const matches2 = useMediaQuery('(min-width: 850px)');
+
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'start',
-      }}
-    >
-      <Image
-        style={{
-          width: '20em',
-          height: '20em',
-          borderRadius: '60px',
-          borderColor: 'transparent',
-          objectFit: 'fill',
-        }}
-        src={advert?.imageurl ? advert?.imageurl : imagePlaceholder}
-      />
+    <>
       <div
         style={{
           display: 'flex',
-          flexDirection: 'column',
+          flexDirection:  'column',
           alignItems: 'start',
-          marginLeft: '10%',
-          marginRight: '10%',
+          justifyContent: matches2 ? undefined : 'center',
+          gap: 50,
+          marginLeft: 30,
+          position: 'relative',
         }}
       >
+        <div style={{
+          display: 'flex', 
+          flexDirection: 'row',
+          gap: 100
+        }}>
+        <Image
+          style={{
+            maxWidth: matches2 ? 350 : 200,
+            maxHeight: matches2 ? 350 : 200,
+            width: '100%',
+            height: 'auto',
+            borderRadius: !advert.imageurl ? 30 : undefined,
+            borderColor: 'transparent',
+            objectFit: 'cover',
+          }}
+          src={advert?.imageurl ? advert?.imageurl : imagePlaceholder}
+        />
+      <div>
         <div
           style={{
             display: 'flex',
-            gap: 10,
-            width: '100%',
-
-            alignItems: 'center',
+            flexDirection: 'column',
+            gap: 8,
           }}
         >
-          <BodyText
+          <div
             style={{
-              fontFamily: 'Poppins',
-              color: 'black',
-              fontSize: '24px',
-              fontWeight: 600,
+              display: 'flex',
+              flexDirection: 'row',
+              gap: 50,
+              alignItems: 'center',
             }}
           >
-            {advert.productname ?? ''}
-          </BodyText>
-          {advert.prioritized && (
             <BodyText
               style={{
-                border: '1px solid',
-                fontFamily: 'Poppins',
-                borderRadius: '20px',
-                fontSize: '12px',
-                borderColor: palette.subSectionsBgAccent,
-                color: palette.subSectionsBgAccent,
-                paddingLeft: '20px',
-                paddingRight: '20px',
-                height: '20px',
-                textAlign: 'center',
-                font: 'light',
+                fontSize: 28,
+                fontWeight: 600,
               }}
             >
-              prioritized
+              {advert.productname ? advert.productname : 'N.S*'}
             </BodyText>
-          )}
-        </div>
-        <BodyText
-          style={{
-            fontFamily: 'Poppins',
-            color: 'gray',
-            fontSize: '16px',
-            fontWeight: 300,
-            marginLeft: '10px',
-            wordBreak: 'break-all',
-          }}
-        >
-          {advert?.description ? advert.description : ''}
-        </BodyText>
-        {groupList(categoryToAttributes(advert.category!) ?? [], 2).map((g) => {
-          return (
             <div
               style={{
+                backgroundColor: palette.subSectionsBgAccent,
+                borderRadius: 15,
                 display: 'flex',
-                flexDirection: 'row',
-                gap: '20%',
-                alignItems: 'start',
-                justifyContent: 'start',
-                marginTop: '5%',
-                width: 'auto',
+                alignItems: 'center',
+                paddingLeft: 25,
+                paddingRight: 25,
+                height: 30,
+                marginBottom: 16,
               }}
             >
-              {' '}
-              {g.map((attribute) => {
-                const value = (advert as any)[attribute];
-                return (
-                  attribute in advert &&
-                  value && (
-                    <ProductAttribute
-                      name={attribute}
-                      value={
-                        [
-                          'purchaseDate',
-                          'expirationDate',
-                          'createdAt',
-                        ].includes(attribute)
-                          ? value.toString().substring(0, 10)
-                          : attribute === 'color'
-                          ? value.name
-                          : value
-                      }
-                      color={value.hex}
-                    ></ProductAttribute>
-                  )
-                );
-              })}
+              <BodyText
+                style={{
+                  fontSize: 20,
+                  fontWeight: 600,
+                  color: 'white',
+                  marginBottom: 0,
+                }}
+              >
+                {advert.type ? advert.type : 'N.S*'}
+              </BodyText>
             </div>
-          );
-        })}
+            {advert.prioritized ? (
+              <div
+                style={{
+                  backgroundColor: palette.subSectionsBgAccent,
+                  borderRadius: 15,
+                  display: 'flex',
+                  alignItems: 'center',
+                  paddingLeft: 25,
+                  paddingRight: 25,
+                  height: 30,
+                  marginBottom: 16,
+                  marginLeft: -30,
+                }}
+              >
+                <BodyText
+                  style={{
+                    fontSize: 20,
+                    fontWeight: 600,
+                    color: 'white',
+                    marginBottom: 0,
+                  }}
+                >
+                  Prioritized
+                </BodyText>
+              </div>
+            ) : undefined}
+          </div>
+          <BodyText
+            style={{
+              color: 'gray',
+              fontSize: 16,
+              fontWeight: 300,
+              marginTop: -16,
+              marginBottom: 10,
+              wordBreak: 'break-all',
+            }}
+          >
+            {advert?.description ? advert.description : ''}
+          </BodyText>
+        </div>
+        <ProductAttribute
+            name="category"
+            value={advert.category ? advert.category : 'N.S*'}
+          />
+        {
+          groupList(categoryToAttributes(advert.category!) ?? [], 2).map((g) =>  { 
+            return (<div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              gap: '20%',
+              alignItems: 'start',
+              justifyContent: 'start',
+              marginTop: '5%',
+              width: 'auto',
+            }}
+          > {
+            g.map((attribute) => {
+            const value = (advert as any)[attribute]
+            return (
+              attribute in advert && value &&  <ProductAttribute
+              name={attribute}
+              value={['purchaseDate', 'expirationDate', 'createdAt'].includes(attribute) ? value.toString().substring(0, 10) : attribute === 'color' ? value.name :value}
+              color={value.hex}
+            ></ProductAttribute>
+            )
+            
+          })
+        }
+        </div>)})}
         <div
           style={{
             display: 'flex',
@@ -147,8 +186,13 @@ const ProductDetails = (advert: PopulatedAdvert) => {
           ></ProductAttribute>
         </div>
       </div>
-    </div>
+      </div>
+      </div>
+      {!advert.expirationDate || !advert.purchaseDate || !advert.color ? (
+        <BodyText style={{ position: 'absolute', bottom: 25, left: 15 }}>
+          *Not specified
+        </BodyText>
+      ) : undefined}
+    </>
   );
 };
-
-export { ProductDetails };

@@ -76,7 +76,9 @@ export const AdvertsPagination: FC = () => {
       'quantity[lte]',
       'radius',
 
-      'sort',
+      'q', //search
+
+      'sort', //sorting
     ];
     const paramKeys = Array.from(search.keys());
 

@@ -45,68 +45,69 @@ const OfferBar: React.FC<OfferBarProps> = (props) => {
     fetchData();
   }, [props.offer.offeree, props.offer.offeror]);
   return (
-    <>
-      {!isLoading ? (
-        <InfoBar
-          onClick={openModal}
-          contentLine1={
-            <>
-              <BodyText
-                style={{
-                  font: 'light',
-                  fontFamily: 'Poppins',
-                  color: 'black',
-                  width: '50%',
-                  textAlign: 'start',
-                }}
-              >
-                {offerer.name ?? 'No Name given'}
-                {Ratings(offerer.rating ?? 0)}
-              </BodyText>
-              <BodyText
-                style={{
-                  font: 'light',
-                  fontFamily: 'Poppins',
-                  color: 'black',
-                  width: '50%',
-                  textAlign: 'end',
-                }}
-              >
-                {props?.offer?.createdAt?.toString().slice(0, 10)}
-              </BodyText>
-            </>
-          }
-          contentLine2={
-            <div
+    <> 
+     {!isLoading ? 
+      <InfoBar
+        onClick={openModal}
+        contentLine1={
+          <>
+            <BodyText
               style={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'start',
-                gap: '10%',
-                marginLeft: '25%',
+                font: 'light',
+                fontFamily: 'Poppins',
+                color: 'black',
+                width: '50%',
+                textAlign: 'start',
               }}
             >
-              <ProductAttribute
-                name="quantity"
-                value={props?.offer?.quantity}
-              />
-              <ProductAttribute name="price" value={props?.offer?.price} />
-              {props.offer.status === OfferStatus.CANCELED_OUT_OF_STOCK && (
-                <img
-                  style={{
-                    marginBottom: '2%',
-                  }}
-                  src={outOfStock}
-                  alt="OOS"
-                />
-              )}
-            </div>
-          }
-        />
-      ) : (
-        <></>
-      )}
+              {offerer.name ?? 'No Name given'}
+              {Ratings(offerer.rating ?? 0, 'red')}
+            </BodyText>
+            <BodyText
+              style={{
+                font: 'light',
+                fontFamily: 'Poppins',
+                color: 'black',
+                width: '50%',
+                textAlign: 'end',
+              }}
+            >
+              {props?.offer?.createdAt?.toString().slice(0, 10)}
+            </BodyText>
+          </>
+        }
+        contentLine2={
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'start',
+              gap: '10%',
+              marginLeft: '25%'
+            }}
+          >
+            <ProductAttribute
+              name="quantity"
+              value={props?.offer?.quantity}
+            />
+            <ProductAttribute
+              name="price"
+              value={props?.offer?.price}
+            />
+            {
+              props.offer.status === OfferStatus.CANCELED_OUT_OF_STOCK && 
+              <img
+              style={{
+                marginBottom: '2%',
+              }}
+              src={outOfStock}
+              alt="OOS"
+            />
+            }
+          </div>
+        }
+      /> : <></>}
       {showModal && (
         <OfferModal
           isShowing={showModal}
