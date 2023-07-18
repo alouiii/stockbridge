@@ -13,7 +13,7 @@ export const palette = {
   borderBoostrap: '#cccccc',
 
   openOffer: '#6097f0',
-  rejectedOffer: '#db403d',
+  rejectedOffer: '#d16260',
   acceptedOffer: '#52b399',
   canceledOffer: '#e8ad64',
   advertCardBg: "#FFF5F8",

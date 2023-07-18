@@ -12,70 +12,6 @@ type StoreDetailsBarProps = {
 
 const StoreDetailsBar: React.FC<StoreDetailsBarProps> = (props) => {
   const [showModal, setShowModal] = useState(false);
-  
-  const fieldContainer = (message: string, value: string, rating = false) => {
-    return (
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          gap: '4%',
-          alignItems: 'start',
-          justifyContent: 'start',
-          width: '50%',
-        }}
-      >
-        <BodyText
-          style={{
-            color: '#7881D7',
-            fontWeight: 600,
-            fontSize: '24px',
-          }}
-        >
-          {message}
-        </BodyText>
-        <div
-          style={
-            rating
-              ? {
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'start',
-                  justifyContent: 'start',
-                }
-              : {}
-          }
-        >
-          <div
-            style={{
-              width: 'auto',
-              fontWeight: 300,
-              fontSize: '24px',
-              fontFamily: 'Poppins',
-              color: '#ffffff',
-              display: 'flex',
-              flexDirection: 'column',
-              textDecorationColor: rating ? '#ffffff' : '',
-            }}
-          >
-            <BodyText
-              style={{
-                textDecoration: rating ? 'underline' : '',
-                cursor: rating ? 'pointer' : '',
-              }}
-              onClick={rating ? () => setShowModal(true) : () => {}}
-            >
-              {' '}
-              {value}
-            </BodyText>
-            {rating &&
-              Ratings(props.store?.rating ? props.store.rating : 0, 'red')}
-          </div>
-        </div>
-      </div>
-    );
-  };
-
 
   return (
     <div
@@ -101,17 +37,34 @@ const StoreDetailsBar: React.FC<StoreDetailsBarProps> = (props) => {
           flexWrap: 'wrap',
         }}
       >
-        <StoreDetailsElement label="Category">
-          <BodyText style={{ color: 'white', fontSize: 24, margin: '0 5px' }}>
-            {props.category}
-          </BodyText>
-        </StoreDetailsElement>
         <StoreDetailsElement label="Name">
           <BodyText
-            style={{ color: 'white', fontSize: 24, margin: '0 5px' }}
+            style={{
+              color: 'white',
+              fontSize: 24,
+              margin: '0 5px',
+              textDecoration: 'underline',
+              cursor: 'pointer',
+            }}
             onClick={() => setShowModal(true)}
           >
             {props.store?.name}
+          </BodyText>
+        </StoreDetailsElement>
+        <StoreDetailsElement label="Member since">
+          <BodyText
+            style={{
+              color: 'white',
+              fontSize: 24,
+              margin: '0 5px',
+            }}
+          >
+            {props.store.createdAt
+              ? new Date(props.store.createdAt).toLocaleDateString('en-US', {
+                  month: 'long',
+                  year: 'numeric',
+                })
+              : ''}
           </BodyText>
         </StoreDetailsElement>
         <StoreDetailsElement label="Rating">

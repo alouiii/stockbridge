@@ -8,6 +8,7 @@ type ProductAttributeProps = {
   border?: boolean;
   margin?: string;
   fontSize?: string;
+  width?: number
 };
 const ProductAttribute: FC<ProductAttributeProps> = (props) => {
   return (
@@ -31,7 +32,7 @@ const ProductAttribute: FC<ProductAttributeProps> = (props) => {
       </BodyText>
       <BodyText
         style={{
-          width: 150,
+          width: props.width,
           borderRadius: 10,
           border: props?.border ? '2px solid black' : '',
           textAlign: props.border ? 'center' : 'start',

@@ -56,7 +56,6 @@ const ProductOverview = () => {
           }
         }
       } catch (error) {
-        console.error(error);
         navigate("*") //not found page
       }
     };
