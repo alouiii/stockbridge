@@ -89,7 +89,7 @@ export function UserInfo() {
     } catch {
       navigate('*'); //not found page
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabContext.selectedProfileSection]);
 
   return (

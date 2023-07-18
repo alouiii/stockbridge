@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { getStore, PopulatedUser, User } from '../../api/collections/user';
+import React, { useState } from 'react';
+import { User } from '../../api/collections/user';
 import { Ratings } from '../Ratings';
 import { BodyText } from '../Text/BodyText';
 import { StoreDetailsModal } from './StoreDetailsModal';

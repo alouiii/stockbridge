@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { Spinner } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Colors, getAdvert, PopulatedAdvert } from '../api/collections/advert';
+import { getAdvert, PopulatedAdvert } from '../api/collections/advert';
 import { OffersSection } from '../components/Offers/OffersSection';
 import { Page } from '../components/Page';
 import { ProductOverviewSection } from '../components/ProductOverview/ProductOverviewSection';
@@ -42,12 +42,12 @@ const ProductOverview = () => {
           const fetchedAdvert = await getAdvert(id);
           if (fetchedAdvert) {
             setAdvert(fetchedAdvert as PopulatedAdvert);
-            setIsLoading(false)
+            setIsLoading(false);
           }
         }
       } catch (error) {
         console.error(error);
-        navigate("*") //not found page
+        navigate('*'); //not found page
       }
     };
     fetchData();
@@ -55,14 +55,18 @@ const ProductOverview = () => {
 
   const { user } = useContext(LoginContext);
   const owner = advert.store?._id === user?._id;
-  return (
-    isLoading ? <FadeLoader color={palette.subSectionsBgAccent} style={{
-      position: 'absolute',
-      left: '45%',
-      right: '45%',
-      top: '45%',
-      bottom: '45%'
-    }} /> :
+  return isLoading ? (
+    <FadeLoader
+      color={palette.subSectionsBgAccent}
+      style={{
+        position: 'absolute',
+        left: '45%',
+        right: '45%',
+        top: '45%',
+        bottom: '45%',
+      }}
+    />
+  ) : (
     <Page>
       {advert ? (
         <div
@@ -81,7 +85,7 @@ const ProductOverview = () => {
             />
           )}
           {advert.reviews && advert.reviews.length > 0 && advert._id && (
-            <ReviewsSection advert={advert}/>
+            <ReviewsSection advert={advert} />
           )}
         </div>
       ) : (

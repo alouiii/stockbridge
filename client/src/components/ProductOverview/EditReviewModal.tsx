@@ -48,7 +48,7 @@ const EditReviewModal: FC<EditReviewContentProps> = (props) => {
     } else {
       try {
         if (props.advert) {
-           await createReview({
+          await createReview({
             description: description,
             rating: rating,
             reviewer: user!._id,

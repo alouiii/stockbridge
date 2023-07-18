@@ -6,8 +6,6 @@ import imagePlaceholder from '../../assets/product-placeholder.png';
 import { palette } from '../../utils/colors';
 import { categoryToAttributes, groupList } from './EditAdvertModal';
 
-
-
 const ProductDetails = (advert: PopulatedAdvert) => {
   return (
     <div
@@ -88,32 +86,46 @@ const ProductDetails = (advert: PopulatedAdvert) => {
         >
           {advert?.description ? advert.description : ''}
         </BodyText>
-        {
-          groupList(categoryToAttributes(advert.category!) ?? [], 2).map((g) =>  { 
-            return (<div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              gap: '20%',
-              alignItems: 'start',
-              justifyContent: 'start',
-              marginTop: '5%',
-              width: 'auto',
-            }}
-          > {
-            g.map((attribute) => {
-            const value = (advert as any)[attribute]
-            return (
-              attribute in advert && value &&  <ProductAttribute
-              name={attribute}
-              value={['purchaseDate', 'expirationDate', 'createdAt'].includes(attribute) ? value.toString().substring(0, 10) : attribute === 'color' ? value.name :value}
-              color={value.hex}
-            ></ProductAttribute>
-            )
-            
-          })
-        }
-        </div>)})}
+        {groupList(categoryToAttributes(advert.category!) ?? [], 2).map((g) => {
+          return (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                gap: '20%',
+                alignItems: 'start',
+                justifyContent: 'start',
+                marginTop: '5%',
+                width: 'auto',
+              }}
+            >
+              {' '}
+              {g.map((attribute) => {
+                const value = (advert as any)[attribute];
+                return (
+                  attribute in advert &&
+                  value && (
+                    <ProductAttribute
+                      name={attribute}
+                      value={
+                        [
+                          'purchaseDate',
+                          'expirationDate',
+                          'createdAt',
+                        ].includes(attribute)
+                          ? value.toString().substring(0, 10)
+                          : attribute === 'color'
+                          ? value.name
+                          : value
+                      }
+                      color={value.hex}
+                    ></ProductAttribute>
+                  )
+                );
+              })}
+            </div>
+          );
+        })}
         <div
           style={{
             display: 'flex',
