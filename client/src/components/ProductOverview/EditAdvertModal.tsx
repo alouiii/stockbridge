@@ -5,9 +5,9 @@ import {
   updateAdvert,
   createAdvert,
   ProductCategory,
-  Colors,
   PopulatedAdvert,
 } from '../../api/collections/advert';
+import { ChromePicker } from 'react-color';
 import { palette } from '../../utils/colors';
 import defaultPostAdvertImage from '../../assets/advertPostAdvert.svg';
 import trashIcon from '../../assets/trash-bin.svg';
@@ -19,13 +19,39 @@ import {
 } from '../../utils/functions';
 import { BodyText } from '../Text/BodyText';
 import { useNavigate } from 'react-router-dom';
-
+import 'bootstrap/dist/css/bootstrap.min.css';
+import colorPicker  from '../../assets/colour-picker.svg'
 type EditAdvertContentProps = {
   isShowing: boolean;
   onClose: () => void;
   advert?: PopulatedAdvert;
 };
 
+function mapColorName(hex: string): string | undefined {
+  switch(hex.toUpperCase()) {
+    case '#0000FF': 
+    return 'Blue';
+    case '#FF0000':
+      return 'Red';
+    case '#008000':
+      return 'Green';
+    case '#000000':
+      return 'Black';
+    case '#FFFFFF':
+      return 'White'  
+    case '#FFC0CB':
+      return 'Pink';
+    case '#FFFF00':
+      return 'Yellow';
+    case '#FFA500':
+      return 'Orange';
+    case '#A020F0': 
+    return 'Purple';
+    default: 
+    return undefined;
+  }
+
+}
 export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
   const { user, loggedIn } = useContext(LoginContext);
 
@@ -36,7 +62,7 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
   const [encodedImage, setEncodedImage] = useState(
     props.advert?.imageurl ?? '',
   );
-
+  const colorPickerRef = useRef<HTMLDivElement>(null);
   const [advertType, setAdvertType] = useState(
     props.advert?.type ? props.advert?.type : 'Sell',
   );
@@ -70,7 +96,6 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
 
   const handleChange = (event: any) => {
     // we put type any because we are handling various events, such as HTML input, HTML select ecc
-    event.preventDefault();
     const { name, value, type } = event.target;
     setFormData({
       ...formData,
@@ -131,7 +156,7 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
           await updateAdvert(props.advert._id, {
             productname: formData.productname,
             description: formData.description,
-            color: formData.color ? formData.color : undefined,
+            color: formData.color ?? undefined,
             expirationDate: new Date(formData.expirationDate ?? ''),
             purchaseDate: new Date(formData.purchaseDate ?? ''),
             quantity: formData.Quantity,
@@ -140,11 +165,12 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
             imageurl: encodedImage,
           } as Advert);
         } else {
+          
           await createAdvert({
             productname: formData.productname,
             description: formData.description,
             prioritized: false,
-            color: formData.color ? formData.color : undefined,
+            color: formData.color ?? undefined,
             expirationDate: new Date(formData.expirationDate ?? ''),
             purchaseDate: new Date(formData.purchaseDate ?? ''),
             quantity: formData.Quantity,
@@ -179,6 +205,22 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
       });
     }
   };
+
+  const [showPicker, setShowPicker ] = useState(false);
+  
+  const handleColorChange = (selectedColor: any) => {
+    setFormData({
+      ...formData, 
+      color: {
+        name: selectedColor.name ?? mapColorName(selectedColor.hex),
+        hex: selectedColor.hex
+      }
+    })
+  };
+
+  const handlePipetteClick = () => {
+    setShowPicker(!showPicker)
+  }
 
   return (
     <Modal size="lg" show={props.isShowing} onHide={props.onClose}>
@@ -369,24 +411,31 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                 >
                   Product Color
                 </Form.Label>
-                <Form.Select
-                  style={{
-                    padding: 10,
-                    color: palette.gray,
-                    margin: 5,
-                  }}
-                  placeholder="Color"
-                  value={formData.color}
-                  name="color"
-                  onChange={handleChange}
-                >
-                  <option> -- Select Color -- </option>
-                  {Object.values(Colors)
-                    .filter((key) => isNaN(Number(key)))
-                    .map((c, index) => (
-                      <option key={index}>{c}</option>
-                    ))}
-                </Form.Select>
+                {
+                  showPicker && 
+                  <div ref={colorPickerRef} style={{ position: 'absolute', top: '1em', right: '3em' }}>
+                <ChromePicker
+                  color={formData.color?.hex}
+                  onChange={ (color) => handleColorChange(color) }
+                />
+          </div>
+                }
+                <Form.Group style={{ position: 'relative' }}>
+                <Form.Control style={{
+                  padding: 10,
+                  color: palette.gray,
+                  margin: 5,
+                }}  type="text" 
+                name="color" 
+                placeholder="Enter Color or Select" onChange={(e) => {
+                    handleColorChange({'name': e.currentTarget.value });
+                }} value={formData.color?.name ?? formData.color?.hex}></Form.Control>
+                <div className="input-group-append">
+                  <Button style={{ position: 'absolute', top: '0.33em', right: '-1em', background: 'transparent', borderColor: 'transparent', width: '15%'}} onClick={handlePipetteClick}>
+                    <Image src={colorPicker}/>
+                  </Button>
+                </div>
+                </Form.Group>
               </Form.Group>
             </Col>
           </Row>
@@ -497,7 +546,7 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
                   type="number"
                   name="Price"
                   min={1}
-                  value={formData.Price ?? ''}
+                  value={Number(formData.Price ?? '')}
                   onChange={handleChange}
                   required
                   isInvalid={!!errors.Price}

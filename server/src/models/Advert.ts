@@ -4,15 +4,22 @@ import {
   AdvertType,
   Advert,
   ProductCategory,
-  Colors,
+  Color,
 } from '../entities/advertEntity';
 import userModel from './User';
-import { User } from '../entities/userEntity';
-import { findUserById } from '../services/userServices';
-import { getUser } from '../controllers/userController';
 
 const Types = mongoose.Schema.Types;
 
+const ColorSchema = new mongoose.Schema<Color>({
+  name: {
+    type: Types.String,
+    required: [false, 'please add the color name']
+  }, 
+  hex: {
+    type: Types.String,
+    required: [false]
+  }
+})
 const advertSchema = new mongoose.Schema<Advert>({
   productname: {
     type: Types.String,
@@ -51,11 +58,7 @@ const advertSchema = new mongoose.Schema<Advert>({
     required: [true, 'Please add a creation date'],
     default: Date.now,
   },
-  color: {
-    type: Types.String,
-    enum: Object.values(Colors),
-    required: [false, 'You could enter a color for the product'],
-  },
+  color: ColorSchema,
   status: {
     type: Types.String,
     enum: Object.values(AdvertStatus),
@@ -104,7 +107,7 @@ const advertSchema = new mongoose.Schema<Advert>({
 });
 
 advertSchema.pre('save', async function (next) {
-  const store = await userModel.findById(this.store.id);
+  const store = await userModel.findById(this.store);
   if (store) {
     this.location = store.location;
   }

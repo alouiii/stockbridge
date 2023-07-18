@@ -89,7 +89,8 @@ const ProductDetails = (advert: PopulatedAdvert) => {
           <ProductAttribute
             margin=""
             name="Color"
-            value={advert?.color}
+            value={advert.color.name}
+            color={advert.color.hex}
           ></ProductAttribute>
         )}
         {advert?.purchaseDate && (

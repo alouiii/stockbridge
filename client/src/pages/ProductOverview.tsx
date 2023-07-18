@@ -28,7 +28,7 @@ const ProductOverview = () => {
     store: '',
     reviews: [],
     imageurl: '',
-    color: Colors.Blue,
+    color: undefined,
     createdAt: new Date(),
   } as PopulatedAdvert);
   const [isLoading, setIsLoading] = useState(true);
@@ -51,7 +51,7 @@ const ProductOverview = () => {
       }
     };
     fetchData();
-  }, [id]);
+  }, [id, navigate]);
 
   const { user } = useContext(LoginContext);
   const owner = advert.store?._id === user?._id;

@@ -14,7 +14,6 @@ import { Ratings } from '../Ratings';
 import { ResponseModal, ResponseType } from './ResponseModal';
 import { FadeLoader } from 'react-spinners';
 import { palette } from '../../utils/colors';
-import { Checkbox } from '@mui/material';
 type OfferContentProps = {
   isShowing: boolean;
   onClose: () => void;
@@ -369,7 +368,7 @@ const OfferModal: FC<OfferContentProps> = (props) => {
                       marginTop: '10px',
                     }}
                   >
-                    <Form.Label>Color: {props.advert?.color}</Form.Label>
+                    <Form.Label>Color: {props.advert?.color.name}</Form.Label>
                   </Row>
                 )}
                 {props.advert?.purchaseDate && (

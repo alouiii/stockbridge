@@ -14,13 +14,11 @@ export enum AdvertStatus {
   Closed = 'Closed',
   Deleted = 'Deleted',
 }
-export enum Colors {
-  Blue = 'Blue',
-  Red = 'Red',
-  Yellow = 'Yellow',
-  Green = 'Green',
-}
 
+export interface Color {
+  name?: string;
+  hex?: string;
+}
 export enum ProductCategory {
   Apparel_And_Accessories = 'Apparel And Accessories',
   Electronics_And_Gadgets = 'Electronics And Gadgets',
@@ -50,7 +48,7 @@ export interface Advert {
   description: string;
   imageurl?: string;
   prioritized: boolean;
-  color: string;
+  color: Color;
   expirationDate: Date;
   purchaseDate: Date;
   quantity: number;
