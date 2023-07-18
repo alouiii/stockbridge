@@ -18,20 +18,6 @@ type OrderBarUserProfileProps = {
  * @returns
  */
 const OrderBarUserProfile: React.FC<OrderBarUserProfileProps> = (props) => {
-  const [offerer, setOfferer] = useState({} as User);
-  const [offeree, setOfferee] = useState({} as User);
-  useEffect(() => {
-    const fetchData = () => {
-      try {
-        setOfferer(props.order.offer?.offeror!);
-        setOfferee(props.order.offer?.offeree!);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
-  }, []);
-
   return (
     <>
       <OrderBarUserProfileInfo

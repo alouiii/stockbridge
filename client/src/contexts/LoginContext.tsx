@@ -1,7 +1,6 @@
 import { createContext, useEffect, useState } from 'react';
-import { User, verify } from '../api/collections/user';
+import { verify } from '../api/collections/user';
 import { PopulatedUser } from '../api/collections/user';
-import { ApiClient } from '../api/apiClient';
 
 export type LoginState = {
   loggedIn: boolean;
