@@ -107,6 +107,7 @@ const ProductDetails = (advert: PopulatedAdvert) => {
               attribute in advert && value &&  <ProductAttribute
               name={attribute}
               value={['purchaseDate', 'expirationDate', 'createdAt'].includes(attribute) ? value.toString().substring(0, 10) : attribute === 'color' ? value.name :value}
+              color={value.hex}
             ></ProductAttribute>
             )
             
