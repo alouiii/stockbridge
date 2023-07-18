@@ -12,10 +12,15 @@ import {
   getAdvertsByStore,
 } from '../services/advertServices';
 import { AuthenticatedRequest } from '../middlewares/authMiddleware';
-import { Advert, ProductCategory } from '../entities/advertEntity';
+import {
+  Advert,
+  AdvertStatus,
+  ProductCategory,
+} from '../entities/advertEntity';
 import { ObjectId } from 'mongodb';
 import { AppError } from '../utils/errorHandler';
-import { findUserById, updateUser } from '../services/userServices';
+import { User } from '../entities/userEntity';
+import advertModel from '../models/Advert';
 
 /**
  * This method returns an advert by id   *
@@ -41,7 +46,8 @@ export const getAdverts = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const reqQuery = { ...req.query };
 
-    ['q', 'sort', 'page', 'limit', 'radius'].forEach( //change search->q
+    ['q', 'sort', 'page', 'limit', 'radius'].forEach(
+      //change search->q
       (param) => delete reqQuery[param],
     );
 
@@ -66,7 +72,8 @@ export const getAdverts = asyncHandler(
     if (req.query.limit) {
       limit = parseInt(req.query.limit as string);
     }
-    if (req.query.q) { // change search -> q
+    if (req.query.q) {
+      // change search -> q
       search = req.query.q as string; // change search -> q
     }
     if (req.query.radius) {
@@ -78,8 +85,8 @@ export const getAdverts = asyncHandler(
       limit,
       search,
       sortBy,
-      radius === 0 ? undefined : radius,
-      radius === 0 ? undefined : req.user?.location?.coordinates,
+      radius === 0 || !req.user ? undefined : radius,
+      radius === 0 || !req.user ? undefined : req.user?.location?.coordinates,
       queryStr,
     );
 
@@ -95,7 +102,8 @@ export const getAdverts = asyncHandler(
  */
 export const postAdvert = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
-    const advert = await createAdvert(req.body);
+    const user: User = req.user as User;
+    const advert = await createAdvert(req.body, user);
     res.status(201).json(advert);
   },
 );
@@ -156,10 +164,11 @@ export const getCategoriesByStore = asyncHandler(
 export const prioritizeAdvert = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const { advert } = req.params;
-    const fetchedAdvert = await findAdvertById(advert, false);
-    fetchedAdvert.prioritized = true;
-    const updatedAdvert = await updateAdvert(advert, fetchedAdvert);
-    res.status(200).json(updatedAdvert);
+    const fetchedAdvert = await advertModel.findOneAndUpdate({_id: advert}, {
+      id: advert,
+      prioritized: true
+    });
+    res.status(200).json(fetchedAdvert);
   },
 );
 /**
@@ -204,8 +213,6 @@ export const getPopularAdverts = asyncHandler(
   },
 );
 
-
-
 /**
  * Checks if a user can edit or delete an advert with a given id.
  * @param req The request containing the to be checked ids.
@@ -213,13 +220,20 @@ export const getPopularAdverts = asyncHandler(
 async function _checkUserCanEditOrDeleteAdvert(req: AuthenticatedRequest) {
   let userId = new ObjectId(req.user?.id);
   const { id } = req.params;
-  const advert = await findAdvertById(id, false)
+  const advert = await findAdvertById(id, false);
   // The user editing or deleting must be the one who created the advert.
-  if (!(advert.store.equals(userId))) {
+  if (!advert.store.equals(userId)) {
     throw new AppError(
       'Not authorized to edit this route',
       'Not authorized to edit this route',
       401,
+    );
+  }
+  if (advert.status !== AdvertStatus.Ongoing) {
+    throw new AppError(
+      'Not authorized to edit this advert',
+      'Not authorized to edit this advert',
+      600,
     );
   }
 }

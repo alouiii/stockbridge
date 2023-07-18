@@ -1,42 +1,67 @@
-import React, { ReactElement, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Tabs, { AdvertSortCriteria, OfferSortCriteria } from '../../ContentTabs/Tabs';
 import ContentTab from '../../ContentTabs/ContentTab';
 import ProductInfoBar from '../ProductInfoBar';
 import {
   PopulatedAdvert,
   getAdvertsByUser,
+  AdvertStatus,
+  Advert,
 } from '../../../api/collections/advert';
 import NoResultsMessage from '../NoResultsMessage';
 import { LoginContext } from '../../../contexts/LoginContext';
-
+import { FadeLoader } from 'react-spinners';
+import { palette } from '../../../utils/colors';
+function sortClosed(adverts: (Advert|PopulatedAdvert)[]) {
+  return adverts.sort((a,b) => {
+    if (a.status === AdvertStatus.Closed && b.status !== AdvertStatus.Closed) {
+      return -1
+    } else {
+      if (b.status === AdvertStatus.Closed && a.status !== AdvertStatus.Closed) {
+        return 1
+      } else {
+        return 0
+      }
+    }
+  });
+}
 /**
  * Component that displays the content of MyAdverts section.
  */
 const MyAdvertsContent: React.FC = () => {
   const [buyingAdverts, setBuyingAdverts] = useState([] as PopulatedAdvert[]);
   const [sellingAdverts, setSellingAdverts] = useState([] as PopulatedAdvert[]);
-  const { user, loggedIn } = useContext(LoginContext);
+  const { user } = useContext(LoginContext);
 
   const [searchText, setSearchText] = useState("");
   const [sortCriteria, setSortCriteria] = useState<AdvertSortCriteria | OfferSortCriteria>(AdvertSortCriteria.NONE);
+  const [isLoading, setIsLoading] = useState(false);
   // False == order asc , True == order desc
   const [sortOrder, setSortOrder] = useState(false);
-
-
   useEffect(() => {
+    setIsLoading(true);
+    console.log(user)
     const fetchData = async () => {
       try {
-        const fetchedAdverts = await getAdvertsByUser(user?._id);
-        let sellingAds = fetchedAdverts.filter((x) => x.type === 'Sell');
-        setSellingAdverts(sellingAds as PopulatedAdvert[]);
-        let buyingAds = fetchedAdverts.filter((x) => x.type === 'Ask');
-        setBuyingAdverts(buyingAds as PopulatedAdvert[]);
+        if (user) {
+          const fetchedAdverts = await getAdvertsByUser(user?._id);
+          let sellingAds = fetchedAdverts.filter((x) => x.type === 'Sell');
+          sellingAds = sortClosed(sellingAds) as Advert[];
+          setSellingAdverts(sellingAds as PopulatedAdvert[]);
+          let buyingAds = fetchedAdverts.filter((x) => x.type === 'Ask');
+          buyingAds = sortClosed(buyingAds) as Advert[];
+          setBuyingAdverts(buyingAds as PopulatedAdvert[]);
+        }
       } catch (error) {
         console.error(error);
       }
     };
     fetchData();
-  }, [user?._id]);
+    if (sellingAdverts && buyingAdverts) {
+      setIsLoading(false)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
 
 
@@ -64,12 +89,26 @@ const MyAdvertsContent: React.FC = () => {
             default:
               return 0;
           }
-
       })
+      if (sortCriteria === AdvertSortCriteria.NONE) {
+        result = sortClosed(list) as PopulatedAdvert[]
+      }
       return sortOrder ? result : result.reverse();
   }
-
+  
   return (
+    isLoading ? (
+      <FadeLoader
+        color={palette.subSectionsBgAccent}
+        style={{
+          position: 'absolute',
+          left: '45%',
+          right: '45%',
+          top: '45%',
+          bottom: '45%',
+        }}
+      />
+    ) : 
     <div>
       <Tabs isOffer = {false} searchText={searchText} setSearchText={setSearchText} sortCriteria={sortCriteria} setSortCriteria={setSortCriteria} sortOrder= {sortOrder} setSortOrder={setSortOrder}>
         <ContentTab title="Selling Ads">
@@ -80,13 +119,14 @@ const MyAdvertsContent: React.FC = () => {
                 productId={product._id}
                 imageUrl={product.imageurl}
                 name={product.productname}
-                date={product.purchaseDate?.toString().substring(0, 10)}
+                date={product.createdAt?.toString().substring(0, 10)}
                 quantity={product.quantity}
                 price={product.price}
                 highlight={searchText}
+                status={product.status}
               />
             );
-          }) : <NoResultsMessage />}
+          }) : <NoResultsMessage/>}
         </ContentTab>
         <ContentTab title="Buying Ads">
           {buyingAdverts.length > 0 ? sortedAndFilteredItems(buyingAdverts).map((product, index) => {
@@ -96,13 +136,14 @@ const MyAdvertsContent: React.FC = () => {
                 productId={product._id}
                 imageUrl={product.imageurl}
                 name={product.productname}
-                date={product.purchaseDate?.toString().substring(0, 10)}
+                date={product.createdAt!.toString().substring(0, 10)}
                 quantity={product.quantity}
                 price={product.price}
                 highlight={searchText}
+                status={product.status ? product.status : undefined}
               />
             );
-          }) : <NoResultsMessage />}
+          }) : <NoResultsMessage/>}
         </ContentTab>
         
       </Tabs>

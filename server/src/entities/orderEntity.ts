@@ -1,10 +1,11 @@
 import { Offer } from './offerEntity';
 
 export enum OrderStatus {
-  PAYMENT_PENDING = 'Payment Pending',
-  SHIPMENT_PENDING = 'Shipment Pending',
-  RECEIVED = 'Received',
+  PAYMENT_PENDING = 'PAYMENT_PENDING',
+  SHIPMENT_PENDING = 'SHIPMENT_PENDING',
+  RECEIVED = 'RECEIVED',
 }
+
 
 export interface Order {
   id: string;
@@ -13,4 +14,5 @@ export interface Order {
   status: OrderStatus;
   offer: Offer;
   createdAt: Date;
+  paymentId: string;
 }

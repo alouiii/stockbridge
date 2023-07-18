@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ProductAttribute } from '../ProductOverview/ProductAttribute';
-import { OfferStatus, PopulatedOffer } from '../../api/collections/offer';
+import { Offer } from '../../api/collections/offer';
+import { OfferStatus } from '../../api/collections/offer';
 import { PopulatedAdvert } from '../../api/collections/advert';
 import { BodyText } from '../Text/BodyText';
 import { OfferModal } from './OfferModal';
@@ -12,7 +13,7 @@ import { LoginContext } from '../../contexts/LoginContext';
 require('./offerBarStyle.scss');
 
 type OfferBarProps = {
-  offer: PopulatedOffer;
+  offer: Offer;
   advert: PopulatedAdvert;
 };
 
@@ -35,8 +36,8 @@ const OfferBar: React.FC<OfferBarProps> = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setOfferer(props.offer.offeror!);
-        setOfferee(props.offer.offeree!);
+        setOfferer(props.offer.offeror as User);
+        setOfferee(props.offer.offeree as User);
       } catch (error) {
         console.error(error);
       }
@@ -81,19 +82,18 @@ const OfferBar: React.FC<OfferBarProps> = (props) => {
               display: 'flex',
               flexDirection: 'row',
               alignItems: 'center',
-              justifyContent: 'center',
-              marginLeft: '10%',
+              justifyContent: 'start',
+              gap: '10%',
+              marginLeft: '25%'
             }}
           >
             <ProductAttribute
-              name="Quantity"
+              name="quantity"
               value={props?.offer?.quantity}
-              unit="pcs"
             />
             <ProductAttribute
-              name="Price"
+              name="price"
               value={props?.offer?.price}
-              unit="€"
             />
             {
               props.offer.status === OfferStatus.CANCELED_OUT_OF_STOCK && 
