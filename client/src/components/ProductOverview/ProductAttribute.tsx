@@ -111,7 +111,7 @@ const ProductAttribute: React.FC<ProductAttributeProps> = (props) => {
       }}/>}
       <BodyText
         style={{
-          width: '150px',
+          width: props.color ? '4.5em' : '7.5em',
           height: border ? '40px' : '',
           borderRadius: '10px',
           border: border ? '3px solid black' : '',
