@@ -62,7 +62,6 @@ export const setUserIfAvailable = asyncHandler(
         ) as JwtPayload;
 
         req.user = await userModel.findById(decoded.id);
-        next();
       } catch (err) {
         logger.info('No user found');
       }
