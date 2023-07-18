@@ -86,13 +86,19 @@ export const AdvertCard: FC<AdvertCardProps> = (props) => {
       }
       onClick={props.fancyEffect ? handleAdvertClick : undefined}
     >
-      <Image
-        src={props.icon || emptyIcon}
-        alt="image"
-        width={props.icon ? 200 : 160}
-        height={props.icon ? 200 : 150}
-        style={{ marginTop: 30 }}
-      />
+      <div style={{ paddingLeft: 50, paddingRight: 50 }}>
+        <Image
+          src={props.icon || emptyIcon}
+          alt="image"
+          style={{
+            marginTop: 30,
+            width: props.icon ? 200 : 160,
+            height: 150,
+            objectFit: 'cover',
+            borderRadius: 8
+          }}
+        />
+      </div>
       <div
         style={{
           display: 'flex',

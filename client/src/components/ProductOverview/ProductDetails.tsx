@@ -31,14 +31,17 @@ export const ProductDetails: FC<ProductDetailsProps> = (props) => {
       >
         <Image
           style={{
-            width: matches2 ? 350 : 200,
-            height: matches2 ? 350 : 200,
-            borderRadius: 30,
+            maxWidth: matches2 ? 350 : 200,
+            maxHeight: matches2 ? 350 : 200,
+            width: '100%',
+            height: 'auto',
+            borderRadius: !advert.imageurl ? 30 : undefined,
             borderColor: 'transparent',
             objectFit: 'cover',
           }}
           src={advert?.imageurl ? advert?.imageurl : imagePlaceholder}
         />
+
         <div
           style={{
             display: 'flex',
