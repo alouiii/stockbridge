@@ -6,6 +6,9 @@ import imagePlaceholder from '../../assets/product-placeholder.png';
 import { FC } from 'react';
 import useMediaQuery from '../../hooks/useMediaQuery';
 import { palette } from '../../utils/colors';
+import { categoryToAttributes, groupList } from './EditAdvertModal';
+
+
 
 interface ProductDetailsProps {
   advert: PopulatedAdvert;
@@ -13,8 +16,6 @@ interface ProductDetailsProps {
 
 export const ProductDetails: FC<ProductDetailsProps> = (props) => {
   const { advert } = props;
-
-  const matches1 = useMediaQuery('(min-width: 1000px)');
   const matches2 = useMediaQuery('(min-width: 850px)');
 
   return (
@@ -22,13 +23,19 @@ export const ProductDetails: FC<ProductDetailsProps> = (props) => {
       <div
         style={{
           display: 'flex',
-          flexDirection: matches2 ? 'row' : 'column',
-          alignItems: 'center',
+          flexDirection:  'column',
+          alignItems: 'start',
           justifyContent: matches2 ? undefined : 'center',
           gap: 50,
+          marginLeft: 30,
           position: 'relative',
         }}
       >
+        <div style={{
+          display: 'flex', 
+          flexDirection: 'row',
+          gap: 100
+        }}>
         <Image
           style={{
             maxWidth: matches2 ? 350 : 200,
@@ -41,7 +48,7 @@ export const ProductDetails: FC<ProductDetailsProps> = (props) => {
           }}
           src={advert?.imageurl ? advert?.imageurl : imagePlaceholder}
         />
-
+      <div>
         <div
           style={{
             display: 'flex',
@@ -127,50 +134,59 @@ export const ProductDetails: FC<ProductDetailsProps> = (props) => {
           >
             {advert?.description ? advert.description : ''}
           </BodyText>
-          <ProductAttribute
-            name="Category"
+        </div>
+        <ProductAttribute
+            name="category"
             value={advert.category ? advert.category : 'N.S*'}
           />
-          <ProductAttribute name="Color" value={advert?.color ?? 'N.S*'} />
-          <ProductAttribute
-            name="Purchased On"
-            value={
-              advert.purchaseDate
-                ? advert.purchaseDate.toString().substring(0, 10)
-                : 'N.S*'
-            }
-          />
-          <ProductAttribute
-            name="Expires On"
-            value={
-              advert.expirationDate
-                ? advert.expirationDate.toString().substring(0, 10)
-                : 'N.S*'
-            }
-          />
-          <div
+        {
+          groupList(categoryToAttributes(advert.category!) ?? [], 2).map((g) =>  { 
+            return (<div
             style={{
               display: 'flex',
-              flexDirection: matches1 ? 'row' : 'column',
-              gap: matches1 ? 50 : 0,
+              flexDirection: 'row',
+              gap: '20%',
+              alignItems: 'start',
+              justifyContent: 'start',
+              marginTop: '5%',
+              width: 'auto',
             }}
-          >
-            <ProductAttribute
-              name="Quantity"
-              value={advert?.quantity}
-              unit="pcs"
-              border={true}
-              width={150}
-            />
-            <ProductAttribute
-              name="Price"
-              value={advert?.price}
-              unit="€"
-              border={true}
-              width={150}
-            />
-          </div>
+          > {
+            g.map((attribute) => {
+            const value = (advert as any)[attribute]
+            return (
+              attribute in advert && value &&  <ProductAttribute
+              name={attribute}
+              value={['purchaseDate', 'expirationDate', 'createdAt'].includes(attribute) ? value.toString().substring(0, 10) : attribute === 'color' ? value.name :value}
+              color={value.hex}
+            ></ProductAttribute>
+            )
+            
+          })
+        }
+        </div>)})}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            gap: '20%',
+            alignItems: 'start',
+            justifyContent: 'start',
+            marginTop: '5%',
+            width: 'auto',
+          }}
+        >
+          <ProductAttribute
+            name="quantity"
+            value={advert?.quantity}
+          ></ProductAttribute>
+          <ProductAttribute
+            name="price"
+            value={advert?.price}
+          ></ProductAttribute>
         </div>
+      </div>
+      </div>
       </div>
       {!advert.expirationDate || !advert.purchaseDate || !advert.color ? (
         <BodyText style={{ position: 'absolute', bottom: 25, left: 15 }}>

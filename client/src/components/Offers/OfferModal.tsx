@@ -1,6 +1,5 @@
 import { FC, useContext, useState } from 'react';
 import { Button, Col, Form, Modal, Row, Image } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
 import { PopulatedAdvert } from '../../api/collections/advert';
 import {
   createOffer,
@@ -14,7 +13,7 @@ import { Ratings } from '../Ratings';
 import { ResponseModal, ResponseType } from './ResponseModal';
 import { FadeLoader } from 'react-spinners';
 import { palette } from '../../utils/colors';
-import { Checkbox } from '@mui/material';
+import _ from 'lodash';
 type OfferContentProps = {
   isShowing: boolean;
   onClose: () => void;
@@ -42,14 +41,12 @@ function colorMap(status: OfferStatus): string {
 }
 const OfferModal: FC<OfferContentProps> = (props) => {
   const { user } = useContext(LoginContext);
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     quantity: props.offer?.quantity ? props.offer?.quantity : 0,
     price: props.offer?.price ? props.offer?.price : 0,
     createdAt: new Date(),
   } as Offer);
-
-  const offeree = user?._id === props.offer?.offeree;
+  const offeree = props.offer?.offeree && user?._id === (props.offer as PopulatedOffer).offeree?._id;
   const handleChange = (event: any) => {
     event.preventDefault();
     const { name, value } = event.target;
@@ -61,11 +58,11 @@ const OfferModal: FC<OfferContentProps> = (props) => {
 
   const [errors, setErrors] = useState(
     {} as {
-      price: string;
-      quantity: string;
+      price: string | undefined;
+      quantity: string | undefined;
     },
   );
-  const isValid = () => {
+  const isValid = () => { 
     return (
       formData.price &&
       formData.price >= 0 &&
@@ -85,7 +82,6 @@ const OfferModal: FC<OfferContentProps> = (props) => {
   const [showOutOfStockModal, setShowOutOfStockModal] = useState(false);
   const [isConsentChecked, setIsConsentChecked] = useState(false);
   const closeModal = (responseType: ResponseType) => {
-    console.log(responseType);
     if (responseType === ResponseType.SUCCESSFUL_OFFER_ACCEPTANCE) {
       setShowAcceptanceModal(false);
       window.location.reload();
@@ -122,8 +118,8 @@ const OfferModal: FC<OfferContentProps> = (props) => {
   };
 
   const handleSubmit = async () => {
-    setIsLoading(true);
     if (isValid()) {
+      setIsLoading(true)
       await createOffer({
         quantity: formData.quantity,
         price: formData.price,
@@ -134,10 +130,10 @@ const OfferModal: FC<OfferContentProps> = (props) => {
         advert: props.advert?._id,
       } as Offer)
         .then((newOffer) => {
+          props.onClose()
           if (newOffer) {
             setIsLoading(false);
             setShowCreationModal(true);
-            setFormData(newOffer);
             if (newOffer.status === OfferStatus.CANCELED_OUT_OF_STOCK) {
               setOutOfStockError(true);
               setShowOutOfStockModal(true);
@@ -155,22 +151,21 @@ const OfferModal: FC<OfferContentProps> = (props) => {
         })
         .catch((error) => {
           setCreationError(true);
+          setShowCreationModal(true);
         });
     } else {
       setErrors({
         price: formData.price
           ? formData.price > 0
-            ? ''
+            ? undefined
             : 'Price must be greater than 0'
           : 'Price is missing',
         quantity: formData.quantity
           ? formData.quantity > 0
-            ? (
-                props.advert?.type === 'Sell'
-                  ? formData.quantity <= props.advert?.quantity!
-                  : formData.quantity >= props.advert?.quantity!
+            ? (                
+                  formData.quantity <= props.advert?.quantity!
               )
-              ? ''
+              ? undefined
               : 'Quantity must be less or equal to available Quantity'
             : 'Quantity must be greater than 0'
           : 'Quantity is missing',
@@ -233,7 +228,6 @@ const OfferModal: FC<OfferContentProps> = (props) => {
               ? ResponseType.UNSUCCESSFUL_OFFER_CREATION
               : ResponseType.SUCCESSFUL_OFFER_CREATION
           }
-          offer={formData}
           onClose={closeModal}
         />
       ) : showAcceptanceModal ? (
@@ -244,7 +238,6 @@ const OfferModal: FC<OfferContentProps> = (props) => {
               ? ResponseType.UNSUCCESSFUL_OFFER_ACCEPTANCE
               : ResponseType.SUCCESSFUL_OFFER_ACCEPTANCE
           }
-          offer={props.offer as Offer}
           onClose={closeModal}
         />
       ) : showRejectionModal ? (
@@ -255,7 +248,6 @@ const OfferModal: FC<OfferContentProps> = (props) => {
               ? ResponseType.UNSUCCESSFUL_OFFER_REJECTION
               : ResponseType.SUCCESSFUL_OFFER_REJECTION
           }
-          offer={props.offer as Offer}
           onClose={closeModal}
         />
       ) : showOutOfStockModal ? (
@@ -266,7 +258,6 @@ const OfferModal: FC<OfferContentProps> = (props) => {
               ? ResponseType.OUT_OF_STOCK
               : ResponseType.SUCCESSFUL_OFFER_CREATION
           }
-          offer={formData}
           onClose={closeModal}
         />
       ) : (
@@ -369,7 +360,7 @@ const OfferModal: FC<OfferContentProps> = (props) => {
                       marginTop: '10px',
                     }}
                   >
-                    <Form.Label>Color: {props.advert?.color}</Form.Label>
+                    <Form.Label>Color: {props.advert?.color.name}</Form.Label>
                   </Row>
                 )}
                 {props.advert?.purchaseDate && (
@@ -508,7 +499,7 @@ const OfferModal: FC<OfferContentProps> = (props) => {
                           value={formData.quantity}
                           onChange={handleChange}
                           required
-                          isInvalid={!!errors.quantity}
+                          isInvalid={!_.isNil(errors.quantity)}
                         />
                         <Form.Control.Feedback type="invalid">
                           {errors.quantity}
@@ -521,7 +512,7 @@ const OfferModal: FC<OfferContentProps> = (props) => {
             </Row>
           </Modal.Body>
           {(!props.offer ||
-            !['Rejected', 'Canceled', 'Canceled - Out of Stock'].includes(
+            !['Rejected','Accepted', 'Canceled', 'Canceled - Out of Stock'].includes(
               props.offer.status!,
             )) && (
             <Modal.Footer
@@ -574,18 +565,6 @@ const OfferModal: FC<OfferContentProps> = (props) => {
                     Confirm
                   </Button>
                 </>
-              )}
-              {offeree && props.offer?.status === 'Accepted' && (
-                <Button
-                  className="text-white"
-                  onClick={() => navigate('/userInfo')}
-                  style={{
-                    background: palette.green,
-                    borderColor: palette.green,
-                  }}
-                >
-                  See Order
-                </Button>
               )}
             </Modal.Footer>
           )}

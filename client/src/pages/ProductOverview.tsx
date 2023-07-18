@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Colors, getAdvert, PopulatedAdvert } from '../api/collections/advert';
+import { getAdvert, PopulatedAdvert } from '../api/collections/advert';
 import { getStore, PopulatedUser } from '../api/collections/user';
 import { Page } from '../components/Page';
 import { ProductOverviewSection } from '../components/ProductOverview/ProductOverviewSection';
@@ -29,7 +29,7 @@ const ProductOverview = () => {
     store: '',
     reviews: [],
     imageurl: '',
-    color: Colors.Blue,
+    color: undefined,
     createdAt: new Date(),
   } as PopulatedAdvert);
   const [store, setStore] = useState({} as PopulatedUser);
@@ -61,8 +61,7 @@ const ProductOverview = () => {
       }
     };
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [id, navigate]);
 
   return (
     <Page>

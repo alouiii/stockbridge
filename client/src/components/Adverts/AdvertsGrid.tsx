@@ -10,6 +10,7 @@ import { Button } from 'react-bootstrap';
 import { useSearchParams } from 'react-router-dom';
 import { CustomMap } from './CustomMap';
 import "../override.css"
+import NoResultsMessage from '../Profile/NoResultsMessage';
 
 interface AdvertGridProps {
   adverts: PopulatedAdvert[] | undefined;
@@ -49,7 +50,7 @@ export const AdvertsGrid: FC<AdvertGridProps> = (props) => {
         marginLeft: 'auto',
         marginRight: 'auto',
         display: 'flex',
-        justifyContent: 'center',
+        justifyContent: 'left',
         flexWrap: 'wrap',
         gap: 50,
       }}
@@ -101,9 +102,7 @@ export const AdvertsGrid: FC<AdvertGridProps> = (props) => {
       {props.isMapOpen ? (
         props.adverts ? (
           <CustomMap adverts={props.adverts} />
-        ) : (
-          undefined
-        )
+        ) : undefined
       ) : undefined}
       {props.adverts ? (
         props.adverts.length > 0 ? (
@@ -129,27 +128,23 @@ export const AdvertsGrid: FC<AdvertGridProps> = (props) => {
                 prioritized={item.prioritized}
                 creationDate={item.createdAt}
                 fancyEffect={true}
+                category={item.category}
               />
             </div>
           ))
         ) : (
           <div
             style={{
-              display: 'flex',
-              justifyContent: 'center',
-              width: '100%',
-              height: '100vh',
+              position: 'relative',
+              top: '-17em',
+              right: '-5%',
+              zIndex: -10
+              //justifyContent: 'center',
+              //width: '100%',
+              //height: '100vh',
             }}
           >
-            <BodyText
-              style={{
-                color: 'red',
-                fontSize: 30,
-                textAlign: 'center',
-              }}
-            >
-              No data found
-            </BodyText>
+           <NoResultsMessage />
           </div>
         )
       ) : (

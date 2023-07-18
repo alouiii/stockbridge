@@ -3,10 +3,10 @@ import { Button, Image } from 'react-bootstrap';
 import { BodyText } from '../Text/BodyText';
 import { ColoredLine } from '../ColoredLine';
 import prioritizedIcon from '../../assets/prioritized.svg';
-import emptyIcon from '../../assets/product-placeholder.png';
 import { useNavigate } from 'react-router-dom';
 import { LoginContext } from '../../contexts/LoginContext';
 import { palette } from '../../utils/colors';
+import { mapIcon } from '../Home/TopCategories';
 
 export interface AdvertCardProps {
   id: string | undefined;
@@ -18,6 +18,7 @@ export interface AdvertCardProps {
   prioritized: boolean | undefined;
   creationDate: Date | undefined;
   fancyEffect: boolean;
+  category?: string;
 }
 
 export const AdvertCard: FC<AdvertCardProps> = (props) => {
@@ -50,6 +51,8 @@ export const AdvertCard: FC<AdvertCardProps> = (props) => {
     props.description && props.description.length > 50
       ? `${props.description.slice(0, 50)}...`
       : props.description;
+
+  const defaultIcon = mapIcon(props.category || '');
 
   return (
     <div
@@ -88,7 +91,7 @@ export const AdvertCard: FC<AdvertCardProps> = (props) => {
     >
       <div style={{ paddingLeft: 50, paddingRight: 50 }}>
         <Image
-          src={props.icon || emptyIcon}
+          src={props.icon || defaultIcon}
           alt="image"
           style={{
             marginTop: 30,
@@ -117,10 +120,15 @@ export const AdvertCard: FC<AdvertCardProps> = (props) => {
             {truncatedName}
           </BodyText>
           <ColoredLine
+           
             width={30}
+           
             height={3}
+           
             color={palette.advertCardLine}
+           
             marginTop={-10}
+         
           />
         </div>
         <div
