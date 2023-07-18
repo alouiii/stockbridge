@@ -102,9 +102,7 @@ export const AdvertsGrid: FC<AdvertGridProps> = (props) => {
       {props.isMapOpen ? (
         props.adverts ? (
           <CustomMap adverts={props.adverts} />
-        ) : (
-          undefined
-        )
+        ) : undefined
       ) : undefined}
       {props.adverts ? (
         props.adverts.length > 0 ? (
@@ -130,6 +128,7 @@ export const AdvertsGrid: FC<AdvertGridProps> = (props) => {
                 prioritized={item.prioritized}
                 creationDate={item.createdAt}
                 fancyEffect={true}
+                category={item.category}
               />
             </div>
           ))
