@@ -6,7 +6,7 @@ import Slider from '@mui/material/Slider';
 import { ProductCategory } from '../../api/collections/advert';
 import { useSearchParams } from 'react-router-dom';
 import '../override.css';
-import deleteIcon from "../../assets/deleteX.svg"
+import deleteIcon from '../../assets/deleteX.svg';
 
 interface FilterAdvertsModalProps {
   isOpen: boolean;
@@ -70,7 +70,7 @@ export const FilterAdvertsModal: FC<FilterAdvertsModalProps> = (props) => {
 
   const handleConfirm = () => {
     saveResults();
-    if (selectedCategories) {
+    if (selectedCategories && selectedCategories.length > 0) {
       const categories = selectedCategories.join(',');
       search.set('category[in]', categories);
       setSearch(search, { replace: true });

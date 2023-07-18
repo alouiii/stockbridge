@@ -11,18 +11,14 @@ const ReviewOfferSection: FC<ReviewOfferSectionProps> = (props) => {
       style={{
         alignItems: 'center',
         justifyContent: 'center',
-        paddingLeft: '60px',
-        width: 'full',
-        marginBottom: '2%',
+        paddingTop: 15,
       }}
     >
       <BodyText
         style={{
-          fontFamily: 'poppins',
-          color: 'black',
-          fontSize: '36px',
+          fontSize: 30,
           fontWeight: 600,
-          paddingLeft: '10px',
+          paddingLeft: 15,
         }}
       >
         {props.section}

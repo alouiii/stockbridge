@@ -39,9 +39,9 @@ const OfferBarUserProfile: React.FC<OfferBarUserProfileProps> = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const fetchedOfferor = await getStore(props.offer.offeror!)
+        const fetchedOfferor = await getStore(props.offer.offeror!);
         setOfferer(fetchedOfferor);
-        const fetchedOfferee = await getStore(props.offer.offeree!)
+        const fetchedOfferee = await getStore(props.offer.offeree!);
         setOfferee(fetchedOfferee);
       } catch (error) {
         console.error(error);
@@ -70,7 +70,7 @@ const OfferBarUserProfile: React.FC<OfferBarUserProfileProps> = (props) => {
               >
                 {/* The state does not work properly, this is a workaround that issue */}
                 {offerer?.name ?? 'No Name given'}
-                {Ratings(offerer?.rating ?? 0)}
+                {Ratings(offerer?.rating ?? 0, 'red')}
               </BodyText>
               <BodyText
                 style={{
@@ -97,10 +97,7 @@ const OfferBarUserProfile: React.FC<OfferBarUserProfileProps> = (props) => {
                 name="quantity"
                 value={props?.offer?.quantity}
               />
-              <ProductAttribute
-                name="price"
-                value={props?.offer?.price}
-              />
+              <ProductAttribute name="price" value={props?.offer?.price} />
             </div>
           }
         />
