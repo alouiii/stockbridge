@@ -57,7 +57,8 @@ const OrderBarUserProfile: React.FC<OrderBarUserProfileProps> = (props) => {
         offer={props.order.offer as PopulatedOffer}
         outgoing={props.outgoing}
         highlight={props.highlight}
-      />
+        onClick={openModal}
+      />    
       {showModal && (
         <span>This is my modal</span>
       )}

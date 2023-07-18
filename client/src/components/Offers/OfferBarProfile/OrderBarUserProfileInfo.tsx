@@ -18,6 +18,7 @@ type OrderBarUserProfileInfoProps = {
   order: NestedPopulatedOrder;
   outgoing: boolean;
   highlight: string;
+  onClick: () => void;
 };
 
 const OrderBarUserProfileInfo: React.FC<OrderBarUserProfileInfoProps> = (
@@ -52,6 +53,7 @@ const OrderBarUserProfileInfo: React.FC<OrderBarUserProfileInfoProps> = (
     <li
       className={`product-bar offer ${isPendingOrder ? "order-bar-clickable" : "non-clickable"} row`}
       style={{ backgroundColor: 'white' }}
+      onClick= {props.onClick}
     >
       <div className="product-image col-2">
         <Image
