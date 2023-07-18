@@ -1,4 +1,4 @@
-import React, { FC, useContext, useRef, useState } from 'react';
+import React, { FC, useContext, useEffect, useRef, useState } from 'react';
 import { Button, Col, Form, Modal, Row, Image } from 'react-bootstrap';
 import {
   Advert,
@@ -29,26 +29,26 @@ type EditAdvertContentProps = {
   onClose: () => void;
   advert?: PopulatedAdvert;
 };
-function groupList(attributeList: string[]): string[][] {
+export function groupList(attributeList: string[], n: number): string[][] {
   const groupedList: string[][] = []
   let currentGroup: string[] = []
   for (let i = 0; i < attributeList.length; i++) {
     const currentValue = attributeList[i];
-    if (i % 2 === 0) {
+    if (i % n === 0) {
+      currentGroup = []
       currentGroup.push(currentValue);
     } else {
       currentGroup.push(currentValue);
       groupedList.push(currentGroup);
-      currentGroup = []
     }
 
-    if (i === attributeList.length -1 && i % 2 === 0) {
+    if (i === attributeList.length -1 && i % n === 0) {
       groupedList.push(currentGroup)
     }
   }
   return groupedList;
 }
-function categoryToAttributes(category: string) {
+export function categoryToAttributes(category: string) {
   if (Object.values(ProductCategory).map(c => c.toString()).includes(category)) {
     switch (category) {
       case ProductCategory.Apparel_And_Accessories: 
@@ -101,7 +101,11 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
     setAdvertType(event.target.value);
   };
   const [attributeList, setAttributeList] = useState<string[]>();
-
+  useEffect(() => {
+    if (props.advert) {
+      setAttributeList(categoryToAttributes(props.advert.category!))
+    } 
+  }, [props.advert]);
   const [formData, setFormData] = useState({
     productname: props.advert?.productname ?? undefined,
     description: props.advert?.description ?? undefined,
@@ -119,10 +123,10 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
     store: props.advert?.store ?? user?._id,
     size: props.advert?.size ?? undefined,
     fabric: props.advert?.fabric ?? '',
-    sustainable: props.advert?.sustainable ?? '',
-    energyClass: props.advert?.energyClass ?? '',
-    crueltyFree: props.advert?.crueltyFree ?? '',
-    recyclable: props.advert?.recyclable ?? '',
+    sustainable: props.advert?.sustainable ?? undefined,
+    energyClass: props.advert?.energyClass ?? undefined,
+    crueltyFree: props.advert?.crueltyFree ?? undefined,
+    recyclable: props.advert?.recyclable ?? undefined,
     weight: props.advert?.weight ?? undefined,
     height: props.advert?.height ?? undefined,
     width: props.advert?.width ?? undefined,
@@ -228,7 +232,7 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
       }    
     />
     case 'material': 
-      return <FormAttribute name={name} control={true} label='Material' value={formData.fabric} onChange={handleChange}/>
+      return <FormAttribute name={name} control={true} label='Material' value={formData.material} onChange={handleChange}/>
   } 
 }
 
@@ -300,18 +304,19 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
             price: formData.Price,
             category: formData.category,
             imageurl: encodedImage,
-            size: formData.size,
-            fabric: formData.fabric,
-            sustainable: formData.sustainable,
-            energyClass: formData.energyClass,
-            crueltyFree: formData.crueltyFree,
-            recyclable: formData.recyclable,
-            weight: formData.weight,
-            height: formData.height,
-            width: formData.width,
-            length: formData.length,
-            pages: formData.pages,
-            volume: formData.volume,
+            size: formData.size ?? undefined,
+            fabric: formData.fabric ?? undefined,
+            sustainable: formData.sustainable ?? undefined,
+            energyClass: formData.energyClass ?? undefined,
+            crueltyFree: formData.crueltyFree ?? undefined,
+            recyclable: formData.recyclable ?? undefined,
+            weight: formData.weight ?? undefined,
+            height: formData.height ?? undefined,
+            width: formData.width ?? undefined,
+            length: formData.length ?? undefined,
+            pages: formData.pages ?? undefined,
+            volume: formData.volume ?? undefined,
+            material: formData.material ?? undefined
           } as Advert);
         } else {
           await createAdvert({
@@ -329,18 +334,19 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
             store: user?._id,
             imageurl: encodedImage,
             type: advertType,
-            size: formData.size,
-            fabric: formData.fabric,
-            sustainable: formData.sustainable,
-            energyClass: formData.energyClass,
-            crueltyFree: formData.crueltyFree,
-            recyclable: formData.recyclable,
-            weight: formData.weight,
-            height: formData.height,
-            width: formData.width,
-            length: formData.length,
-            pages: formData.pages,
-            volume: formData.volume,
+            size: formData.size ?? undefined,
+            fabric: formData.fabric ?? undefined,
+            sustainable: formData.sustainable ?? undefined,
+            energyClass: formData.energyClass ?? undefined,
+            crueltyFree: formData.crueltyFree ?? undefined,
+            recyclable: formData.recyclable ?? undefined,
+            weight: formData.weight ?? undefined,
+            height: formData.height ?? undefined,
+            width: formData.width ?? undefined,
+            length: formData.length ?? undefined,
+            pages: formData.pages ?? undefined,
+            volume: formData.volume ?? undefined,
+            material: formData.material ?? undefined
           });
         }
       } catch (error) {
@@ -547,7 +553,7 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
             {(attributeList?.length && attributeList.length > 0) && attributes(attributeList[0], formData)}
           </Row>
           {attributeList?.length && attributeList.length > 1 && 
-            groupList(attributeList.slice(1)).map(g => 
+            groupList(attributeList.slice(1), 2).map(g => 
               <Row>
               {attributes(g[0], formData)}
               {g.length > 1 && attributes(g[1], formData)}
