@@ -36,6 +36,9 @@ const OrderBarUserProfileInfo: React.FC<OrderBarUserProfileInfoProps> = (
     }
   };
 
+  // The status of the order is pending.
+  const isPendingOrder = props.order.status === OrderStatus.PAYMENT_PENDING;
+
   const [isHovered, setIsHovered] = useState(false);
   const handleMouseOver = () => {
     setIsHovered(true);
@@ -47,7 +50,7 @@ const OrderBarUserProfileInfo: React.FC<OrderBarUserProfileInfoProps> = (
 
   return (
     <li
-      className="product-bar offer non-clickable row"
+      className={`product-bar offer ${isPendingOrder ? "order-bar-clickable" : "non-clickable"} row`}
       style={{ backgroundColor: 'white' }}
     >
       <div className="product-image col-2">
