@@ -5,9 +5,11 @@ import {
   Advert,
   ProductCategory,
   Colors,
+  Sizes,
+  Options,
+  EnergyClass,
 } from '../entities/advertEntity';
 import userModel from './User';
-import { User } from '../entities/userEntity';
 
 const Types = mongoose.Schema.Types;
 
@@ -54,6 +56,31 @@ const advertSchema = new mongoose.Schema<Advert>({
     enum: Object.values(Colors),
     required: [false, 'You could enter a color for the product'],
   },
+  energyClass: {
+    type: Types.String,
+    enum: Object.values(EnergyClass),
+    required: [false, 'You could enter an energy Class for the product'],
+  },
+  size: {
+    type: Types.String,
+    enum: Object.values(Sizes),
+    required: [false, 'You could enter a size for the product'],
+  },
+  sustainable: {
+    type: Types.String,
+    enum: Object.values(Options),
+    required: [false, ''],
+  },
+  crueltyFree: {
+    type: Types.String,
+    enum: Object.values(Options),
+    required: [false, ''],
+  },
+  recyclable: {
+    type: Types.String,
+    enum: Object.values(Options),
+    required: [false, ''],
+  },
   status: {
     type: Types.String,
     enum: Object.values(AdvertStatus),
@@ -69,6 +96,38 @@ const advertSchema = new mongoose.Schema<Advert>({
     type: Types.String,
     enum: Object.values(ProductCategory),
     required: [true, 'Please add a product category'],
+  },
+  fabric: {
+    type: Types.String,
+    required: [false, 'Please add the product fabric'],
+  },
+  material: {
+    type: Types.String,
+    required: [false, 'Please add the product material'],
+  },
+  width: {
+    type: Types.Number,
+    required: [false, ''],
+  },
+  height: {
+    type: Types.Number,
+    required: [false, ''],
+  },
+  length: {
+    type: Types.Number,
+    required: [false, ''],
+  },
+  weight: {
+    type: Types.Number,
+    required: [false, ''],
+  },
+  volume: {
+    type: Types.Number,
+    required: [false, ''],
+  },
+  pages: {
+    type: Types.Number,
+    required: [false, ''],
   },
   offers: [
     {
@@ -110,15 +169,15 @@ advertSchema.pre('save', async function (next) {
 });
 
 advertSchema.pre('findOneAndUpdate', async function (next) {
+  
   const thisAdvert = this.getUpdate() as Advert;
-  const existingAdvert = await advertModel.findById(thisAdvert.id);
-  if (!existingAdvert?.prioritized && thisAdvert.prioritized) {
-    const concernedUser = await userModel.findById(existingAdvert?.store);
-    if (concernedUser) {
-      concernedUser.prioritisationTickets =
-        concernedUser.prioritisationTickets - 1;
-      concernedUser.save();
-    }
+
+  if (!Object.getOwnPropertyNames(thisAdvert).some(property => (property != 'prioritized') && (property != 'id') )) {
+    const fetchedAdvert = await advertModel.findById(thisAdvert.id);
+
+    const concernedUser = await userModel.findOneAndUpdate({_id: fetchedAdvert?.store}, {
+      $inc: {prioritisationTickets: -1}
+    });
   }
   next();
 });

@@ -78,7 +78,7 @@ export const createAdvert = async (advert: Advert, user: User) => {
     throw new AppError(
       `Advert limit reached`,
       `Advert limit reachedAdvert limit of ${advertLimit} reached`,
-      400,
+      403,
     );
   }
 
@@ -138,6 +138,8 @@ export const findAllAdverts = async (
   logger.debug(`${serviceName}: Page: ${page}`);
   logger.debug(`${serviceName}: Limit: ${limit}`);
   logger.debug(`${serviceName}: Search: ${search}`);
+  logger.debug(`${serviceName}: Radius: ${radius}`);
+  logger.debug(`${serviceName}: Center: ${center}`);
 
   let queryFilter = queryStr ? JSON.parse(queryStr) : {};
 
