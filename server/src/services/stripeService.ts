@@ -294,7 +294,7 @@ export const handleSuccessfulPaymentIntent = async (
   product: string,
 ) => {
   logger.debug(
-    `${serviceName}: Handling successful payment intent for ${userId}`,
+    `${serviceName}: Handling successful payment intent for ${userId} and ${product}`,
   );
   const user = (await userModel.findById(userId)) as User;
   switch (true) {
