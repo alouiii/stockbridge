@@ -32,7 +32,7 @@ function App() {
         <Route path="/contactUs" element={<ContactUs />} />
         <Route path="/productoverview/:id" element={<ProductOverview />} />
         <Route path="/adverts" element={<Adverts />} />
-        <Route path="*" element={<NotFound />} />
+        <Route path="404" element={<NotFound />} />
       </Routes>
     </LoginContextProvider>
   );

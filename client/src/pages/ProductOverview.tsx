@@ -57,7 +57,7 @@ const ProductOverview = () => {
           }
         }
       } catch (error) {
-        navigate('*'); //not found page
+        navigate('/404'); //not found page
       }
     };
     fetchData();
