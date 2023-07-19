@@ -8,7 +8,7 @@ import {
   Offer,
   OfferStatus,
   PopulatedOffer,
-  rejectOffer
+  rejectOffer,
 } from '../../api/collections/offer';
 import { LoginContext } from '../../contexts/LoginContext';
 import { Ratings } from '../Ratings';
@@ -88,7 +88,7 @@ const OfferModal: FC<OfferContentProps> = (props) => {
   const [showOutOfStockModal, setShowOutOfStockModal] = useState(false);
   const [isConsentChecked, setIsConsentChecked] = useState(false);
   const closeModal = (responseType: ResponseType) => {
-    props.onClose()
+    props.onClose();
     switch (responseType) {
       case ResponseType.SUCCESSFUL_OFFER_ACCEPTANCE:
         setShowAcceptanceModal(false);
@@ -125,10 +125,10 @@ const OfferModal: FC<OfferContentProps> = (props) => {
         window.location.reload();
         break;
       case ResponseType.UNSUCCESSFUL_CANCEL:
-          setShowCancelationModal(false);
-          break;
+        setShowCancelationModal(false);
+        break;
       default:
-        console.log("Invalid response type!");
+        console.log('Invalid response type!');
     }
   };
 
@@ -152,7 +152,7 @@ const OfferModal: FC<OfferContentProps> = (props) => {
             if (newOffer.status === OfferStatus.CANCELED_OUT_OF_STOCK) {
               setOutOfStockError(true);
               setShowOutOfStockModal(true);
-              setShowCreationModal(false)
+              setShowCreationModal(false);
               setAcceptanceError(false);
               setCreationError(false);
               setRejectionError(false);
@@ -190,7 +190,7 @@ const OfferModal: FC<OfferContentProps> = (props) => {
   const handleReject = async () => {
     try {
       if (props.offer?._id) {
-        await rejectOffer(props.offer as PopulatedOffer, user?._id!)
+        await rejectOffer(props.offer as PopulatedOffer, user?._id!);
       }
       setShowRejectionModal(true);
     } catch (error) {
@@ -204,7 +204,7 @@ const OfferModal: FC<OfferContentProps> = (props) => {
   const handleAccept = async () => {
     try {
       if (props.offer?._id) {
-        await acceptOffer(props.offer as PopulatedOffer, user?._id!)
+        await acceptOffer(props.offer as PopulatedOffer, user?._id!);
       }
       setShowAcceptanceModal(true);
     } catch (error) {
@@ -216,7 +216,7 @@ const OfferModal: FC<OfferContentProps> = (props) => {
     try {
       if (props.offer?._id) {
         setIsLoading(true);
-        await cancelOffer(props.offer as PopulatedOffer, user?._id!)
+        await cancelOffer(props.offer as PopulatedOffer, user?._id!);
       }
       setShowCancelationModal(true);
       setIsLoading(false);
@@ -280,15 +280,17 @@ const OfferModal: FC<OfferContentProps> = (props) => {
           }
           onClose={closeModal}
         />
-      ) : showCancelationModal ? <ResponseModal
-      isShowing={showCancelationModal}
-      responseType={
-        cancelationError
-          ? ResponseType.UNSUCCESSFUL_CANCEL
-          : ResponseType.SUCCESSFUL_CANCEL
-      }
-      onClose={closeModal}
-    /> : (
+      ) : showCancelationModal ? (
+        <ResponseModal
+          isShowing={showCancelationModal}
+          responseType={
+            cancelationError
+              ? ResponseType.UNSUCCESSFUL_CANCEL
+              : ResponseType.SUCCESSFUL_CANCEL
+          }
+          onClose={closeModal}
+        />
+      ) : (
         <Modal
           show={props.isShowing}
           onHide={() => props.onClose()}
@@ -353,77 +355,43 @@ const OfferModal: FC<OfferContentProps> = (props) => {
               style={{
                 justifyContent: 'center',
                 alignItems: 'center',
+                height: '70%'
               }}
             >
-              {props.advert?.imageurl && (
-                <Col>
+                <Col style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  position: 'relative',
+                  bottom: '1em'
+                }}>
+                <Form.Label
+                    style={{
+                      fontSize: '24px',
+                      fontWeight: 400,
+                      marginBottom: '1em'
+                    }}
+                  >
+                    {props.advert?.productname}
+                  </Form.Label>
                   <Image
                     style={{
-                      width: '160px',
-                      height: '160px',
-                      borderRadius: '60px',
+                      width: '10em',
+                      height: '10em',
+                      borderRadius: 60,
                     }}
                     src={props.advert?.imageurl}
                   />
                 </Col>
-              )}
+
+              {
+                props.offer &&
               <Col
                 style={{
                   marginLeft: props.advert?.imageurl ? '' : '100px',
                 }}
               >
-                <Row>
-                  <Form.Label
-                    style={{
-                      fontSize: '24px',
-                      fontWeight: 400,
-                    }}
-                  >
-                    {props.advert?.productname}
-                  </Form.Label>
-                </Row>
-                {props.advert?.color && (
-                  <Row
-                    style={{
-                      marginTop: '10px',
-                    }}
-                  >
-                    <Form.Label>Color: {props.advert?.color.name}</Form.Label>
-                  </Row>
-                )}
-                {props.advert?.purchaseDate && (
-                  <Row
-                    style={{
-                      marginTop: '10px',
-                    }}
-                  >
-                    <Form.Label>
-                      Purchase Date: 
-                      {" "+ props.advert?.purchaseDate.toString().substring(0, 10) }
-                    </Form.Label>
-                  </Row>
-                )}
-                {props.advert?.expirationDate && (
-                  <Row
-                    style={{
-                      marginTop: '10px',
-                    }}
-                  >
-                    <Form.Label>
-                      Expiration Date:
-                      {" "+ props.advert?.expirationDate.toString().substring(0, 10)}
-                    </Form.Label>
-                  </Row>
-                )}
-              </Col>
-              <Col>
-                <Row>
-                  <Form.Label>
-                    {props.advert?.type === 'Sell' ? 'Seller' : 'Buyer'}:{' '}
-                    {props.storeName}
-                    {Ratings(props.rating ? props.rating : 0, 'red')}
-                  </Form.Label>
-                </Row>
                 <Row>
                   <Form.Group
                     style={{
@@ -450,7 +418,7 @@ const OfferModal: FC<OfferContentProps> = (props) => {
                           fontWeight: 600,
                         }}
                       >
-                        {props.offer.price} €
+                        {props.advert?.price} €
                       </Form.Label>
                     ) : (
                       <div
@@ -506,6 +474,131 @@ const OfferModal: FC<OfferContentProps> = (props) => {
                           fontWeight: 600,
                         }}
                       >
+                        {props.advert?.quantity} pcs
+                      </Form.Label>
+                    ) : (
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: '10%',
+                        }}
+                      >
+                        <Form.Control
+                          style={{
+                            width: '60%',
+                            color: palette.gray,
+                          }}
+                          type="number"
+                          name="quantity"
+                          min={1}
+                          value={formData.quantity}
+                          onChange={handleChange}
+                          required
+                          isInvalid={!_.isNil(errors.quantity)}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {errors.quantity}
+                        </Form.Control.Feedback>
+                      </div>
+                    )}
+                  </Form.Group>
+                </Row>
+              </Col>
+              }
+              <Col style={{
+                position: 'relative',
+                bottom: '1.7em'
+              }}>
+                <Row>
+                  <Form.Label>
+                    {props.advert?.type === 'Sell' ? 'Buyer' : 'Seller'}:{' '}
+                    {props.storeName}
+                    {Ratings(props.rating ? props.rating : 0, 'red')}
+                  </Form.Label>
+                </Row>
+                <Row>
+                  <Form.Group
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      alignContent: 'center',
+                      gap: '10%',
+                      marginTop: '10px',
+                    }}
+                  >
+                    <Form.Label
+                      style={{
+                        width: props.offer ? '130px' : '110px',
+                      }}
+                    >
+                     Offered Price {props.offer ? '' : '(€)'}
+                    </Form.Label>
+                    {props.offer ? (
+                      <Form.Label
+                        style={{
+                          color: palette.gray,
+                          font: 'bold',
+                          fontWeight: 600,
+                        }}
+                      >
+                        {props.offer.price} €
+                      </Form.Label>
+                    ) : (
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: '10%',
+                        }}
+                      >
+                        <Form.Control
+                          style={{
+                            width: '60%',
+                            color: palette.gray,
+                          }}
+                          type="number"
+                          name="price"
+                          value={formData.price}
+                          min={0}
+                          onChange={handleChange}
+                          required
+                          isInvalid={!!errors.price}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {errors.price}
+                        </Form.Control.Feedback>
+                      </div>
+                    )}
+                  </Form.Group>
+                </Row>
+                <Row>
+                  <Form.Group
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      alignContent: 'center',
+                      gap: '10%',
+                      marginTop: '10px',
+                    }}
+                  >
+                    <Form.Label
+                      style={{
+                        width: props.offer ? '130px' : '110px',
+                      }}
+                    >
+                     Offered Quantity {props.offer ? '' : '(pcs)'}
+                    </Form.Label>
+                    {props.offer ? (
+                      <Form.Label
+                        style={{
+                          color: palette.gray,
+                          font: 'bold',
+                          fontWeight: 600,
+                        }}
+                      >
                         {props.offer.quantity} pcs
                       </Form.Label>
                     ) : (
@@ -539,12 +632,14 @@ const OfferModal: FC<OfferContentProps> = (props) => {
               </Col>
             </Row>
           </Modal.Body>
-          {(!props.offer ||
-              OfferStatus.OPEN === props.offer.status
-            ) && (
+          {(!props.offer || OfferStatus.OPEN === props.offer.status) && (
             <Modal.Footer
               style={{
-                justifyContent: offeree ? 'center' : props.offer ? 'center' : 'space-between',
+                justifyContent: offeree
+                  ? 'center'
+                  : props.offer
+                  ? 'center'
+                  : 'space-between',
               }}
             >
               {offeree && props.offer?.status === OfferStatus.OPEN && (
@@ -571,8 +666,7 @@ const OfferModal: FC<OfferContentProps> = (props) => {
                   Accept
                 </Button>
               )}
-              {
-                !offeree && props.offer?.status === OfferStatus.OPEN && 
+              {!offeree && props.offer?.status === OfferStatus.OPEN && (
                 <Button
                   className="text-white"
                   onClick={handleCancel}
@@ -581,9 +675,9 @@ const OfferModal: FC<OfferContentProps> = (props) => {
                     borderColor: palette.canceledOffer,
                   }}
                 >
-                 Cancel
+                  Cancel
                 </Button>
-              }
+              )}
               {!props.offer && (
                 <>
                   <div>

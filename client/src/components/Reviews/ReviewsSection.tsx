@@ -170,12 +170,12 @@ const ReviewsSection: FC<ReviewsSectionProps> = (props) => {
             alignSelf: 'center',
             background: 'none',
             border: 'none',
-            fontSize: '2em'
+            fontSize: '2em',
           }}
           onClick={handleToggleSortOrder}
         >
           <i
-            className={sortOrder ? 'bi bi-sort-down' : 'bi bi-sort-up'}
+            className={sortOrder ? 'bi bi-sort-up' : 'bi bi-sort-down'}
             style={{
               color: '#f76c6c',
             }}
