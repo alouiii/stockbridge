@@ -7,11 +7,11 @@
 
 ## Credentials 
 
-- Proton mail access credentials: email: `stockbridge-seba@proton.me` / password: `xfV8scJqwvwE7Z-`
-- MongoDB atlas credentials (to login to atlas): email: `stockbridge-seba@proton.me` / password: `8jB8p7!GGN5ejFh`
+- Proton mail access credentials (https://proton.me/mail): email: `stockbridge-seba@proton.me` / password: `xfV8scJqwvwE7Z-`
+- MongoDB atlas credentials (to login to atlas) (https://www.mongodb.com/atlas): email: `stockbridge-seba@proton.me` / password: `8jB8p7!GGN5ejFh`
 - Database access credentials (to connect mongoose to atlas): user: `admin` / password: `aHFSMJA3CN3rrLLq`
-- Mapquest (Map feature): stockbridge-seba@proton.me / password: `pD8Jqe.x4eKRLrc`
-- Stripe (Payment feature): email: `stockbridge-seba@proton.me`/ password: `_Z.xm4g5ii3!up5`
+- Mapquest (Map feature) (https://developer.mapquest.com/): stockbridge-seba@proton.me / password: `pD8Jqe.x4eKRLrc`
+- Stripe (Payment feature) (https://dashboard.stripe.com/): email: `stockbridge-seba@proton.me`/ password: `_Z.xm4g5ii3!up5`
 
 ## Starting the application
 
