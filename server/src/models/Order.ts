@@ -40,13 +40,14 @@ export const orderSchema = new mongoose.Schema<Order>({
     type: Types.String,
   },
 });
-orderSchema.pre<Order>('save', async function (next) {
+orderSchema.pre('findOneAndUpdate', async function (next) {
+  const thisOrder = this.getUpdate() as Order;
   try {
-    const offer = await offerModel.findById(this.offer);
+    const offer = await offerModel.findById(thisOrder.offer);
     if (offer) {
       const advert = await findAdvertById(offer?.advert.toString());
-      if (advert?.quantity && this.status == OrderStatus.RECEIVED) {
-        advert.quantity = advert?.quantity - this.quantity;
+      if (advert?.quantity && thisOrder.status == OrderStatus.RECEIVED) {
+        advert.quantity = advert?.quantity - offer.quantity * offer.price;
         if (advert.quantity <= 0) {
           advert.status = AdvertStatus.Closed;
         }
@@ -63,8 +64,9 @@ orderSchema.pre<Order>('save', async function (next) {
         await advertModel.findByIdAndUpdate(advert.id, advert);
       }
     }
+    next()
   } catch (error) {
-    logger.error(`Failed updating advert corresponding to order ${this.id}`);
+    logger.error(`Failed updating advert corresponding to order ${thisOrder.id}`);
   }
 });
 
