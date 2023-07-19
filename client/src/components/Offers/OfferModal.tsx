@@ -2,10 +2,13 @@ import { FC, useContext, useState } from 'react';
 import { Button, Col, Form, Modal, Row, Image } from 'react-bootstrap';
 import { AdvertType, PopulatedAdvert } from '../../api/collections/advert';
 import {
+  acceptOffer,
+  cancelOffer,
   createOffer,
   Offer,
   OfferStatus,
   PopulatedOffer,
+  rejectOffer,
   updateOffer,
 } from '../../api/collections/offer';
 import { LoginContext } from '../../contexts/LoginContext';
@@ -186,9 +189,7 @@ const OfferModal: FC<OfferContentProps> = (props) => {
   const handleReject = async () => {
     try {
       if (props.offer?._id) {
-        await updateOffer(props.offer._id, {
-          status: OfferStatus.REJECTED,
-        });
+        await rejectOffer(props.offer as PopulatedOffer, user?._id!)
       }
       setShowRejectionModal(true);
     } catch (error) {
@@ -202,9 +203,7 @@ const OfferModal: FC<OfferContentProps> = (props) => {
   const handleAccept = async () => {
     try {
       if (props.offer?._id) {
-        await updateOffer(props.offer._id, {
-          status: OfferStatus.ACCEPTED,
-        });
+        await acceptOffer(props.offer as PopulatedOffer, user?._id!)
       }
       setShowAcceptanceModal(true);
     } catch (error) {
@@ -216,9 +215,7 @@ const OfferModal: FC<OfferContentProps> = (props) => {
     try {
       if (props.offer?._id) {
         setIsLoading(true);
-        await updateOffer(props.offer._id, {
-          status: OfferStatus.CANCELED_USER,
-        });
+        await cancelOffer(props.offer as PopulatedOffer, user?._id!)
       }
       setShowCancelationModal(true);
       setIsLoading(false);
