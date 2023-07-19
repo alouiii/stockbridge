@@ -4,8 +4,8 @@ import { Review } from './review';
 import { User } from './user';
 
 export enum AdvertType {
-  Sell,
-  Ask,
+  Sell = 'Sell',
+  Ask = 'Ask',
 }
 
 export enum AdvertStatus {
@@ -194,6 +194,12 @@ export async function updateAdvert(
 
 export async function deleteAdvert(id: string): Promise<void> {
   return await apiClient.delete<void>(`/adverts/${id}`, {
+    withCredentials: true,
+  });
+}
+
+export async function closeAdvert(id: string): Promise<Advert> {
+  return await apiClient.get<Advert>(`/adverts/closeAdvertById/${id}`, {
     withCredentials: true,
   });
 }
