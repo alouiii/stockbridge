@@ -56,19 +56,16 @@ orderSchema.pre<Order>('save', async function (next) {
             fetchedOffer.status === OfferStatus.OPEN &&
             fetchedOffer.quantity > advert.quantity
           ) {
-            logger.warn(fetchedOffer);
             fetchedOffer.status = OfferStatus.CANCELED_OUT_OF_STOCK;
             await offerModel.findByIdAndUpdate(fetchedOffer.id, fetchedOffer);
           }
         });
         await advertModel.findByIdAndUpdate(advert.id, advert);
       }
-      next();
     }
   } catch (error) {
     logger.error(`Failed updating advert corresponding to order ${this.id}`);
   }
-  next();
 });
 
 orderSchema.pre<Order>('save', async function (next) {
