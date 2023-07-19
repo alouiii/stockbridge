@@ -51,6 +51,7 @@ const OrderBarUserProfile: React.FC<OrderBarUserProfileProps> = (props) => {
   const [showModal, setShowModal] = useState(false);
   const closeModal = () => {
     setShowModal(false);
+    window.location.reload();
   };
 
   const openModal = () => {
