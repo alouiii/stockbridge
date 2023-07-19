@@ -43,7 +43,8 @@ export const orderSchema = new mongoose.Schema<Order>({
 orderSchema.pre('findOneAndUpdate', async function (next) {
   const thisOrder = this.getUpdate() as Order;
   try {
-    const offer = await offerModel.findById(thisOrder.offer);
+    const thisFilter: {offer: string} = this.getQuery() as {offer: string};
+    const offer = await offerModel.findById(thisFilter.offer);
     if (offer) {
       const advert = await findAdvertById(offer?.advert.toString());
       if (advert?.quantity && thisOrder.status == OrderStatus.RECEIVED) {
