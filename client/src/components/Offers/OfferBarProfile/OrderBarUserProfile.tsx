@@ -51,7 +51,6 @@ const OrderBarUserProfile: React.FC<OrderBarUserProfileProps> = (props) => {
   const [showModal, setShowModal] = useState(false);
   const closeModal = () => {
     setShowModal(false);
-    window.location.reload();
   };
 
   const openModal = () => {
@@ -92,7 +91,10 @@ const OrderBarUserProfile: React.FC<OrderBarUserProfileProps> = (props) => {
           setLoadPaymentModal(true);
           closeModal();
         }}
-        onCancel={cancelOrder}
+        onCancel={() => {
+          cancelOrder();
+          window.location.reload();
+        }}
       />
       {isPayer && loadPaymentModal && (
         <PaymentElement
