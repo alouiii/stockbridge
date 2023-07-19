@@ -20,6 +20,8 @@ export enum ResponseType {
   SUCCESSFUL_ADVERT_UPDATE,
   UNSUCCESSFUL_ADVERT_UPDATE,
   OUT_OF_ADVERTS,
+  SUCCESSFUL_CANCEL,
+  UNSUCCESSFUL_CANCEL
 }
 
 type OfferCreationModalProps = {
@@ -43,12 +45,15 @@ const ResponseModal: FC<OfferCreationModalProps> = (props) => {
   const update =
     props.responseType === ResponseType.SUCCESSFUL_ADVERT_UPDATE ||
     props.responseType === ResponseType.UNSUCCESSFUL_ADVERT_UPDATE;
+  const cancel = props.responseType === ResponseType.SUCCESSFUL_CANCEL ||
+  props.responseType === ResponseType.UNSUCCESSFUL_CANCEL;
   const successfull = [
     ResponseType.SUCCESSFUL_OFFER_ACCEPTANCE,
     ResponseType.SUCCESSFUL_OFFER_CREATION,
     ResponseType.SUCCESSFUL_OFFER_REJECTION,
     ResponseType.SUCCESSFUL_ADVERT_CREATION,
     ResponseType.SUCCESSFUL_ADVERT_UPDATE,
+    ResponseType.SUCCESSFUL_CANCEL
   ].includes(props.responseType);
 
   const advert =
@@ -98,7 +103,7 @@ const ResponseModal: FC<OfferCreationModalProps> = (props) => {
                 ? 'Creation'
                 : update
                 ? 'Update'
-                : 'Rejection'}
+                : cancel ? 'Cancel' : 'Rejection'}
             </BodyText>
           </Col>
         </Row>
@@ -130,7 +135,7 @@ const ResponseModal: FC<OfferCreationModalProps> = (props) => {
               ? 'created'
               : update
               ? 'updated'
-              : 'rejected'}
+              : cancel ? 'canceled' : 'rejected'}
             !
           </BodyText>
           {outOfStock && <BodyText>The product has run out of stock!</BodyText>}

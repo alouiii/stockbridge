@@ -76,9 +76,11 @@ const OfferModal: FC<OfferContentProps> = (props) => {
   const [creationError, setCreationError] = useState(false);
   const [acceptanceError, setAcceptanceError] = useState(false);
   const [rejectionError, setRejectionError] = useState(false);
+  const [cancelationError, setCancelationError] = useState(false);
   const [showCreationModal, setShowCreationModal] = useState(false);
   const [showAcceptanceModal, setShowAcceptanceModal] = useState(false);
   const [showRejectionModal, setShowRejectionModal] = useState(false);
+  const [showCancelationModal, setShowCancelationModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [OutOfStockError, setOutOfStockError] = useState(false);
   const [showOutOfStockModal, setShowOutOfStockModal] = useState(false);
@@ -88,9 +90,8 @@ const OfferModal: FC<OfferContentProps> = (props) => {
       setShowAcceptanceModal(false);
       window.location.reload();
     } else {
-      if (responseType === ResponseType.SUCCESSFUL_OFFER_CREATION) {
+      if (responseType === ResponseType.SUCCESSFUL_OFFER_CREATION || responseType === ResponseType.UNSUCCESSFUL_OFFER_CREATION) {
         setShowCreationModal(false);
-        window.location.reload();
       } else {
         if (responseType === ResponseType.SUCCESSFUL_OFFER_REJECTION) {
           setShowRejectionModal(false);
@@ -104,13 +105,22 @@ const OfferModal: FC<OfferContentProps> = (props) => {
               setShowAcceptanceModal(false);
               window.location.reload();
             } else {
-              if (responseType === ResponseType.UNSUCCESSFUL_OFFER_CREATION) {
-                setShowCreationModal(false);
-              } else {
                 if (responseType === ResponseType.OUT_OF_STOCK) {
                   setShowOutOfStockModal(false);
                   window.location.reload();
-                }
+                } else {
+                  if (responseType === ResponseType.OUT_OF_ADVERTS) {
+                    setShowCreationModal(false);
+                  } else {
+                    if (responseType === ResponseType.SUCCESSFUL_CANCEL) {
+                      setShowCancelationModal(false);
+                      window.location.reload();
+                    } else {
+                      if (responseType === ResponseType.UNSUCCESSFUL_CANCEL) {
+                        setShowCancelationModal(false);
+                      }
+                    }
+                  }
               }
             }
           }
@@ -174,14 +184,12 @@ const OfferModal: FC<OfferContentProps> = (props) => {
   };
 
   const handleReject = async () => {
-    setIsLoading(true);
     try {
       if (props.offer?._id) {
-        updateOffer(props.offer._id, {
+        await updateOffer(props.offer._id, {
           status: OfferStatus.REJECTED,
         });
       }
-      setIsLoading(false);
       setShowRejectionModal(true);
     } catch (error) {
       setRejectionError(true);
@@ -192,17 +200,30 @@ const OfferModal: FC<OfferContentProps> = (props) => {
     setIsConsentChecked(event.target.checked);
   };
   const handleAccept = async () => {
-    setIsLoading(true);
     try {
       if (props.offer?._id) {
-        updateOffer(props.offer._id, {
+        await updateOffer(props.offer._id, {
           status: OfferStatus.ACCEPTED,
         });
       }
-      setIsLoading(false);
       setShowAcceptanceModal(true);
     } catch (error) {
       setAcceptanceError(true);
+    }
+  };
+
+  const handleCancel = async () => {
+    try {
+      if (props.offer?._id) {
+        setIsLoading(true);
+        await updateOffer(props.offer._id, {
+          status: OfferStatus.CANCELED_USER,
+        });
+      }
+      setShowCancelationModal(true);
+      setIsLoading(false);
+    } catch (error) {
+      setCancelationError(true);
     }
   };
 
@@ -260,7 +281,15 @@ const OfferModal: FC<OfferContentProps> = (props) => {
           }
           onClose={closeModal}
         />
-      ) : (
+      ) : showCancelationModal ? <ResponseModal
+      isShowing={showCancelationModal}
+      responseType={
+        cancelationError
+          ? ResponseType.UNSUCCESSFUL_CANCEL
+          : ResponseType.SUCCESSFUL_CANCEL
+      }
+      onClose={closeModal}
+    /> : (
         <Modal
           show={props.isShowing}
           onHide={() => props.onClose()}
@@ -512,41 +541,50 @@ const OfferModal: FC<OfferContentProps> = (props) => {
             </Row>
           </Modal.Body>
           {(!props.offer ||
-            ![
-              'Rejected',
-              'Accepted',
-              'Canceled',
-              'Canceled - Out of Stock',
-            ].includes(props.offer.status!)) && (
+              OfferStatus.OPEN === props.offer.status
+            ) && (
             <Modal.Footer
               style={{
-                justifyContent: offeree ? 'center' : 'space-between',
+                justifyContent: offeree ? 'center' : props.offer ? 'center' : 'space-between',
               }}
             >
-              {offeree && props.offer?.status === 'Open' && (
+              {offeree && props.offer?.status === OfferStatus.OPEN && (
                 <Button
                   className="text-white"
                   onClick={handleReject}
                   style={{
-                    background: palette.subSectionsBgAccent,
-                    borderColor: palette.subSectionsBgAccent,
+                    background: palette.rejectedOffer,
+                    borderColor: palette.rejectedOffer,
                   }}
                 >
                   Reject
                 </Button>
               )}
-              {offeree && props.offer?.status === 'Open' && (
+              {offeree && props.offer?.status === OfferStatus.OPEN && (
                 <Button
                   className="text-white"
                   onClick={handleAccept}
                   style={{
-                    background: palette.green,
-                    borderColor: palette.green,
+                    background: palette.acceptedOffer,
+                    borderColor: palette.acceptedOffer,
                   }}
                 >
                   Accept
                 </Button>
               )}
+              {
+                !offeree && props.offer?.status === OfferStatus.OPEN && 
+                <Button
+                  className="text-white"
+                  onClick={handleCancel}
+                  style={{
+                    background: palette.canceledOffer,
+                    borderColor: palette.canceledOffer,
+                  }}
+                >
+                 Cancel
+                </Button>
+              }
               {!props.offer && (
                 <>
                   <div>
@@ -566,8 +604,8 @@ const OfferModal: FC<OfferContentProps> = (props) => {
                     onClick={handleSubmit}
                     disabled={!isConsentChecked}
                     style={{
-                      background: palette.green,
-                      borderColor: palette.green,
+                      background: palette.acceptedOffer,
+                      borderColor: palette.acceptedOffer,
                     }}
                   >
                     Confirm
