@@ -86,7 +86,7 @@ export function UserInfo() {
   useEffect(() => {
     // If not logged in, redirect to home page
     if (!loggedIn) {
-      navigate('/');
+      navigate('/signIn');
     }
 
     try {
