@@ -42,11 +42,6 @@ const ProductOverview = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!loggedIn) {
-      console.log(loggedIn);
-      navigate('/signIn');
-    }
-
     const fetchData = async () => {
       try {
         if (id) {
@@ -62,7 +57,11 @@ const ProductOverview = () => {
           }
         }
       } catch (error: any) {
-        navigate('/404'); //not found page
+        if (!loggedIn) {
+          navigate('/signIn');
+        } else {
+          navigate('/404'); //not found page
+        }
       }
     };
     fetchData();
