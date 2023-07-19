@@ -48,7 +48,7 @@ orderSchema.pre('findOneAndUpdate', async function (next) {
     if (offer) {
       const advert = await findAdvertById(offer?.advert.toString());
       if (advert?.quantity && thisOrder.status == OrderStatus.RECEIVED) {
-        advert.quantity = advert?.quantity - offer.quantity * offer.price;
+        advert.quantity = advert?.quantity - offer.quantity;
         if (advert.quantity <= 0) {
           advert.status = AdvertStatus.Closed;
         }
