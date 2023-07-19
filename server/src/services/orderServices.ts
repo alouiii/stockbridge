@@ -130,7 +130,7 @@ export const cancelOrder = async (id: string, user: User) => {
     },
   );
 
-  await offerModel.findByIdAndUpdate(order.offer.id, {
+  await offerModel.findByIdAndUpdate(order.offer, {
     status: OfferStatus.CANCELED_USER
   },{
     runValidators: true,
