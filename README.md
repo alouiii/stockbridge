@@ -25,7 +25,7 @@
 - Please make sure that the `.env` file is present under `env` directory which is under the `server` directory. The content of the `.env` file should the same as down below. If not, please set it.
 - Finally, run `yarn start` from the root directory to start both the frontend and backend. Alternatively, you can run `yarn server` and `yarn client` to start the backend and frontend respectively. Check `package.json` for more details.
 
-## Getting started
+## Additional information (For developers)
 
 To install packages, go to root directory and run: `yarn install`
 
