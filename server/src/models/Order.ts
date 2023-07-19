@@ -40,12 +40,12 @@ export const orderSchema = new mongoose.Schema<Order>({
     type: Types.String,
   },
 });
-orderSchema.pre<Order>('save', async function (next) {
+orderSchema.pre<Order>('findOneAndUpdate', async function (next) {
   try {
     const offer = await offerModel.findById(this.offer);
     if (offer) {
       const advert = await findAdvertById(offer?.advert.toString());
-      if (advert?.quantity) {
+      if (advert?.quantity && this.status == OrderStatus.RECEIVED) {
         advert.quantity = advert?.quantity - this.quantity;
         if (advert.quantity <= 0) {
           advert.status = AdvertStatus.Closed;
