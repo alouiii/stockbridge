@@ -6,6 +6,8 @@ import { OrderStatus } from '../entities/orderEntity';
 import advertModel from '../models/Advert';
 import offerModel from '../models/Offer';
 import { User } from '../entities/userEntity';
+import { sendMail } from '../utils/mailService';
+import userModel from '../models/User';
 
 const serviceName = 'orderServices';
 
@@ -51,6 +53,22 @@ export const updateOrder = async (id: string, order: Order) => {
   });
 };
 
+const getRelatedObjects = async (offerId: string) => {
+  const offer = await offerModel.findById(offerId);
+  if (!offer) {
+    logger.error(`${serviceName}: Offer not found with id of ${offerId}`);
+    throw new AppError('Offer not found', 'Offer not found', 404);
+  }
+  const advert = await advertModel.findById(offer.advert);
+
+  if (!advert) {
+    logger.error(`${serviceName}: Advert not found with id of ${offer.advert}`);
+    throw new AppError('Advert not found', 'Advert not found', 404);
+  }
+
+  return { offer, advert };
+};
+
 /**
  * cancel an order.
  * @param id
@@ -59,6 +77,7 @@ export const updateOrder = async (id: string, order: Order) => {
  */
 export const cancelOrder = async (id: string, user: User) => {
   logger.debug(`${serviceName}: cancelling order with id: ${id}`);
+
   const order = await orderModel.findById(id);
   if (!order) {
     logger.error(`${serviceName}: Order not found with id of ${id}`);
@@ -76,25 +95,8 @@ export const cancelOrder = async (id: string, user: User) => {
     logger.error(`${serviceName}: Order already received`);
     throw new AppError('Order already received', 'Order already received', 400);
   }
-  const offer = await offerModel.findById(order.offer);
-  if (!offer) {
-    logger.error(`${serviceName}: Offer not found with id of ${id}`);
-    throw new AppError('Offer not found', 'Offer not found', 404);
-  }
-  const advert = await advertModel.findByIdAndUpdate(
-    offer.advert,
-    {
-      $inc: { quantity: offer.quantity },
-    },
-    {
-      new: true,
-    },
-  );
 
-  if (!advert) {
-    logger.error(`${serviceName}: Advert not found with id of ${id}`);
-    throw new AppError('Advert not found', 'Advert not found', 404);
-  }
+  let { offer, advert } = await getRelatedObjects(order.offer.toString());
 
   if (
     (advert.type === 'Ask' && offer.offeree._id.toString() !== user?.id) ||
@@ -105,6 +107,17 @@ export const cancelOrder = async (id: string, user: User) => {
       throw new AppError('User not authorized', 'User not authorized', 401);
     }
   }
+
+  await advertModel.findByIdAndUpdate(
+    offer.advert,
+    {
+      $inc: { quantity: offer.quantity },
+    },
+    {
+      new: true,
+    },
+  )!;
+
   await orderModel.findByIdAndUpdate(
     id,
     {
@@ -114,6 +127,27 @@ export const cancelOrder = async (id: string, user: User) => {
       runValidators: true,
     },
   );
+
+  await notifyAboutOrder(offer.id, true);
+};
+
+export const notifyAboutOrder = async (id: string, cancelled: boolean) => {
+  const { offer, advert } = await getRelatedObjects(id);
+  const offeror = await userModel.findById(offer.offeror);
+  const offeree = await userModel.findById(offer.offeree);
+  if (!offeror || !offeree) {
+    logger.error(
+      `${serviceName}: Could not find offeror or offeree. Mail not sent`,
+    );
+  } else {
+    await sendMail(
+      `${offeree.email}, ${offeror.email}`,
+      cancelled ? 'Order cancelled' : 'Order received',
+      cancelled
+        ? `Order of Offer ${id} for advert ${advert.productname} with ID: ${advert._id} has been cancelled.`
+        : `Order of Offer ${id} for advert ${advert.productname} with ID: ${advert._id} has been received.`,
+    );
+  }
 };
 
 /**
@@ -138,6 +172,7 @@ export const findAllOrders = async () => {
 /**
  * Returns an order created from an offer.
  * @param offer : id of the offer
+ * @param populate : boolean determines if the result should be populated
  * @returns Promise containing the deleted advert.
  */
 export const findOrderByOffer = async (offer: string, populate = true) => {
