@@ -8,6 +8,7 @@ import offerModel from '../models/Offer';
 import { User } from '../entities/userEntity';
 import { sendMail } from '../utils/mailService';
 import userModel from '../models/User';
+import { AdvertStatus } from '../entities/advertEntity';
 
 const serviceName = 'orderServices';
 
@@ -112,6 +113,7 @@ export const cancelOrder = async (id: string, user: User) => {
     offer.advert,
     {
       $inc: { quantity: offer.quantity },
+      status: AdvertStatus.Ongoing,
     },
     {
       new: true,
