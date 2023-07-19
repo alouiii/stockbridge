@@ -318,13 +318,11 @@ export const handleSuccessfulPaymentIntent = async (
         `${serviceName}: Handling successful payment intent for ${offerId}`,
       );
       logger.debug(`${serviceName}: Updating order status to RECEIVED`);
-      await orderModel.findOneAndUpdate(
-        { offer: offerId },
-        {
-          status: OrderStatus.RECEIVED,
-        },
-      );
-
+      const order = await orderModel.findOne( { offer: offerId })
+      if (order) {
+        order.status = OrderStatus.RECEIVED;
+        order.save();
+      }
       await notifyAboutOrder(offerId, false);
       break;
     default:

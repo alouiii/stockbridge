@@ -40,7 +40,7 @@ export const orderSchema = new mongoose.Schema<Order>({
     type: Types.String,
   },
 });
-orderSchema.pre<Order>('findOneAndUpdate', async function (next) {
+orderSchema.pre<Order>('save', async function (next) {
   try {
     const offer = await offerModel.findById(this.offer);
     if (offer) {
