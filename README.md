@@ -16,7 +16,7 @@
 ## Starting the application
 
 - Run `yarn install` in root directory to install all dependencies
-- Install stripe CLI  on your machine: https://stripe.com/docs/stripe-cli on your machine
+- Install stripe CLI  on your machine: https://stripe.com/docs/stripe-cli
   - Run `stripe login` to login to our stripe account preferably using the --interactive flag
   - Stripe credentials: email: `stockbridge-seba@proton.me`/ password: `_Z.xm4g5ii3!up5`
   - Run `yarn stripe` from the root directory or `stripe listen --forward-to localhost:3001/api/v1/stripe/webhook` to listen to webhooks
