@@ -277,6 +277,12 @@ export const rejectOffer = asyncHandler(
     
     offer.status = OfferStatus.REJECTED;
     await updateOffer(offer._id, offer)
+  } else {
+    throw new AppError(
+      'Not authorized to reject this offer',
+      'Not authorized to reject this offer',
+      401,
+    );
   }
   res.status(200).json(offer);
 }
@@ -289,6 +295,12 @@ export const acceptOffer = asyncHandler(
   if (user == offer.offeree._id && offer.status === OfferStatus.OPEN) {
     offer.status = OfferStatus.ACCEPTED;
     await updateOffer(offer._id, offer)
+  } else {
+    throw new AppError(
+      'Not authorized to accept this offer',
+      'Not authorized to accept this offer',
+      401,
+    );
   }
   res.status(200).json(offer);
 }
@@ -301,6 +313,12 @@ export const cancelOffer = asyncHandler(
   if (user == offer.offeror._id && offer.status === OfferStatus.OPEN) {
     offer.status = OfferStatus.CANCELED_USER
     await updateOffer(offer._id, offer)
+  } else {
+    throw new AppError(
+      'Not authorized to cancel this offer',
+      'Not authorized to cancel this offer',
+      401,
+    );
   }
   res.status(200).json(offer);
 }
