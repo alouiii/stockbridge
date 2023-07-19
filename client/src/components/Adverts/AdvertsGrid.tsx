@@ -10,7 +10,7 @@ import { Button } from 'react-bootstrap';
 import { useSearchParams } from 'react-router-dom';
 import { CustomMap } from './CustomMap';
 import '../override.css';
-import NoResultsMessage from '../Profile/NoResultsMessage';
+import useMediaQuery from '../../hooks/useMediaQuery';
 
 interface AdvertGridProps {
   adverts: PopulatedAdvert[] | undefined;
@@ -26,6 +26,8 @@ interface AdvertGridProps {
  */
 export const AdvertsGrid: FC<AdvertGridProps> = (props) => {
   const [search, setSearch] = useSearchParams();
+
+  const matches = useMediaQuery('(min-width: 749px)');
 
   const [advertType, setAdvertType] = useState<AdvertType>(
     search.get('type') === 'Ask'
@@ -50,7 +52,7 @@ export const AdvertsGrid: FC<AdvertGridProps> = (props) => {
         marginLeft: !props.isMapOpen ? 50 : 2,
         marginRight: !props.isMapOpen ? 50 : 2,
         display: 'flex',
-        justifyContent: !props.isMapOpen ? 'left' : 'center',
+        justifyContent: !props.isMapOpen && matches ? 'left' : 'center',
         flexWrap: 'wrap',
         gap: 50,
       }}
@@ -113,7 +115,6 @@ export const AdvertsGrid: FC<AdvertGridProps> = (props) => {
               style={{
                 flex: '1 0 300px',
                 maxWidth: '300px',
-                //marginRight: '20px',
                 marginBottom: '20px',
               }}
             >
@@ -135,20 +136,36 @@ export const AdvertsGrid: FC<AdvertGridProps> = (props) => {
         ) : (
           <div
             style={{
-              position: 'relative',
-              top: '-17em',
-              right: '-5%',
-              zIndex: -10,
-              //justifyContent: 'center',
-              //width: '100%',
-              //height: '100vh',
+              display: 'flex',
+              justifyContent: 'center',
+              width: '100%',
+              height: '100vh',
             }}
           >
-            <NoResultsMessage />
+            <BodyText
+              style={{
+                color: '#727272',
+                fontSize: 30,
+                textAlign: 'center',
+              }}
+            >
+              No results found
+            </BodyText>
           </div>
         )
       ) : (
-        <FadeLoader color={palette.subSectionsBgAccent} />
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            width: '100%',
+            marginTop: 200,
+          }}
+        >
+          <FadeLoader
+            color={palette.subSectionsBgAccent}
+          />
+        </div>
       )}
       <ReactPaginate
         previousLabel="<"
