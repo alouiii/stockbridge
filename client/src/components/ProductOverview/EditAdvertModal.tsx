@@ -658,12 +658,15 @@ export const EditAdvertModal: FC<EditAdvertContentProps> = (props) => {
       isShowing={showResponseModal}
       advertID={props.advert ? props.advert._id! : advertID}
       onClose={function (responseType: ResponseType): void {
+        props.onClose()
         if (responseType === ResponseType.SUCCESSFUL_ADVERT_CREATION) {
-          props.onClose();
-          window.location.reload();
-        } else {
-          props.onClose();
+          navigate(`/productoverview/${advertID}`)
         }
+          else { 
+            if (responseType === ResponseType.SUCCESSFUL_ADVERT_UPDATE) {
+            window.location.reload()
+            }
+        } 
       }}
     />
   ) : (
