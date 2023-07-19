@@ -28,6 +28,7 @@ type OfferCreationModalProps = {
   responseType: ResponseType;
   isShowing: boolean;
   advertID?: string;
+  buying?: boolean;
   onClose: (responseType: ResponseType) => void;
 };
 
@@ -150,7 +151,7 @@ const ResponseModal: FC<OfferCreationModalProps> = (props) => {
                 textDecoration: 'underline',
                 cursor: 'pointer',
               }}
-              onClick={() => navigate('/userInfo')}
+              onClick={() => navigate(`/userInfo?${props.buying ? 'Buying' : 'Selling'}`)}
             >
               More Info
             </BodyText>

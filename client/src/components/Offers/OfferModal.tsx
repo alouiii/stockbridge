@@ -1,6 +1,6 @@
 import { FC, useContext, useState } from 'react';
 import { Button, Col, Form, Modal, Row, Image } from 'react-bootstrap';
-import { PopulatedAdvert } from '../../api/collections/advert';
+import { AdvertType, PopulatedAdvert } from '../../api/collections/advert';
 import {
   createOffer,
   Offer,
@@ -250,6 +250,7 @@ const OfferModal: FC<OfferContentProps> = (props) => {
               : ResponseType.SUCCESSFUL_OFFER_CREATION
           }
           onClose={closeModal}
+          buying={props.advert?.type === AdvertType.Sell}
         />
       ) : showAcceptanceModal ? (
         <ResponseModal

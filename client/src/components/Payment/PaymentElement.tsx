@@ -81,7 +81,11 @@ const PaymentElement = (props: PaymentProps) => {
             show={props.show}
             onHide={props.onHide}
             type={props.type}
-            onSuccess={props.onSuccess}
+            onSuccess={() => {if (props.onSuccess) 
+               {
+                props.onSuccess();
+                window.location.reload();
+              }  }}
           />
         </Elements>
       ) : (
