@@ -18,6 +18,36 @@ type OrderBarUserProfileProps = {
  * @returns
  */
 const OrderBarUserProfile: React.FC<OrderBarUserProfileProps> = (props) => {
+  const [offerer, setOfferer] = useState({} as User);
+  const [offeree, setOfferee] = useState({} as User);
+  useEffect(() => {
+    const fetchData = () => {
+      try {
+        setOfferer(props.order.offer?.offeror!);
+        setOfferee(props.order.offer?.offeree!);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  // Show order modal.
+  const [showModal, setShowModal] = useState(false);
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
+  const closeModalOnSave = () => {
+    setShowModal(false);
+    //change to set Advert
+    window.location.reload();
+  };
+
+  const openModal = () => {
+    setShowModal(true);
+  };
+
   return (
     <>
       <OrderBarUserProfileInfo
@@ -27,7 +57,11 @@ const OrderBarUserProfile: React.FC<OrderBarUserProfileProps> = (props) => {
         offer={props.order.offer as PopulatedOffer}
         outgoing={props.outgoing}
         highlight={props.highlight}
-      />
+        onClick={openModal}
+      />    
+      {showModal && (
+        <span>This is my modal</span>
+      )}
     </>
   );
 };
