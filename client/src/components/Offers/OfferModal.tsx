@@ -89,46 +89,47 @@ const OfferModal: FC<OfferContentProps> = (props) => {
   const [showOutOfStockModal, setShowOutOfStockModal] = useState(false);
   const [isConsentChecked, setIsConsentChecked] = useState(false);
   const closeModal = (responseType: ResponseType) => {
-    if (responseType === ResponseType.SUCCESSFUL_OFFER_ACCEPTANCE) {
-      setShowAcceptanceModal(false);
-      window.location.reload();
-    } else {
-      if (responseType === ResponseType.SUCCESSFUL_OFFER_CREATION || responseType === ResponseType.UNSUCCESSFUL_OFFER_CREATION) {
+    props.onClose()
+    switch (responseType) {
+      case ResponseType.SUCCESSFUL_OFFER_ACCEPTANCE:
+        setShowAcceptanceModal(false);
+        window.location.reload();
+        break;
+      case ResponseType.SUCCESSFUL_OFFER_CREATION:
         setShowCreationModal(false);
-      } else {
-        if (responseType === ResponseType.SUCCESSFUL_OFFER_REJECTION) {
-          setShowRejectionModal(false);
-          window.location.reload();
-        } else {
-          if (responseType === ResponseType.UNSUCCESSFUL_OFFER_REJECTION) {
-            setShowRejectionModal(false);
-            window.location.reload();
-          } else {
-            if (responseType === ResponseType.UNSUCCESSFUL_OFFER_ACCEPTANCE) {
-              setShowAcceptanceModal(false);
-              window.location.reload();
-            } else {
-                if (responseType === ResponseType.OUT_OF_STOCK) {
-                  setShowOutOfStockModal(false);
-                  window.location.reload();
-                } else {
-                  if (responseType === ResponseType.OUT_OF_ADVERTS) {
-                    setShowCreationModal(false);
-                  } else {
-                    if (responseType === ResponseType.SUCCESSFUL_CANCEL) {
-                      setShowCancelationModal(false);
-                      window.location.reload();
-                    } else {
-                      if (responseType === ResponseType.UNSUCCESSFUL_CANCEL) {
-                        setShowCancelationModal(false);
-                      }
-                    }
-                  }
-              }
-            }
-          }
-        }
-      }
+        window.location.reload();
+        break;
+      case ResponseType.SUCCESSFUL_OFFER_REJECTION:
+        setShowRejectionModal(false);
+        window.location.reload();
+        break;
+      case ResponseType.UNSUCCESSFUL_OFFER_REJECTION:
+        setShowRejectionModal(false);
+        window.location.reload();
+        break;
+      case ResponseType.UNSUCCESSFUL_OFFER_ACCEPTANCE:
+        setShowAcceptanceModal(false);
+        window.location.reload();
+        break;
+      case ResponseType.UNSUCCESSFUL_OFFER_CREATION:
+        setShowCreationModal(false);
+        break;
+      case ResponseType.OUT_OF_STOCK:
+        setShowOutOfStockModal(false);
+        window.location.reload();
+        break;
+      case ResponseType.OUT_OF_ADVERTS:
+        setShowCreationModal(false);
+        break;
+      case ResponseType.SUCCESSFUL_CANCEL:
+        setShowCancelationModal(false);
+        window.location.reload();
+        break;
+      case ResponseType.UNSUCCESSFUL_CANCEL:
+          setShowCancelationModal(false);
+          break;
+      default:
+        console.log("Invalid response type!");
     }
   };
 
@@ -152,6 +153,7 @@ const OfferModal: FC<OfferContentProps> = (props) => {
             if (newOffer.status === OfferStatus.CANCELED_OUT_OF_STOCK) {
               setOutOfStockError(true);
               setShowOutOfStockModal(true);
+              setShowCreationModal(false)
               setAcceptanceError(false);
               setCreationError(false);
               setRejectionError(false);
@@ -397,8 +399,8 @@ const OfferModal: FC<OfferContentProps> = (props) => {
                     }}
                   >
                     <Form.Label>
-                      Purchase Date:
-                      {props.advert?.purchaseDate.toString().substring(0, 10)}
+                      Purchase Date: 
+                      {" "+ props.advert?.purchaseDate.toString().substring(0, 10) }
                     </Form.Label>
                   </Row>
                 )}
@@ -410,7 +412,7 @@ const OfferModal: FC<OfferContentProps> = (props) => {
                   >
                     <Form.Label>
                       Expiration Date:
-                      {props.advert?.expirationDate.toString().substring(0, 10)}
+                      {" "+ props.advert?.expirationDate.toString().substring(0, 10)}
                     </Form.Label>
                   </Row>
                 )}
