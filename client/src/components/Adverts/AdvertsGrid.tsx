@@ -47,10 +47,10 @@ export const AdvertsGrid: FC<AdvertGridProps> = (props) => {
     <div
       className="row"
       style={{
-        marginLeft: 'auto',
-        marginRight: 'auto',
+        marginLeft: !props.isMapOpen ? 50 : 2,
+        marginRight: !props.isMapOpen ? 50 : 2,
         display: 'flex',
-        justifyContent: 'left',
+        justifyContent: !props.isMapOpen ? 'left' : 'center',
         flexWrap: 'wrap',
         gap: 50,
       }}
@@ -68,7 +68,7 @@ export const AdvertsGrid: FC<AdvertGridProps> = (props) => {
           }}
         >
           <Button
-            style={{ border: 'none', backgroundColor: 'white' }}
+            style={{ border: 'none', backgroundColor: 'white', paddingLeft: 0 }}
             onClick={() => setAdvertType(AdvertType.Sell)}
           >
             <BodyText
@@ -113,7 +113,7 @@ export const AdvertsGrid: FC<AdvertGridProps> = (props) => {
               style={{
                 flex: '1 0 300px',
                 maxWidth: '300px',
-                marginRight: '20px',
+                //marginRight: '20px',
                 marginBottom: '20px',
               }}
             >
