@@ -8,6 +8,7 @@ import offerModel from '../models/Offer';
 import { User } from '../entities/userEntity';
 import { sendMail } from '../utils/mailService';
 import userModel from '../models/User';
+import { OfferStatus } from '../entities/offerEntity';
 
 const serviceName = 'orderServices';
 
@@ -128,6 +129,12 @@ export const cancelOrder = async (id: string, user: User) => {
       runValidators: true,
     },
   );
+
+  await offerModel.findByIdAndUpdate(order.offer.id, {
+    status: OfferStatus.CANCELED_USER
+  },{
+    runValidators: true,
+  },)
 
   await notifyAboutOrder(offer.id, true);
 };
