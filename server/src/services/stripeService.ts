@@ -22,7 +22,7 @@ const stripe = new Stripe(environment.STRIPE_SECRET_KEY, {
 /**
  * Creates a stripe customer for payment
  * @param user user id for which the stripe customer will be created
- * @returns 
+ * @returns
  */
 export const createStripeCustomer = async (user: User) => {
   logger.debug(`${serviceName}: Creating stripe customer for ${user.email}`);
@@ -42,8 +42,8 @@ export const createStripeCustomer = async (user: User) => {
  * @param amount amount of monry in the payment
  * @param product the product for which the payment will be issued
  * @param config configuration of payment intent (redirect url for example)
- * @param automaticPaymentMethods 
- * @returns 
+ * @param automaticPaymentMethods
+ * @returns
  */
 
 export const createStripePaymentIntent = async (
@@ -78,11 +78,10 @@ export const createStripePaymentIntent = async (
   });
 };
 
-
 /**
  * Used in the signup step to setup payment method of the user
- * @param user 
- * @returns 
+ * @param user
+ * @returns
  */
 
 export const createStripeSetupIntent = async (user: User) => {
@@ -101,7 +100,7 @@ export const createStripeSetupIntent = async (user: User) => {
 
 /**
  * Deletes inactive subscriptions and keeps the currently active one
- * @param customer 
+ * @param customer
  */
 const delUselessSubscriptions = async (customer: Stripe.Customer) => {
   if (customer.subscriptions) {
@@ -120,7 +119,11 @@ const delUselessSubscriptions = async (customer: Stripe.Customer) => {
   }
 };
 
-//TODO: How to handle the subscription edit
+/**
+ * Creates a subscription for the user
+ * @param user
+ * @param subscriptionType
+ */
 export const createStripeSubscription = async (
   user: User,
   subscriptionType: SubscriptionType,
@@ -184,11 +187,11 @@ export const createStripeSubscription = async (
   return { subscription, paymentIntent };
 };
 
-
 /**
- * 
- * @param user 
- * @returns 
+ * Cancels the stripe subscription of the user
+ *
+ * @param user
+ * @returns
  */
 export const cancelStripeSubscription = async (user: User) => {
   logger.debug(
@@ -220,6 +223,11 @@ export const cancelStripeSubscription = async (user: User) => {
   return;
 };
 
+/**
+ * Gets the stripe subscription invoice link. This is needed if the subscription renewal fails
+ * @param user
+ */
+
 export const getSubscriptionInvoiceLink = async (user: User) => {
   logger.debug(
     `${serviceName}: Getting stripe subscription invoice for ${user.email}`,
@@ -245,7 +253,11 @@ export const getSubscriptionInvoiceLink = async (user: User) => {
   return invoice.hosted_invoice_url;
 };
 
-//TODO: Handle the event subscription.updated / subscription.deleted / subscription.created
+/**
+ * Handles events from the stripe
+ * @param sig
+ * @param reqBody
+ */
 export const webhookHandler = async (
   sig: string | string[],
   reqBody: Buffer,
@@ -318,6 +330,11 @@ export const webhookHandler = async (
   return true;
 };
 
+/**
+ * Handles successful payment intent
+ * @param userId
+ * @param product
+ */
 export const handleSuccessfulPaymentIntent = async (
   userId: string,
   product: string,
