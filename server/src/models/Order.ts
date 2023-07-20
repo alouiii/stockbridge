@@ -4,7 +4,7 @@ import { Advert, AdvertStatus } from '../entities/advertEntity';
 import { OfferStatus } from '../entities/offerEntity';
 import { OrderStatus, Order } from '../entities/orderEntity';
 import { findAdvertById } from '../services/advertServices';
-import { findAllOffersByAdvert } from '../services/offerServices';
+import { findAllOffersByAdvert, notifyAboutCanceledOffer } from '../services/offerServices';
 import offerModel from './Offer';
 import { createStripePaymentIntent } from '../services/stripeService';
 import userModel from './User';
@@ -60,6 +60,7 @@ orderSchema.pre('findOneAndUpdate', async function (next) {
           ) {
             fetchedOffer.status = OfferStatus.CANCELED_OUT_OF_STOCK;
             await offerModel.findByIdAndUpdate(fetchedOffer.id, fetchedOffer);
+            await notifyAboutCanceledOffer(fetchedOffer.id);
           }
         });
         await advertModel.findByIdAndUpdate(advert.id, advert);
