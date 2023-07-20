@@ -35,7 +35,6 @@ const StoreDetailsModal: FC<StoreDetailsProps> = (props) => {
     const fetchReviews = async () => {
       try {
         const fetchedReviews = await getReviewsByReviewee(props.store);
-        console.log(fetchedReviews);
         setReviews(fetchedReviews);
       } catch (error) {
         console.log('an error happened');
@@ -96,6 +95,50 @@ const StoreDetailsModal: FC<StoreDetailsProps> = (props) => {
                     <FormLabel style={{ marginLeft: '2%' }}>
                       {' '}
                       {populatedStore.createdAt?.toString().slice(0, 10)}
+                    </FormLabel>
+                  </Form.Group>
+                )}
+                {populatedStore.phoneNumber && (
+                  <Form.Group
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      gap: '2px',
+                      width: '100%',
+                    }}
+                  >
+                    <FormLabel
+                      style={{
+                        fontWeight: 600,
+                      }}
+                    >
+                      Phone Number:
+                    </FormLabel>
+                    <FormLabel style={{ marginLeft: '2%' }}>
+                      {' '}
+                      {populatedStore.phoneNumber}
+                    </FormLabel>
+                  </Form.Group>
+                )}
+                {populatedStore.email && (
+                  <Form.Group
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      gap: '2px',
+                      width: '100%',
+                    }}
+                  >
+                    <FormLabel
+                      style={{
+                        fontWeight: 600,
+                      }}
+                    >
+                      Email:
+                    </FormLabel>
+                    <FormLabel style={{ marginLeft: '2%' }}>
+                      {' '}
+                      {populatedStore.email}
                     </FormLabel>
                   </Form.Group>
                 )}
@@ -208,7 +251,7 @@ const StoreDetailsModal: FC<StoreDetailsProps> = (props) => {
                             width: '50%',
                           }}
                         >
-                          {r.reviewer.name?.slice(1, 10)}
+                          {r.reviewer.name}
                         </BodyText>
                         <BodyText
                           style={{

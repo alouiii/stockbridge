@@ -11,6 +11,7 @@ import { handleSubscription } from './userServices';
 import userModel from '../models/User';
 import orderModel from '../models/Order';
 import { OrderStatus } from '../entities/orderEntity';
+import { notifyAboutOrder } from './orderServices';
 
 const serviceName = 'stripeService';
 const stripe = new Stripe(environment.STRIPE_SECRET_KEY, {
@@ -238,10 +239,6 @@ export const webhookHandler = async (
         paymentIntent.metadata.product,
       );
       break;
-    case 'payment_method.attached':
-      const paymentMethod = event.data.object;
-      logger.debug(`${serviceName}: PaymentMethod was attached to a Customer!`);
-      break;
     // ... handle other event types
     case 'setup_intent.succeeded':
       logger.debug(`${serviceName}: SetupIntent was successful!`);
@@ -294,7 +291,7 @@ export const handleSuccessfulPaymentIntent = async (
   product: string,
 ) => {
   logger.debug(
-    `${serviceName}: Handling successful payment intent for ${userId}`,
+    `${serviceName}: Handling successful payment intent for ${userId} and ${product}`,
   );
   const user = (await userModel.findById(userId)) as User;
   switch (true) {
@@ -310,7 +307,7 @@ export const handleSuccessfulPaymentIntent = async (
     case product === 'Basic Subscription':
     case product === 'Advanced Subscription':
     case product === 'Premium Subscription':
-      break;
+      return;
     case product.startsWith('offerId_'):
       const offerId = product.split('_')[1];
       logger.debug(
@@ -323,6 +320,8 @@ export const handleSuccessfulPaymentIntent = async (
           status: OrderStatus.RECEIVED,
         },
       );
+
+      await notifyAboutOrder(offerId, false);
       break;
     default:
       throw new AppError('Product not found', 'Product not found', 404);

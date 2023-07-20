@@ -15,14 +15,23 @@ const serviceName = 'advertServices';
  * Find an advert by id
  * @param id
  * @param populate determines if the result should be populated
+ * @param hide hides details about the advert from non logged in users
  * @returns Promise containing the advert
  */
 export const findAdvertById = async (
   id: string,
   populate = true,
+  hide = false,
 ): Promise<Advert> => {
   logger.debug(`${serviceName}: Finding advert with id: ${id}`);
-  const advert = await populateResult(advertModel.findById(id), populate);
+  let query = hide
+    ? advertModel
+        .findById(id)
+        .select(
+          'productname prioritized quantity description price imageurl createdAt category',
+        )
+    : advertModel.findById(id);
+  const advert = await populateResult(query, populate);
 
   if (!advert) {
     logger.error(`${serviceName}: Advert not found with id of ${id}`);
@@ -110,6 +119,21 @@ export const delAdvert = async (id: string) => {
 };
 
 /**
+ * Close an advert
+ * @param id - The ID of the advert to cancel
+ * @returns Promise containing the closed advert
+ */
+export const closeAdvertService = async (id: string) => {
+  logger.debug(`${serviceName}: Close advert with id: ${id}`);
+  const updatedAdvert = await advertModel.findOneAndUpdate(
+    { _id: id },
+    { status: 'Closed' }, // Set the new status -> canceled
+    { new: true, runValidators: true },
+  );
+  return updatedAdvert;
+};
+
+/**
  * Find all adverts
  * @param page page number
  * @param limit number of items per page
@@ -119,6 +143,7 @@ export const delAdvert = async (id: string) => {
  * @param center center of the search area
  * @param queryStr query string
  * @param populate determines if the result should be populated
+ * @param isUserLogged determines if the user is logged in
  * @returns Promise containing all adverts
  */
 
@@ -130,7 +155,8 @@ export const findAllAdverts = async (
   radius?: number,
   center?: number[],
   queryStr?: string,
-  populate = true,
+  populate = false,
+  isUserLogged = false,
 ) => {
   logger.debug(`${serviceName}: Finding all adverts with pagination`);
   logger.debug(`${serviceName}: Query string: ${queryStr}`);
@@ -226,6 +252,12 @@ export const findAllAdverts = async (
   const total = await advertModel.countDocuments(queryFilter);
 
   query = query.skip(startIndex).limit(limit);
+  // Selects the fields that can be displayed for all users
+  if (!isUserLogged) {
+    query = query.select(
+      'productname prioritized quantity description status price imageurl createdAt category',
+    );
+  }
 
   const results = await query;
 
@@ -265,7 +297,11 @@ export const getAdvertsByCategory = async (
     `${serviceName}: Requesting all adverts with category: ${category}`,
   );
   return await populateResult(
-    advertModel.find({ category: category }),
+    advertModel
+      .find({ category: category })
+      .select(
+        'productname prioritized quantity status description price imageurl createdAt category location',
+      ),
     populate,
   );
 };
@@ -304,6 +340,11 @@ export const getPopularCategories = async (limit: number) => {
   ]);
 };
 
+/**
+ * Retrieves the advert Ids of the top "limit" (as number) ads of each category.
+ * @param limit
+ * @returns
+ */
 export const getPopularAdverts = async (limit: number) => {
   logger.debug(`${serviceName}: Requesting most popular adverts`);
   return advertModel.aggregate([

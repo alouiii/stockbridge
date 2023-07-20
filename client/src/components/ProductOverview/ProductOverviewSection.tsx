@@ -3,7 +3,7 @@ import React, { useContext, useState } from 'react';
 import { ProductDetailsTopBar } from './ProductDetailsTopBar';
 import { ProductDetails } from './ProductDetails';
 import { Button } from 'react-bootstrap';
-import { PopulatedAdvert } from '../../api/collections/advert';
+import { AdvertStatus, PopulatedAdvert } from '../../api/collections/advert';
 import { OfferModal } from '../Offers/OfferModal';
 import { PopulatedUser } from '../../api/collections/user';
 import { LoginContext } from '../../contexts/LoginContext';
@@ -60,8 +60,12 @@ const ProductOverviewSection: React.FC<ProductOverviewSectionProps> = (
             position: 'relative',
           }}
         >
-          {props.advert ? <ProductDetails advert={props.advert} /> : undefined}
-          {!props.advert.prioritized || !owner ? (
+          {props.advert ? (
+            <>
+              <ProductDetails advert={props.advert} />
+            </>
+          ) : undefined}
+          {((owner && !props.advert.prioritized && props.advert.status === AdvertStatus.Ongoing) || (!owner && props.advert.status === AdvertStatus.Ongoing)) ? (
             <div>
               <Button
                 style={{

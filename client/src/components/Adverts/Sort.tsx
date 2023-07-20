@@ -130,11 +130,12 @@ export const Sort: FC = () => {
           alignSelf: 'center',
           background: 'none',
           border: 'none',
+          paddingRight: 0,
         }}
         onClick={handleToggleSortOrder}
       >
         <i
-          className={sortOrder ? 'bi bi-sort-down-alt' : 'bi bi-sort-up-alt'}
+          className={sortOrder ? 'bi bi-sort-up' : 'bi bi-sort-down'}
           style={{
             color: '#f76c6c',
             fontSize: 33,

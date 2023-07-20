@@ -83,10 +83,48 @@ export async function getUserSpecificOffers(
   advertType: string,
   offerType: string,
 ): Promise<PopulatedOffer[]> {
-  console.debug(user, advertType, offerType);
   return await apiClient.get<PopulatedOffer[]>(
     `/offers/getUserSpecificOffers`,
     { withCredentials: true },
     { user: user, advertType: advertType, offerType: offerType },
+  );
+}
+
+export async function rejectOffer(
+  offer: PopulatedOffer,
+  user: string,
+): Promise<PopulatedOffer> {
+  return await apiClient.put<PopulatedOffer>(
+    `/offers/rejectOffer/${user}`,
+    offer,
+    {
+      withCredentials: true,
+    },
+  );
+}
+
+export async function cancelOffer(
+  offer: PopulatedOffer,
+  user: string,
+): Promise<PopulatedOffer> {
+  return await apiClient.put<PopulatedOffer>(
+    `/offers/cancelOffer/${user}`,
+    offer,
+    {
+      withCredentials: true,
+    },
+  );
+}
+
+export async function acceptOffer(
+  offer: PopulatedOffer,
+  user: string,
+): Promise<PopulatedOffer> {
+  return await apiClient.put<PopulatedOffer>(
+    `/offers/acceptOffer/${user}`,
+    offer,
+    {
+      withCredentials: true,
+    },
   );
 }

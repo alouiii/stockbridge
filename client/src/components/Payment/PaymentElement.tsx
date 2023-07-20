@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Appearance,
   loadStripe,
@@ -36,7 +36,7 @@ export interface PaymentProps {
 const PaymentElement = (props: PaymentProps) => {
   const [clientSecret, setClientSecret] = useState('');
   const [error, setError] = useState<string | undefined>(undefined);
-
+  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
   useEffect(() => {
     setError(undefined);
 
@@ -81,7 +81,15 @@ const PaymentElement = (props: PaymentProps) => {
             show={props.show}
             onHide={props.onHide}
             type={props.type}
-            onSuccess={props.onSuccess}
+            onSuccess={async () => {
+              if (props.onSuccess) {
+                props.onSuccess();
+                if (props.type !== PaymentType.SETUP_INTENT) {
+                  await sleep(3000);
+                  window.location.reload();
+                }
+              }
+            }}
           />
         </Elements>
       ) : (

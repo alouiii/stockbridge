@@ -125,8 +125,10 @@ const Tabs: React.FC<Props> = ({
                   {item}
                 </option>
               ))
-            : advertValues.map((item, _) => (
-                <option value={item}>{item}</option>
+            : advertValues.map((item, index) => (
+                <option key={index} value={item}>
+                  {item}
+                </option>
               ))}
         </select>
         <Button
@@ -139,7 +141,7 @@ const Tabs: React.FC<Props> = ({
           onClick={handleToggleSortOrder}
         >
           <i
-            className={sortOrder ? 'bi bi-sort-down-alt' : 'bi bi-sort-up-alt'}
+            className={sortOrder ? 'bi bi-sort-up' : 'bi bi-sort-down'}
             style={{
               color: '#f76c6c',
             }}

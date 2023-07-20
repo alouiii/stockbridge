@@ -10,6 +10,7 @@ import {
   getPopularCategories as getPopularCategoriesService,
   getPopularAdverts as getPopularAdvertsService,
   getAdvertsByStore,
+  closeAdvertService,
 } from '../services/advertServices';
 import { AuthenticatedRequest } from '../middlewares/authMiddleware';
 import {
@@ -88,6 +89,7 @@ export const getAdverts = asyncHandler(
       radius === 0 || !req.user ? undefined : radius,
       radius === 0 || !req.user ? undefined : req.user?.location?.coordinates,
       queryStr,
+      !!req.user,
     );
 
     res.status(200).json(results);
@@ -134,7 +136,22 @@ export const deleteAdvert = asyncHandler(
     const { id } = req.params;
     await _checkUserCanEditOrDeleteAdvert(req);
     const advert = await delAdvert(id);
-    res.status(204).json(advert);
+    res.status(200).json(advert);
+  },
+);
+
+/**
+ * This method closes an advert by id   *
+ * @param req - The request object
+ * @param res - The response object
+ * @returns closed advert object.
+ */
+export const closeAdvert = asyncHandler(
+  async (req: AuthenticatedRequest, res: Response) => {
+    const { id } = req.params;
+    await _checkUserCanEditOrDeleteAdvert(req);
+    const advert = await closeAdvertService(id);
+    res.status(200).json(advert);
   },
 );
 
@@ -207,11 +224,10 @@ export const getPopularCategories = asyncHandler(
 export const getPopularAdverts = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
-    const adverts = await getPopularAdvertsService(limit);
-    const results = [] as Advert[];
-    for (const advert of adverts) {
-      results.push(await findAdvertById(advert._id));
-    }
+    const popularAdvertsIds = await getPopularAdvertsService(limit);
+    const results = await Promise.all(
+      popularAdvertsIds.map((x) => findAdvertById(x._id, false, true)),
+    );
     res.status(200).json({ results });
   },
 );
@@ -234,8 +250,8 @@ async function _checkUserCanEditOrDeleteAdvert(req: AuthenticatedRequest) {
   }
   if (advert.status !== AdvertStatus.Ongoing) {
     throw new AppError(
-      'Not authorized to edit this advert',
-      'Not authorized to edit this advert',
+      'Error in editing the advert',
+      'Error in editing the advert',
       600,
     );
   }

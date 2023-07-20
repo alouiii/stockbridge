@@ -5,6 +5,8 @@ import { Review, createReview } from '../../api/collections/review';
 import { LoginContext } from '../../contexts/LoginContext';
 import { palette } from '../../utils/colors';
 import { Ratings } from '../Ratings';
+import { toast, ToastContainer } from 'react-toastify';
+import { ResponseModal, ResponseType } from '../Offers/ResponseModal';
 
 type EditReviewContentProps = {
   isShowing: boolean;
@@ -31,6 +33,8 @@ const EditReviewModal: FC<EditReviewContentProps> = (props) => {
     setError(false);
   };
 
+  const [showResponseModal, setShowResponseModal] = useState(false);
+  const [reviewError, setReviewError] = useState(false);
   const { user } = useContext(LoginContext);
   const handleSubmit = async () => {
     if (!rating || !description) {
@@ -46,82 +50,108 @@ const EditReviewModal: FC<EditReviewContentProps> = (props) => {
             reviewedAdvert: props.advert,
             createdAt: new Date(),
           } as Review);
+          setReviewError(false);
+          setShowResponseModal(true);
         }
-        if (props.onClose) {
+        /* if (props.onClose) {
           props.onClose();
           window.location.reload();
-        }
+        } */
       } catch (error) {
         console.error(error);
+        /* const notify = () =>
+          toast.error('Error when submitting review', {
+            position: 'bottom-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'colored',
+          });
+        notify(); */
+        setShowResponseModal(true);
+        setReviewError(true);
       }
     }
   };
-
+  const onClose = () => {
+    props.onClose()
+    setShowResponseModal(false);
+    if (!error) {
+      window.location.reload()
+    }
+  }
   return (
-    <Modal show={props.isShowing} onHide={props.onClose}>
-      <Modal.Header closeButton>
-        <Modal.Title>Write your review</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Form>
-          <Form.Group
+    <>
+    {showResponseModal && <ResponseModal isShowing={showResponseModal} responseType={reviewError ? ResponseType.UNSUCCESSFUL_REVIEW : ResponseType.SUCCESSFUL_REVIEW} onClose={onClose}/>}
+      <Modal show={props.isShowing} onHide={props.onClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Write your review</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 'auto',
+                gap: '70%',
+              }}
+            >
+              <Form.Label
+                style={{
+                  color: palette.gray,
+                }}
+              >
+                Review
+              </Form.Label>
+              {Ratings(rating, 'red', handleRatingChange)}
+            </Form.Group>
+            <Form.Group>
+              <Form.Control
+                style={{
+                  padding: '10px',
+                  color: palette.gray,
+                  margin: '5px',
+                  overflow: 'hidden',
+                }}
+                as="textarea"
+                rows={3}
+                name="description"
+                value={description}
+                onChange={handleDescriptionChange}
+                isInvalid={error}
+              />
+              <Form.Control.Feedback
+                style={{
+                  margin: '5px',
+                }}
+                type="invalid"
+              >
+                {error && 'Review incomplete'}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            className="text-white"
+            onClick={handleSubmit}
             style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 'auto',
-              gap: '70%',
+              background: palette.subSectionsBgAccent,
+              borderColor: palette.subSectionsBgAccent,
             }}
           >
-            <Form.Label
-              style={{
-                color: palette.gray,
-              }}
-            >
-              Review
-            </Form.Label>
-            {Ratings(rating, 'red', handleRatingChange)}
-          </Form.Group>
-          <Form.Group>
-            <Form.Control
-              style={{
-                padding: '10px',
-                color: palette.gray,
-                margin: '5px',
-                overflow: 'hidden',
-              }}
-              as="textarea"
-              rows={3}
-              name="description"
-              value={description}
-              onChange={handleDescriptionChange}
-              isInvalid={error}
-            />
-            <Form.Control.Feedback
-              style={{
-                margin: '5px',
-              }}
-              type="invalid"
-            >
-              {error && 'Review incomplete'}
-            </Form.Control.Feedback>
-          </Form.Group>
-        </Form>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button
-          className="text-white"
-          onClick={handleSubmit}
-          style={{
-            background: palette.subSectionsBgAccent,
-            borderColor: palette.subSectionsBgAccent,
-          }}
-        >
-          Submit
-        </Button>
-      </Modal.Footer>
-    </Modal>
+            Submit
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <ToastContainer />
+    </>
   );
 };
 

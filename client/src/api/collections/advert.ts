@@ -1,11 +1,11 @@
 import { ApiClient } from '../apiClient';
 import { Offer } from './offer';
 import { Review } from './review';
-import { User } from './user';
+import { Location, User } from './user';
 
 export enum AdvertType {
-  Sell,
-  Ask,
+  Sell = 'Sell',
+  Ask = 'Ask',
 }
 
 export enum AdvertStatus {
@@ -123,6 +123,7 @@ export interface Advert {
   weight?: number;
   pages?: number;
   material?: string;
+  location?: Location;
 }
 
 export interface PopulatedAdvert {
@@ -156,6 +157,7 @@ export interface PopulatedAdvert {
   pages?: number;
   volume?: number;
   material?: string;
+  location?: Location;
 }
 
 const apiClient = new ApiClient();
@@ -194,6 +196,12 @@ export async function updateAdvert(
 
 export async function deleteAdvert(id: string): Promise<void> {
   return await apiClient.delete<void>(`/adverts/${id}`, {
+    withCredentials: true,
+  });
+}
+
+export async function closeAdvert(id: string): Promise<Advert> {
+  return await apiClient.get<Advert>(`/adverts/closeAdvertById/${id}`, {
     withCredentials: true,
   });
 }

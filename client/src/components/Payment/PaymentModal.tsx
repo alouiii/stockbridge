@@ -16,9 +16,22 @@ import 'react-toastify/dist/ReactToastify.css';
 export default function PaymentModal(props: PaymentProps) {
   const stripe = useStripe();
   const elements = useElements();
-
+  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
   const [message, setMessage] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
+
+  let buttonText = 'Pay now';
+  switch (props.type) {
+    case PaymentType.PAYMENT_INTENT:
+      buttonText = 'Pay now';
+      break;
+    case PaymentType.SETUP_INTENT:
+      buttonText = 'Set up';
+      break;
+    case PaymentType.SUBSCRIPTION:
+      buttonText = 'Subscribe';
+      break;
+  }
 
   useEffect(() => {
     if (!stripe) {
@@ -111,6 +124,10 @@ export default function PaymentModal(props: PaymentProps) {
       setMessage('');
       if (props.onSuccess) {
         props.onSuccess();
+        if (props.type !== PaymentType.SETUP_INTENT) {
+          await sleep(2000);
+          window.location.reload();
+        }
       }
       toast.success('Succeeded!', {
         position: 'bottom-right',
@@ -217,7 +234,7 @@ export default function PaymentModal(props: PaymentProps) {
               }}
             >
               <span id="button-text">
-                {isLoading ? <Spinner animation="grow" /> : 'Pay now'}
+                {isLoading ? <Spinner animation="grow" /> : buttonText}
               </span>
             </button>
             {/* Show any error or success messages */}

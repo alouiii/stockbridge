@@ -3,7 +3,7 @@ import { Offer, PopulatedOffer } from './offer';
 
 export enum OrderStatus {
   PAYMENT_PENDING = 'PAYMENT_PENDING',
-  SHIPMENT_PENDING = 'SHIPMENT_PENDING',
+  CANCELLED = 'CANCELLED',
   RECEIVED = 'RECEIVED',
 }
 
@@ -60,18 +60,27 @@ export async function getOrdersByAdvert(advert: string): Promise<Order[]> {
 /**
  * Returns orders filtered by the given parameters
  * @param user the user Id
- * @param advertType 'Ask' or 'Sell'
+ * @param orderType 'Ask' or 'Sell'
  * @returns
  */
 export async function getUserSpecificOrders(
   user: string,
   orderType: string,
 ): Promise<PopulatedOrder[]> {
-  console.debug(user, orderType);
   return await apiClient.get<PopulatedOrder[]>(
     `/orders/getUserSpecificOrders`,
     { withCredentials: true },
     { user: user, orderType: orderType },
+  );
+}
+
+export async function cancelOrder(id: string): Promise<Order> {
+  return await apiClient.put<Order>(
+    `/orders/cancelOrder/${id}`,
+    {},
+    {
+      withCredentials: true,
+    },
   );
 }
 
