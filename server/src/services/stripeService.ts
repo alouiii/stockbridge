@@ -19,6 +19,11 @@ const stripe = new Stripe(environment.STRIPE_SECRET_KEY, {
   typescript: true,
 });
 
+/**
+ * Creates a stripe customer for payment
+ * @param user user id for which the stripe customer will be created
+ * @returns 
+ */
 export const createStripeCustomer = async (user: User) => {
   logger.debug(`${serviceName}: Creating stripe customer for ${user.email}`);
   return await stripe.customers.create({
@@ -30,6 +35,16 @@ export const createStripeCustomer = async (user: User) => {
     },
   });
 };
+
+/**
+ * Creates a payment intent with the user
+ * @param user user creating the payment intent
+ * @param amount amount of monry in the payment
+ * @param product the product for which the payment will be issued
+ * @param config configuration of payment intent (redirect url for example)
+ * @param automaticPaymentMethods 
+ * @returns 
+ */
 
 export const createStripePaymentIntent = async (
   user: User,
@@ -63,6 +78,13 @@ export const createStripePaymentIntent = async (
   });
 };
 
+
+/**
+ * Used in the signup step to setup payment method of the user
+ * @param user 
+ * @returns 
+ */
+
 export const createStripeSetupIntent = async (user: User) => {
   logger.debug(
     `${serviceName}: Creating stripe setup intent for ${user.email}`,
@@ -77,6 +99,10 @@ export const createStripeSetupIntent = async (user: User) => {
   });
 };
 
+/**
+ * Deletes inactive subscriptions and keeps the currently active one
+ * @param customer 
+ */
 const delUselessSubscriptions = async (customer: Stripe.Customer) => {
   if (customer.subscriptions) {
     for (const subscription of customer.subscriptions.data) {
@@ -158,6 +184,12 @@ export const createStripeSubscription = async (
   return { subscription, paymentIntent };
 };
 
+
+/**
+ * 
+ * @param user 
+ * @returns 
+ */
 export const cancelStripeSubscription = async (user: User) => {
   logger.debug(
     `${serviceName}: Canceling stripe subscription for ${user.email}`,
