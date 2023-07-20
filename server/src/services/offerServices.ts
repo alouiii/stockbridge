@@ -121,27 +121,21 @@ export const findAllOffersByAdvert = async (
  * @param id offer id
  */
 export const notifyAboutCanceledOffer = async (id: string) => {
-
   const offer = await findOfferById(id);
   if (!offer) {
-    logger.error(
-      `${serviceName}: Could not find the offer. Mail not sent`,
-    );
+    logger.error(`${serviceName}: Could not find the offer. Mail not sent`);
   }
   const user = await findUserById(offer.offeror);
   if (!user) {
-    logger.error(
-      `${serviceName}: Could not find offeror. Mail not sent`,
-    );
+    logger.error(`${serviceName}: Could not find offeror. Mail not sent`);
   } else {
     await sendMail(
       `${user.email}`,
-      'Order cancelled',
-      `Your offer ${id} for advert ${offer.advert.productname} with ID: ${offer.advert._id} has been cancelled due to stock limit.`
+      'Offer cancelled',
+      `Your offer ${id} for advert ${offer.advert.productname} with ID: ${offer.advert._id} has been cancelled due to stock limit.`,
     );
   }
 };
-
 
 /**
  * Populates the referenced elements in a document

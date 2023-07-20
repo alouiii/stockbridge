@@ -4,7 +4,10 @@ import { Advert, AdvertStatus } from '../entities/advertEntity';
 import { OfferStatus } from '../entities/offerEntity';
 import { OrderStatus, Order } from '../entities/orderEntity';
 import { findAdvertById } from '../services/advertServices';
-import { findAllOffersByAdvert, notifyAboutCanceledOffer } from '../services/offerServices';
+import {
+  findAllOffersByAdvert,
+  notifyAboutCanceledOffer,
+} from '../services/offerServices';
 import offerModel from './Offer';
 import { createStripePaymentIntent } from '../services/stripeService';
 import userModel from './User';
@@ -53,7 +56,7 @@ orderSchema.pre('findOneAndUpdate', async function (next) {
           advert.status = AdvertStatus.Closed;
         }
         const offers = await findAllOffersByAdvert(advert.id);
-        offers.forEach(async (fetchedOffer) => {
+        for (const fetchedOffer of offers) {
           if (
             fetchedOffer.status === OfferStatus.OPEN &&
             fetchedOffer.quantity > advert.quantity
@@ -62,7 +65,7 @@ orderSchema.pre('findOneAndUpdate', async function (next) {
             await offerModel.findByIdAndUpdate(fetchedOffer.id, fetchedOffer);
             await notifyAboutCanceledOffer(fetchedOffer.id);
           }
-        });
+        }
         await advertModel.findByIdAndUpdate(advert.id, advert);
       }
     }
